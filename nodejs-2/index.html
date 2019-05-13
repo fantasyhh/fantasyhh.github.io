@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>用 Python 眼光看Nodejs（二） | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Nodejs,Nodejs,">
+  
+
+  
+  <meta name="description" content="上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-08
+    </span>
+    
+      <span>
+        | <a href="/categories/Nodejs/"><i class="fa fa-bookmark"></i>Nodejs</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    用 Python 眼光看Nodejs（二）
+  </h1>
+  
+  <article class="passage-article">
+    <p>上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整与基础，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳</p>
+<h2 id="Nodejs安装"><a href="#Nodejs安装" class="headerlink" title="Nodejs安装"></a>Nodejs安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Using Ubuntu</span><br><span class="line">curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -</span><br><span class="line">sudo apt-get install -y nodejs</span><br><span class="line"># update npm</span><br><span class="line">npm install npm -g</span><br><span class="line"># show version</span><br><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其实我一开始直接下载官网编译好的nodejs，之后做命令的链接，如<a href="https://blog.csdn.net/tengxing007/article/details/78903807" target="_blank" rel="noopener">这边的安装教程</a>，也很好理解。但是后来发现一个问题，全局装一些带有命令行的库时，比如express-generator，命令行没有express该命令，需要将express库的bin文件手动连接到/usr/local/bin/express，略微麻烦<br>当然还有最稳妥的方法，源码安装，去nodejs官网下载source code，然后<code>./configure</code>,<code>make</code>,<code>make install</code>（我在命令前加sudo，然后发现npm install也需要加sudo，不太一样），源码安装有点耗时，我那破机器花了半小时</p>
+</blockquote>
+<h2 id="Nodejs模块包库的解释与代码的组织"><a href="#Nodejs模块包库的解释与代码的组织" class="headerlink" title="Nodejs模块包库的解释与代码的组织"></a>Nodejs模块包库的解释与代码的组织</h2><p>写到这边时，遇到一些基础概念，自己都有些蒙了，查了蛮久资料，理了一下</p>
+<p><strong>先回味下Python的相关含义:</strong></p>
+<blockquote>
+<p>module：一个 .py 文件就是个 module<br> lib：抽象概念，和另外两个不是一类，只要你喜欢，什么都是 lib，就算只有个 hello world<br> package：就是个带 <strong>init</strong>.py 的文件夹，并不在乎里面有什么，不过一般来讲会包含一些    packages/modulesscrapy、flask、Django、numpy、scipy、NLTK、jieba 在你的语境下，一般都被认为是 lib，因为关注点不是他们的代码是怎么组织的。</p>
+</blockquote>
+<p>看了上面的解释,再结合这篇文章 <a href="https://liam.page/2017/07/23/modules-and-packages-of-python/" target="_blank" rel="noopener">Python 中的黑暗角落（三）：模块与包</a>我明白的更多了</p>
+<p>再来说说Nodejs,其实也可以同样的理解,一个打印‘hello world’的js文件是一个模块（module），一个带有package.json的文件夹都是包（package）比如express框架，但是它们都是库（lib），因为都是给别人或者自己来用的，只是我们平常接触的一个些库都不是单个文件那么简单的，大多以包的形式存在。</p>
+<p>接下来是<a href="https://nqdeng.github.io/7-days-nodejs/#2" target="_blank" rel="noopener">Nodejs代码组织与部署</a>中间有困惑记录下来</p>
+<ol>
+<li><strong>Node.js模块里exports与module.exports的区别?</strong><br><a href="https://www.zhihu.com/question/26621212http://" target="_blank" rel="noopener">相关笔记1</a>，<a href="https://liuzhichao.com/p/1669.html" target="_blank" rel="noopener">相关笔记2</a></li>
+</ol>
+<p><strong>2. 待记录….</strong></p>
+<h2 id="npm命令"><a href="#npm命令" class="headerlink" title="npm命令"></a>npm命令</h2><blockquote>
+<p>npm之于Nodejs，如，pip之余Python</p>
+</blockquote>
+<p>所以这里把一些常用的命令记录下来，以后就方便翻了</p>
+<h5 id="查看npm拥有的全部命令"><a href="#查看npm拥有的全部命令" class="headerlink" title="查看npm拥有的全部命令"></a>查看npm拥有的全部命令</h5><p><code>$ npm - -help</code><br><code>$ npm help</code></p>
+<h5 id="查看某一个npm命令的详细用法"><a href="#查看某一个npm命令的详细用法" class="headerlink" title="查看某一个npm命令的详细用法"></a>查看某一个npm命令的详细用法</h5><p><code>$ npm &lt;command&gt; --help</code><br><code>$ npm help &lt;command&gt;</code></p>
+<h5 id="与npmrc相关的三个文件："><a href="#与npmrc相关的三个文件：" class="headerlink" title="与npmrc相关的三个文件："></a>与npmrc相关的三个文件：</h5><p>npm项目配置文件：/path/to/my/project/.npmrc<br>用户配置文件：~/.npmrc (可通过<code>npm config get userconfig</code>查看)<br>全局配置文件：$PREFIX/etc/npmrc (可通过<code>npm config get globalconfig</code>查看)<br>npm内置配置文件：/path/to/npm/npmrc</p>
+<h5 id="npm获取配置的6种方式（优先级从高到低）："><a href="#npm获取配置的6种方式（优先级从高到低）：" class="headerlink" title="npm获取配置的6种方式（优先级从高到低）："></a>npm获取配置的6种方式（优先级从高到低）：</h5><h6 id="1-命令行参数"><a href="#1-命令行参数" class="headerlink" title="1.命令行参数"></a>1.<strong>命令行参数</strong></h6><p><code>$ --proxy http://&lt;server&gt;:&lt;port&gt;</code></p>
+<h6 id="2-环境变量"><a href="#2-环境变量" class="headerlink" title="2.环境变量"></a>2.<strong>环境变量</strong></h6><p>以”npmconfig”为前缀的环境变量将会被认为是npm的配置属性。<br><code>$ npm_config_proxy=http://&lt;server&gt;:&lt;port&gt;</code></p>
+<h6 id="3-用户配置文件"><a href="#3-用户配置文件" class="headerlink" title="3.用户配置文件"></a>3.<strong>用户配置文件</strong></h6><p>//查看用户配置文件路径<br><code>$ npm config get userconfig</code><br>//Linux系统默认路径<br><code>$HOME/.npmrc</code></p>
+<h6 id="4-全局配置文件"><a href="#4-全局配置文件" class="headerlink" title="4.全局配置文件"></a>4.<strong>全局配置文件</strong></h6><p>//查看文件路径<br><code>$ npm config get globalconfig</code><br>//我的ubuntu文件路径<br><code>/usr/local/node-v10.15.3-linux-x64/etc/npmrc</code></p>
+<h6 id="5-内置配置文件"><a href="#5-内置配置文件" class="headerlink" title="5.内置配置文件"></a>5.<strong>内置配置文件</strong></h6><p>安装npm的目录下的npmrc文件。</p>
+<h6 id="6-默认配置"><a href="#6-默认配置" class="headerlink" title="6.默认配置"></a>6.<strong>默认配置</strong></h6><p>如果前5条均未设置，npm会使用默认配置参数。</p>
+<blockquote>
+<p>关于npm的配置主要命令可通过npm config - -help来查看（比如用npm config ls -l查看npm全部默认配置）。但是一样，作为简单用户我们没必要用的这么多，我们平常只要设置一个user config，我pip就是这么搞2333。设置也就换换npm注册源来增加下载速度（将registry=<a href="https://registry.npm.taobao.org放入~/.npmrc，没有这个文件则新建一个，npm" target="_blank" rel="noopener">https://registry.npm.taobao.org放入~/.npmrc，没有这个文件则新建一个，npm</a> c get registry来验证换了没，上传包记得换回来，不过基本用不到）</p>
+</blockquote>
+<h5 id="npm-info-命令可以查看每个模块的具体信息"><a href="#npm-info-命令可以查看每个模块的具体信息" class="headerlink" title="npm info 命令可以查看每个模块的具体信息"></a>npm info 命令可以查看每个模块的具体信息</h5><p><code>$ npm info &lt;package&gt;</code></p>
+<h5 id="以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"><a href="#以树形结构列出当前项目安装的所有模块，以及它们依赖的模块" class="headerlink" title="以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"></a>以树形结构列出当前项目安装的所有模块，以及它们依赖的模块</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ npm list</span><br><span class="line"></span><br><span class="line"># 加上 global 参数，会列出全局安装的模块</span><br><span class="line">$ npm list -global</span><br><span class="line"></span><br><span class="line"># npm list 命令也可以列出单个模块</span><br><span class="line">$ npm list express</span><br></pre></td></tr></table></figure>
+<h5 id="使用-npm-安装包"><a href="#使用-npm-安装包" class="headerlink" title="使用 npm 安装包"></a>使用 npm 安装包</h5><p><code>npm install/i &lt;package_name&gt;</code></p>
+<blockquote>
+<p>在npm install部分，有很多东西值得注意的，比如全局与本地的区别，npm是默认本地安装，像极了python的虚拟环境，完全独立，不用了把文件夹删了就行，很赞。还有开发依赖，生产依赖。所以后来python的pipenv诞生了，吸取了其他包管理器比如npm等的一些优点，已被官方推荐使用</p>
+</blockquote>
+<h5 id="执行package-json中的脚本"><a href="#执行package-json中的脚本" class="headerlink" title="执行package.json中的脚本"></a>执行package.json中的脚本</h5><p><code>npm run</code></p>
+<p><strong>以上都是些简单的概括，具体的看这<a href="https://neveryu.github.io/2017/04/10/npm/" target="_blank" rel="noopener">npm全面介绍</a></strong>以及官网手册，东西很多，挑你用得着的看</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs安装"><span class="toc-text">Nodejs安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs模块包库的解释与代码的组织"><span class="toc-text">Nodejs模块包库的解释与代码的组织</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#npm命令"><span class="toc-text">npm命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#查看npm拥有的全部命令"><span class="toc-text">查看npm拥有的全部命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查看某一个npm命令的详细用法"><span class="toc-text">查看某一个npm命令的详细用法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#与npmrc相关的三个文件："><span class="toc-text">与npmrc相关的三个文件：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#npm获取配置的6种方式（优先级从高到低）："><span class="toc-text">npm获取配置的6种方式（优先级从高到低）：</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-命令行参数"><span class="toc-text">1.命令行参数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-环境变量"><span class="toc-text">2.环境变量</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-用户配置文件"><span class="toc-text">3.用户配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-全局配置文件"><span class="toc-text">4.全局配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-内置配置文件"><span class="toc-text">5.内置配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#6-默认配置"><span class="toc-text">6.默认配置</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#npm-info-命令可以查看每个模块的具体信息"><span class="toc-text">npm info 命令可以查看每个模块的具体信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"><span class="toc-text">以树形结构列出当前项目安装的所有模块，以及它们依赖的模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#使用-npm-安装包"><span class="toc-text">使用 npm 安装包</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#执行package-json中的脚本"><span class="toc-text">执行package.json中的脚本</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/nodejs-2/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Nodejs/"><i class="fa fa-tags"></i>Nodejs</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.png" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/nodejs-1/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
