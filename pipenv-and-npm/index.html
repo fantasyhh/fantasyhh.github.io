@@ -6,16 +6,16 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>用 Python 眼光看Nodejs（一）,杂谈 | 烛影小札</title>
+  <title>由npm而温故到的pipenv | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Nodejs,Nodejs,">
+    <meta name="keywords" content="Python,python,npm,">
   
 
   
-  <meta name="description" content="说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。">
+  <meta name="description" content="最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的source url换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用pip freeze 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是Kenneth Reitz（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。">
 
   
 
@@ -188,11 +188,11 @@
   <div class="passage">
   <div class="passage-meta">
     <span>
-      <i class="fa fa-calendar"></i>2019-05-07
+      <i class="fa fa-calendar"></i>2019-05-14
     </span>
     
       <span>
-        | <a href="/categories/Nodejs/"><i class="fa fa-bookmark"></i>Nodejs</a>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
       </span>
     
     
@@ -202,46 +202,40 @@
     
   </div>
   <h1 class="passage-title">
-    用 Python 眼光看Nodejs（一）,杂谈
+    由npm而温故到的pipenv
   </h1>
   
   <article class="passage-article">
-    <p></p>
-<p>说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。</p>
-<h2 id="Nodejs为何与Python放在一起看待"><a href="#Nodejs为何与Python放在一起看待" class="headerlink" title="Nodejs为何与Python放在一起看待"></a>Nodejs为何与Python放在一起看待</h2><p>后端Nodejs基于服务端的javascript,前端js是基于浏览器端的 javascript。它们的语法不一样但是组成不一样。<br><strong>JavaScript</strong>：</p>
+    <h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的<code>source url</code>换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用<code>pip freeze</code> 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是<a href="https://zhuanlan.zhihu.com/p/22332669" target="_blank" rel="noopener">Kenneth Reitz</a>（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。</p>
+<h3 id="Pipenv燥起来"><a href="#Pipenv燥起来" class="headerlink" title="Pipenv燥起来"></a>Pipenv燥起来</h3><p>pipenv 参考了其他语言的包管理工具（bundler, composer, npm, cargo, yarn, etc.），旨在将最好的包管理工具带入 python 世界。pipevn 可以解决哪些问题：</p>
 <ul>
-<li>ECMAScript（语言基础，如：语法、数据类型结构以及一些内置对象） </li>
-<li>DOM（一些操作页面元素的方法）</li>
-<li>BOM（一些操作浏览器的方法）</li>
+<li><p>使用 pipenv 就相当于同时使用了 pip 和 virtualenv ，即做到包管理又可以管理虚拟环境。</p>
+</li>
+<li><p>使用 pipenv 解决 requirement.txt 面临的问题，pipenv 使用 Pipfile 代替 requirement.txt 文件来记录项目依赖包。</p>
+</li>
+<li><p>新增了 Pipfile.lock 文件来锁定 python 软件的包名及版本，以及其依赖关系的列表。</p>
+</li>
+<li>让你深入了解库的依赖图（例如<code>$ pipenv graph</code>）</li>
+<li>通过加载.env文件简化开发工作流程</li>
 </ul>
-<p><strong>Nodejs</strong>：</p>
+<h4 id="1-基础用法"><a href="#1-基础用法" class="headerlink" title="1. 基础用法"></a>1. 基础用法</h4><p>这里不过多介绍用法，<code>pipenv --help</code>或者官网即可查询。只推荐两篇文章当做小手册快速查看<br><a href="https://www.jianshu.com/p/00af447f0005" target="_blank" rel="noopener">pipenv利器</a> ， 以及 <a href="https://crazygit.wiseturtles.com/2018/01/08/pipenv-tour/" target="_blank" rel="noopener">pipenv使用指南</a></p>
+<h4 id="2-项目中如何使用"><a href="#2-项目中如何使用" class="headerlink" title="2. 项目中如何使用"></a>2. 项目中如何使用</h4><p>在pipenv的目录中，我我以前总是放弃用<code>pipenv install</code>而是<code>pipenv shell</code>进入虚拟环境然后<code>pip</code>，因为<code>pienv install</code>的时候会有lock这一个步骤导致很慢（<a href="https://github.com/pypa/pipenv/issues/1914" target="_blank" rel="noopener">因为lock文件中要记录哈希值等</a>），lock文件的作用上面说过就不说了。但是用pip后库的名称版本不会记录到Pipfile，所以如果想完全摒弃requirement就应该用<code>pipenv install</code>。（其实可以完全不用到pipenv 进入虚拟环境,用<strong><code>pipenv run python|pip</code> </strong>即可）</p>
+<blockquote>
+<p>以Django项目为例。生成虚拟环境之前设置PIPENV_PYPI_MIRROR环境变量为<code>https://pypi.tuna.tsinghua.edu.cn/simple</code>，<a href="https://pipenv.readthedocs.io/en/latest/advanced/#pipenv.environments.PIPENV_PYPI_MIRROR" target="_blank" rel="noopener">详情见这里</a>，目的是pipenv安装库的时候都会使用清华源，免得每次都要改。然后生成一个envdir，进入该目录，安装django，新建django。app等。项目完成之后，将与djang项目平级的Pipfile以及lock文件放入项目，然后版本控制，上传git。之后就是别人clone下来，进入django项目，pipenv install就能将python环境与Pipfile中的文件生成，方便省事。这是我暂时的想法，以后有更好的方案会换</p>
+</blockquote>
+<h4 id="3-Pipfile与Pipfile-lock"><a href="#3-Pipfile与Pipfile-lock" class="headerlink" title="3. Pipfile与Pipfile.lock"></a>3. Pipfile与Pipfile.lock</h4><p>那为什么有了Pipfile还有Pipfile.lock</p>
+<blockquote>
+<p>Python应用程序的具体要求来自Pipfile。这将包括应该从哪里获取包以及它们的松散版本约束。<br>Pipfile.lock为了再现性，将存储环境的详细信息（所有已安装的包含固定版本和其他详细信息的包）。该文件将自动生成，用户不应修改。</p>
+</blockquote>
+<p>这里有个比较明了的回答，<a href="https://stackoverflow.com/questions/52951316/why-does-pipenv-need-pipfile-and-pipfile-lock" target="_blank" rel="noopener">Why does pipenv need Pipfile and Pipfile.lock?</a>。<br>转而也可以逐渐理解npm中<code>package.json</code>与<code>package-lock.json</code>的作用了</p>
+<p><strong>那我们是否要将这两个文件保持版本控制，官方的建议是：</strong></p>
 <ul>
-<li>ECMAScript（语言基础，如：语法、数据类型结构以及一些内置对象）</li>
-<li>OS（操作系统）</li>
-<li>file（文件系统）</li>
-<li>net（网络系统）</li>
-<li>database（数据库）</li>
+<li>通常，保持两者Pipfile和Pipfile.lock版本控制。</li>
+<li>Pipfile.lock如果要定位多个版本的Python，请不要保留版本控制。</li>
+<li>在Pipfile的[requires]部分中指定目标Python版本。理想情况下，你应该只有一个目标Python版本，因为这是一个部署工具。</li>
+<li>pipenv install与语法完全兼容，可在此处找到完整的文档。pip install请注意，Pipfile使用TOML Spec。</li>
 </ul>
-<p>其实说到底，前端js开发和nodejs开发，两者间除了js是重合的以外，其它技能互相之间完全没有半毛钱关系。自己以前没有学过JavaScript，但是学了Python也有三四年了，对一些web服务器原理、关系数据使用，以及稍微深一点的网络原理以及一些服务器方面的知识有一定的了解，虽然称不上多，但是有了一点基础，这些都是与Nodejs相关的。所以将两者放在一起来谈，比较相同点与不同点能更有兴趣地学习下去。</p>
-<h2 id="Nodejs能用来干什么"><a href="#Nodejs能用来干什么" class="headerlink" title="Nodejs能用来干什么"></a>Nodejs能用来干什么</h2><p>如果Nodejs与Python没有什么大的差异化，那简直是没必要再白费精力学一门新语言，Nodejs当然有它自己闪亮的特性。</p>
-<blockquote>
-<p>NodeJS的作者说，他创造NodeJS的目的是为了实现高性能Web服务器，他首先看重的是事件机制和异步IO模型的优越性，而不是JS。但是他需要选择一种编程语言实现他的想法，这种编程语言不能自带IO功能，并且需要能良好支持事件机制。JS没有自带IO功能，天生就用于处理浏览器中的DOM事件，并且拥有一大群程序员，因此就成为了天然的选择。</p>
-</blockquote>
-<p><strong>事件驱动</strong>与<strong>异步IO</strong>，这两个词在学习Python异步编程的时候遇到过，正如开头说的那样，很是折磨，很多概念模糊不清，对到底为何要这么<strong>重视异步</strong>不太懂，直到看了这篇文章 <a href="http://python.jobbole.com/88291/" target="_blank" rel="noopener">Python异步编程</a>，才有些理解为何平常我们觉得性能也就毫秒或者更小时间的差别咋要这么在意，多个几秒钟又没大事，何必异步这么麻烦。类似的还有这篇<a href="https://www.jianshu.com/p/486b0965c296" target="_blank" rel="noopener">Linux IO模型</a>，都是极佳的文章。人类总是一直在探求极致的运算速度，榨干CPU的性能，让它弹无虚发，哈哈！这就是进步。</p>
-<blockquote>
-<p>异步编程是以进程、线程、协程、函数/方法作为执行任务程序的基本单位，结合回调、事件循环、信号量等机制，以提高程序整体执行效率和并发能力的编程方式。</p>
-</blockquote>
-<p>那Nodejs到底能用来干什么或者说它的适用场景擅长领域在哪？就好比Python的科学计算，机器学习是一绝<br>，那Nodejs呢？<br><strong>Node.js特别适合于你希望保持从浏览器到服务器的持久连接的应用程序。使用称为“长轮询”的技术，你可以编写一个实时向用户发送更新的应用程序。对许多网络框架进行长时间轮询，比如Ruby on Rails或Django，会在服务器上产生巨大的负担，因为每个活动客户端都会占用一个服务器进程。这种情况相当于一个tarpit攻击。当你使用Node.js之类的东西时，服务器不需要为每个打开的连接维护单独的线程。</strong><br>所以Node.js最适合实时应用：<strong>在线游戏</strong>，<strong>协作工具</strong>，<strong>聊天室</strong>，或者其他用户需要立即看到一个用户对应用程序做的任何事情，而<strong>没有页面刷新</strong></p>
-<blockquote>
-<p>简而言之，Node.js非常适合具有大量并发连接的应用程序，并且每个请求只需要很少的CPU周期，因为在执行函数期间会阻止事件循环（包含所有其他客户端）</p>
-</blockquote>
-<h2 id="怎么学Nodejs"><a href="#怎么学Nodejs" class="headerlink" title="怎么学Nodejs"></a>怎么学Nodejs</h2><ol>
-<li>先说js的语法，之前学习过一点，看着干巴巴的基础概念，用法、变量、函数等，这些看过一遍都懂，但是要用的时候就还得翻，很枯燥。但是有幸，js与python都是较为“动态的语言”，所以要用到的时候可以翻翻<a href="https://www.runoob.com/js/js-tutorial.html" target="_blank" rel="noopener">菜鸟教程上的js部分</a></li>
-<li>关于Nodejs的那一部分主要还是语法api的应用，但是nodejs一直在修正，所以什么手册实体书没用，主要还是<a href="http://nodejs.cn/api/" target="_blank" rel="noopener">官方的手册</a>以及网上大佬的教程</li>
-<li>我想，过程可以是这样的，先了解nodejs的运行方式与以及项目布局。Nodejs较重要的还是web开发，所以之后选择一个web框架去啃，在框架的教程中发现新知识或者新的语法就去查，去跟官方手册对照，去跟Python对照，解决了再继续下去，记录方式还是Google相关文章做整理为主，自己记录经典例子为辅</li>
-<li>当然了，平常的工作中几乎没有用到高并发的时候，最终目的使用nodejs创建一个聊天室或者一个高并发的restful api，也算用到实际中了</li>
-</ol>
-<h2 id="未来"><a href="#未来" class="headerlink" title="未来"></a>未来</h2><p>用Nodejs的新知识来温故Python类似的旧知识，充实偶尔犯闲的上班时间，开始吧！</p>
+<h3 id="顺便说说npm"><a href="#顺便说说npm" class="headerlink" title="顺便说说npm"></a>顺便说说npm</h3><p><a href="https://www.cnblogs.com/tzyy/p/5193811.html" target="_blank" rel="noopener">package.json的字段详解</a>在这里，同样的按上面的说法，lock文件应该也要放入版本控制，但有一篇文章写道<a href="https://www.codementor.io/johnkennedy/get-rid-of-that-npm-package-lock-json-e0bj7ai42" target="_blank" rel="noopener">package-lock.json文件是地狱</a>。哈哈哈23333</p>
   </article>
   <aside class="table-content" id="site-toc">
   <div class="table-content-title">
@@ -249,7 +243,7 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs为何与Python放在一起看待"><span class="toc-text">Nodejs为何与Python放在一起看待</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs能用来干什么"><span class="toc-text">Nodejs能用来干什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#怎么学Nodejs"><span class="toc-text">怎么学Nodejs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未来"><span class="toc-text">未来</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#题外话"><span class="toc-text">题外话</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pipenv燥起来"><span class="toc-text">Pipenv燥起来</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基础用法"><span class="toc-text">1. 基础用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-项目中如何使用"><span class="toc-text">2. 项目中如何使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Pipfile与Pipfile-lock"><span class="toc-text">3. Pipfile与Pipfile.lock</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#顺便说说npm"><span class="toc-text">顺便说说npm</span></a></li></ol>
   </div>
 </aside>
   
@@ -258,7 +252,7 @@
       
         <div>
           原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/nodejs-1/</a>
+          <a href target="_blank">https://fantasyhh.github.io/pipenv-and-npm/</a>
         </div>
       
       <div>
@@ -269,7 +263,9 @@
   
     <div class="passage-tags">
      
-      <a href="/tags/Nodejs/"><i class="fa fa-tags"></i>Nodejs</a>
+      <a href="/tags/python/"><i class="fa fa-tags"></i>python</a>
+     
+      <a href="/tags/npm/"><i class="fa fa-tags"></i>npm</a>
     
     </div>
   
@@ -349,10 +345,10 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="/nodejs-2/" data-enable="true">
+    <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="/sed-usage/" data-enable="true">
+    <a href="/nodejs-2/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>

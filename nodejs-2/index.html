@@ -6,7 +6,7 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>用 Python 眼光看Nodejs（二） | 烛影小札</title>
+  <title>用 Python 眼光看Nodejs（二），安装及npm配置 | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -202,7 +202,7 @@
     
   </div>
   <h1 class="passage-title">
-    用 Python 眼光看Nodejs（二）
+    用 Python 眼光看Nodejs（二），安装及npm配置
   </h1>
   
   <article class="passage-article">
@@ -247,6 +247,7 @@
 </blockquote>
 <h5 id="执行package-json中的脚本"><a href="#执行package-json中的脚本" class="headerlink" title="执行package.json中的脚本"></a>执行package.json中的脚本</h5><p><code>npm run</code></p>
 <p><strong>以上都是些简单的概括，具体的看这<a href="https://neveryu.github.io/2017/04/10/npm/" target="_blank" rel="noopener">npm全面介绍</a></strong>以及官网手册，东西很多，挑你用得着的看</p>
+<h5 id="推荐的npm库版本管理工具"><a href="#推荐的npm库版本管理工具" class="headerlink" title="推荐的npm库版本管理工具"></a>推荐的npm库版本管理工具</h5><p><a href="https://segmentfault.com/a/1190000011085967" target="_blank" rel="noopener">npm-check</a>,检查过期的不正确的和未使用的依赖项,版本神器，中文翻译<a href="https://www.helplib.com/GitHub/article_120756" target="_blank" rel="noopener">文档在这</a></p>
   </article>
   <aside class="table-content" id="site-toc">
   <div class="table-content-title">
@@ -254,7 +255,7 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs安装"><span class="toc-text">Nodejs安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs模块包库的解释与代码的组织"><span class="toc-text">Nodejs模块包库的解释与代码的组织</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#npm命令"><span class="toc-text">npm命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#查看npm拥有的全部命令"><span class="toc-text">查看npm拥有的全部命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查看某一个npm命令的详细用法"><span class="toc-text">查看某一个npm命令的详细用法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#与npmrc相关的三个文件："><span class="toc-text">与npmrc相关的三个文件：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#npm获取配置的6种方式（优先级从高到低）："><span class="toc-text">npm获取配置的6种方式（优先级从高到低）：</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-命令行参数"><span class="toc-text">1.命令行参数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-环境变量"><span class="toc-text">2.环境变量</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-用户配置文件"><span class="toc-text">3.用户配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-全局配置文件"><span class="toc-text">4.全局配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-内置配置文件"><span class="toc-text">5.内置配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#6-默认配置"><span class="toc-text">6.默认配置</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#npm-info-命令可以查看每个模块的具体信息"><span class="toc-text">npm info 命令可以查看每个模块的具体信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"><span class="toc-text">以树形结构列出当前项目安装的所有模块，以及它们依赖的模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#使用-npm-安装包"><span class="toc-text">使用 npm 安装包</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#执行package-json中的脚本"><span class="toc-text">执行package.json中的脚本</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs安装"><span class="toc-text">Nodejs安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs模块包库的解释与代码的组织"><span class="toc-text">Nodejs模块包库的解释与代码的组织</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#npm命令"><span class="toc-text">npm命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#查看npm拥有的全部命令"><span class="toc-text">查看npm拥有的全部命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查看某一个npm命令的详细用法"><span class="toc-text">查看某一个npm命令的详细用法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#与npmrc相关的三个文件："><span class="toc-text">与npmrc相关的三个文件：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#npm获取配置的6种方式（优先级从高到低）："><span class="toc-text">npm获取配置的6种方式（优先级从高到低）：</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-命令行参数"><span class="toc-text">1.命令行参数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-环境变量"><span class="toc-text">2.环境变量</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-用户配置文件"><span class="toc-text">3.用户配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-全局配置文件"><span class="toc-text">4.全局配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-内置配置文件"><span class="toc-text">5.内置配置文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#6-默认配置"><span class="toc-text">6.默认配置</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#npm-info-命令可以查看每个模块的具体信息"><span class="toc-text">npm info 命令可以查看每个模块的具体信息</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"><span class="toc-text">以树形结构列出当前项目安装的所有模块，以及它们依赖的模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#使用-npm-安装包"><span class="toc-text">使用 npm 安装包</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#执行package-json中的脚本"><span class="toc-text">执行package.json中的脚本</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#推荐的npm库版本管理工具"><span class="toc-text">推荐的npm库版本管理工具</span></a></li></ol></li></ol>
   </div>
 </aside>
   
@@ -354,7 +355,7 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/pipenv-and-npm/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
     <a href="/nodejs-1/" data-enable="true">
