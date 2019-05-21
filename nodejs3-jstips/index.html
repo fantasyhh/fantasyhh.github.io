@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新） | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Nodejs,Nodejs,js,">
+  
+
+  
+  <meta name="description" content="说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生常谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能更容易接受，达到慢慢积累的效果。这对于自己写代码也有一定帮助，看的语法少，那就稳稳当当码代码，不搞花里胡哨的写法。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-17
+    </span>
+    
+      <span>
+        | <a href="/categories/Nodejs/"><i class="fa fa-bookmark"></i>Nodejs</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）
+  </h1>
+  
+  <article class="passage-article">
+    <p></p>
+<p>说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能更容易接受，达到慢慢积累的效果。这对于自己写代码也有一定帮助，看的语法少，那就稳稳当当码代码，不搞花里胡哨的写法。</p>
+<p><a href="https://juejin.im/post/5b9cb3336fb9a05d290ee47e" target="_blank" rel="noopener">ES6、ES7、ES8特性一锅炖</a>，这里是Js近几年来的新特性，其实新特性对于初学者还是很有好的，相关用法只用看新的就行，老的完全摒弃不闻不问，多清净。</p>
+<h2 id="1-箭头函数"><a href="#1-箭头函数" class="headerlink" title="1. 箭头函数"></a>1. 箭头函数</h2><p>类似于Python的匿名函数，lambda表达式，但又有一些不一样。lambda只能是一条单独的表达式，而箭头函数却可以有多个表达式，中间用分好隔开，我认为两者差异的原因很大程度上在于，<strong>匿名函数本身就是为回调函数量身定做的，而Js中回调用法真的是家常便饭，要是像Python那样仅仅是单行表达式，那真的是太不方便了。</strong></p>
+<h4 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(参数<span class="number">1</span>, 参数<span class="number">2</span>, …, 参数N) =&gt; &#123; 函数声明 &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//相当于：(参数1, 参数2, …, 参数N) =&gt;&#123; return 表达式; &#125;</span></span><br><span class="line">(参数<span class="number">1</span>, 参数<span class="number">2</span>, …, 参数N) =&gt; 表达式（单一）</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当只有一个参数时，圆括号是可选的：</span></span><br><span class="line">(单一参数) =&gt; &#123;函数声明&#125;</span><br><span class="line">单一参数 =&gt; &#123;函数声明&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 没有参数的函数应该写成一对圆括号。</span></span><br><span class="line">() =&gt; &#123;函数声明&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//加括号的函数体返回对象字面表达式：</span></span><br><span class="line">参数=&gt; (&#123;<span class="attr">foo</span>: bar&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//支持剩余参数和默认参数</span></span><br><span class="line">(参数<span class="number">1</span>, 参数<span class="number">2</span>, ...rest) =&gt; &#123;函数声明&#125;</span><br><span class="line">(参数<span class="number">1</span> = 默认值<span class="number">1</span>,参数<span class="number">2</span>, …, 参数N = 默认值N) =&gt; &#123;函数声明&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//同样支持参数列表解构</span></span><br><span class="line"><span class="keyword">let</span> f = <span class="function">(<span class="params">[a, b] = [<span class="number">1</span>, <span class="number">2</span>], &#123;x: c&#125; = &#123;x: a + b&#125;</span>) =&gt;</span> a + b + c;</span><br><span class="line">f();  <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+<p>当然官方不太可能单单因为这一个简单的功能：<strong>更短的函数</strong> 而把它搬到新特性里来，看这边<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener">箭头函数与普通函数区别</a></p>
+<h2 id="2-数组的迭代到数组的常用用法"><a href="#2-数组的迭代到数组的常用用法" class="headerlink" title="2. 数组的迭代到数组的常用用法"></a>2. 数组的迭代到数组的常用用法</h2><p>例子正好用到上面的箭头函数：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array1 = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>];</span><br><span class="line">array1.forEach(<span class="function">(<span class="params">value,index,array</span>) =&gt;</span>&#123;<span class="built_in">console</span>.log(value,index,array)&#125;)</span><br><span class="line"><span class="comment">//除了value，其他的参数是可选的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//可用for of代替，类似于Python中for... in</span></span><br><span class="line"><span class="keyword">for</span> (value <span class="keyword">of</span> array1) &#123;<span class="built_in">console</span>.log(value)&#125;</span><br></pre></td></tr></table></figure></p>
+<p>大概浏览下<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener">array数组的语法一览</a>，array的方法很多，基本上结合了Python中的list的内置函数以及itertools模块中的函数（<strong>包含过滤，映射，合并，元素拓展，重新排列等功能</strong>。当然，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators" target="_blank" rel="noopener">js语法中也有迭代器跟生成器的概念</a>，这里不拓展。</p>
+<h2 id="3-解构"><a href="#3-解构" class="headerlink" title="3. 解构"></a>3. 解构</h2><p>刚看到结构的语法，有些懵逼，实在想不到跟Python的哪种语法相关。后来一看是<a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p01_unpack_sequence_into_separate_variables.html" target="_blank" rel="noopener">将序列分解为单独变量</a>，以及<a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p02_unpack_elements_from_iterables.html" target="_blank" rel="noopener">从任意长度的可迭代对象中分解元素</a>。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//解构数组</span></span><br><span class="line"><span class="keyword">var</span> a, b, rest;</span><br><span class="line">[a, b] = [<span class="number">10</span>, <span class="number">20</span>];</span><br><span class="line"><span class="comment">// 用三个点，python中是*</span></span><br><span class="line">[a, b, ...rest] = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>];</span><br><span class="line"><span class="built_in">console</span>.log(rest);</span><br><span class="line"><span class="comment">// expected output: [30,40,50]</span></span><br><span class="line"><span class="comment">//使用扩展运算符（...）拷贝数组</span></span><br><span class="line"><span class="keyword">const</span> itemsCopy = [...items];</span><br><span class="line"></span><br><span class="line"><span class="comment">///解构对象，这个是python没有的，通过dict.values()然后再分解</span></span><br><span class="line"><span class="keyword">var</span> a, b;</span><br><span class="line">(&#123;a, b&#125; = &#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;);</span><br><span class="line"><span class="comment">//给新的变量赋值</span></span><br><span class="line"><span class="keyword">var</span> o = &#123;<span class="attr">p</span>: <span class="number">42</span>, <span class="attr">q</span>: <span class="literal">true</span>&#125;;</span><br><span class="line"><span class="keyword">var</span> &#123;<span class="attr">p</span>: foo, <span class="attr">q</span>: bar&#125; = o;</span><br><span class="line"><span class="built_in">console</span>.log(foo); <span class="comment">// 42</span></span><br><span class="line"><span class="built_in">console</span>.log(bar); <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 提供默认值</span></span><br><span class="line"><span class="keyword">var</span> &#123;a = <span class="number">10</span>, b = <span class="number">5</span>&#125; = &#123;<span class="attr">a</span>: <span class="number">3</span>&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 3</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 5</span></span><br><span class="line"><span class="comment">// 给新的变量命名并提供默认值</span></span><br><span class="line"><span class="keyword">var</span> &#123;<span class="attr">a</span>:aa = <span class="number">10</span>, <span class="attr">b</span>:bb = <span class="number">5</span>&#125; = &#123;<span class="attr">a</span>: <span class="number">3</span>&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(aa); <span class="comment">// 3</span></span><br><span class="line"><span class="built_in">console</span>.log(bb); <span class="comment">// 5</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="4-模板字符串"><a href="#4-模板字符串" class="headerlink" title="4. 模板字符串"></a>4. 模板字符串</h2><blockquote>
+<p>静态字符串一律使用单引号或反引号，不使用双引号。动态字符串使用反引号。<br><code>const a = &#39;foobar&#39;;
+const b = `foo${a}bar`;</code></p>
+</blockquote>
+<p>打印字符串这种常用到语法,一定需要个优雅的写法,才有动力让程序员代码继续搞下去。跟<a href="http://ju.outofmemory.cn/entry/198922" target="_blank" rel="noopener">神一样的python的<code>format</code>语法</a>差不多，不过好像不能在格式化字符串的同时对传入变量进行一些转换操作，比如进制，小数点转换等。<br>还有种更高级的用法：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/template_strings#%E5%B8%A6%E6%A0%87%E7%AD%BE%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2" target="_blank" rel="noopener">带标签的模板字符串</a>，不展开。</p>
+<h4 id="拓展：条件运算符"><a href="#拓展：条件运算符" class="headerlink" title="拓展：条件运算符"></a>拓展：条件运算符</h4><blockquote>
+<p>条件（三元）运算符是 JavaScript 仅有的使用三个操作数的运算符。本运算符经常作为if语句的简短形式来使用。<br>condition ? expr1 : expr2</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> age = <span class="number">26</span>;</span><br><span class="line"><span class="keyword">var</span> canDrinkAlcohol = (age &gt; <span class="number">21</span>) ? <span class="string">"True, over 21"</span> : <span class="string">"False, under 21"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(canDrinkAlcohol); <span class="comment">// "True, over 21"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 三元运算符能够很好地用在函数返回值的表达式中，此时不需要 if/else 语句</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">canDrinkAlcohol</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (age &gt; <span class="number">21</span>) ? <span class="string">"True, over 21"</span> : <span class="string">"False, under 21"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> output = canDrinkAlcohol(<span class="number">26</span>);</span><br><span class="line"><span class="built_in">console</span>.log(output); <span class="comment">// "True, over 21"</span></span><br></pre></td></tr></table></figure>
+<p>在Python中不存在三元表达式，可以用<strong>简洁版的if/else语句</strong>：<code>canDrinkAlcohol =   &quot;True, over 21&quot; if age&gt;21 else  &quot;False, under 21&quot;</code>，可以达到同样效果。</p>
+<h2 id="5-let与const"><a href="#5-let与const" class="headerlink" title="5. let与const"></a>5. let与const</h2><blockquote>
+<p>Python是强类型 + 动态类型 , JS是弱类型 + 动态类型<br>动态/静态类型，指的是声明一个变量之后，它是否可以存储（指向）不同类型的变量。隐式类型转换，只可能发生在弱类型语言中<br>关于更多这方面的了解可以看这个链接：<a href="https://github.com/muwenzi/Program-Blog/issues/34" target="_blank" rel="noopener">JS是动态弱类型语言的理解</a></p>
+</blockquote>
+<p>虽同为动态类型语言，但js还是有点小不同，要用var，let，const之类的。<a href="https://juejin.im/post/5bdedd42e51d450d810a897c" target="_blank" rel="noopener">浅谈var、let和const区别</a>这里已经说得很清楚了,编程对此的建议是：</p>
+<blockquote>
+<p>let完全可以取代var，因为两者语义相同，而且let没有副作用,在let和const之间，建议优先使用const，尤其是在全局环境，不应该设置变量，只应设置常量。</p>
+</blockquote>
+<h2 id="6-this用法"><a href="#6-this用法" class="headerlink" title="6. this用法"></a>6. this用法</h2><p>关于this，见到的比较少，但对这个语法也是模糊不清，等真正接触到了在写心得。具体用法参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">官网手册</a></p>
+<h2 id="7-async与await"><a href="#7-async与await" class="headerlink" title="7. async与await"></a>7. async与await</h2><p>这是个头疼的语法，无论是在Python还是js中。不过殊途同归，异步协程的语法在一系列更改迭代之后，从yield到了await，这才是真正的光明大陆，抛弃内部实现，直接用同步语法写异步吧，美滋滋。</p>
+<blockquote>
+<p>在Python中异步编程更多的体验是在高效率，替换多线程的作用，而在nodejs中，本身函数的异步性，我感觉这个语法的核心在于取代回调函数的地狱，重在更好代码书写方式，即用同步方式写异步编程 ; promise与future含义接近，都代表未来会完成的事物，尽量不要对它们进行手动实例化，很多都是内部实现的，我们做的只是理解异步，然后用专家们定义的“async”与“await”就好</p>
+</blockquote>
+<h2 id="杂谈"><a href="#杂谈" class="headerlink" title="杂谈"></a>杂谈</h2><p><strong>作为一门语言，繁多的语法是免不了的，真的很多，js中还看到了Python中见过的但是不怎么熟悉用不到的语法的影子，都是一一对应。对于这些，不可能一口吃成胖子,任重而道远。碰到新语法就先去揣测它的意思然后去翻阅官方手册更容易去记住它～</strong></p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-箭头函数"><span class="toc-text">1. 箭头函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基础用法"><span class="toc-text">基础用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#高级用法"><span class="toc-text">高级用法</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#2-数组的迭代到数组的常用用法"><span class="toc-text">2. 数组的迭代到数组的常用用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-解构"><span class="toc-text">3. 解构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-模板字符串"><span class="toc-text">4. 模板字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#拓展：条件运算符"><span class="toc-text">拓展：条件运算符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-let与const"><span class="toc-text">5. let与const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-this用法"><span class="toc-text">6. this用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-async与await"><span class="toc-text">7. async与await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#杂谈"><span class="toc-text">杂谈</span></a></li>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/nodejs3-jstips/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Nodejs/"><i class="fa fa-tags"></i>Nodejs</a>
+     
+      <a href="/tags/js/"><i class="fa fa-tags"></i>js</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.png" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/pipenv-and-npm/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
