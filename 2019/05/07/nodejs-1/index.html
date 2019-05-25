@@ -6,16 +6,16 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>Shell脚本自动生成django项目结构并添加常用插件 | 烛影小札</title>
+  <title>用 Python 眼光看Nodejs（一）,杂谈 | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Python,Django,Shell,">
+    <meta name="keywords" content="Nodejs,Nodejs,">
   
 
   
-  <meta name="description" content="时常需要新建一个django项目来做快速的Demo演示，自己也记不住一些基本配置与库的导入，常常去之前写的项目中拷贝，Pycharm切来切去有点麻烦，萌生出了简单写个shell脚本自动化生成django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，美滋滋！">
+  <meta name="description" content="说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。">
 
   
 
@@ -188,11 +188,11 @@
   <div class="passage">
   <div class="passage-meta">
     <span>
-      <i class="fa fa-calendar"></i>2019-04-24
+      <i class="fa fa-calendar"></i>2019-05-07
     </span>
     
       <span>
-        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+        | <a href="/categories/Nodejs/"><i class="fa fa-bookmark"></i>Nodejs</a>
       </span>
     
     
@@ -202,15 +202,46 @@
     
   </div>
   <h1 class="passage-title">
-    Shell脚本自动生成django项目结构并添加常用插件
+    用 Python 眼光看Nodejs（一）,杂谈
   </h1>
   
   <article class="passage-article">
     <p></p>
-<p>生成一个新的django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，一劳永逸</p>
-<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux:"></a>Linux:</h2><p><code>只支持linux 测试环境为Ubuntu</code>,只支持linux 测试环境为Ubuntu，我这边用的是python虚拟环境，也可不需要</p>
-<h3 id="Set-virtualenv"><a href="#Set-virtualenv" class="headerlink" title="Set virtualenv"></a>Set virtualenv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir envdir</span><br><span class="line">$ <span class="built_in">cd</span> envdir</span><br><span class="line">$ pipenv --python 3.x</span><br><span class="line">$ pipenv shell</span><br></pre></td></tr></table></figure>
-<h3 id="Auto-create"><a href="#Auto-create" class="headerlink" title="Auto create"></a>Auto create</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/fantasyhh/MyAutoDjango</span><br><span class="line">$ <span class="built_in">cd</span> MyAutoDjango</span><br><span class="line">$ chmod u+x auto.sh</span><br><span class="line">$ ./auto.sh</span><br></pre></td></tr></table></figure>
+<p>说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。</p>
+<h2 id="Nodejs为何与Python放在一起看待"><a href="#Nodejs为何与Python放在一起看待" class="headerlink" title="Nodejs为何与Python放在一起看待"></a>Nodejs为何与Python放在一起看待</h2><p>后端Nodejs基于服务端的javascript,前端js是基于浏览器端的 javascript。它们的语法不一样但是组成不一样。<br><strong>JavaScript</strong>：</p>
+<ul>
+<li>ECMAScript（语言基础，如：语法、数据类型结构以及一些内置对象） </li>
+<li>DOM（一些操作页面元素的方法）</li>
+<li>BOM（一些操作浏览器的方法）</li>
+</ul>
+<p><strong>Nodejs</strong>：</p>
+<ul>
+<li>ECMAScript（语言基础，如：语法、数据类型结构以及一些内置对象）</li>
+<li>OS（操作系统）</li>
+<li>file（文件系统）</li>
+<li>net（网络系统）</li>
+<li>database（数据库）</li>
+</ul>
+<p>其实说到底，前端js开发和nodejs开发，两者间除了js是重合的以外，其它技能互相之间完全没有半毛钱关系。自己以前没有学过JavaScript，但是学了Python也有三四年了，对一些web服务器原理、关系数据使用，以及稍微深一点的网络原理以及一些服务器方面的知识有一定的了解，虽然称不上多，但是有了一点基础，这些都是与Nodejs相关的。所以将两者放在一起来谈，比较相同点与不同点能更有兴趣地学习下去。</p>
+<h2 id="Nodejs能用来干什么"><a href="#Nodejs能用来干什么" class="headerlink" title="Nodejs能用来干什么"></a>Nodejs能用来干什么</h2><p>如果Nodejs与Python没有什么大的差异化，那简直是没必要再白费精力学一门新语言，Nodejs当然有它自己闪亮的特性。</p>
+<blockquote>
+<p>NodeJS的作者说，他创造NodeJS的目的是为了实现高性能Web服务器，他首先看重的是事件机制和异步IO模型的优越性，而不是JS。但是他需要选择一种编程语言实现他的想法，这种编程语言不能自带IO功能，并且需要能良好支持事件机制。JS没有自带IO功能，天生就用于处理浏览器中的DOM事件，并且拥有一大群程序员，因此就成为了天然的选择。</p>
+</blockquote>
+<p><strong>事件驱动</strong>与<strong>异步IO</strong>，这两个词在学习Python异步编程的时候遇到过，正如开头说的那样，很是折磨，很多概念模糊不清，对到底为何要这么<strong>重视异步</strong>不太懂，直到看了这篇文章 <a href="http://python.jobbole.com/88291/" target="_blank" rel="noopener">Python异步编程</a>，才有些理解为何平常我们觉得性能也就毫秒或者更小时间的差别咋要这么在意，多个几秒钟又没大事，何必异步这么麻烦。类似的还有这篇<a href="https://www.jianshu.com/p/486b0965c296" target="_blank" rel="noopener">Linux IO模型</a>，都是极佳的文章。人类总是一直在探求极致的运算速度，榨干CPU的性能，让它弹无虚发，哈哈！这就是进步。</p>
+<blockquote>
+<p>异步编程是以进程、线程、协程、函数/方法作为执行任务程序的基本单位，结合回调、事件循环、信号量等机制，以提高程序整体执行效率和并发能力的编程方式。</p>
+</blockquote>
+<p>那Nodejs到底能用来干什么或者说它的适用场景擅长领域在哪？就好比Python的科学计算，机器学习是一绝<br>，那Nodejs呢？<br><strong>Node.js特别适合于你希望保持从浏览器到服务器的持久连接的应用程序。使用称为“长轮询”的技术，你可以编写一个实时向用户发送更新的应用程序。对许多网络框架进行长时间轮询，比如Ruby on Rails或Django，会在服务器上产生巨大的负担，因为每个活动客户端都会占用一个服务器进程。这种情况相当于一个tarpit攻击。当你使用Node.js之类的东西时，服务器不需要为每个打开的连接维护单独的线程。</strong><br>所以Node.js最适合实时应用：<strong>在线游戏</strong>，<strong>协作工具</strong>，<strong>聊天室</strong>，或者其他用户需要立即看到一个用户对应用程序做的任何事情，而<strong>没有页面刷新</strong></p>
+<blockquote>
+<p>简而言之，Node.js非常适合具有大量并发连接的应用程序，并且每个请求只需要很少的CPU周期，因为在执行函数期间会阻止事件循环（包含所有其他客户端）</p>
+</blockquote>
+<h2 id="怎么学Nodejs"><a href="#怎么学Nodejs" class="headerlink" title="怎么学Nodejs"></a>怎么学Nodejs</h2><ol>
+<li>先说js的语法，之前学习过一点，看着干巴巴的基础概念，用法、变量、函数等，这些看过一遍都懂，但是要用的时候就还得翻，很枯燥。但是有幸，js与python都是较为“动态的语言”，所以要用到的时候可以翻翻<a href="https://www.runoob.com/js/js-tutorial.html" target="_blank" rel="noopener">菜鸟教程上的js部分</a></li>
+<li>关于Nodejs的那一部分主要还是语法api的应用，但是nodejs一直在修正，所以什么手册实体书没用，主要还是<a href="http://nodejs.cn/api/" target="_blank" rel="noopener">官方的手册</a>以及网上大佬的教程</li>
+<li>我想，过程可以是这样的，先了解nodejs的运行方式与以及项目布局。Nodejs较重要的还是web开发，所以之后选择一个web框架去啃，在框架的教程中发现新知识或者新的语法就去查，去跟官方手册对照，去跟Python对照，解决了再继续下去，记录方式还是Google相关文章做整理为主，自己记录经典例子为辅</li>
+<li>当然了，平常的工作中几乎没有用到高并发的时候，最终目的使用nodejs创建一个聊天室或者一个高并发的restful api，也算用到实际中了</li>
+</ol>
+<h2 id="未来"><a href="#未来" class="headerlink" title="未来"></a>未来</h2><p>用Nodejs的新知识来温故Python类似的旧知识，充实偶尔犯闲的上班时间，开始吧！</p>
   </article>
   <aside class="table-content" id="site-toc">
   <div class="table-content-title">
@@ -218,7 +249,7 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-text">Linux:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Set-virtualenv"><span class="toc-text">Set virtualenv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Auto-create"><span class="toc-text">Auto create</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs为何与Python放在一起看待"><span class="toc-text">Nodejs为何与Python放在一起看待</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nodejs能用来干什么"><span class="toc-text">Nodejs能用来干什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#怎么学Nodejs"><span class="toc-text">怎么学Nodejs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未来"><span class="toc-text">未来</span></a></li></ol>
   </div>
 </aside>
   
@@ -227,7 +258,7 @@
       
         <div>
           原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2019/04/24/auto-django/</a>
+          <a href target="_blank">https://fantasyhh.github.io/2019/05/07/nodejs-1/</a>
         </div>
       
       <div>
@@ -238,9 +269,7 @@
   
     <div class="passage-tags">
      
-      <a href="/tags/Django/"><i class="fa fa-tags"></i>Django</a>
-     
-      <a href="/tags/Shell/"><i class="fa fa-tags"></i>Shell</a>
+      <a href="/tags/Nodejs/"><i class="fa fa-tags"></i>Nodejs</a>
     
     </div>
   
@@ -320,10 +349,10 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="/2019/04/25/sed-usage/" data-enable="true">
+    <a href="/2019/05/08/nodejs-2/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/2019/04/25/sed-usage/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>

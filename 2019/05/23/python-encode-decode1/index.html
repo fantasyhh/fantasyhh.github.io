@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>通过串口发送16进制数据引发的Python3编码血案 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,Python,Linux,Serial,">
+  
+
+  
+  <meta name="description" content="由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-23
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    通过串口发送16进制数据引发的Python3编码血案
+  </h1>
+  
+  <article class="passage-article">
+    <p></p>
+<p>由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..</p>
+<h2 id="1-按部就班"><a href="#1-按部就班" class="headerlink" title="1. 按部就班"></a>1. 按部就班</h2><p>设备手册里写的读距离命令是这样的： 68,04,01,01,06 ，发送后结果数据以数据输出格式输出。<br>数据一个十个字节，输出格式为=&gt;数据帧字头（1Byte）+数据长度（6Byte）+地址（1Byte）+数据（6Byte）+校验和（1Byte）。</p>
+<blockquote>
+<p> <strong>可先用python3 -m  serial.tools.list_ports 查看可用串口</strong></p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> serial</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">ser = serial.Serial(port=<span class="string">'/dev/ttyUSB3'</span>,baudrate=<span class="number">9600</span>)</span><br><span class="line"><span class="comment"># 由于发送的是十六进制数据，应该这么写</span></span><br><span class="line">ser.write([<span class="number">0x68</span>,<span class="number">0x04</span>,<span class="number">0x01</span>,<span class="number">0x01</span>,<span class="number">0x06</span>]）</span><br><span class="line"><span class="comment">#然后过1秒钟（超声波传播不会很快）</span></span><br><span class="line">time.sleep(<span class="number">1</span>)</span><br><span class="line">value = ser.read_all()[-10=&gt;]</span><br></pre></td></tr></table></figure>
+<h2 id="2-发送十六进制数据的方式"><a href="#2-发送十六进制数据的方式" class="headerlink" title="2.发送十六进制数据的方式"></a>2.发送十六进制数据的方式</h2><p>像上面一样，发送一组16进制数据就这么简单。我刚开始的时候找了很多方式，各种python2的老方法，不起作用的方法充斥着网上，鱼龙混杂。后来，我发现，串口明明传输的是字节，这是个列表，怎么就可行了呢？来一波代码查看。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def write(self, value)=&gt;</span><br><span class="line">    <span class="string">"""Output the given byte string over the serial port."""</span></span><br><span class="line">    if not self.is_open=&gt;</span><br><span class="line">        <span class="keyword">raise</span> portNotOpenError</span><br><span class="line">    d = to_bytes(value)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后我们继续查看to_bytes函数</span></span><br><span class="line"><span class="comment"># all Python versions prior 3.x convert ``str([17])`` to '[17]' instead of '\x11'</span></span><br><span class="line"><span class="comment"># so a simple ``bytes(sequence)`` doesn't work for all versions</span></span><br><span class="line">def to_bytes(seq)=&gt;</span><br><span class="line">    <span class="string">"""convert a sequence to a bytes type"""</span></span><br><span class="line">    if isinstance(seq, bytes)=&gt;</span><br><span class="line">        <span class="keyword">return</span> seq</span><br><span class="line">    elif isinstance(seq, bytearray)=&gt;</span><br><span class="line">        <span class="keyword">return</span> bytes(seq)</span><br><span class="line">    elif isinstance(seq, memoryview)=&gt;</span><br><span class="line">        <span class="keyword">return</span> seq.tobytes()</span><br><span class="line">    elif isinstance(seq, unicode)=&gt;</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">'unicode strings are not supported, please encode to bytes=&gt; &#123;!r&#125;'</span>.format(seq))</span><br><span class="line">    else=&gt;</span><br><span class="line">        <span class="comment"># handle list of integers and bytes (one or more items) for Python 2 and 3</span></span><br><span class="line">        <span class="keyword">return</span> bytes(bytearray(seq))</span><br></pre></td></tr></table></figure></p>
+<p>我们可以看到如果单纯传入列表参数，将会<code>return bytes(bytearray(seq))</code>，那我们来看看：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bytes(bytearray([<span class="number">0x68</span>,<span class="number">0x04</span>,<span class="number">0x01</span>,<span class="number">0x01</span>,<span class="number">0x06</span>]))    <span class="comment"># b'h\x04\x01\x01\x06'</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><strong>bytearray和bytes不一样的地方在于，bytearray是可变的,它们的关系就相当于list与tuple</strong></p>
+</blockquote>
+<p><strong>源码里的写法应该是兼容了Python2与Python3</strong> ，在Python3将列表转换为字节，我们也可以这么写来达到转换的效果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bytes([<span class="number">0x68</span>,<span class="number">0x04</span>,<span class="number">0x01</span>,<span class="number">0x01</span>,<span class="number">0x06</span>]     <span class="comment">#b'h\x04\x01\x01\x06</span></span><br></pre></td></tr></table></figure></p>
+<p>或者通过单纯的十六进制字符串（即没有0x前缀）来传递数据：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 空格可不需要</span></span><br><span class="line">bytes.fromhex(<span class="string">'68 04 01 01 06'</span>)      <span class="comment">#b'h\x04\x01\x01\x06</span></span><br></pre></td></tr></table></figure></p>
+<p>伴随着这个<strong>fromhex</strong>方法的是<strong>hex</strong>方法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d = bytes.fromhex(<span class="string">'68 04 01 01 06'</span>)</span><br><span class="line">d.hex()                                <span class="comment"># '6804010106'</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="3-那接收到了什么？"><a href="#3-那接收到了什么？" class="headerlink" title="3. 那接收到了什么？"></a>3. 那接收到了什么？</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">value = ser.read_all()[-10=&gt;]</span><br><span class="line"><span class="comment">#value的值为 b'h\t\x01\x01\xc2\x00,\x00JC'</span></span><br></pre></td></tr></table></figure>
+<p>乍一看有点懵逼，我要的是超声波测量到的障碍物距离，你给我一串这茬看不懂的干啥？</p>
+<blockquote>
+<p><strong>bytes或bytearray的对象的各个元素是介于0~255（含）之间的整数</strong></p>
+</blockquote>
+<p>我们尝试下这样获取：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">value = <span class="string">b'h\t\x01\x01\xc2\x00,\x00JC'</span></span><br><span class="line"><span class="comment"># len(value) is 10</span></span><br><span class="line">value[0] =&gt; 104		 # ord('h')=104</span><br><span class="line">value[1] =&gt; 9           # ord('\t')=9</span><br><span class="line">value[2] =&gt; 1           # ord('\x01')=1</span><br><span class="line">value[3] =&gt; 1</span><br><span class="line">value[4] =&gt; 194         # ord('\xc2')=194</span><br><span class="line">value[5] =&gt; 0</span><br><span class="line">value[6] =&gt; 44          # ord(',')=44</span><br><span class="line">value[7] =&gt; 0</span><br><span class="line">value[8] =&gt; 74          # ord('J')=74</span><br><span class="line">value[9] =&gt; 67          # ord('C')=67</span><br></pre></td></tr></table></figure></p>
+<p><strong>由此我们可以知道，字节就是代表的一串二进制，这是计算机懂的语言，然后我们将二进制转换为数字，通过拿到的值计算就好</strong></p>
+<h2 id="4-思考几个问题？"><a href="#4-思考几个问题？" class="headerlink" title="4. 思考几个问题？"></a>4. 思考几个问题？</h2><ul>
+<li><strong>既然字节是二进制，为什么要用十六进制表示呢？</strong></li>
+<li><strong>我们查看返回的值<code>b&#39;h\t\x01\x01\xc2\x00,\x00JC&#39;</code>，为什么是一些字母与十六进制的混合使用？</strong></li>
+<li><strong><code>\x04</code>与<code>0x04</code>有什么区别，不都是十六进制吗？</strong></li>
+<li><strong>很多很多…..</strong></li>
+</ul>
+<p><strong>那么就可以接着看下面的编码详解,不见不散。</strong></p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-按部就班"><span class="toc-text">1. 按部就班</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-发送十六进制数据的方式"><span class="toc-text">2.发送十六进制数据的方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-那接收到了什么？"><span class="toc-text">3. 那接收到了什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-思考几个问题？"><span class="toc-text">4. 思考几个问题？</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/05/23/python-encode-decode1/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+     
+      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
+     
+      <a href="/tags/Serial/"><i class="fa fa-tags"></i>Serial</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.png" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/2019/05/25/python-encode-decode2/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/05/17/nodejs3-jstips/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

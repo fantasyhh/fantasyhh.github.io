@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>血案后对python3.7最新字节字符编码解码知识整理 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,Python,bytes,">
+  
+
+  
+  <meta name="description" content="之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-25
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    血案后对python3.7最新字节字符编码解码知识整理
+  </h1>
+  
+  <article class="passage-article">
+    <p>之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。</p>
+<h2 id="1-先从概念理解开始"><a href="#1-先从概念理解开始" class="headerlink" title="1. 先从概念理解开始"></a>1. 先从概念理解开始</h2><blockquote>
+<p>某大佬云：人类使用文本，计算机使用字节序列</p>
+</blockquote>
+<p>我们先可以看一下<a href="https://zhuanlan.zhihu.com/p/29318105" target="_blank" rel="noopener">从ASCII到Unicode的发展历史</a>，然后理解下面的概念。</p>
+<ul>
+<li><strong>bit</strong>：二进制位， 是计算机内部数据储存的最小单位，11010100是一个8位二进制数</li>
+<li><strong>byte</strong>：字节，是计算机中数据处理的基本单位，计算机中以字节为单位存储和解释信息，规定一个字节由八个二进制位构成，即1个字节等于8个比特（1Byte=8bit）。八位二进制数最小为00000000，最大为11111111；通常1个字节可以存入一个ASCII码，2个字节可以存放一个汉字国标码</li>
+<li><strong>Unicode</strong>：Unicode（统一码、万国码、单一码）是计算机科学领域里的一项业界标准，包括字符集、编码方案等。Unicode 是为了解决传统的字符编码方案的局限而产生的，它为每种语言中的每个字符设定了统一并且唯一的二进制编码，以满足跨语言、跨平台进行文本转换、处理的要求</li>
+<li><strong>字符</strong>：“字符”的最佳定义是Unicode字符，字符的具体表述取决于所用的编码</li>
+<li><strong>字符串</strong>：一个字符串就是一个字符序列（多个字符组成）</li>
+<li><strong>码位</strong>：字符的标识，是0~1114111（这个数字记着，下面有用）的数字，在Unicode中以4-6个十六进制数字表示，而且加前缀“U+”，比如字母A的码位就是<code>U+0041</code>，欧元符号€的码位就是<code>U+20AC</code></li>
+<li><strong>编码</strong>：把码位转换成字节序列的过程就是编码</li>
+<li><strong>解码</strong>：把字节序序列转换成码位的过程</li>
+</ul>
+<p>简单看一个书本上例子当下酒菜：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">'café'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(s) <span class="comment"># ➊</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = s.encode(<span class="string">'utf8'</span>) <span class="comment"># ➋</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line"><span class="string">b'caf\xc3\xa9'</span> <span class="comment"># ➌</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(b) <span class="comment"># ➍</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.decode(<span class="string">'utf8'</span>) <span class="comment"># ➎</span></span><br><span class="line"><span class="string">'café'</span></span><br></pre></td></tr></table></figure></p>
+<p>❶ ‘café’ 字符串有 4 个 Unicode 字符。<br>❷ 使用 UTF-8 把 str 对象编码成 bytes 对象。<br>❸ bytes 字面量以 b 开头。<br>❹ 字节序列 b 有 5 个字节(在 UTF-8 中,“é”的码位编码成两个字节)。<br>❺ 使用 UTF-8 把 bytes 对象解码成 str 对象</p>
+<blockquote>
+<p>如果想帮助自己记住 .decode() 和 .encode() 的区别,可以把字节序列想成晦涩难懂的机器磁芯转储,把 Unicode 字符串想成“人类可读”的文本。那么,把字节序列变成人类可读的文本字符串就是解码,而把字符串变成用于存储或传输的字节序列就是编码。</p>
+</blockquote>
+<h2 id="2-几个常会看到的函数"><a href="#2-几个常会看到的函数" class="headerlink" title="2. 几个常会看到的函数"></a>2. 几个常会看到的函数</h2><h4 id="数字转换"><a href="#数字转换" class="headerlink" title="数字转换"></a>数字转换</h4><p> <code>bin()</code>,<code>oct()</code>,<code>int()</code>,<code>hex()</code>，这些函数就不说了，数字转换手算算也是非常简单的。但是我们要知道Python中各种进制数据的表示，以十进制的23为例，二进制前缀为0b，<code>0b10111</code>，八进制前缀为0o，<code>0o27</code>，十六进制前缀为0x，<code>0x17</code>.</p>
+<p>一个在转换进制的同时高位补零的小技巧：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>bin(<span class="number">2</span>)</span><br><span class="line"><span class="number">0b10</span><span class="string">'</span></span><br><span class="line"><span class="string">&gt;&gt;&gt; '</span>&#123;:<span class="number">08</span>b&#125;<span class="string">'.format(2)</span></span><br><span class="line"><span class="string">'</span><span class="number">00000010</span><span class="string">'</span></span><br><span class="line"><span class="string">&gt;&gt;&gt; '</span>&#123;:<span class="number">8</span>b&#125;<span class="string">'.format()</span></span><br><span class="line"><span class="string">'</span>      <span class="number">10</span><span class="string">'</span></span><br><span class="line"><span class="string"># 输出的都是字符串</span></span><br><span class="line"><span class="string">&gt;&gt;&gt; int('</span><span class="number">00000010</span><span class="string">',2)</span></span><br><span class="line"><span class="string">2</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="不起眼的主角"><a href="#不起眼的主角" class="headerlink" title="不起眼的主角"></a>不起眼的主角</h4><p><code>chr(i)</code>：<strong>返回 Unicode 码位为整数 i （ 0 &lt;= i &lt;= 0x10ffff）的字符的字符串格式。例如，chr(97) 返回字符串 ‘a’，chr(8364) 返回字符串 ‘€’。这是 ord() 的逆函数</strong>。</p>
+<p><code>ord(c)</code>： <strong>对表示单个 Unicode 字符的字符串，返回代表它 Unicode 码点的整数。例如 ord(‘a’) 返回整数 97， ord(‘€’) （欧元符合）返回 8364 。这是 chr() 的逆函数。</strong></p>
+<p>所以上面chr函数里面i的范围最大为0x10ffff，转换成十进制就是码位概念里字符标识数字的1114111，欧元符号转换也是同理，0x20AC就是8364。</p>
+<h2 id="3-计算机所能理解的字节"><a href="#3-计算机所能理解的字节" class="headerlink" title="3. 计算机所能理解的字节"></a>3. 计算机所能理解的字节</h2><h4 id="Python中的字节对象"><a href="#Python中的字节对象" class="headerlink" title="Python中的字节对象"></a>Python中的字节对象</h4><p><strong>操作二进制数据的核心内置类型是 bytes 和 bytearray。 它们由 memoryview 提供支持，该对象使用 缓冲区协议 来访问其他二进制对象所在内存，不需要创建对象的副本。</strong>、<br><code>bytearray(）</code>:返回一个新的 bytes 数组。 bytearray 类是一个可变序列，包含范围为 0 &lt;= x &lt; 256 的整数。它有可变序列大部分常见的方法<br><code>bytes()</code>:返回一个新的“bytes”对象， 是一个不可变序列，包含范围为 0 &lt;= x &lt; 256 的整数,bytes 是 bytearray 的不可变版本 - 它有其中不改变序列的方法和相同的索引、切片操作。<br><strong>Python中bytes 字面值中只允许 ASCII 字符（无论源代码声明的编码为何）。 任何超出 127 的二进制值必须使用相应的转义序列形式加入 bytes 字面值。</strong></p>
+<blockquote>
+<p>bytearray和bytes不一样的地方在于，bytearray是可变的,它们的关系就相当于list与tuple</p>
+</blockquote>
+<p>还是来看书上例子<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe = bytes(<span class="string">'café'</span>, encoding=<span class="string">'utf_8'</span>) ➊</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe</span><br><span class="line"><span class="string">b'caf\xc3\xa9'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe[<span class="number">0</span>] ➋</span><br><span class="line"><span class="number">99</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe[:<span class="number">1</span>] ➌</span><br><span class="line"><span class="string">b'c'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe_arr = bytearray(cafe)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe_arr ➍</span><br><span class="line">bytearray(<span class="string">b'caf\xc3\xa9'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe_arr[<span class="number">-1</span>:] ➎</span><br><span class="line">bytearray(<span class="string">b'\xa9'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>❶ bytes 对象可以从 str 对象使用给定的编码构建。<br>❷ 各个元素是 range(256) 内的整数。<br>❸ bytes 对象的切片还是 bytes 对象,即使是只有一个字节的切片。<br>❹ bytearray 对象没有字面量句法,而是以 bytearray() 和字节序列字面量参数的形式<br>显示。<br>❺ bytearray 对象的切片还是 bytearray 对象。</p>
+<blockquote>
+<p>my_bytes[0] 获取的是一个整数,而 my_bytes[:1] 返回的是一个长度为 1的 bytes 对象——这一点应该不会让人意外。s[0] == s[:1] 只对 str 这个序列类型成立。不过,str 类型的这个行为十分罕见。对其他各个序列类型来说,s[i] 返回一个元素,而 s[i:i+1] 返回一个相同类型的序列,里面是 s[i] 元素。</p>
+</blockquote>
+<h4 id="简单分析"><a href="#简单分析" class="headerlink" title="简单分析"></a>简单分析</h4><p>上面的例子中，我们看到Python中字节用的是<code>b&#39;caf\xc3\xa9&#39;</code>来表示，通过一个前缀b来表示字节，也是为了让人更明白，<code>cafe[0]</code>得到的是99，我们打开<a href="https://www.ascii-code.com/" target="_blank" rel="noopener">ascii码表</a>，或者用<code>ord(&#39;c&#39;)</code>知道了，99代表的就是’c’。从内部来看，这个字节在计算机中的真正存在方式是用<code>01100011</code>来表示，后面的af类似，而<code>é</code>在utf8编码中要用两个字节表示，而且这两个字节都大于127，所有只能使用十六进制转义。<br>那为什么要用十六进制呢，而不是二进制来表明字节？</p>
+<blockquote>
+<p>由于字节(byte)在计算机内部出现的频率较高，如果可以使用一种简洁的方式将它的内在含义准确表达出来，将会给我们带来很多方便。选择十六进制，是因为8位二进制的数字可以方便的转换为2个十六进制的数字。一个字节能且只能由一对十六进制来表示，比如10110110可以表示为B6。如果使用4进制的话则需要使用4个数字来表示一个字节，不够简洁；使用8进制的话，最靠左的8进制数是由2位二进制数字来表示的，相比于使用16进制有些美中不足。</p>
+</blockquote>
+<p>说到底，Python给我们返回来的字节形式还是<strong>“给人看的”</strong>，让我们以一种看字符的方式来看字节。</p>
+<h4 id="字节的两个好用方法来应对十六进制"><a href="#字节的两个好用方法来应对十六进制" class="headerlink" title="字节的两个好用方法来应对十六进制"></a>字节的两个好用方法来应对十六进制</h4><p><code>fromhex(string) （与binascii.b2a_hex(string)类似）</code>:此 bytes 类方法返回一个解码给定字符串的 bytes 对象。 字符串必须由表示每个字节的两个十六进制数码构成，其中的 ASCII 空白符会被忽略<br><code>hex(h)（与binascii.a2b_hex(string)类似））</code>：返回一个字符串对象，该对象包含实例中每个字节的两个十六进制数字。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe = bytes(<span class="string">'café'</span>, encoding=<span class="string">'utf_8'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe</span><br><span class="line"><span class="string">b'caf\xc3\xa9'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cafe.hex()</span><br><span class="line"><span class="string">'636166c3a9'</span></span><br><span class="line">&gt;&gt;&gt;bytes.fromhex(<span class="string">'63 61 66 c3 a9'</span>)</span><br><span class="line"><span class="string">b'caf\xc3\xa9'</span></span><br><span class="line"><span class="comment"># 另一种写方法,用的不多，一些手册或者其他语言里的十六进制数据都是没有0x前缀，还要手动补，不靠谱</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bytes([<span class="number">0x63</span>,<span class="number">0x61</span>,<span class="number">0x66</span>,<span class="number">0xc3</span>,<span class="number">0xa9</span>])</span><br><span class="line"><span class="string">b'caf\xc3\xa9'</span></span><br></pre></td></tr></table></figure></p>
+<p>查看下bytes用法</p>
+<blockquote>
+<p>Init signature: bytes(self, /, *args, **kwargs)<br>Docstring:<br>bytes(iterable_of_ints) -&gt; bytes<br>bytes(string, encoding[, errors]) -&gt; bytes<br>bytes(bytes_or_buffer) -&gt; immutable copy of bytes_or_buffer<br>bytes(int) -&gt; bytes object of size given by the parameter initialized with null bytes<br>bytes() -&gt; empty bytes object</p>
+</blockquote>
+<p>好了，这下心里的结都理清楚了，特别是要给下位机发送一段十六进制的数字的组合，就可以这么转换了</p>
+<h2 id="4-结构体与内存视图"><a href="#4-结构体与内存视图" class="headerlink" title="4. 结构体与内存视图"></a>4. 结构体与内存视图</h2><p><strong>struct 模块提供了一些函数,把打包的字节序列转换成不同类型字段组成的元组,还有一些函数用于执行反向转换,把元组转换成打包的bytes、bytearray 和 memoryview 对象。</strong></p>
+<p>虽然网上找的时候好多遇到了<code>struct</code>模块，但这里不多说，留下两个链接<a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#memoryview" target="_blank" rel="noopener">内存试图</a>，<a href="https://docs.python.org/zh-cn/3/library/struct.html?highlight=struct#module-struct" target="_blank" rel="noopener">struct模块官方手册</a>。</p>
+<h2 id="5-编码与解码"><a href="#5-编码与解码" class="headerlink" title="5. 编码与解码"></a>5. 编码与解码</h2><blockquote>
+<p>Python 自带了超过 100 种编解码器(codec, encoder/decoder),用于在文本和字节之间相互转换。每个编解码器都有一个名称,如 ‘utf_8’,而且经常有几个别名,如’utf8’、’utf-8’ 和 ‘U8’。这些名称可以传给open()、str.encode()、bytes.decode() 等函数的 encoding 参数。</p>
+</blockquote>
+<p>终于到了编码与解码，其实万剑归一，那些科技大佬们在混沌的一片编码方式中劈开了一斧，创建了utf8，我们只要用它就行了。看下面一个例子。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span> k = <span class="string">'欢'</span>.encode(<span class="string">'utf8'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span> k</span><br><span class="line"><span class="string">b'\xe6\xac\xa2'</span> <span class="comment"># ➊</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(bin(k[<span class="number">0</span>])+<span class="string">'    '</span>+bin(k[<span class="number">1</span>])+<span class="string">'    '</span>+bin(k[<span class="number">2</span>]))</span><br><span class="line"><span class="number">0b11100110</span>    <span class="number">0b10101100</span>    <span class="number">0b10100010</span>  <span class="comment"># ➋</span></span><br></pre></td></tr></table></figure></p>
+<p>❶ 汉字‘欢’通过utf8编码程三个字节<br>❷ 打印这三个字节的二进制</p>
+<p> 然后再来看Unicode字符代码与UTF-8编码的对应关系，发现与下面的第三条是对应的，所以编码也不是乱编的，你随便写一个字节再解码都是容易报错的，百分之九十九，除非你运气好。</p>
+<pre><code>0000 0000-0000 007F | 0xxxxxxx
+
+0000 0080-0000 07FF | 110xxxxx 10xxxxxx
+
+0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
+
+0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+</code></pre><h2 id="6-尾声"><a href="#6-尾声" class="headerlink" title="6.尾声"></a>6.尾声</h2><p>在整理以上内容的过程中，又收获了新的知识，头脑里对这一块又清晰多了。字节字符编码解码无论在哪门语言中都是快让人头疼难啃的骨头，其实不在于Python中语法是怎样的，而是对概念的理解，人类对编码的越加完善，架设了这么一条人与计算机交流的的桥梁。科技的美好在于此～</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-先从概念理解开始"><span class="toc-text">1. 先从概念理解开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-几个常会看到的函数"><span class="toc-text">2. 几个常会看到的函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数字转换"><span class="toc-text">数字转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#不起眼的主角"><span class="toc-text">不起眼的主角</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#3-计算机所能理解的字节"><span class="toc-text">3. 计算机所能理解的字节</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Python中的字节对象"><span class="toc-text">Python中的字节对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简单分析"><span class="toc-text">简单分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#字节的两个好用方法来应对十六进制"><span class="toc-text">字节的两个好用方法来应对十六进制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-结构体与内存视图"><span class="toc-text">4. 结构体与内存视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-编码与解码"><span class="toc-text">5. 编码与解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-尾声"><span class="toc-text">6.尾声</span></a></li>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/05/25/python-encode-decode2/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+     
+      <a href="/tags/bytes/"><i class="fa fa-tags"></i>bytes</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.png" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/05/23/python-encode-decode1/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>

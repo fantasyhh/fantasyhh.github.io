@@ -6,16 +6,16 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>Shell脚本自动生成django项目结构并添加常用插件 | 烛影小札</title>
+  <title>由npm而温故到的pipenv | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Python,Django,Shell,">
+    <meta name="keywords" content="Python,python,npm,">
   
 
   
-  <meta name="description" content="时常需要新建一个django项目来做快速的Demo演示，自己也记不住一些基本配置与库的导入，常常去之前写的项目中拷贝，Pycharm切来切去有点麻烦，萌生出了简单写个shell脚本自动化生成django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，美滋滋！">
+  <meta name="description" content="最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的source url换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用pip freeze 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是Kenneth Reitz（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。">
 
   
 
@@ -188,7 +188,7 @@
   <div class="passage">
   <div class="passage-meta">
     <span>
-      <i class="fa fa-calendar"></i>2019-04-24
+      <i class="fa fa-calendar"></i>2019-05-14
     </span>
     
       <span>
@@ -202,15 +202,40 @@
     
   </div>
   <h1 class="passage-title">
-    Shell脚本自动生成django项目结构并添加常用插件
+    由npm而温故到的pipenv
   </h1>
   
   <article class="passage-article">
-    <p></p>
-<p>生成一个新的django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，一劳永逸</p>
-<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux:"></a>Linux:</h2><p><code>只支持linux 测试环境为Ubuntu</code>,只支持linux 测试环境为Ubuntu，我这边用的是python虚拟环境，也可不需要</p>
-<h3 id="Set-virtualenv"><a href="#Set-virtualenv" class="headerlink" title="Set virtualenv"></a>Set virtualenv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir envdir</span><br><span class="line">$ <span class="built_in">cd</span> envdir</span><br><span class="line">$ pipenv --python 3.x</span><br><span class="line">$ pipenv shell</span><br></pre></td></tr></table></figure>
-<h3 id="Auto-create"><a href="#Auto-create" class="headerlink" title="Auto create"></a>Auto create</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/fantasyhh/MyAutoDjango</span><br><span class="line">$ <span class="built_in">cd</span> MyAutoDjango</span><br><span class="line">$ chmod u+x auto.sh</span><br><span class="line">$ ./auto.sh</span><br></pre></td></tr></table></figure>
+    <h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的<code>source url</code>换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用<code>pip freeze</code> 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是<a href="https://zhuanlan.zhihu.com/p/22332669" target="_blank" rel="noopener">Kenneth Reitz</a>（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。</p>
+<h3 id="Pipenv燥起来"><a href="#Pipenv燥起来" class="headerlink" title="Pipenv燥起来"></a>Pipenv燥起来</h3><p>pipenv 参考了其他语言的包管理工具（bundler, composer, npm, cargo, yarn, etc.），旨在将最好的包管理工具带入 python 世界。pipevn 可以解决哪些问题：</p>
+<ul>
+<li><p>使用 pipenv 就相当于同时使用了 pip 和 virtualenv ，即做到包管理又可以管理虚拟环境。</p>
+</li>
+<li><p>使用 pipenv 解决 requirement.txt 面临的问题，pipenv 使用 Pipfile 代替 requirement.txt 文件来记录项目依赖包。</p>
+</li>
+<li><p>新增了 Pipfile.lock 文件来锁定 python 软件的包名及版本，以及其依赖关系的列表。</p>
+</li>
+<li>让你深入了解库的依赖图（例如<code>$ pipenv graph</code>）</li>
+<li>通过加载.env文件简化开发工作流程</li>
+</ul>
+<h4 id="1-基础用法"><a href="#1-基础用法" class="headerlink" title="1. 基础用法"></a>1. 基础用法</h4><p>这里不过多介绍用法，<code>pipenv --help</code>或者官网即可查询。只推荐两篇文章当做小手册快速查看<br><a href="https://www.jianshu.com/p/00af447f0005" target="_blank" rel="noopener">pipenv利器</a> ， 以及 <a href="https://crazygit.wiseturtles.com/2018/01/08/pipenv-tour/" target="_blank" rel="noopener">pipenv使用指南</a></p>
+<h4 id="2-项目中如何使用"><a href="#2-项目中如何使用" class="headerlink" title="2. 项目中如何使用"></a>2. 项目中如何使用</h4><p>在pipenv的目录中，我我以前总是放弃用<code>pipenv install</code>而是<code>pipenv shell</code>进入虚拟环境然后<code>pip</code>，因为<code>pienv install</code>的时候会有lock这一个步骤导致很慢（<a href="https://github.com/pypa/pipenv/issues/1914" target="_blank" rel="noopener">因为lock文件中要记录哈希值等</a>），lock文件的作用上面说过就不说了。但是用pip后库的名称版本不会记录到Pipfile，所以如果想完全摒弃requirement就应该用<code>pipenv install</code>。（其实可以完全不用到pipenv 进入虚拟环境,用<strong><code>pipenv run python|pip</code> </strong>即可）</p>
+<blockquote>
+<p>以Django项目为例。生成虚拟环境之前设置PIPENV_PYPI_MIRROR环境变量为<code>https://pypi.tuna.tsinghua.edu.cn/simple</code>，<a href="https://pipenv.readthedocs.io/en/latest/advanced/#pipenv.environments.PIPENV_PYPI_MIRROR" target="_blank" rel="noopener">详情见这里</a>，目的是pipenv安装库的时候都会使用清华源，免得每次都要改。然后生成一个envdir，进入该目录，安装django，新建django。app等。项目完成之后，将与djang项目平级的Pipfile以及lock文件放入项目，然后版本控制，上传git。之后就是别人clone下来，进入django项目，pipenv install就能将python环境与Pipfile中的文件生成，方便省事。这是我暂时的想法，以后有更好的方案会换</p>
+</blockquote>
+<h4 id="3-Pipfile与Pipfile-lock"><a href="#3-Pipfile与Pipfile-lock" class="headerlink" title="3. Pipfile与Pipfile.lock"></a>3. Pipfile与Pipfile.lock</h4><p>那为什么有了Pipfile还有Pipfile.lock</p>
+<blockquote>
+<p>Python应用程序的具体要求来自Pipfile。这将包括应该从哪里获取包以及它们的松散版本约束。<br>Pipfile.lock为了再现性，将存储环境的详细信息（所有已安装的包含固定版本和其他详细信息的包）。该文件将自动生成，用户不应修改。</p>
+</blockquote>
+<p>这里有个比较明了的回答，<a href="https://stackoverflow.com/questions/52951316/why-does-pipenv-need-pipfile-and-pipfile-lock" target="_blank" rel="noopener">Why does pipenv need Pipfile and Pipfile.lock?</a>。<br>转而也可以逐渐理解npm中<code>package.json</code>与<code>package-lock.json</code>的作用了</p>
+<p><strong>那我们是否要将这两个文件保持版本控制，官方的建议是：</strong></p>
+<ul>
+<li>通常，保持两者Pipfile和Pipfile.lock版本控制。</li>
+<li>Pipfile.lock如果要定位多个版本的Python，请不要保留版本控制。</li>
+<li>在Pipfile的[requires]部分中指定目标Python版本。理想情况下，你应该只有一个目标Python版本，因为这是一个部署工具。</li>
+<li>pipenv install与语法完全兼容，可在此处找到完整的文档。pip install请注意，Pipfile使用TOML Spec。</li>
+</ul>
+<h3 id="顺便说说npm"><a href="#顺便说说npm" class="headerlink" title="顺便说说npm"></a>顺便说说npm</h3><p><a href="https://www.cnblogs.com/tzyy/p/5193811.html" target="_blank" rel="noopener">package.json的字段详解</a>在这里，同样的按上面的说法，lock文件应该也要放入版本控制，但有一篇文章写道<a href="https://www.codementor.io/johnkennedy/get-rid-of-that-npm-package-lock-json-e0bj7ai42" target="_blank" rel="noopener">package-lock.json文件是地狱</a>。哈哈哈23333</p>
   </article>
   <aside class="table-content" id="site-toc">
   <div class="table-content-title">
@@ -218,7 +243,7 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-text">Linux:</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Set-virtualenv"><span class="toc-text">Set virtualenv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Auto-create"><span class="toc-text">Auto create</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#题外话"><span class="toc-text">题外话</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pipenv燥起来"><span class="toc-text">Pipenv燥起来</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基础用法"><span class="toc-text">1. 基础用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-项目中如何使用"><span class="toc-text">2. 项目中如何使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Pipfile与Pipfile-lock"><span class="toc-text">3. Pipfile与Pipfile.lock</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#顺便说说npm"><span class="toc-text">顺便说说npm</span></a></li></ol>
   </div>
 </aside>
   
@@ -227,7 +252,7 @@
       
         <div>
           原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2019/04/24/auto-django/</a>
+          <a href target="_blank">https://fantasyhh.github.io/2019/05/14/pipenv-and-npm/</a>
         </div>
       
       <div>
@@ -238,9 +263,9 @@
   
     <div class="passage-tags">
      
-      <a href="/tags/Django/"><i class="fa fa-tags"></i>Django</a>
+      <a href="/tags/python/"><i class="fa fa-tags"></i>python</a>
      
-      <a href="/tags/Shell/"><i class="fa fa-tags"></i>Shell</a>
+      <a href="/tags/npm/"><i class="fa fa-tags"></i>npm</a>
     
     </div>
   
@@ -320,10 +345,10 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="/2019/04/25/sed-usage/" data-enable="true">
+    <a href="/2019/05/17/nodejs3-jstips/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/2019/05/08/nodejs-2/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
