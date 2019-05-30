@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>supvisor和celery以及django+vue的配置整理 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,supvisorctl,celery,django,vue,">
+  
+
+  
+  <meta name="description" content="supvisor经常用来打包服务（领导喜欢service这个词，无语），celery用来做异步任务以及定时任务。web项目常常使用前后端分离，django+vue的组合，但是也要做一些配置,这里对一些以往的配置做一些整理,省的每次都要翻以前的项目，权当记录手册。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-05-30
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    supvisor和celery以及django+vue的配置整理
+  </h1>
+  
+  <article class="passage-article">
+    <p>supvisor经常用来打包服务（领导喜欢service这个词，无语），celery用来做异步任务以及定时任务。web项目常常使用前后端分离，django+vue的组合，但是也要做一些配置,这里对一些以往的配置做一些整理,省的每次都要翻以前的项目，权当记录手册。</p>
+<h2 id="1-Supvisor-Celery配置"><a href="#1-Supvisor-Celery配置" class="headerlink" title="1. Supvisor+Celery配置"></a>1. Supvisor+Celery配置</h2><p>假设有个叫smartmp的项目，那么有如下配置。<br><strong>supvisor对celery beat的配置文件：</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[program:smartmpbeat]</span><br><span class="line"></span><br><span class="line"><span class="built_in">command</span>=/usr/<span class="built_in">local</span>/bin/celery -A smartmp beat -l info</span><br><span class="line"></span><br><span class="line">directory=/home/baird/PycharmProjects/smartmp</span><br><span class="line"></span><br><span class="line">user=baird</span><br><span class="line"></span><br><span class="line">numprocs=1</span><br><span class="line"></span><br><span class="line">stdout_logfile=/var/<span class="built_in">log</span>/celery/smartmp_beat.log</span><br><span class="line">stderr_logfile=/var/<span class="built_in">log</span>/celery/smartmp_beat.log</span><br><span class="line"></span><br><span class="line">autostart= <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">autorestart=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">stopwaitsecs = 600</span><br><span class="line">killasgroup=<span class="literal">true</span></span><br><span class="line">priority=999</span><br></pre></td></tr></table></figure></p>
+<p><strong>supvisor对celery workers的配置文件：</strong><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[program:smartmpworker]</span><br><span class="line"></span><br><span class="line"><span class="built_in">command</span>=/usr/<span class="built_in">local</span>/bin/celery  -A smartmp worker -l info</span><br><span class="line"></span><br><span class="line">directory=/home/baird/PycharmProjects/smartmp</span><br><span class="line"></span><br><span class="line">user=baird</span><br><span class="line"></span><br><span class="line">numprocs=1</span><br><span class="line"></span><br><span class="line">stdout_logfile=/var/<span class="built_in">log</span>/celery/smartmp_worker.log</span><br><span class="line">stderr_logfile=/var/<span class="built_in">log</span>/celery/smartmp_worker.log</span><br><span class="line"></span><br><span class="line">autostart= <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">autorestart=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">stopwaitsecs = 600</span><br><span class="line">killasgroup=<span class="literal">true</span></span><br><span class="line">priority=998</span><br></pre></td></tr></table></figure></p>
+<p><strong>celery在django settings中的配置：</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># celery</span></span><br><span class="line">CELERY_BROKER_URL = <span class="string">'redis://localhost:6379'</span></span><br><span class="line">CELERY_RESULT_BACKEND = <span class="string">'redis://localhost:6379'</span></span><br><span class="line">CELERY_ACCEPT_CONTENT = [<span class="string">'application/json'</span>]</span><br><span class="line">CELERY_RESULT_SERIALIZER = <span class="string">'json'</span></span><br><span class="line">CELERY_TASK_SERIALIZER = <span class="string">'json'</span></span><br><span class="line">CELERY_TIMEZONE = <span class="string">'Asia/Shanghai'</span></span><br><span class="line"><span class="comment"># Other Celery settings</span></span><br><span class="line">CELERY_BEAT_SCHEDULE = &#123;</span><br><span class="line">    <span class="string">'get_di_value'</span>: &#123;</span><br><span class="line">        <span class="string">'task'</span>: <span class="string">'di.tasks.get_di_value'</span>,</span><br><span class="line">        <span class="string">'schedule'</span>: <span class="number">5.0</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>这边虽然用Supvisor配置的celery，但是也可以当做是配置运行普通Python脚本，把command命令替换即可，<a href="http://liyangliang.me/posts/2015/06/using-supervisor/" target="_blank" rel="noopener">关于supvisor的其他参数可以看这里</a></strong>。<br><strong>关于celery的话，自从celery到了4.0之后，就可以不需要配合其他django插件集成到django中。那会网上的坑贼多，全是老教程，直到我找到了一篇<a href="https://medium.com/@yehandjoe/celery-4-periodic-task-in-django-9f6b5a8c21c7#--respond" target="_blank" rel="noopener">启蒙教程</a></strong>，写的太好啦，一目了然。</p>
+<h2 id="2-整合Django和Vue-js"><a href="#2-整合Django和Vue-js" class="headerlink" title="2. 整合Django和Vue.js"></a>2. 整合Django和Vue.js</h2><p>对于前后端分离的项目，整合整个项目也属于后端的事情，有时候往往会遗漏掉点配置。所以也记录下<a href="https://cloud.tencent.com/developer/article/1005607" target="_blank" rel="noopener">这篇文章</a>比较好的说明了。<br>设置里注意以下几点：</p>
+<ol>
+<li>总的url中的对于<code>index.html</code>的模板视图</li>
+<li>模板配置中添加模板路径</li>
+<li>静态文件的搜索路径</li>
+<li>对于部署到服务器上，如果是内部几乎没并发的小项目，可以使用supvisor配合python3 manage.py runserver来使用达到小服务器的作用</li>
+</ol>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Supvisor-Celery配置"><span class="toc-text">1. Supvisor+Celery配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-整合Django和Vue-js"><span class="toc-text">2. 整合Django和Vue.js</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/05/30/celery-supvisor-config/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/supvisorctl/"><i class="fa fa-tags"></i>supvisorctl</a>
+     
+      <a href="/tags/celery/"><i class="fa fa-tags"></i>celery</a>
+     
+      <a href="/tags/django/"><i class="fa fa-tags"></i>django</a>
+     
+      <a href="/tags/vue/"><i class="fa fa-tags"></i>vue</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.png" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.png" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/05/25/python-encode-decode2/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
