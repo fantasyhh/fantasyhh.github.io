@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>Django Class-Based Views vs. Function-Based Views | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Django,Django,Python,">
+  
+
+  
+  <meta name="description" content="从一开始学习Django时候的Hello world的函数视图，到自带的View视图，再到restframework的APIView以及viewset。回过头来看看，好像有种从稚嫩到成熟再到老奸巨猾的感觉，代码量越来越少了，第三方库封装的越来越多，但是真正包含在其中的实现和理解我们却愈发忽视。作为一个web框架，我们在使用时应该更多在于一个完整的流程的实现过程，所以，无论是CBV还是FBV本质都是一样的。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-06-04
+    </span>
+    
+      <span>
+        | <a href="/categories/Django/"><i class="fa fa-bookmark"></i>Django</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Django Class-Based Views vs. Function-Based Views
+  </h1>
+  
+  <article class="passage-article">
+    <p>从一开始学习Django时候的Hello world的函数视图，到自带的View视图，再到restframework的APIView以及viewset。回过头来看看，好像有种从稚嫩到成熟再到老奸巨猾的感觉，代码量越来越少了，第三方库封装的越来越多，但是真正包含在其中的实现和理解我们却愈发忽视。作为一个web框架，我们在使用时应该更多在于一个完整的流程的实现过程，所以，无论是CBV还是FBV本质都是一样的</p>
+<p>本文翻译国外作者Vitor Freitas博客，<a href="https://simpleisbetterthancomplex.com/article/2017/03/21/class-based-views-vs-function-based-views.html" target="_blank" rel="noopener">原文地址</a>在这里。如有侵权，立即删除。</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在django很老的版本时候，只有<code>function-based views</code>，但问题是是基于函数的视图太过于简单，很难去拓展,自定义它们,没法达到视图重用的地步。<br>为了解决这个问题，<code>class-based views</code>诞生了。所以，现在的django有基于函数或者基于类这两种视图。<br>当我们将<code>class-based views</code>加入到路由配置的时候。通常使用<code>View.as_view()</code>类方法，它返回一个函数，跟<code>function-based views</code>类似。</p>
+<p>下面是源码中<code>as_view</code>方法的实现，相去看完整源码可以去看django完整源码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">View</span>:</span></span><br><span class="line"><span class="meta">    @classonlymethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">as_view</span><span class="params">(cls, **initkwargs)</span>:</span></span><br><span class="line">        <span class="string">"""Main entry point for a request-response process."""</span></span><br><span class="line">        <span class="keyword">for</span> key <span class="keyword">in</span> initkwargs:</span><br><span class="line">            <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">view</span><span class="params">(request, *args, **kwargs)</span>:</span></span><br><span class="line">            self = cls(**initkwargs)</span><br><span class="line">            <span class="keyword">if</span> hasattr(self, <span class="string">'get'</span>) <span class="keyword">and</span> <span class="keyword">not</span> hasattr(self, <span class="string">'head'</span>):</span><br><span class="line">                self.head = self.get</span><br><span class="line">            self.request = request</span><br><span class="line">            self.args = args</span><br><span class="line">            self.kwargs = kwargs</span><br><span class="line">            <span class="keyword">return</span> self.dispatch(request, *args, **kwargs)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> view</span><br></pre></td></tr></table></figure></p>
+<p>所以如果你想明确调用一个<code>class-based views</code>，你需要：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> MyView.as_view()(request)</span><br></pre></td></tr></table></figure></p>
+<p>为了让代码更清楚一点，你也可以赋值给一个变量：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">view_function = MyView.as_view()</span><br><span class="line"><span class="keyword">return</span> view_function(request)</span><br></pre></td></tr></table></figure></p>
+<p><strong>通过<code>as_view()</code>返回的视图函数是每个<code>class-based view</code>的外面一部分。调用视图函数之后，它将传递请求（request）给<code>dispatch()</code>方法，<code>dispatch()</code>方法将会根据request type (GET, POST, PUT, etc)来执行正确的方法。</strong></p>
+<h3 id="Class-Based-View-例子"><a href="#Class-Based-View-例子" class="headerlink" title="Class-Based View 例子"></a>Class-Based View 例子</h3><p>如果你通过<code>django.views.View</code>基类拓展一个视图，<code>dispatch()</code>方法会按照逻辑自动处理HTTP方法。如果请求是一个POST，它将在视图里执行<code>post()</code>方法  </p>
+<p>views.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.views <span class="keyword">import</span> View</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ContactView</span><span class="params">(View)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        <span class="comment"># Code block for GET request</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        <span class="comment"># Code block for POST request</span></span><br></pre></td></tr></table></figure></p>
+<p>urls.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r'contact/$'</span>, views.ContactView.as_view(), name=<span class="string">'contact'</span>),</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<h3 id="Function-Based-View-例子"><a href="#Function-Based-View-例子" class="headerlink" title="Function-Based View 例子"></a>Function-Based View 例子</h3><p>在<code>Function-Based View</code>中，通过表达式处理请求逻辑。</p>
+<p>views.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">contact</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        <span class="comment"># Code block for POST request</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># Code block for GET request (will also match PUT, HEAD, DELETE, etc)</span></span><br></pre></td></tr></table></figure></p>
+<p>urls.py<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    url(<span class="string">r'contact/$'</span>, views.contact, name=<span class="string">'contact'</span>),</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>这两张视图主要的区别就在这。但是通用类视图（<code>generic class-based views</code>）就有更多故事了。</p>
+<h3 id="Generic-Class-Based-Views"><a href="#Generic-Class-Based-Views" class="headerlink" title="Generic Class-Based Views"></a>Generic Class-Based Views</h3><p>通用类视图在web应用中被用来解决一些常用操作，比如：创建一个新模型对象，表格处理，数据list，分页，档案视图等。<br>通用类视图包括在django核心包中，可以从<code>django.views.generic</code>导入。它们能很好地加快开发过程。下面大体列一下可用的视图：</p>
+<p><strong>Simple Generic Views</strong>  </p>
+<ul>
+<li>View</li>
+<li>TemplateView</li>
+<li>RedirectView</li>
+</ul>
+<p><strong>Detail Views</strong>  </p>
+<ul>
+<li>DetailView  </li>
+</ul>
+<p><strong>List Views</strong>  </p>
+<ul>
+<li>ListView  </li>
+</ul>
+<p><strong>Editing Views</strong>    </p>
+<ul>
+<li>FormView</li>
+<li>CreateView</li>
+<li>UpdateView</li>
+<li>DeleteView</li>
+</ul>
+<p><strong>Date-Based Views</strong>  </p>
+<ul>
+<li>ArchiveIndexView</li>
+<li>YearArchiveView</li>
+<li>MonthArchiveView</li>
+<li>WeekArchiveView</li>
+<li>DayArchiveView</li>
+<li>TodayArchiveView</li>
+<li>DateDetailView  </li>
+</ul>
+<p>你可以从django官方手册上寻找更加详细的内容。</p>
+<p>看到那么多视图时可能有点头晕，因为通用类的实现用了大量混合类（minixs）。</p>
+<p>django文档上有个很好的资源，写着每个通用类视图的属性跟方法：<a href="https://docs.djangoproject.com/en/2.0/ref/class-based-views/flattened-index/" title=" Class-based generic views - flattened index." target="_blank" rel="noopener">Class-based generic views - flattened index</a>，我一直放在书签中。</p>
+<h3 id="关于django视图的见仁见智"><a href="#关于django视图的见仁见智" class="headerlink" title="关于django视图的见仁见智"></a>关于django视图的见仁见智</h3><p><strong>观点1： 使用所有的通用视图</strong>！ </p>
+<p>这个观点认为.django提供常用的基础的视图让你用来减少工作量，为什么不用呢？我们可以尝试以这种观点来实践，能更快更成功地构建大量项目。</p>
+<p><strong>观点2:仅使用<code>django.views.generic.View</code></strong></p>
+<p>这个观点认为,django的通用视图函数都继承与一个<code>Generic CBV</code>,通吃所有,想怎么自定义就怎么自定义.</p>
+<p><strong>观点3:避免使用通用类视图除非你想子类化这些视图</strong></p>
+<p>这个观点认为初学者刚开始尽量使用函数视图,因为它们更容易写跟理解,只有当你想要重用大量重用视图时才用<code>Class-Based View</code></p>
+<h3 id="优点与缺点"><a href="#优点与缺点" class="headerlink" title="优点与缺点"></a>优点与缺点</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">优点</th>
+<th style="text-align:center">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Function-Based Views</td>
+<td style="text-align:center">容易实现跟理解；流程简单；直接使用装饰器</td>
+<td style="text-align:center">代码难以重用；处理HTTP请求时要有分支表达式</td>
+</tr>
+<tr>
+<td style="text-align:center">Class-Based Views</td>
+<td style="text-align:center">易拓展跟代码重用；可以用混合类继承；单独用类方法处理HTTP请求；有许多内置的通用视图函数</td>
+<td style="text-align:center">不容易去理解；代码流程负载；父类混合类中隐藏较多代码；使用装饰器时需要额外的导入或覆盖方法</td>
+</tr>
+</tbody>
+</table>
+<p> 对于这两种视图的使用没有对与错,完全取决于开发状况与需求。就像文章一开始所说的，类视图不能代替函数视图。两者各有千秋。如果你想实现一个list view，那么你只需要继承<code>ListView</code>然覆盖它们的属性就行了。当然，如果你想进行一个更复杂的操作，比如同时处理多个表单，那么函数视图将会更适合你。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这里是我本人（并非原作者）的一些想法。一开始学django的时候，只知道基于函数的视图，这对于初学者来说是友好的。后来写的东西复杂的时候，特别是HTTP 请求不止是一开始单一的GET时，我更偏向于继承<code>django.views.generic.View</code>，简单覆盖方法就可以处理请求了。而对于内置的通用类视图，以及一些混合类啥的，我有些难以理解，再加上平时的开发都是前后端分离，利用django自带的模版系统的机会越来越少，所以我基本不用通用类视图。但是当你构建restful api的时候，运用到DRF框架时，里面也有类似的通用类，这个不依赖模版，真的很好用，我会在以后的章节里讲解。</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Class-Based-View-例子"><span class="toc-text">Class-Based View 例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-Based-View-例子"><span class="toc-text">Function-Based View 例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generic-Class-Based-Views"><span class="toc-text">Generic Class-Based Views</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于django视图的见仁见智"><span class="toc-text">关于django视图的见仁见智</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优点与缺点"><span class="toc-text">优点与缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/06/04/django-CBV-VS-FBV/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Django/"><i class="fa fa-tags"></i>Django</a>
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/05/30/celery-supvisor-config/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
