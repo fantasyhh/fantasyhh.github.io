@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>由DRF上传图片温习到的HTTP知识 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,Django,DRF,Http,">
+  
+
+  
+  <meta name="description" content="在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-06-05
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    由DRF上传图片温习到的HTTP知识
+  </h1>
+  
+  <article class="passage-article">
+    <p></p>
+<p>在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。</p>
+<h2 id="1-熟悉而又陌生的HTTP"><a href="#1-熟悉而又陌生的HTTP" class="headerlink" title="1. 熟悉而又陌生的HTTP"></a>1. 熟悉而又陌生的HTTP</h2><blockquote>
+<p>某大佬云：学习Web开发不好好学习HTTP报文，将会“打拳不练功，到老一场空”，你花在犯迷糊上的时间比你沉下心来学习HTTP的时间肯定会多很多。</p>
+</blockquote>
+<p>这句话在我看来是及其正确的。作为一个后端开发，不仅仅在于空荡荡地写代码，单身三十年的手速来辅助粘贴，更重要的是在代码有问题进行调试时，了解代码在框架中的运行流程。心中对整个过程了如指掌的程序猿解决问题自然很快，反之，则会花大把时间犯糊涂。</p>
+<p>刚实习的那会，大把大把的时间，看过一本<strong>思科网络技术学院教程</strong>，我是在当当买的，但是听同事说是大学教科书，囧，不过内容古镇的是不错，当时粗粗一读已经解决了大部分心中的疑惑，上网是怎样的过程，TCP/IP啥的。不过还是对细节掌握太少，不然也不会有今日的困惑，乃至回头要重新翻这本书。</p>
+<p>教程这里就不说了，网上大把大把，图文并茂，生动地很，这里这是给出链接，自己整理下。</p>
+<ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status" target="_blank" rel="noopener">HTTP状态码</a></li>
+<li><a href="https://blog.csdn.net/u010256388/article/details/68491509" target="_blank" rel="noopener">HTTP请求行、请求头、请求体详解</a></li>
+<li><a href="https://blog.csdn.net/hguisu/article/details/8680808" target="_blank" rel="noopener">HTTP详解(1)-工作原理</a>，当然还有2，这篇文章中有两张图要贴出来方便自己直接看。</li>
+</ul>
+<p>一张是TCP/IP模型</p>
+<p><img src="/images/TCP_IP.gif" alt="TCP/IP"></p>
+<p>另外一张是HTTP协议栈中各层数据流</p>
+<p><img src="/images/TCP_IP.gif" alt="HTTP协议栈中各层数据流"></p>
+<p>为什么要贴出来，重要程度就不说了。</p>
+<h2 id="2-让我从DRF瞬移到了HTTP的问题"><a href="#2-让我从DRF瞬移到了HTTP的问题" class="headerlink" title="2. 让我从DRF瞬移到了HTTP的问题"></a>2. 让我从DRF瞬移到了HTTP的问题</h2><p>假设有这样一个Models，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BeautifulGirl</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">32</span>, null=<span class="literal">True</span>, unique=<span class="literal">True</span>)</span><br><span class="line">    img = models.ImageField(null=<span class="literal">True</span>, blank=<span class="literal">True</span>, upload_to=<span class="string">'beauty/'</span>)</span><br></pre></td></tr></table></figure>
+<p>我View视图先按照传统写的，<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 上传美女图片</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadBeauty2</span><span class="params">(APIView)</span>:</span></span><br><span class="line">    <span class="comment"># parser_classes = (MultiPartParser,)</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request)</span>:</span></span><br><span class="line">        data = request.data</span><br><span class="line">        beauty_name = data[<span class="string">'name'</span>]</span><br><span class="line">        <span class="keyword">if</span> beauty_name <span class="keyword">in</span> BeautifulGirl.objects.values_list(<span class="string">'name'</span>, flat=<span class="literal">True</span>):</span><br><span class="line">            <span class="keyword">return</span> Response(&#123;<span class="string">'msg'</span>: <span class="string">'repeat name'</span>&#125;, status=<span class="number">500</span>)</span><br><span class="line">        image = data[<span class="string">'image'</span>]</span><br><span class="line">        img_name = image.name</span><br><span class="line">        girl = BeautifulGirl()</span><br><span class="line">        girl.name = beauty_name</span><br><span class="line">        girl.img.save(img_name, image, save=<span class="literal">False</span>)</span><br><span class="line">        girl.save()</span><br><span class="line">        <span class="keyword">return</span> Response(&#123;<span class="string">'msg'</span>: <span class="string">'upload ok'</span>&#125;, status=<span class="number">200</span>)</span><br></pre></td></tr></table></figure></p>
+<p>刚开始没有<strong><code>parser_classes = (MultiPartParser,)</code></strong>这一行，而且我的DRF parser 只设置成了<strong><code>&#39;rest_framework.parsers.JSONParser&#39;,</code></strong>，好了找到问题，那我看看哪个合适，<strong><code>FileUploadParser</code></strong>看上去合适的，设置一下，报错<strong><code>Missing filename. Request should include a Content-Disposition header ....</code></strong><br>后来看到了<a href="https://stackoverflow.com/questions/46806335/fileuploadparser-doesnt-get-the-file-name" target="_blank" rel="noopener">解决方法</a>，OK了，但是我对这个<strong><code>MultiPartParser</code></strong>很懵逼，<strong><code>FileUploadParser</code></strong>不就是上传图片，为何不可行。</p>
+<blockquote>
+<p>其实遇到这个问题也是我设置的问题，DRF默认解析包好了这个MultiPartParser，但我觉得平常只用json，所以只设置成了JSONParser，尴尬，用默认设置即可</p>
+</blockquote>
+<h2 id="3-使用Django进行文件上传的基础知识"><a href="#3-使用Django进行文件上传的基础知识" class="headerlink" title="3. 使用Django进行文件上传的基础知识"></a>3. 使用Django进行文件上传的基础知识</h2><p>这节的内容翻译自<a href="https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html" target="_blank" rel="noopener">这里</a></p>
+<ul>
+<li><p>将文件提交到服务器时，文件数据最终会被放入request.FILES。</p>
+</li>
+<li><p>HTML表单必须enctype=”multipart/form-data”正确设置属性。否则 request.FILES将是空的。</p>
+</li>
+<li><p>必须使用POST方法提交表单。</p>
+</li>
+<li><p>Django有适当的模型字段来处理上传的文件：FileField和ImageField。</p>
+</li>
+<li><p>上传到FileField或ImageField不存储在数据库中，存储在文件系统中的文件。</p>
+</li>
+<li><p>FileField并ImageField在数据库中创建为字符串字段（通常为VARCHAR），包含对实际文件的引用。</p>
+</li>
+<li><p>如果删除包含FileField或ImageField的模型实例，Django将不会删除物理文件，而只会删除对文件的引用。</p>
+</li>
+<li><p>这request.FILES是一个类字典的对象。request.FILES的键值的名称都是来自<code>&lt;input type=&quot;file&quot; name=&quot;&quot; /&gt;</code>。</p>
+</li>
+<li><p>每个值request.FILES都是一个UploadedFile实例。</p>
+</li>
+<li><p>你将需要设置MEDIA_URL并MEDIA_ROOT在项目的settings.py。</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MEDIA_URL = <span class="string">'/media/'</span></span><br><span class="line">MEDIA_ROOT = os.path.join(BASE_DIR, <span class="string">'media'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在开发服务器中，你可以使用django.contrib.staticfiles.views.serve（） 视图为用户上载的文件（媒体）提供服务。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"><span class="keyword">from</span> django.conf.urls.static <span class="keyword">import</span> static</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    <span class="comment"># Project url patterns...</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> settings.DEBUG:</span><br><span class="line">    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>要访问MEDIA_URL模板，你必须添加django.template.context_processors.media到您的 context_processeors内部TEMPLATES配置。</li>
+</ul>
+<h2 id="4-multipart-form-data-是什么"><a href="#4-multipart-form-data-是什么" class="headerlink" title="4 . multipart/form-data 是什么"></a>4 . multipart/form-data 是什么</h2><p>整理一下两篇极佳的科普文章：</p>
+<ol>
+<li><a href="https://imququ.com/post/four-ways-to-post-data-in-http.html" target="_blank" rel="noopener">四种常见的 POST 提交数据方式</a></li>
+<li><a href="https://stackoverflow.com/questions/4526273/what-does-enctype-multipart-form-data-mean/4526286" target="_blank" rel="noopener">what-does-enctype-multipart-form-data-mean？</a></li>
+</ol>
+<h2 id="5-FileUploadParser是什么以及更简单的方式上传图片"><a href="#5-FileUploadParser是什么以及更简单的方式上传图片" class="headerlink" title="5. FileUploadParser是什么以及更简单的方式上传图片"></a>5. FileUploadParser是什么以及更简单的方式上传图片</h2><blockquote>
+<p>FileUploadParser适用于可以将文件作为原始数据请求上载的本机客户端。对于基于Web的上载或具有分段上传支持的本机客户端，应该使用MultiPartParser</p>
+</blockquote>
+<p><strong>好了，建议是不应该使用 =。= </strong></p>
+<p>其实更好Crete数据的方法还是用DRF的通用视图，贼方便<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UploadBeauty</span><span class="params">(ListCreateAPIView)</span>:</span></span><br><span class="line">    queryset = BeautifulGirl.objects.all()</span><br><span class="line">    serializer_class = BeautifulGirlSerializers</span><br><span class="line">    parser_classes = (MultiPartParser,FormParser)</span><br></pre></td></tr></table></figure></p>
+<h2 id="6-回过头看看"><a href="#6-回过头看看" class="headerlink" title="6. 回过头看看"></a>6. 回过头看看</h2><p>既然作为一个稳定的web框架，更多的是让开发者方便快速，不用过多地在意包括http以及更多协议中本身繁杂晦涩的概念与操作，封装地很完美，但是很多东西，比如设置文件里仅仅一行字段就能代表很多东西，预留了默认设置，让初学者更加方便快捷，上手即用，没有门槛。但其中很多通用的基础知识在代码运行流程内部体现，需要掌握并且动手不断地尝试，必要时读源码来了解原由。</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-熟悉而又陌生的HTTP"><span class="toc-text">1. 熟悉而又陌生的HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-让我从DRF瞬移到了HTTP的问题"><span class="toc-text">2. 让我从DRF瞬移到了HTTP的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-使用Django进行文件上传的基础知识"><span class="toc-text">3. 使用Django进行文件上传的基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-multipart-form-data-是什么"><span class="toc-text">4 . multipart/form-data 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-FileUploadParser是什么以及更简单的方式上传图片"><span class="toc-text">5. FileUploadParser是什么以及更简单的方式上传图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-回过头看看"><span class="toc-text">6. 回过头看看</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/06/05/drf-post-image/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Django/"><i class="fa fa-tags"></i>Django</a>
+     
+      <a href="/tags/DRF/"><i class="fa fa-tags"></i>DRF</a>
+     
+      <a href="/tags/Http/"><i class="fa fa-tags"></i>Http</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/06/04/django-CBV-VS-FBV/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
