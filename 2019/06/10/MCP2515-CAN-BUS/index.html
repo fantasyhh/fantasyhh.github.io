@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>利用MCP2515芯片在树莓派上使用CAN BUS协议 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="RaspberryPi,Shell,Linux,CAN BUS,">
+  
+
+  
+  <meta name="description" content="在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-06-10
+    </span>
+    
+      <span>
+        | <a href="/categories/RaspberryPi/"><i class="fa fa-bookmark"></i>RaspberryPi</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    利用MCP2515芯片在树莓派上使用CAN BUS协议
+  </h1>
+  
+  <article class="passage-article">
+    <p>在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～</p>
+<p>我之前的完成过程基本依靠Google，贴上我参考的国外教程：</p>
+<ol>
+<li><a href="https://www.raspberrypi.org/forums/viewtopic.php?t=141052" target="_blank" rel="noopener">[quick-guide] CAN bus on raspberry pi with MCP2515</a></li>
+<li><a href="https://vimtut0r.com/2017/01/17/can-bus-with-raspberry-pi-howtoquickstart-mcp2515-kernel-4-4-x/" target="_blank" rel="noopener">CAN-Bus with Raspberry Pi: HowTo/Quickstart MCP2515 Kernel 4.4.x+</a></li>
+<li><a href="https://harrisonsand.com/can-on-the-raspberry-pi/" target="_blank" rel="noopener">https://harrisonsand.com/can-on-the-raspberry-pi/</a></li>
+</ol>
+<h2 id="1-硬件相关问题"><a href="#1-硬件相关问题" class="headerlink" title="1. 硬件相关问题"></a>1. 硬件相关问题</h2><p>关于MCP2515 SPI转CAN的芯片，可能有多个“款式”的存在（有些教程里的跟我的芯片不一样），但是必要的针脚的插法都是一致的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">RPi Pin    RPi Label     CAN Module</span><br><span class="line">02---------5V------------VCC</span><br><span class="line">06---------GND-----------GND</span><br><span class="line">19---------GPIO10--------MOSI (SI)</span><br><span class="line">21---------GPIO9---------MISO (SO)</span><br><span class="line">22---------GPIO25--------INT</span><br><span class="line">23---------GPIO11--------SCK</span><br><span class="line">24---------GPIO8---------CS</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其他没什么的说的，在肯定自己接线没错误之后，我们需要怀疑芯片是不是坏的，我试的时候前面两个都是坏的，导致挂不上去</p>
+</blockquote>
+<h2 id="2-配置树莓派"><a href="#2-配置树莓派" class="headerlink" title="2. 配置树莓派"></a>2. 配置树莓派</h2><p><strong>编辑/boot/config.txt并添加以下行，将振荡器参数设置为模块上存在的振荡器参数。大多数模块使用16MHz振荡器作为时钟，但也有使用8MHz（即oscillator=8000000）。你可以通过查看芯片来确定频率。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dtparam=spi=on</span><br><span class="line">dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25</span><br><span class="line">dtoverlay=spi-bcm2835-overlay</span><br></pre></td></tr></table></figure>
+<p>通过<strong><code>uname -a</code></strong>查看树莓派内核，如果内核为4.4.x，则需要将最后一行配置修改：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dtparam=spi=on</span><br><span class="line">dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25</span><br><span class="line">dtoverlay=spi1-1cs</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-挂载CAN设备"><a href="#3-挂载CAN设备" class="headerlink" title="3. 挂载CAN设备"></a>3. 挂载CAN设备</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install can-utils</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+<p>等机器起来之后，我们可以先查看连接是否准确，有没有这个MCP2515设备，有了我们才能继续挂载。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0</span><br><span class="line">driver  modalias  net  of_node  subsystem  uevent</span><br><span class="line">pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0/net</span><br><span class="line">can0</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>如果连接不准确基本上看不到上面的net文件夹，也就没有can0这个设备了</p>
+</blockquote>
+<p>之后，设置你想要的波特率挂载，我这里用的是125000，<strong><code>sudo ip link set can0 up type can bitrate 125000</code></strong>，挂载成功后，就能在<strong><code>ifconfig</code></strong>中看到：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">pi@piv2:~ $ sudo ifconfig</span><br><span class="line">can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00</span><br><span class="line">          UP RUNNING NOARP  MTU:16  Metric:1</span><br><span class="line">          RX packets:0 errors:0 dropped:0 overruns:0 frame:0</span><br><span class="line">          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0</span><br><span class="line">          collisions:0 txqueuelen:10</span><br><span class="line">          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)</span><br><span class="line">etho      xxxx</span><br><span class="line">          ....</span><br><span class="line">          ....</span><br><span class="line">wlan0     xxxx</span><br><span class="line">          ....</span><br><span class="line">          ....</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>每当机器重启之后，这个挂载就会失效，需重新挂载。可以直接做成服务或者放在rc.local中，开机自动启动就行</p>
+</blockquote>
+<h2 id="4-发送CAN数据"><a href="#4-发送CAN数据" class="headerlink" title="4. 发送CAN数据"></a>4. 发送CAN数据</h2><p><strong><code>Usage: cansend &lt;device&gt; &lt;can_frame&gt;</code></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cansend can0 127#DEADBEEF</span><br></pre></td></tr></table></figure></p>
+<p>具体的can_frame格式也不用担心，当你格式数据输的不准确时，命令会自动提示所需的格式。<br>同时可以再开个终端查看收到的数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">candump can0</span><br></pre></td></tr></table></figure>
+<h2 id="5-使用Python第三方库向CAN发送数据"><a href="#5-使用Python第三方库向CAN发送数据" class="headerlink" title="5. 使用Python第三方库向CAN发送数据"></a>5. 使用Python第三方库向CAN发送数据</h2><p>当有需求要将功能写入Python脚本中时，可以使用<strong><code>python-can</code></strong>模块，具体的用法这里不多讲，看<a href="https://python-can.readthedocs.io/en/master/" target="_blank" rel="noopener">官方手册即可</a>。</p>
+<h2 id="6-尾声"><a href="#6-尾声" class="headerlink" title="6.尾声"></a>6.尾声</h2><p><strong>对CAN BUS知之甚少，只能依葫芦画瓢，一步一步慢慢走验证解雇，当觉得自己的操作都正确时却没有得到正确结果时，坏一下硬件本身是否有问题！</strong></p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-硬件相关问题"><span class="toc-text">1. 硬件相关问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-配置树莓派"><span class="toc-text">2. 配置树莓派</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-挂载CAN设备"><span class="toc-text">3. 挂载CAN设备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-发送CAN数据"><span class="toc-text">4. 发送CAN数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-使用Python第三方库向CAN发送数据"><span class="toc-text">5. 使用Python第三方库向CAN发送数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-尾声"><span class="toc-text">6.尾声</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/06/10/MCP2515-CAN-BUS/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Shell/"><i class="fa fa-tags"></i>Shell</a>
+     
+      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
+     
+      <a href="/tags/CAN-BUS/"><i class="fa fa-tags"></i>CAN BUS</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/06/05/drf-post-image/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
