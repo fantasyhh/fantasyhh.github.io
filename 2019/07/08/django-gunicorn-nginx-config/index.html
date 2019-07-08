@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>Django+Gunicorn+Nginx配置整理 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,Django,Gunicorn,Nginx,">
+  
+
+  
+  <meta name="description" content="之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-07-08
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Django+Gunicorn+Nginx配置整理
+  </h1>
+  
+  <article class="passage-article">
+    <p>之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅</p>
+<h2 id="1-Gunicorn使用及配置"><a href="#1-Gunicorn使用及配置" class="headerlink" title="1. Gunicorn使用及配置"></a>1. Gunicorn使用及配置</h2><blockquote>
+<p>我们可以通过执行<strong><code>./manage.py runserver</code></strong>命令来运行我们的django应用程序。但我们知道它被称为开发服务器是有原因的，因为自带的开发服务器不健壮，安全问题，线程问题等等。那么，我们如何真正运行我们的应用呢？</p>
+</blockquote>
+<p><strong>Gunicorn，一个简单，轻便，快速的Python WSGI HTTP Server for UNIX。</strong></p>
+<ul>
+<li><p>绑定一个具体的端口</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gunicorn --bind <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">8030</span> myproject.wsgi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>增加请求服务的worker数量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gunicorn --workers <span class="number">3</span> myproject.wsgi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>以守护进程模式来运行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gunicorn --daemon myproject.wsgi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>或者把上面三个组合起来这是常用的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gunicorn -D -b <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">8030</span> -w <span class="number">3</span> myproject.wsgi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>或者我更喜欢把配置写到配置文件里</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gunicorn -c /path/to/config/gunicorn.conf.py  myproject.wsgi</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>gunicorn.conf.py</strong> 配置文件模板如下，具体可以去看<a href="http://docs.gunicorn.org/en/stable/" target="_blank" rel="noopener">Gunicorn官方文档</a> ：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> logging.handlers</span><br><span class="line"><span class="keyword">from</span> logging.handlers <span class="keyword">import</span> WatchedFileHandler</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"></span><br><span class="line">bind = <span class="string">"unix:/tmp/gunicorn.sock"</span>   <span class="comment">#绑定的ip与端口</span></span><br><span class="line">backlog = <span class="number">512</span>                <span class="comment">#监听队列数量，64-2048</span></span><br><span class="line"><span class="comment">#chdir = '/home/test/server/bin'  #gunicorn要切换到的目的工作目录</span></span><br><span class="line">worker_class = <span class="string">'sync'</span> <span class="comment">#使用gevent模式，还可以使用sync 模式，默认的是sync模式</span></span><br><span class="line">workers = <span class="number">4</span> <span class="comment"># multiprocessing.cpu_count()    #进程数</span></span><br><span class="line">threads = <span class="number">16</span> <span class="comment">#multiprocessing.cpu_count()*4 #指定每个进程开启的线程数</span></span><br><span class="line">loglevel = <span class="string">'info'</span> <span class="comment">#日志级别，这个日志级别指的是错误日志的级别，而访问日志的级别&gt;无法设置</span></span><br><span class="line"><span class="comment">#access_log_format = '%(t)s %(p)s %(h)s "%(r)s" %(s)s %(L)s %(b)s %(f)s" "%(a)s"'</span></span><br><span class="line">access_log_format = <span class="string">'%(t)s %(p)s %(h)s "%(r)s" %(s)s'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#accesslog = "./gunicorn_access.log"      #访问日志文件</span></span><br><span class="line"><span class="comment">#errorlog = "./gunicorn_error.log"        #错误日志文件</span></span><br><span class="line">accesslog = <span class="string">"-"</span>  <span class="comment">#访问日志文件，"-" 表示标准输出</span></span><br><span class="line">errorlog = <span class="string">"-"</span>   <span class="comment">#错误日志文件，"-" 表示标准输出</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="2-一对好基友：Supervisor与Gunicorn"><a href="#2-一对好基友：Supervisor与Gunicorn" class="headerlink" title="2. 一对好基友：Supervisor与Gunicorn"></a>2. 一对好基友：Supervisor与Gunicorn</h2><p>我们可以用supervisor来管理Gunicorn服务，配置模板如下。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[program:gunicorn_demo]</span><br><span class="line">process_name=%(program_name)s</span><br><span class="line">numprocs=<span class="number">1</span></span><br><span class="line">priority=<span class="number">901</span></span><br><span class="line">directory = /opt/gunicorn_demo/</span><br><span class="line">command = /opt/virtualenv/bin/python /opt/virtualenv/bin/gunicorn -c gunicorn_demo.py gunicorn_demo:app</span><br><span class="line">autostart = true</span><br><span class="line">startsecs = <span class="number">20</span></span><br><span class="line">autorestart = true</span><br><span class="line">startretries = <span class="number">3</span></span><br><span class="line">user = root</span><br><span class="line">redirect_stderr = true</span><br><span class="line">stdout_logfile_maxbytes = <span class="number">20</span>MB</span><br><span class="line">stdout_logfile_backups = <span class="number">10</span></span><br><span class="line">stdout_logfile = /dev/null</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-Gunicorn如何处理静态文件？"><a href="#3-Gunicorn如何处理静态文件？" class="headerlink" title="3. Gunicorn如何处理静态文件？"></a>3. Gunicorn如何处理静态文件？</h2><blockquote>
+<p>在用Gunicorn跑Django的时候,比较郁闷的是静态文件的处理,即使在settings设置DEBUG=True,静态文件也不会正常显示.生产环境下一般不会裸跑Gunicorn,一般都会在前面放一个Nginx反代到Gunicorn,而静态文件直接交给Nginx处理.<br>但是如heroku,coding.net的演示平台这种PaaS就不能自己配置反向代理,怎么样设置wsgi才能正常处理静态文件呢.这里总结下处理这个问题的经验。</p>
+</blockquote>
+<p>以上问题来自<a href="https://zhu327.github.io/2015/09/29/gunicorn%E8%BF%90%E8%A1%8Cdjango%E6%97%B6%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" target="_blank" rel="noopener">Gunicorn运行Django时静态文件处理
+</a> </p>
+<p>这里提到了两个方法来解决此问题：</p>
+<ul>
+<li><strong>1. 强制使用Django自带的静态文件处理器</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"><span class="keyword">from</span> django.conf.urls.static <span class="keyword">import</span> static</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    <span class="comment"># ... the rest of your URLconf goes here ...</span></span><br><span class="line">] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT）</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>2. 使用第三方库Whitenoise用来处理wsgi app静态文件</strong><br>这个方法比较好一点，用Whitenoise搭配Gunicorn,完全能在没有Nginx的情况下在生产环境中处理静态文件，配置非常简单，可以参考 <a href="http://whitenoise.evans.io/en/stable/" target="_blank" rel="noopener">Whitenoise官方文档</a> </li>
+</ul>
+<h2 id="4-Nginx与Gunicorn配置记录"><a href="#4-Nginx与Gunicorn配置记录" class="headerlink" title="4. Nginx与Gunicorn配置记录"></a>4. Nginx与Gunicorn配置记录</h2><p>网上的教程鱼龙混杂，配置各个都不太一样，但大差不差，有些能用有些不能用，踩了蛮多坑，把自己的第一次成公配置贴在这里，方便自己以后回来查看。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name 127.0.0.1;</span><br><span class="line">    access_log /var/log/nginx/demo_access_log;</span><br><span class="line">    error_log /var/log/nginx/demo_error_log;</span><br><span class="line">    location  = /favicon.ico &#123; access_log off ; log_not_found off ;  &#125;</span><br><span class="line">    location / &#123;</span><br><span class="line">      include proxy_params;</span><br><span class="line">      proxy_pass http://unix:/tmp/gunicorn.sock;</span><br><span class="line">    &#125;</span><br><span class="line">    location /static &#123;</span><br><span class="line">      root  /home/jiahuan/envdir/TestGunicorn;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里gunicorn我用的是<code>.sock</code>，所以相应的nginx这边的proxy_pass也要用sock，当然也可以用，http+port的形式。<br>配置到能访问网址，不止是一个配置文件就能解决的，完整的过程看这边：<a href="http://rahmonov.me/posts/run-a-django-app-with-nginx-and-gunicorn/" target="_blank" rel="noopener">run-a-django-app-with-nginx-and-gunicorn</a>  以及<a href="https://www.cnblogs.com/nanrou/p/7026802.html" target="_blank" rel="noopener">初次部署django+gunicorn+nginx</a> ,用来看看一些概念和思路。</p>
+<h2 id="5-更好的解决方式：Docker"><a href="#5-更好的解决方式：Docker" class="headerlink" title="5. 更好的解决方式：Docker"></a>5. 更好的解决方式：Docker</h2><p>研究的过程中，接触到了Docker。我们可以用pipenv保持python开发环境的一致，干净，但是当涉及到一些系统级别的服务时，比如redis作为消息队列 ，nginx作为代理服务器时，我们怎么做到隔离呢，那就是用Docker。这真的是太方便了！有时候因为Ubuntu系统版本的问题，或者之前设置过了这会想删除之前项目部署重新设置，可能存在一系列让人烦躁的事情，而Docker直接搞一个Nginx容器用来做反向代理，用一个redis容易作为消息队列的存储，干净的容器，不用了将容器直接关闭或者清除，也不用操心各个容器间的内部网络，都实现好了。<br>输入关键字docker django能在gihtub找到很多别人写的。我找到一个自己认为较好的，fork之后然后进行了一些修改（比如生成docker 镜像时，新增了国内下载源等），项目地址在这<a href="https://github.com/fantasyhh/docker-django" target="_blank" rel="noopener">docker-django</a> ，可以先按照教程跑起来然后查看内部的实现原理，会发现docker真的乃一部署神器！</p>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>这一配置篇与上一章的概念篇，把我最近关于对wsgi以及部署方面的一些概念进行了总结，也算解了心中一大困惑，部署是常见的事，记录下来，有规矩，才有方圆～</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Gunicorn使用及配置"><span class="toc-text">1. Gunicorn使用及配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-一对好基友：Supervisor与Gunicorn"><span class="toc-text">2. 一对好基友：Supervisor与Gunicorn</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Gunicorn如何处理静态文件？"><span class="toc-text">3. Gunicorn如何处理静态文件？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Nginx与Gunicorn配置记录"><span class="toc-text">4. Nginx与Gunicorn配置记录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-更好的解决方式：Docker"><span class="toc-text">5. 更好的解决方式：Docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-总结"><span class="toc-text">6. 总结</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/07/08/django-gunicorn-nginx-config/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Django/"><i class="fa fa-tags"></i>Django</a>
+     
+      <a href="/tags/Gunicorn/"><i class="fa fa-tags"></i>Gunicorn</a>
+     
+      <a href="/tags/Nginx/"><i class="fa fa-tags"></i>Nginx</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/06/27/python3-wsgi-concept/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
