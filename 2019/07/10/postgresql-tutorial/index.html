@@ -6,16 +6,16 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>标签: Queue | 烛影小札</title>
+  <title>PostgreSQL 常用命令记录 | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Python, Diary, Linux">
+    <meta name="keywords" content="PostgreSQL,Linux,sql,">
   
 
   
-  <meta name="description" content>
+  <meta name="description" content="从之前看的Two Scoops Press Two Scoops of Django 1.11书籍或者是官网的教程，又或者最近在github查找django-docker人家的代码时看到的，都是用的PostgreSQL作为Django的数据库，平常都是用的Mysql，是不是验证了”国外大多用PostgresSQL，国内大多用Mysql“这句话，我对这个数据库比较陌生，但是既然官网都主推了，相对Mysql也有额外特色功能,SQL语句大多是通用的，不如把其他的基础使用语法记录一下，也算入门了。">
 
   
 
@@ -42,7 +42,7 @@
     welcome: {"enable":false,"interval":30},
     start_time: "2019-04-24",
     passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: false,
+    is_post: true,
     lock: false,
     author: "Jiahuan Shi",
     share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
@@ -184,19 +184,101 @@
 </nav>
 <div id="site-process"></div>
     <main>
-      <div class="timeline">
-  <h2 class="timeline-title">标签: Queue</h2>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-07-10
+    </span>
+    
+      <span>
+        | <a href="/categories/PostgreSQL/"><i class="fa fa-bookmark"></i>PostgreSQL</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    PostgreSQL 常用命令记录
+  </h1>
   
+  <article class="passage-article">
+    <br>从之前看的<code>Two Scoops Press Two Scoops of Django 1.11</code>书籍或者是官网的教程，又或者最近在github查找django-docker人家的代码时看到的，都是用的PostgreSQL作为Django的数据库，平常都是用的Mysql，是不是验证了”国外大多用PostgresSQL，国内大多用Mysql“这句话，我对这个数据库比较陌生，但是既然官网都主推了，相对Mysql也有额外特色功能,SQL语句大多是通用的，不如把其他的基础使用语法记录一下，也算入门了。<p></p>
+<h2 id="1-好的开始"><a href="#1-好的开始" class="headerlink" title="1. 好的开始"></a>1. 好的开始</h2><ul>
+<li><p>创建一个新的PostgreSQL角色并输入密码，可选选项查看<a href="https://www.postgresql.org/docs/11/app-createuser.html" target="_blank" rel="noopener">createuser文档</a><br><code>createuser -P -e dbuser</code></p>
+<blockquote>
+<p><code>-e</code>选项为创建完成过后的通知消息，下同</p>
+</blockquote>
+</li>
+<li><p>创建数据库，可选选项查看<a href="https://www.postgresql.org/docs/11/app-createdb.html" target="_blank" rel="noopener">createdb选项</a><br><code>createdb -e -O dbuser  mydb</code></p>
+</li>
+<li><p>通过sql文件导入数据<br><code>psql mydb &lt; mydb.sql</code></p>
+</li>
+<li><p>如果数据库存在则删除该数据库<br><code>dropdb --if-exists mydb</code></p>
+</li>
+<li><p>如果数据用户存在则删除该用户<br><code>dropuser --if-exists dbuser</code></p>
+</li>
+</ul>
+<p>也可以用交互的方法<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#　su postgres first login postgres DB</span></span><br><span class="line">psql</span><br><span class="line"><span class="comment"># create user</span></span><br><span class="line">CREATE USER dbuser WITH PASSWORD <span class="string">'password'</span>;</span><br><span class="line"><span class="comment"># create db</span></span><br><span class="line">CREATE DATABASE exampledb OWNER dbuser;</span><br><span class="line"><span class="comment"># grant all privileges</span></span><br><span class="line">GRANT ALL PRIVILEGES ON DATABASE exampledb to dbuser;</span><br><span class="line"><span class="comment"># login exampledb</span></span><br><span class="line">psql -U dbuser -d exampledb -h 127.0.0.1 -p 5432</span><br><span class="line"><span class="comment"># if linux user == db user</span></span><br><span class="line">psql exampledb</span><br><span class="line"><span class="comment"># psql exampledb &lt; exampledb.sql</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>将PostgreSQL数据库导出到一个脚本文件<br><code>pg_dump</code></li>
+<li>将所有的PostgreSQL数据库导出到一个脚本文件<br><code>pg_dumpall</code></li>
+<li>从一个由pg_dump或pg_dumpall程序导出的脚本文件中恢复PostgreSQL数据库<br><code>pg_restore</code></li>
+</ul>
+<h2 id="2-快捷命令"><a href="#2-快捷命令" class="headerlink" title="2. 快捷命令"></a>2. 快捷命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">\h：查看SQL命令的详细解释，例如 \h select</span><br><span class="line">?：查看psql命令列表</span><br><span class="line">\l：列出所有数据库</span><br><span class="line">\c [database_name]：连接其他数据库</span><br><span class="line">\d （table）：列出数据库的所有表（某一具体表） </span><br><span class="line">\dn：查看表架构</span><br><span class="line">\di：查看索引</span><br><span class="line">\du：列出所有数据库用户</span><br><span class="line">\conninfo：列出连接</span><br><span class="line"><span class="comment">#　更多请查看 \?</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-东张西望"><a href="#3-东张西望" class="headerlink" title="3. 东张西望"></a>3. 东张西望</h2><ul>
+<li><a href="http://www.freeoa.net/osuport/db/postgresql-comm-used-cmd-refer_3072.html" target="_blank" rel="noopener">PostgreSQL最常用命令参考</a></li>
+<li><a href="https://blog.csdn.net/baidu_33387365/article/details/80883142" target="_blank" rel="noopener">PostgreSQL：深入理解 template1 和 template0</a></li>
+</ul>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-好的开始"><span class="toc-text">1. 好的开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-快捷命令"><span class="toc-text">2. 快捷命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-东张西望"><span class="toc-text">3. 东张西望</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/07/10/postgresql-tutorial/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
+     
+      <a href="/tags/sql/"><i class="fa fa-tags"></i>sql</a>
     
-      <h3 class="timeline-subtitle">2019</h3>
-    
-    <div class="timeline-item">
-      <time>2019-06-13</time>
-      <a target="_self" href="/2019/06/13/python3-queue/">Python3 队列用法整理</a>
     </div>
   
 </div>
+
     </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
     
     <div class="site-footer-wrapper">
   <footer class="site-footer">
@@ -260,19 +342,19 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/2019/07/10/docker-common-commands/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/2019/07/08/django-gunicorn-nginx-config/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
   <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="false" id="site-toc-show-btn">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
       <i class="fa fa-bars"></i>
     </a>
     
-      <a href="javascript:void(0);" data-enable="false">
+      <a href="#site-comment" data-enable="true">
         <i class="fa fa-commenting"></i>
       </a>
     

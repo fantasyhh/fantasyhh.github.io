@@ -6,16 +6,16 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>由npm而温故到的pipenv | 烛影小札</title>
+  <title>Docker常用命令 | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Python,python,npm,">
+    <meta name="keywords" content="Docker,Linux,Docker,">
   
 
   
-  <meta name="description" content="最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的source url换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用pip freeze 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是Kenneth Reitz（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。">
+  <meta name="description" content="因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。">
 
   
 
@@ -188,11 +188,11 @@
   <div class="passage">
   <div class="passage-meta">
     <span>
-      <i class="fa fa-calendar"></i>2019-05-14
+      <i class="fa fa-calendar"></i>2019-07-10
     </span>
     
       <span>
-        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+        | <a href="/categories/Docker/"><i class="fa fa-bookmark"></i>Docker</a>
       </span>
     
     
@@ -202,40 +202,88 @@
     
   </div>
   <h1 class="passage-title">
-    由npm而温故到的pipenv
+    Docker常用命令
   </h1>
   
   <article class="passage-article">
-    <h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的<code>source url</code>换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用<code>pip freeze</code> 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是<a href="https://zhuanlan.zhihu.com/p/22332669" target="_blank" rel="noopener">Kenneth Reitz</a>（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。</p>
-<h3 id="Pipenv燥起来"><a href="#Pipenv燥起来" class="headerlink" title="Pipenv燥起来"></a>Pipenv燥起来</h3><p>pipenv 参考了其他语言的包管理工具（bundler, composer, npm, cargo, yarn, etc.），旨在将最好的包管理工具带入 python 世界。pipevn 可以解决哪些问题：</p>
-<ul>
-<li><p>使用 pipenv 就相当于同时使用了 pip 和 virtualenv ，即做到包管理又可以管理虚拟环境。</p>
+    <p></p>
+<p>因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。</p>
+<h5 id="由于国内网络环境的缘故，要使用国内源安装，安装过程看这里的教程"><a href="#由于国内网络环境的缘故，要使用国内源安装，安装过程看这里的教程" class="headerlink" title="由于国内网络环境的缘故，要使用国内源安装，安装过程看这里的教程"></a><strong>由于国内网络环境的缘故，要使用国内源安装，安装过程看<a href="https://yeasy.gitbooks.io/docker_practice/install/ubuntu.html" target="_blank" rel="noopener">这里的教程</a></strong></h5><h2 id="1-操作容器"><a href="#1-操作容器" class="headerlink" title="1. 操作容器"></a>1. 操作容器</h2><ul>
+<li><p>启动容器以后台方式运行(更通用的方式）<br><code>docker run --name container_name -v /path/to/hostdir:/mnt -d -p 5000:5000 image_name</code></p>
 </li>
-<li><p>使用 pipenv 解决 requirement.txt 面临的问题，pipenv 使用 Pipfile 代替 requirement.txt 文件来记录项目依赖包。</p>
+<li><p>在运行着的容器内部运行一条命令(比attach更好用)<br><code>docker exec -it   &lt;id/container_name&gt;  /bin/(bash|sh)</code></p>
 </li>
-<li><p>新增了 Pipfile.lock 文件来锁定 python 软件的包名及版本，以及其依赖关系的列表。</p>
+<li><p>附着到正在运行的容器<br><code>docker attach &lt;id/container_name&gt;</code></p>
 </li>
-<li>让你深入了解库的依赖图（例如<code>$ pipenv graph</code>）</li>
-<li>通过加载.env文件简化开发工作流程</li>
-</ul>
-<h4 id="1-基础用法"><a href="#1-基础用法" class="headerlink" title="1. 基础用法"></a>1. 基础用法</h4><p>这里不过多介绍用法，<code>pipenv --help</code>或者官网即可查询。只推荐两篇文章当做小手册快速查看<br><a href="https://www.jianshu.com/p/00af447f0005" target="_blank" rel="noopener">pipenv利器</a> ， 以及 <a href="https://crazygit.wiseturtles.com/2018/01/08/pipenv-tour/" target="_blank" rel="noopener">pipenv使用指南</a></p>
-<h4 id="2-项目中如何使用"><a href="#2-项目中如何使用" class="headerlink" title="2. 项目中如何使用"></a>2. 项目中如何使用</h4><p>在pipenv的目录中，我我以前总是放弃用<code>pipenv install</code>而是<code>pipenv shell</code>进入虚拟环境然后<code>pip</code>，因为<code>pienv install</code>的时候会有lock这一个步骤导致很慢（<a href="https://github.com/pypa/pipenv/issues/1914" target="_blank" rel="noopener">因为lock文件中要记录哈希值等</a>），lock文件的作用上面说过就不说了。但是用pip后库的名称版本不会记录到Pipfile，所以如果想完全摒弃requirement就应该用<code>pipenv install</code>。（其实可以完全不用到pipenv 进入虚拟环境,用<strong><code>pipenv run python|pip</code> </strong>即可）</p>
+<li><p>实时查看日志输出<br><code>docker logs -f &lt;id/container_name&gt; (类似 tail -f) (带上时间戳-t）</code></p>
+</li>
+<li><p>列出当前所有正在运行的container(类似的选项就不说了 docker ps –help)<br><code>docker ps</code></p>
+</li>
+<li><p>显示一个运行的容器里面的进程信息<br><code>docker top &lt;id/container_name&gt;</code></p>
+</li>
+<li><p>显示容器统计信息（可选–no-stream，all等参数）<br><code>docker stats</code></p>
+</li>
+<li><p>查看容器内部详情细节<br><code>docker inspect &lt;id/container_name&gt;</code></p>
+</li>
+<li><p>从容器内拷贝文件到主机上(从主机拷贝到容器里将cp后面两个参数调换)<br><code>docker cp &lt;id/container_name&gt;:/file/path/within/container /host/path/target</code></p>
+</li>
+<li><p>保存对容器的修改（commit） 当你对某一个容器做了修改之后（通过在容器中运行某一个命令），可以把对容器的修改保存下来，这样下次可以从保存后的最新状态运行该容器<br><code>docker commit &lt;id/container_name&gt; new_image_name</code></p>
+</li>
+<li><p>删除单个容器（可加-f选项）<br><code>docker rm &lt;id/container_name&gt;</code></p>
+</li>
+<li><p>删除所有容器<br><code>docker rm  $(docker ps -a -q)</code></p>
+</li>
+<li><p>查看容器内部详情细节<br><code>docker inspect --format &#39;{.NetworkSettings.IPAddress}&#39; &lt;id/container_name&gt;</code></p>
 <blockquote>
-<p>以Django项目为例。生成虚拟环境之前设置PIPENV_PYPI_MIRROR环境变量为<code>https://pypi.tuna.tsinghua.edu.cn/simple</code>，<a href="https://pipenv.readthedocs.io/en/latest/advanced/#pipenv.environments.PIPENV_PYPI_MIRROR" target="_blank" rel="noopener">详情见这里</a>，目的是pipenv安装库的时候都会使用清华源，免得每次都要改。然后生成一个envdir，进入该目录，安装django，新建django。app等。项目完成之后，将与djang项目平级的Pipfile以及lock文件放入项目，然后版本控制，上传git。之后就是别人clone下来，进入django项目，pipenv install就能将python环境与Pipfile中的文件生成，方便省事。这是我暂时的想法，以后有更好的方案会换</p>
+<p>注意这里format之后不是一对{} 而是两对，这里有bug，所以先这么写着</p>
 </blockquote>
-<h4 id="3-Pipfile与Pipfile-lock"><a href="#3-Pipfile与Pipfile-lock" class="headerlink" title="3. Pipfile与Pipfile.lock"></a>3. Pipfile与Pipfile.lock</h4><p>那为什么有了Pipfile还有Pipfile.lock</p>
-<blockquote>
-<p>Python应用程序的具体要求来自Pipfile。这将包括应该从哪里获取包以及它们的松散版本约束。<br>Pipfile.lock为了再现性，将存储环境的详细信息（所有已安装的包含固定版本和其他详细信息的包）。该文件将自动生成，用户不应修改。</p>
-</blockquote>
-<p>这里有个比较明了的回答，<a href="https://stackoverflow.com/questions/52951316/why-does-pipenv-need-pipfile-and-pipfile-lock" target="_blank" rel="noopener">Why does pipenv need Pipfile and Pipfile.lock?</a>。<br>转而也可以逐渐理解npm中<code>package.json</code>与<code>package-lock.json</code>的作用了</p>
-<p><strong>那我们是否要将这两个文件保持版本控制，官方的建议是：</strong></p>
-<ul>
-<li>通常，保持两者Pipfile和Pipfile.lock版本控制。</li>
-<li>Pipfile.lock如果要定位多个版本的Python，请不要保留版本控制。</li>
-<li>在Pipfile的[requires]部分中指定目标Python版本。理想情况下，你应该只有一个目标Python版本，因为这是一个部署工具。</li>
-<li>pipenv install与语法完全兼容，可在此处找到完整的文档。pip install请注意，Pipfile使用TOML Spec。</li>
+</li>
+<li><p>停止、启动、杀死、重启一个容器<br><code>docker stop|start|kill|restart &lt;id/container_name&gt;</code></p>
+</li>
 </ul>
-<h3 id="顺便说说npm"><a href="#顺便说说npm" class="headerlink" title="顺便说说npm"></a>顺便说说npm</h3><p><a href="https://www.cnblogs.com/tzyy/p/5193811.html" target="_blank" rel="noopener">package.json的字段详解</a>在这里，同样的按上面的说法，lock文件应该也要放入版本控制，但有一篇文章写道<a href="https://www.codementor.io/johnkennedy/get-rid-of-that-npm-package-lock-json-e0bj7ai42" target="_blank" rel="noopener">package-lock.json文件是地狱</a>。哈哈哈23333</p>
+<h2 id="2-操作镜像"><a href="#2-操作镜像" class="headerlink" title="2. 操作镜像"></a>2. 操作镜像</h2><ul>
+<li><p>列出镜像（可加-a ，-q选项）<br><code>docker images</code></p>
+</li>
+<li><p>从dockerhub检索image<br><code>docker search image_name</code></p>
+</li>
+<li><p>下载image<br><code>docker pull image_name</code></p>
+</li>
+<li><p>删除一个或者多个镜像(可加-f选项)<br><code>docker rmi image_name</code></p>
+</li>
+<li><p>显示一个镜像的历史<br><code>docker history image_name</code></p>
+</li>
+<li><p>发布docker镜像<br><code>docker image push my_repo/my_image:my_tag</code></p>
+</li>
+<li><p>删除一个或者多个镜像<br><code>docker rmi image_name</code></p>
+</li>
+<li><p>保存一个镜像到一个tar文件里（反过来就是解压）<br><code>docker save debian -o mydebian.tar</code><br><code>docker load -i mydebian.tar</code></p>
+</li>
+<li><p>给镜像打标签(标签指向源镜像，多生产一个)<br><code>docker tag centos:7 mycentos7:v1</code></p>
+</li>
+</ul>
+<h2 id="3-其他"><a href="#3-其他" class="headerlink" title="3. 其他"></a>3. 其他</h2><ul>
+<li><p>通过Dockerfile生成新的镜像<br><code>docker build  -t new_image_name:tag .</code></p>
+</li>
+<li><p>显示系统范围信息<br><code>docker info</code></p>
+</li>
+<li><p>提供docker 版本信息<br><code>docker version</code></p>
+</li>
+<li><p>查看docker0的网络(宿主机上操作)<br><code>ip a show docker0</code></p>
+</li>
+<li><p>附着到容器内部查看其内部ip：<br><code>ip a show eth0</code></p>
+</li>
+<li><p> 登录到Docker registry.<br><code>docker login</code></p>
+</li>
+<li><p>删除所有未使用的容器，未使用的网络和悬空图像(也可单独删除)<br><code>docker system prune</code></p>
+</li>
+<li><p>显示系统范围信息<br><code>docker info</code></p>
+</li>
+<li><p>显示系统范围信息<br><code>docker info</code></p>
+</li>
+</ul>
+<h2 id="4-念念不忘"><a href="#4-念念不忘" class="headerlink" title="4. 念念不忘"></a>4. 念念不忘</h2><ul>
+<li><a href="https://gist.github.com/garystafford/f0bd5f696399d4d7df0f" target="_blank" rel="noopener">国外友人自己整理的有用的Docker命令</a></li>
+</ul>
   </article>
   <aside class="table-content" id="site-toc">
   <div class="table-content-title">
@@ -243,8 +291,8 @@
     <span>目录</span>
   </div>
   <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#题外话"><span class="toc-text">题外话</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pipenv燥起来"><span class="toc-text">Pipenv燥起来</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-基础用法"><span class="toc-text">1. 基础用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-项目中如何使用"><span class="toc-text">2. 项目中如何使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Pipfile与Pipfile-lock"><span class="toc-text">3. Pipfile与Pipfile.lock</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#顺便说说npm"><span class="toc-text">顺便说说npm</span></a></li></ol>
-  </div>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#由于国内网络环境的缘故，要使用国内源安装，安装过程看这里的教程"><span class="toc-text">由于国内网络环境的缘故，要使用国内源安装，安装过程看这里的教程</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#1-操作容器"><span class="toc-text">1. 操作容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-操作镜像"><span class="toc-text">2. 操作镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-其他"><span class="toc-text">3. 其他</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-念念不忘"><span class="toc-text">4. 念念不忘</span></a>
+  </li></div>
 </aside>
   
     <aside class="passage-copyright">
@@ -252,7 +300,7 @@
       
         <div>
           原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2019/05/14/pipenv-and-npm/</a>
+          <a href target="_blank">https://fantasyhh.github.io/2019/07/10/docker-common-commands/</a>
         </div>
       
       <div>
@@ -263,9 +311,9 @@
   
     <div class="passage-tags">
      
-      <a href="/tags/python/"><i class="fa fa-tags"></i>python</a>
+      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
      
-      <a href="/tags/npm/"><i class="fa fa-tags"></i>npm</a>
+      <a href="/tags/Docker/"><i class="fa fa-tags"></i>Docker</a>
     
     </div>
   
@@ -345,10 +393,10 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="/2019/05/17/nodejs3-jstips/" data-enable="true">
+    <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="/2019/05/08/nodejs-2/" data-enable="true">
+    <a href="/2019/07/10/postgresql-tutorial/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
