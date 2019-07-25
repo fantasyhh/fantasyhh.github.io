@@ -6,7 +6,7 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>Docker常用命令 | 烛影小札</title>
+  <title>Docker常用命令整理 | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -202,7 +202,7 @@
     
   </div>
   <h1 class="passage-title">
-    Docker常用命令
+    Docker常用命令整理
   </h1>
   
   <article class="passage-article">
@@ -233,7 +233,7 @@
 </li>
 <li><p>删除所有容器<br><code>docker rm  $(docker ps -a -q)</code></p>
 </li>
-<li><p>查看容器内部详情细节<br><code>docker inspect --format &#39;{.NetworkSettings.IPAddress}&#39; &lt;id/container_name&gt;</code></p>
+<li><p>查看容器内部详情细节<br><code>docker inspect -f &#39;{range .NetworkSettings.Networks}{.IPAddress}{end}&#39; container_name_or_id</code></p>
 <blockquote>
 <p>注意这里format之后不是一对{} 而是两对，这里有bug，所以先这么写着</p>
 </blockquote>
@@ -275,10 +275,6 @@
 <li><p> 登录到Docker registry.<br><code>docker login</code></p>
 </li>
 <li><p>删除所有未使用的容器，未使用的网络和悬空图像(也可单独删除)<br><code>docker system prune</code></p>
-</li>
-<li><p>显示系统范围信息<br><code>docker info</code></p>
-</li>
-<li><p>显示系统范围信息<br><code>docker info</code></p>
 </li>
 </ul>
 <h2 id="4-念念不忘"><a href="#4-念念不忘" class="headerlink" title="4. 念念不忘"></a>4. 念念不忘</h2><ul>
@@ -393,7 +389,7 @@
 
 <div class="bottom-bar">
   <div class="bottom-bar-left">
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/2019/07/25/python-about-keyboard/" data-enable="true">
       <i class="fa fa-arrow-left"></i>
     </a>
     <a href="/2019/07/10/postgresql-tutorial/" data-enable="true">
