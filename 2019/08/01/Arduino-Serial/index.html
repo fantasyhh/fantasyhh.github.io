@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>Arduino Serial使用以及各种读写函数区别 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Arduino,Serial,Soc,">
+  
+
+  
+  <meta name="description" content="之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-08-01
+    </span>
+    
+      <span>
+        | <a href="/categories/Arduino/"><i class="fa fa-bookmark"></i>Arduino</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Arduino Serial使用以及各种读写函数区别
+  </h1>
+  
+  <article class="passage-article">
+    <p>之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….</p>
+<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>常见的串口调试是将Arduino与PC相连，然后利用PC上的串口助手与其通信调试，但是有一个注意点是，调试Arduino串口时，用串口助手调试与跟程序语言(比如Python，Arduino语言)调试的传输的数据有区别，比如串口助手输入框中输入<code>97</code>时你可能输入的是两个字符<code>9</code>与<code>7</code>，而在用Arduino语法（Serial.write(97)）写的时候就是代表ASCII的<code>a</code>，或者在Python中是<code>ser.write(b&#39;a&#39;)</code>也可写成<code>ser.write([97])</code>）,两者调试方法有明显的差别性。</p>
+<h2 id="2-两个重要的写函数（write，print）"><a href="#2-两个重要的写函数（write，print）" class="headerlink" title="2. 两个重要的写函数（write，print）"></a>2. 两个重要的写函数（write，print）</h2><h3 id="Serial-write"><a href="#Serial-write" class="headerlink" title="Serial.write()"></a>Serial.write()</h3><p>串口中通信的一定是byte（字节），也就是八位Bit（二进制位），可以为一个字节，也可为多个字节；如果想发送代表数字的字符，应该使用print()函数（这个后面说）；该函数返回有几个字节被发送了。</p>
+<p><code>Serial.write()</code>一共有三种语法</p>
+<ul>
+<li><code>Serial.write(val)</code></li>
+</ul>
+<p>发送单个字节，比如发送97，那么等于发送十进制ASCII码值为97的字符，也就是字母a</p>
+<ul>
+<li><code>Serial.write(str)</code></li>
+</ul>
+<p>发送字符串作为一系列的字节,比如<code>int bytesSent = Serial.write(“hello”);</code></p>
+<blockquote>
+<p>注意，这里一定要用双引号，我一开始习惯了Python的用法，单双引号看心情来用，直接只收到一个字节，问题很大</p>
+</blockquote>
+<ul>
+<li><code>Serial.write(buf, len)</code></li>
+</ul>
+<p>发送一个长度为len的数组（一般为char类型数组),跟上面<code>Serial.write(str)</code>作用是一致的，只是传入参数不一样</p>
+<h3 id="Serial-print"><a href="#Serial-print" class="headerlink" title="Serial.print()"></a>Serial.print()</h3><blockquote>
+<p><strong>Prints data to the serial port as human-readable ASCII text.</strong></p>
+</blockquote>
+<p>println与print类似，只是多了换行符，这里只介绍print函数。<br>上面这行英文已经把它跟read()函数的关系分的很清楚了。这个命令可以有多种形式。每个数字都使用ASCII字符打印。浮点数类似地打印为ASCII数字，默认为两位小数。字节作为单个字符发送。字符和字符串按原样发送。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Serial.print(<span class="number">78</span>) gives <span class="string">"78"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>) gives <span class="string">"1.23"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="string">'N'</span>) gives <span class="string">"N"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="string">"Hello world."</span>) gives <span class="string">"Hello world."</span></span><br></pre></td></tr></table></figure>
+<p>还有第二个可选参数<code>format</code>是具体的格式，允许二进制八进制十六进制等，例如：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Serial.print(<span class="number">78</span>, BIN) gives <span class="string">"1001110"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">78</span>, OCT) gives <span class="string">"116"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">78</span>, DEC) gives <span class="string">"78"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">78</span>, HEX) gives <span class="string">"4E"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>, <span class="number">0</span>) gives <span class="string">"1"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>, <span class="number">2</span>) gives <span class="string">"1.23"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>, <span class="number">4</span>) gives <span class="string">"1.2346"</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Serial-write与Serial-print函数的区别"><a href="#Serial-write与Serial-print函数的区别" class="headerlink" title="Serial.write与Serial.print函数的区别"></a>Serial.write与Serial.print函数的区别</h3><blockquote>
+<p>谢邀，我觉得print，printf是开发出来专门针对pc端显示的，write则是用来与串口设备通信的，当然在老手眼里怎么用都行     ——————from逼乎某大佬回答</p>
+</blockquote>
+<p>按照arduino官网reference的解释，<code>Serial. print()</code>是<strong>print data to  the serial port as human-reading ASC II text</strong> ,<code>Serial. write()</code>是<strong>write binary data to  the serial port</strong> ，一个转化为文本输出，一个是数据输出。</p>
+<p>我在测试的时候刚开始并没有发现两者的区别。起初我认为传数据就该用<code>Serial.write</code>，而对于<code>Serial.print</code>这是在用串口助手的时候用，打印一些格式啥的，好利于调试辨认啥的等等（事实确实如此，但不仅于此）</p>
+<p>于是我就将这两者的区别与Python中<code>sys.stdout.write</code>与内置的<code>print</code>函数作比较，前者不会写换行符然后是写到缓冲区，而<code>print</code>函数每次都有换行符，清空了缓冲区，然后就打印到屏幕上了，而且<code>print</code>函数自带了很多格式，可以跟<code>format</code>函数配合啥的，倒是跟Arduino的<code>print</code>有几分相似……但是其实这并不是重点～</p>
+<blockquote>
+<p>我认为Arduino中的<code>write</code>与<code>print</code>还是存在缓冲区这个区别的，比如是在<code>write</code>中设置了<code>timeout</code>等操作，达到了与<code>print</code>类似的操作，这里只是猜测下，不做深究</p>
+</blockquote>
+<p>重点来了！ </p>
+<p>我在这里<a href="https://www.zhihu.com/question/21307404" target="_blank" rel="noopener">Arduino 的 Serial.write() 和 Serial.print() 的区别在哪里？</a>看到了答案？</p>
+<ul>
+<li><strong>在输出字符或字符串时，没有任何区别</strong></li>
+<li><strong>在输出数值时，write会直接输出数据本身，而print会将其转化为可显示的ASCII字符（其实我觉得不妥，转换是串口助手来转换的，应该是算是说转换成可以传输的ASCII码值）</strong></li>
+</ul>
+<p>当时我的想法跟<code>amazing814</code>答主一样，而跟最高赞同者那位相反，后来发现我们概念理解错了<br>他“错误”的回答如下：</p>
+<blockquote>
+<p>1, print 出来的是真实数值,<br>  2, write出来的是ascii码表对应的值(或者是说”对应的图形”)</p>
+</blockquote>
+<p>错在了串口助手会自动将数据转换程ASCII文本！ 反正，你要知道的是，串口发送或者读取到的数据都是字节！这一点用Python串口模块自己尝试一下就行！</p>
+<p>所以<code>Serial.write</code>与<code>Serial.print</code>最大的区别就是传进函数中的数据，前者是真正的原始数据（int型或者说二进制位的数值），得到的是数据本身，而<code>使用print</code>函数的时候会以多个字节的形式向串口传递括号中数值，会将它看成一个字符串，传递其中每一个字符的ASCII码。例如你举的例子“78”会向串口传递“7”和“8”的ASCII码的值。</p>
+<p>比如 Serial.write(78) ,发送的是<code>N</code>(换算成二进制就是01001110)，得到的也是<code>N</code>的字节（即二进制位），虽然串口助手上显示的是<code>N</code><br>与Serial.print(78)，发送的<code>7</code>和<code>8</code>两个字节，内部先把<code>7</code>，<code>8</code>转换成<code>55</code>，<code>56</code>的原始数据，在发送出去，得到也是<code>55</code>,<code>56</code></p>
+<p>所以那位错误的答主，想说的其实并不是“真实”，而是“相同”！ 真正的计算机数据是二进制位（为了方便，转换成十进制了，也就是上面的55,56）</p>
+<p><strong>print主要用于”给人看”的地方. 电脑内部通讯, 如果程序内不需要用人眼再检查, 用 write 会比较好, 直接快捷.</strong></p>
+<h2 id="3-Serial-read-相关函数"><a href="#3-Serial-read-相关函数" class="headerlink" title="3. Serial.read 相关函数"></a>3. Serial.read 相关函数</h2><h3 id="Serial-read"><a href="#Serial-read" class="headerlink" title="Serial.read()"></a>Serial.read()</h3><p>读取即将来的串口数据，但是只读取第一个字节，且这个字节的数据类型为int，即ASCII码值。</p>
+<p>通常与<code>Serial.available()</code>一起用，例子如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> incomingByte = <span class="number">0</span>; <span class="comment">// for incoming serial data</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Serial.begin(<span class="number">9600</span>); <span class="comment">// opens serial port, sets data rate to 9600 bps</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// send data only when you receive data:</span></span><br><span class="line">  <span class="keyword">if</span> (Serial.available() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// read the incoming byte:</span></span><br><span class="line">    incomingByte = Serial.read();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// say what you got:</span></span><br><span class="line">    Serial.print(<span class="string">"I received: "</span>);</span><br><span class="line">    Serial.println(incomingByte, DEC);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>串口发送数据与读到数据都为字节，所以该函数return回来int 型数据很正常，但是我们去可以直接拿来很字符或者一些用在一些函数中，应该是内部自动做了处理（不像Python串口收到的数据还要解码），也就是说<strong>只有在串口读取发送数据时才用到ASCII十进制码值，在做一些其他东西是，都是人类可读的ASCII Text</strong>，从Arduino内置的例子就能看到：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Open serial communications and wait for port to open:</span></span><br><span class="line">  Serial.begin(<span class="number">9600</span>);</span><br><span class="line">  <span class="keyword">while</span> (!Serial) &#123;</span><br><span class="line">    ; <span class="comment">// wait for serial port to connect. Needed for native USB port only</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// send an intro:</span></span><br><span class="line">  Serial.println(<span class="string">"send any byte and I'll tell you everything I can about it"</span>);</span><br><span class="line">  Serial.println();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// get any incoming bytes:</span></span><br><span class="line">  <span class="keyword">if</span> (Serial.available() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">int</span> thisChar = Serial.read();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// say what was sent:</span></span><br><span class="line">    Serial.print(<span class="string">"You sent me: \'"</span>);</span><br><span class="line">    Serial.write(thisChar);</span><br><span class="line">    Serial.print(<span class="string">"\'  ASCII Value: "</span>);</span><br><span class="line">    Serial.println(thisChar);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// analyze what was sent:</span></span><br><span class="line">    <span class="keyword">if</span> (isAlphaNumeric(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's alphanumeric"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isAlpha(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's alphabetic"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isAscii(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's ASCII"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isWhitespace(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's whitespace"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isControl(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a control character"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isDigit(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a numeric digit"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isGraph(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a printable character that's not whitespace"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isLowerCase(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's lower case"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isPrintable(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's printable"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isPunct(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's punctuation"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isSpace(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a space character"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isUpperCase(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's upper case"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isHexadecimalDigit(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a valid hexadecimaldigit (i.e. 0 - 9, a - F, or A - F)"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add some space and ask for another byte:</span></span><br><span class="line">    Serial.println();</span><br><span class="line">    Serial.println(<span class="string">"Give me another byte:"</span>);</span><br><span class="line">    Serial.println();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Serial-readBytes-buffer-length"><a href="#Serial-readBytes-buffer-length" class="headerlink" title="Serial.readBytes(buffer, length)"></a>Serial.readBytes(buffer, length)</h3><p><code>Serial.readBytes</code>从串行端口读取字符到缓冲区,返回放入缓冲区的字节数，如果超时该函数将中断</p>
+<p>这个函数我看到的用法是放在字符数组中，然后再利用数组的特性进行一些操作，例子如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> mystr[<span class="number">10</span>]; <span class="comment">//Initialized variable to store recieved data</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Begin the Serial at 9600 Baud</span></span><br><span class="line">  Serial.begin(<span class="number">9600</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Serial.readBytes(mystr,<span class="number">5</span>); <span class="comment">//Read the serial data and store in var</span></span><br><span class="line">  Serial.println(mystr); <span class="comment">//Print data on Serial Monitor</span></span><br><span class="line">  <span class="keyword">for</span> (byte i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i = i + <span class="number">1</span>) &#123;</span><br><span class="line">      Serial.println(mystr[i]);</span><br><span class="line">  delay(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Serial-readString"><a href="#Serial-readString" class="headerlink" title="Serial.readString()"></a>Serial.readString()</h3><p><code>Serial.readString</code>将串行缓冲区中的字符读入String，如果超时该函数将中断</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String a;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">Serial.begin(<span class="number">9600</span>); <span class="comment">// opens serial port, sets data rate to 9600 bps</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(Serial.available()) &#123;</span><br><span class="line">        a= Serial.readString();<span class="comment">// read the incoming data as string</span></span><br><span class="line">        Serial.println(a);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当时这个函数与上面的搞不太清楚，所以试了下。其实这个函数是读取发送过来的字符串，存到一个String类型的变量里，用来打印，或者处理（<code>Serial.write()无法字节发送String类型的变量</code>）再发出去等等，可以看一下String类型的变量很多个方法比如<code>toCharArray()</code>，<code>toInt()</code>之类的</p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>经历了两天的疑惑解惑过程，发现自己关于串口的基本功还是不够扎实，这个过程中需要自己不断反复地尝试与验证，剥开代码语言的皮囊，看到更下面真实的骨架，其实也挺开心的，故再花点时间整理在这里留作总结以及反思！</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-text">1. 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-两个重要的写函数（write，print）"><span class="toc-text">2. 两个重要的写函数（write，print）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-write"><span class="toc-text">Serial.write()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-print"><span class="toc-text">Serial.print()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-write与Serial-print函数的区别"><span class="toc-text">Serial.write与Serial.print函数的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Serial-read-相关函数"><span class="toc-text">3. Serial.read 相关函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-read"><span class="toc-text">Serial.read()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-readBytes-buffer-length"><span class="toc-text">Serial.readBytes(buffer, length)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-readString"><span class="toc-text">Serial.readString()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-总结"><span class="toc-text">4. 总结</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/08/01/Arduino-Serial/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Serial/"><i class="fa fa-tags"></i>Serial</a>
+     
+      <a href="/tags/Soc/"><i class="fa fa-tags"></i>Soc</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/07/25/python-about-keyboard/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
+  <script async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-143610066-1');
+  </script>
+
+
+
+  <script async>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+
+
+
+
+    
+  </body>
+</html>
