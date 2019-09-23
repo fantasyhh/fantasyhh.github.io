@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>用Python在树莓派中使用MCP23017 I/O扩展模块 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="RaspberryPi,Python,Linux,I2C,">
+  
+
+  
+  <meta name="description" content="For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more?The easiest way of getting more inputs and outputs is to use an “i/o port expander”. This is a device that allows you to control a number of ports using data you send to the device.MCP23017 Example CircuitOther people have has lots of success using I2C devices so I decided to give one a try. I2C is a serial communications protocol which allows chips to swap data on the same “bus”. A port expander takes the data and controls the appropriate pins. This allows lots of sensors and devices to be controlled using only a few of the Pi’s GPIO pins.">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-09-20
+    </span>
+    
+      <span>
+        | <a href="/categories/RaspberryPi/"><i class="fa fa-bookmark"></i>RaspberryPi</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    用Python在树莓派中使用MCP23017 I/O扩展模块
+  </h1>
+  
+  <article class="passage-article">
+    <p><strong>摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景:</strong></p>
+<p>For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more?</p>
+<p>The easiest way of getting more inputs and outputs is to use an “i/o port expander”. This is a device that allows you to control a number of ports using data you send to the device.</p>
+<p>MCP23017 Example CircuitOther people have has lots of success using I2C devices so I decided to give one a try. I2C is a serial communications protocol which allows chips to swap data on the same “bus”. A port expander takes the data and controls the appropriate pins. This allows lots of sensors and devices to be controlled using only a few of the Pi’s GPIO pins.</p>
+<h2 id="1-说说硬件"><a href="#1-说说硬件" class="headerlink" title="1. 说说硬件"></a>1. 说说硬件</h2><p>我买的是微雪电子上的MCP23017 I/O扩展模块,这是一款基于 I2C 接口控制的 I/O 扩展模块，可外扩 16Pin I/O 口，支持同时使用多达 8 个，即可扩至 128Pin I/O 口，兼容 3.3V 和 5V 电平。</p>
+<p>产品参数与接线这里不多说,参考该产品的<a href="http://www.waveshare.net/w/upload/3/31/MCP23017-IO-Expansion-Board-user-manual-cn.pdf" target="_blank" rel="noopener">用户手册</a>,当然我们要验证这个拓展模块有没有用的直接表现就是简单地在电路上面接一个小灯(<strong>假设接在引脚PAO上</strong>).</p>
+<p>这个模块不仅可以拓展树莓派,还可以拓展Arduino与单片机,算是通用的,性价比不错.</p>
+<h2 id="2-系统设置与硬件测试"><a href="#2-系统设置与硬件测试" class="headerlink" title="2. 系统设置与硬件测试"></a>2. 系统设置与硬件测试</h2><p>我们先要打开树莓派上的I2C接口,默认是不开的,这个简单,直接在配置里面打开接口就行,然后重启</p>
+<ul>
+<li><p>安装 i2c-tools 工具对器件地址进行确认<br><strong><code>sudo apt-get install i2c-tools</code></strong></p>
+</li>
+<li><p>查询已连接的 I2C 设备<br><strong><code>i2cdetect -y 1</code></strong></p>
+</li>
+</ul>
+<p>将会打印出已连接设备的 I2C 器件地址信息：</p>
+<pre><code>pi@raspberrypi:~ $ i2cdetect  -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- 27 -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --  
+</code></pre><blockquote>
+<p>注意,这里不同厂家的拓展模块有可能是其他地址,比如0x20,原因在于我这个模块的A0,A1,A2在厂家出厂时就在内部接了3.3V,所以是0x27,这也是为什么能同时接八个该拓展模块的原因,A0,A1,A2,有接GND与3V3的选择,共有<code>2*2*2=8</code>不同的组合,具体可以看下面的表格</p>
+</blockquote>
+<p><img src="/images/MCP23017/address_pin.jpg" alt="MCP23017地址"></p>
+<h2 id="3-命令行测试"><a href="#3-命令行测试" class="headerlink" title="3.命令行测试"></a>3.命令行测试</h2><p><strong>这里的命令行测试我并不是很懂,只是看到外文教程上以这样为例,而且我依葫芦画瓢成功了,写在这里只是为了快速测试 (LED引脚需接在PAO上)</strong></p>
+<ul>
+<li><p>首先我们将PA0-PA6设置为输出模式,将PA7设置为输入(二进制用10000000表示,十六进制用0x80表示):</p>
+<blockquote>
+<p><strong><code>sudo i2cset -y 1 0x27 0x00 0x80</code></strong></p>
+</blockquote>
+</li>
+<li><p>将PA0设置为逻辑高点亮LED:</p>
+<blockquote>
+<p><strong><code>sudo i2cset -y 1 0x27 0x14 0x01</code></strong></p>
+</blockquote>
+</li>
+<li><p>关闭小灯则可以用:</p>
+<blockquote>
+<p><strong><code>sudo i2cset -y 1 0x27 0x14 0x00</code></strong></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="4-在Python脚本中使用拓展模块"><a href="#4-在Python脚本中使用拓展模块" class="headerlink" title="4. 在Python脚本中使用拓展模块"></a>4. 在Python脚本中使用拓展模块</h2><p>习惯了在树莓派中用<code>gpiozero</code>简单丝滑流畅地操控IO,不用关乎太多底层,实在爽的很. 而在这里,我们是I2C bus协议,我们一般是用到<code>smbus</code>库,但是还是有些底层(特别是拓展模块上各个引脚代表的寄存器地址好像有点难以理解)的有些费力,所以找阿找,找到了一个新库,依旧保持优雅!</p>
+<h4 id="什么是CircuitPython"><a href="#什么是CircuitPython" class="headerlink" title="什么是CircuitPython?"></a>什么是CircuitPython?</h4><p><code>CircuitPython</code>基于<code>Python</code>,在<code>Python</code>上添加了硬件支持.<code>CircuitPython</code>旨在在微控制器板上运行。微控制器板是一块带有微控制器芯片的电路板，它本质上是一个多功能的一体机。你持有的电路板是微控制器板！ <code>CircuitPython</code>可以在小型Linux板上运行,这里正好可以用我们的树莓派试试手.</p>
+<h4 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> board</span><br><span class="line"><span class="keyword">import</span> busio</span><br><span class="line"><span class="keyword">from</span> digitalio <span class="keyword">import</span> Direction, Pull</span><br><span class="line"><span class="keyword">from</span> adafruit_mcp230xx.mcp23017 <span class="keyword">import</span> MCP23017</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize the I2C bus:</span></span><br><span class="line">i2c = busio.I2C(board.SCL, board.SDA)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize the MCP23017 chip on the bonnet</span></span><br><span class="line">mcp = MCP23017(i2c,<span class="number">0x27</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#0 to 15 for the GPIOA0...GPIOA7, GPIOB0...GPIOB7 pins (i.e. pin 12 is GPIOB4).</span></span><br><span class="line">a0 = mcp.get_pin(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># defalut input mode , switch to output pinmode</span></span><br><span class="line">a0.switch_to_output()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    a0.value = <span class="literal">True</span></span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br><span class="line">    a0.value = <span class="literal">False</span></span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>具体的代码解释都在注释上写这个了,很简单,不展开.想要查看更多的例子或者源代码可以看<a href="https://github.com/adafruit/Adafruit_CircuitPython_MCP230xx/blob/master/examples/mcp230xx_simpletest.py" target="_blank" rel="noopener"><strong>官方库手册</strong></a></p>
+<h4 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h4><p><strong>当树莓派GPIO口要连接较多设备,数量紧张时,可以用MCP23017拓展模块了来增加,最多可以加128个….<code>adafruit_mcp230xx.mcp23017</code>库也可以很Python地写出控制代码,但是一些监听事件要自己实现,不像<code>gpiozero</code>都有现成的轮子.当然我们可以转换下思路,把一些简单的output设备接在拓展模块上用来简单控制就行,把一些实现复杂的input设备接在树莓派自带的GPIO上,就可以用<code>gpiozero</code>库的高级内容了.</strong></p>
+<p>一些资料整理:<br><a href="https://www.raspberrypi-spy.co.uk/2013/07/how-to-use-a-mcp23017-i2c-port-expander-with-the-raspberry-pi-part-1/#prettyPhoto" target="_blank" rel="noopener">How To Use A MCP23017 I2C Port Expander With The Raspberry Pi – Part 1</a></p>
+<p><a href="https://learn.adafruit.com/using-mcp23008-mcp23017-with-circuitpython/python-circuitpython" target="_blank" rel="noopener">Using MCP23008 &amp; MCP23017 with CircuitPython</a></p>
+<p><a href="https://raspi.tv/2013/using-the-mcp23017-port-expander-with-wiringpi2-to-give-you-16-new-gpio-ports-part-3" target="_blank" rel="noopener">Using the MCP23017 port expander with WiringPi2 to give you 16 new GPIO ports – part 3</a></p>
+<p><a href="https://circuitpython.readthedocs.io/en/2.x/shared-bindings/index.html" target="_blank" rel="noopener">Adafruit CircuitPython</a></p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-说说硬件"><span class="toc-text">1. 说说硬件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-系统设置与硬件测试"><span class="toc-text">2. 系统设置与硬件测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-命令行测试"><span class="toc-text">3.命令行测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-在Python脚本中使用拓展模块"><span class="toc-text">4. 在Python脚本中使用拓展模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#什么是CircuitPython"><span class="toc-text">什么是CircuitPython?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码演示"><span class="toc-text">代码演示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-总结"><span class="toc-text">5. 总结</span></a></li></ol></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/09/20/MCP23017-raspberrypi-expander/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+     
+      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
+     
+      <a href="/tags/I2C/"><i class="fa fa-tags"></i>I2C</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/08/01/Arduino-Serial/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
+  <script async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-143610066-1');
+  </script>
+
+
+
+  <script async>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+
+
+
+
+    
+  </body>
+</html>
