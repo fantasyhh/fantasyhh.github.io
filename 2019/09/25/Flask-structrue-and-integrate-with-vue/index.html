@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>浅谈Flask目录结构以及与Vue.js整合注意事项 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Flask,Python,Flask,Vue,">
+  
+
+  
+  <meta name="description" content="没用Flask之前，我对Flask的只有一个概念，那就是Micro，官网对其的解释是这样的：Micro并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的Micro意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此Flask可以满足你的所有需求，而无所不包。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-09-25
+    </span>
+    
+      <span>
+        | <a href="/categories/Flask/"><i class="fa fa-bookmark"></i>Flask</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    浅谈Flask目录结构以及与Vue.js整合注意事项
+  </h1>
+  
+  <article class="passage-article">
+    <br>没用Flask之前，我对Flask的只有一个概念，那就是<strong><code>Micro</code></strong>，官网对其的解释是这样的：<strong><code>Micro</code></strong>并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的<strong><code>Micro</code></strong>意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此Flask可以满足你的所有需求，而无所不包。<p></p>
+<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>由于工作性质，要求写的小web应用都要涉及一些底层，不如串口通信，或者GPIO调用。而串口这种东西不像数据库连接一样，开几个都可以，也不能开了之后关然后再开（效率比数据库连接差多了）。所以最好写个全局的，开了一次就不用关了，代码量也不多，哪个简单用哪个，我就想到了用Flask。例如一个最小的应用就可以这么简单的写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Hello, World!'</span></span><br></pre></td></tr></table></figure>
+<p>单个Python文件就好办了，然后打开串口，在路由中引用串口实例加入一些操作，就是个能用的小型Web应用了。</p>
+<h2 id="2-目录结构安排一下"><a href="#2-目录结构安排一下" class="headerlink" title="2. 目录结构安排一下"></a>2. 目录结构安排一下</h2><p>即使一个项目再小也要有个规则安排，总不能真的单文件走天下。<br><a href="https://www.v2ex.com/t/467423" target="_blank" rel="noopener">V2EX上有篇文章</a>探讨了Flask的目录结构，我看了上面的每个链接，果然<strong><code>Flask 其实很灵活，怎样都行，怎么舒服怎么来</code></strong>这句话很对。</p>
+<p>我从一些教程或者github中综合了下，整理下我会采用的结构目录，旨在简单明了。</p>
+<h4 id="单模块目录结构"><a href="#单模块目录结构" class="headerlink" title="单模块目录结构"></a>单模块目录结构</h4><p>当项目代码量少于几百行的时候我们可以采用单模块的目录结构，也就是把所有的代码都写在<code>app.py</code>里，然后把一些配置（比如我上面例子中的串口位置，波特率啥的），比如这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app.py</span><br><span class="line">config.py</span><br><span class="line">requirements.txt</span><br><span class="line">static/</span><br><span class="line">templates/</span><br></pre></td></tr></table></figure></p>
+<h4 id="包目录结构"><a href="#包目录结构" class="headerlink" title="包目录结构"></a>包目录结构</h4><p>对于包目录结构我们可以按照<a href="https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/" target="_blank" rel="noopener">官网推荐</a>的来：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">/home/user/Projects/flask-tutorial</span><br><span class="line">├── flaskr/</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── db.py</span><br><span class="line">│   ├── schema.sql</span><br><span class="line">│   ├── auth.py</span><br><span class="line">│   ├── blog.py</span><br><span class="line">│   ├── templates/</span><br><span class="line">│   │   ├── base.html</span><br><span class="line">│   │   ├── auth/</span><br><span class="line">│   │   │   ├── login.html</span><br><span class="line">│   │   │   └── register.html</span><br><span class="line">│   │   └── blog/</span><br><span class="line">│   │       ├── create.html</span><br><span class="line">│   │       ├── index.html</span><br><span class="line">│   │       └── update.html</span><br><span class="line">│   └── static/</span><br><span class="line">│       └── style.css</span><br><span class="line">├── tests/</span><br><span class="line">│   ├── conftest.py</span><br><span class="line">│   ├── data.sql</span><br><span class="line">│   ├── test_factory.py</span><br><span class="line">│   ├── test_db.py</span><br><span class="line">│   ├── test_auth.py</span><br><span class="line">│   └── test_blog.py</span><br><span class="line">├── venv/</span><br><span class="line">├── setup.py</span><br><span class="line">└── MANIFEST.in</span><br></pre></td></tr></table></figure></p>
+<p>看似文件很多，但是基本的骨架还是像下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">config.py</span><br><span class="line">requirements.txt</span><br><span class="line">run.py</span><br><span class="line">instance/</span><br><span class="line">    config.py</span><br><span class="line">yourapp/</span><br><span class="line">    __init__.py</span><br><span class="line">    views.py</span><br><span class="line">    models.py</span><br><span class="line">    forms.py</span><br><span class="line">    static/</span><br><span class="line">    templates/</span><br></pre></td></tr></table></figure></p>
+<p>然后我们可以在这上面进行很多衍生，加入蓝图等东西。</p>
+<h4 id="更完整的目录结构"><a href="#更完整的目录结构" class="headerlink" title="更完整的目录结构"></a>更完整的目录结构</h4><p>更完善的目录结构我们可以加入<code>docker</code>，<code>makefile</code>等，我们可以参考有名的<a href="https://github.com/cookiecutter/cookiecutter/blob/master/README.md" target="_blank" rel="noopener">cookiecutter项目模板</a>，很全面，考虑很周到，但是在自己的开发过程中用不太到，仅供参考。</p>
+<h2 id="3-Flask与Vue-js整合问题"><a href="#3-Flask与Vue-js整合问题" class="headerlink" title="3. Flask与Vue.js整合问题"></a>3. Flask与Vue.js整合问题</h2><p>采用前后端分离开发的时候，需要整合前端vue的包，我们可以在实例化app的时候这么做：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template, jsonify</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set up automatic serving of static Vue &amp; frontend files and template folder for index.html.</span></span><br><span class="line">app = Flask(__name__, static_folder=<span class="string">'./dist/static'</span>, template_folder=<span class="string">'./dist'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Add your routes here:</span></span><br><span class="line"><span class="meta">@app.route('/api/posts')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">blog_posts</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> jsonify([])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Make a "catch all route" so all requests match our index.html file. This lets us use the new history APIs in the browser.</span></span><br><span class="line"><span class="meta">@app.route('/', defaults=&#123;'path': ''&#125;)</span></span><br><span class="line"><span class="meta">@app.route('/&lt;path:path&gt;')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">'index.html'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>Vue这边也要设置，平时前后端分离开发，都是用axios到我开发的机器上拿数据，还会遇到跨域问题，但是整合的时候Vue这边打包前填什么服务器ip呢，我要是部署到别的机器ip肯定会变，ip肯定会变，总不能一个ip打一个不同的包。所以说我们需要在vue.config.js中这么配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    assetsDir: <span class="string">'static'</span>, <span class="comment">// For simple configuration of static files in Flask (the "static_folder='client/dist/static'" part in app.py)</span></span><br><span class="line">    devServer: &#123;</span><br><span class="line">        proxy: <span class="string">'http://localhost:5000'</span> <span class="comment">// So that the client dev server can access your Flask routes</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这样就OK了，打一个包后续都能用了</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>对于Flask目录结构真的是仁者见仁，智者见智，怎么舒服怎么来，但是对于刚开始用的人来说不要一开始就用人家的大结构目录，容易看的懵逼，项目都是从一开始的几个文件然后内容的增多到很多个包，中间有慢慢衍生的过程，想一开始就把代码套在大骨架上实属勉强。<br>Vue配置文件中<code>proxy</code>我只是知道个大概的作用，只是在网上找到了这个解决方案，如果不加，直接在<code>axios</code>中裸用<code>&#39;http://localhost:5000&#39;</code>，那么访问 到的地址就是打开浏览器访问页面时的那台机器的localhost资源，原因可能在于webpack4本身不知道<code>&#39;http://localhost:5000&#39;</code>这个地址，需要代理下！<br><br><br><br><br>参考资料：<br><a href="https://medium.com/unbabel/integrating-webpack-4-with-a-backend-framework-4a0e630d2a03" target="_blank" rel="noopener">Integrating Webpack 4 with a backend framework</a></p>
+<p><a href="https://stackabuse.com/single-page-apps-with-vue-js-and-flask-deployment/" target="_blank" rel="noopener">Single Page Apps with Vue.js and Flask: Deployment</a></p>
+<p><a href="https://vsupalov.com/combine-frontend-and-backend-development-servers/" target="_blank" rel="noopener">Running Frontend and Backend Development Servers Together</a></p>
+<p><a href="https://olav.it/2018/08/29/simple-spa-setup-with-vue-cli-3-and-flask/" target="_blank" rel="noopener">Simple SPA setup with Vue CLI 3 and Flask</a></p>
+<p><a href="https://olav.it/2018/08/29/simple-spa-setup-with-vue-cli-3-and-flask/" target="_blank" rel="noopener">flask-vuejs-template</a></p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-text">1. 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-目录结构安排一下"><span class="toc-text">2. 目录结构安排一下</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#单模块目录结构"><span class="toc-text">单模块目录结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#包目录结构"><span class="toc-text">包目录结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#更完整的目录结构"><span class="toc-text">更完整的目录结构</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Flask与Vue-js整合问题"><span class="toc-text">3. Flask与Vue.js整合问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-总结"><span class="toc-text">4. 总结</span></a></li>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/09/25/Flask-structrue-and-integrate-with-vue/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+     
+      <a href="/tags/Flask/"><i class="fa fa-tags"></i>Flask</a>
+     
+      <a href="/tags/Vue/"><i class="fa fa-tags"></i>Vue</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/09/20/MCP23017-raspberrypi-expander/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
+  <script async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-143610066-1');
+  </script>
+
+
+
+  <script async>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+
+
+
+
+    
+  </body>
+</html>
