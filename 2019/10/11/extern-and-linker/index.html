@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>C语言中extern和头文件以及静态动态库概念梳理 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="C,-Linux - C,">
+  
+
+  
+  <meta name="description" content="最近因为Arduino使用的较多，开始学起来了C语言，看了还多天，无非就是基本的数据类型，运算符，控制语句，简单得很，后来发现这仅仅是语法层面，C语言是除了汇编最为底层的语言了，要了解这门语言，就要从了解支撑起C的底层原理开始了解，编译原理，操作系统，计算机硬件。而这次遇到的C语言的库文件，就好比Python中的标准库与第三方库，怎么共享，中间又是个什么过程，一团黑。因为涉及内容太多太多，我还是偏向于找一些好的资料然后分主题整理下来，自己再串起来，解惑也。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-10-11
+    </span>
+    
+      <span>
+        | <a href="/categories/C/"><i class="fa fa-bookmark"></i>C</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    C语言中extern和头文件以及静态动态库概念梳理
+  </h1>
+  
+  <article class="passage-article">
+    <p>最近因为Arduino使用的较多，开始学起来了C语言，看了还多天，无非就是基本的数据类型，运算符，控制语句，简单得很，后来发现这仅仅是语法层面，C语言是除了汇编最为底层的语言了，要了解这门语言，就要从了解支撑起C的底层原理开始了解，编译原理，操作系统，计算机硬件。而这次遇到的C语言的库文件，就好比Python中的标准库与第三方库，怎么共享，中间又是个什么过程，一团黑。因为涉及内容太多太多，我还是偏向于找一些好的资料然后分主题整理下来，自己再串起来，解惑也。</p>
+<h2 id="1-先说说声明与定义"><a href="#1-先说说声明与定义" class="headerlink" title="1. 先说说声明与定义"></a>1. 先说说声明与定义</h2><p>stackoverflow上有个很全面的回答，<a href="https://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-definition-and-a-declaration" target="_blank" rel="noopener">What is the difference between a definition and a declaration?</a></p>
+<p>下面是我摘抄的一些简单概念：</p>
+<p>定义（definition）：表示创建变量或分配存储单元<br>声明（declaration）：说明变量的性质，但并不分配存储单元<br><code>extern int i</code>; //是声明，不是定义，没有分配内存<br><code>int i</code>; //是定义<br>如果在声明的时候给变量赋值，那么就和去掉extern直接定义变量赋值是等价的</p>
+<p><code>extern int a = 10</code>;<br><code>int a = 10</code>;//上述两条语句等价<br>谨记：声明可以多次，定义只能一次</p>
+<h2 id="2-extern与static"><a href="#2-extern与static" class="headerlink" title="2. extern与static"></a>2. extern与static</h2><h4 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h4><p>当需要在外部文件导入函数或者变量时，我们可能很正常的找到了extern这个关键字，依然有篇经典的回答，<a href="https://stackoverflow.com/questions/1433204/how-do-i-use-extern-to-share-variables-between-source-files" target="_blank" rel="noopener">how do i use extern to share variables between source files</a></p>
+<p>对变量而言，如果你想在本源文件中使用另一个源文件的变量，就需要在使用前用extern声明该变量，或者在头文件中用extern声明该变量；</p>
+<blockquote>
+<p>不加extern也可以…源于某些不可描述的原因（可从上面那链接中找到原因）</p>
+</blockquote>
+<p>对函数而言，如果你想在本源文件中使用另一个源文件的函数，就需要在使用前用声明该变量，声明函数加不加extern都没关系，所以在头文件中函数可以不用加extern。</p>
+<h4 id="static"><a href="#static" class="headerlink" title="static"></a>static</h4><p>对于static，我暂时用的不多，查看<code>C primer plus</code>书籍，我们看到static的三个用法</p>
+<ul>
+<li><strong>块作用域的静态变量</strong></li>
+<li><strong>外部链接的静态变量</strong></li>
+<li><strong>内部链接的静态变量</strong></li>
+</ul>
+<p>相关问答：<a href="https://stackoverflow.com/questions/572547/what-does-static-mean-in-c" target="_blank" rel="noopener">What does “static” mean in C?</a></p>
+<p>上面的讲解都附带了一些例子，我们来看一些<a href="https://medium.com/@shrmoud/static-vs-extern-a79e36f14812" target="_blank" rel="noopener">更清晰的例子: static vs extern</a></p>
+<h2 id="3-头文件"><a href="#3-头文件" class="headerlink" title="3. 头文件"></a>3. 头文件</h2><p>对于我自己创建头文件这件事，我的第一反应是项目多文件的时候导入外部函数啥的用的，后来我发现了<code>extern</code>这个关键字，我就开始疑问，我都可以直接导入外部变量与函数，我为啥还要用头文件这个东西？ 后来发现自己还是<code>too young too simple！</code></p>
+<blockquote>
+<p>其实头文件是种约定，对计算机而言没什么作用，它只是在预编译时在#include的地方展开一下，没别的意义了，其实头文件主要是给别人看的。</p>
+</blockquote>
+<p>所以，按这么说，我在<code>test.h</code>文件中写着<code>extern int max(int a,int b)</code>（函数的extern可以省略），然后主文件中<code>incluede &quot;test.h&quot;</code>，等价于我直接<code>extern int max(int a,int b)</code>放到主文件中，这就达到了和我所产生的疑问一样的目的，然后头文件作用不仅仅这样。</p>
+<p><strong>在以下场景中会使用头文件：</strong></p>
+<ul>
+<li>通过头文件来调用库功能。在很多场合，源代码不便（或不准）向用户公布，只要向用户提供头文件和二进制的库即可。用户只需要按照头文件中的接口声明来调用库功 能，而不必关心接口怎么实现的。</li>
+<li>多文件编译。将稍大的项目分成几个文件实现，通过头文件将其他文件的函数声明引入到当前文件。</li>
+<li>头文件能加强类型安全检查。如果某个接口被实现或被使用时，其方式与头文件中的声明不一致，编译器就会指出错误，这一简单的规则能大大减轻程序员调试、改错的负担。</li>
+</ul>
+<p>既然头文件是一种规定，那么写头文件时也有相当多的规则，<a href="https://reality0ne.com/how-to-struct-c-header-files/" target="_blank" rel="noopener">如何组织好 C 的头文件</a>很有必要。</p>
+<h2 id="4-编译系统"><a href="#4-编译系统" class="headerlink" title="4. 编译系统"></a>4. 编译系统</h2><p>对与一个简单的hello程序<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hello, world\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>当我们调用gcc编译时，过程是这样的：</strong></p>
+<p><img src="/images/gcc_linker/gcc.jpg" alt="compilation system"><br>关于对每个部分的具体相关命令，可以看下<a href="http://youguanxinqing.xyz/index.php/archives/85/" target="_blank" rel="noopener">这篇文章前半部分</a></p>
+<h2 id="5-链接"><a href="#5-链接" class="headerlink" title="5 . 链接"></a>5 . 链接</h2><p><strong>接下来我们着重讲讲链接以及相关的内容：</strong></p>
+<blockquote>
+<p>链接(linking)是将各种代码和数据片段收集并组合成为一个单一文件的过程，这个文件可被加载(复制)到内存并执行。链接可以执行于编’译时(compile time),也就是在源代码被翻译成机器代码时；也可以执行于加载时(load time),也就是在程序被加载器(load-er)加载到内存并执行时；甚至执行于运行时(run time),也就是由应用程序来执行。在早期的计算机系统中，链接是手动执行的。在现代系统中，链接是由叫做链接器(linker)的程序自动执行的。<br>链接器的两个主要任务是<strong>符号解析(symbol resolution)**</strong>与重定位(relocation)**</p>
+</blockquote>
+<h4 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a>可重定位目标文件</h4><p>在上面编译过程中的链接之前，我们经过预处理，编译，汇编，得到了<code>.o</code>文件，<br>也就是可重定位目标文件，包含了二进制代码与数据（是一堆乱码）。</p>
+<h4 id="函数库"><a href="#函数库" class="headerlink" title="函数库"></a>函数库</h4><p>这里说个函数库的概念，顾名思义：里边存放了一堆供程序员使用的函数。其实不但有函数名、函数对应的实现代码，还有链接过程中所需的重定位信息。函数库分为静态库（linux .a 文件 ，windows 为.lib文件）和动态库（.so，windows为.dll文件）文件。<br>当然，Linux 中也有标准的 C 函数库，里面有我们平常熟知的<code>printf</code>，<code>scanf</code>等标准c函数，都统一在libc.a与libc.so中,会存放在某个文件夹，我们可以通过<code>gcc --print-file-name=libc.a</code>查找<br>而用户，也可以根据自生需求，建立自己的用户函数库，这也是为什么我们上面说多个文件共享等等事情。</p>
+<p>这里需要注意，由于函数库来自于 .o 文件，也就是说，是一堆二进制文件构成，你看不到里面的库函数代码。所以库函数该怎么用呢？这就体现了头文件中的重要性。所以 .h 文件与 .c 最好是要分开写。</p>
+<h2 id="6-静态库"><a href="#6-静态库" class="headerlink" title="6. 静态库"></a>6. 静态库</h2><blockquote>
+<p><strong>静态链接器（static linker</strong>）读取一组可重定位目标文件，将所有相关的目标模块打包成为一个单独的文件，称为<strong>静态库（static library）</strong>，也可称之为静态函数库，最后再和主函数的<code>.o</code>文件链接起来创建一个可执行目标。</p>
+</blockquote>
+<p>为什么会有静态库？ <strong>在静态库之前,我们可以选择这么做？</strong></p>
+<p>把所有<code>printf</code>标准函数放到<code>libc.o</code>中，然后<code>gcc main.c /usr/lib/libc.o</code> ，我们就可以用标准函数了。优点是我们将编译器的实现与标准函数实现分开了，但是缺点就是造成浪费，<code>libc.o</code>中我们有上百个函数，但我们平常的一个程序，我们可能仅仅用到<code>printf</code>等几个常用函数，全部导入进来，这样就造成空间浪费，还有就是对某个函数改变了，等重新编译整个源文件，开发维护复杂。</p>
+<p>再者，我们可以为每个标准函数创建独立的<code>.o</code>文件，然后用:<br><code>gcc main.c /usr/lib/printf.o /usr/lib/scanf.o</code><br>这也是可行的，但是一看就知道太麻烦耗时</p>
+<p>之后，静态库概念被提出来，以解决这些不同方法的缺点。相关的函数可以被编译为独立的目标模块，然后封装成一个单独的静态库文件。然后，应用程序可以通过在命令行上指定单独的文件名字来使用这些在库中定义的函数。比如，使用c标准库和数学库中函数的程序可以用形式如下的命令行來编译和链接：<br><code>gcc main. c /usr/lib/libm. a /usr/lib/libc. a</code><br>在链接时，链接器只复制被程序引用的目标模块，这就减少了磁盘跟内存大小。</p>
+<blockquote>
+<p>在Linux系统中，静态库以一种称为存档(archive)的特殊文件格式存放在磁盘中。存档文件是一组连接起来的可重定位目标文件的集合，有一个头部用来描述每个成员目标文件的大小和位置。存档文件名由后缀.a标识。</p>
+</blockquote>
+<p>简单举个例子来，有两个向量加法与乘法的<code>.c</code>文件，分别为<code>addvec.c</code>,<code>multvec.c</code>,还有个主文件<code>main.c</code></p>
+<ul>
+<li>我们先生成<code>.o</code>文件：<br><code>gcc -c addvec.c multvec.c</code></li>
+<li>创建静态库：<br><code>ar rcs libvector.a addvec.o multvec.o</code></li>
+<li>编译主文件：<br><code>gcc -c main.c</code></li>
+<li>最后链接：<br><code>gcc -static -o a.out main.o ./libvector.a</code></li>
+</ul>
+<h2 id="7-动态库"><a href="#7-动态库" class="headerlink" title="7. 动态库"></a>7. 动态库</h2><p>然而，静态库仍然有一些明显的缺点。静态库和所有的软件一样，需要定期维护和更新。如果应用程序员想要使用一个库的最新版本，他们必须以某种方式了解到该库的更新情况，然后显式地将他们的程序与更新了的库重新链接。<br>另一个问题是几乎每个C程序都使用标准I/O函数，比如printf和scanf。在运行时，这些函数的代码会被复制到每个运行进程的文本段中。在一个运行上百个进程的典型系统上，这将是对稀缺的内存系统资源的极大浪费。<br>共享库(shared library)是致力于解决静态库缺陷的一个现代创新产物。共享库是一个目标模块，在运行或加载时，可以加载到任意的内存地址，并和一个在内存中的程序链接起來。这个过程称为动态链接(dynamic linking),是由一个叫做动态链接器(dynamic linker)的程序来执行的。共享库也称为共享目标(shared object),在Linux系统中通常用.so后缀来表示。微软的操作系统大鼠地使用了共享库，它们称为DLL(动态链接库）<br><strong>所有引用某库的可执行目标文件共享这个<code>.so</code>文件中的代码和数据，而不是像静态库的内容那样被复制和嵌入到引用它们的可执行文件中</strong></p>
+<p>还是展示上面向量那个例子：</p>
+<ul>
+<li>构造共享库：<br><code>gcc -shared -fpic -o libvector.so addvec.c multvec.c</code></li>
+<li>链接<br><code>gcc -o a.out main.c ./libvector.so</code></li>
+</ul>
+<blockquote>
+<p>这样就创建了一个可执行目标文件a.out,而此文件的形式使得它在运行时可以和libvector.so链接。基本的思路是当创建可执行文件时，静态执行一些链接，然后在程序加载时，动态完成链接过程。认识到这一点是很重要的：此时，没有任何libvector.so的代码和数据节貞的被复制到可执行文件a.out中。反之，链接器复制了一些重定位和符号表信息，它们使得运行时可以解析对libvector.so中代码利数据的引用</p>
+</blockquote>
+<p><strong>所以静态库与动态库的区别：</strong></p>
+<pre><code>静态库：
+1.链接时将程序放进进可执行程序
+2.会产生多分副本
+3.不依赖程序运行
+动态库：
+1.程序运行时，加载时才去动态库找函数
+2.多进程共享
+3.依赖程序运行
+</code></pre><p>还有个题外话，<a href="https://stackoverflow.com/questions/6906360/by-default-does-gcc-link-to-static-or-dynamic-standard-library" target="_blank" rel="noopener">gcc链接标准库时默认是动态的还是静态的？</a></p>
+<h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h2><p>花了两天，算是把相关的概念过程整理清楚了，有些资料第一次读没有读懂，回过头来再细读，豁然开朗！花了蛮多精力，不知道以后有没有机会用C做代码量多一点的项目，哈哈~</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-先说说声明与定义"><span class="toc-text">1. 先说说声明与定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-extern与static"><span class="toc-text">2. extern与static</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#extern"><span class="toc-text">extern</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#static"><span class="toc-text">static</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#3-头文件"><span class="toc-text">3. 头文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-编译系统"><span class="toc-text">4. 编译系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-链接"><span class="toc-text">5 . 链接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#可重定位目标文件"><span class="toc-text">可重定位目标文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数库"><span class="toc-text">函数库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-静态库"><span class="toc-text">6. 静态库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-动态库"><span class="toc-text">7. 动态库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-总结"><span class="toc-text">8. 总结</span></a></li>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/10/11/extern-and-linker/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Linux-C/"><i class="fa fa-tags"></i>-Linux - C</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
+  <script async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-143610066-1');
+  </script>
+
+
+
+  <script async>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+
+
+
+
+    
+  </body>
+</html>
