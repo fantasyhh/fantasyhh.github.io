@@ -6,16 +6,16 @@
   <meta name="author" content="Jiahuan Shi">
   
   
-  <title>归档: 2019/9 | 烛影小札</title>
+  <title>Django admin后台常用设置汇总 | 烛影小札</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Python, Diary, Linux">
+    <meta name="keywords" content="Python,Django,Python,">
   
 
   
-  <meta name="description" content>
+  <meta name="description" content="一开始学Django的时候基本都有接触django admin管理员后台，但是之后的开发基本很少用，写API测试的时候要修好后台数据基本都是命令行或者数据库直接修改，完全没有接触到admin。但是最近方便公司订饭，写了个订饭系统，前后端分离，本想让前端根据登录员工判断是否是管理员角色，然后在页面上增加管理员操作元素，有点麻烦，。之后，我直接傻了，拍了下自己头，为啥不用django自带的管理员后台呢，好用方便快捷。">
 
   
 
@@ -42,7 +42,7 @@
     welcome: {"enable":false,"interval":30},
     start_time: "2019-04-24",
     passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: false,
+    is_post: true,
     lock: false,
     author: "Jiahuan Shi",
     share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
@@ -184,25 +184,121 @@
 </nav>
 <div id="site-process"></div>
     <main>
-      <div class="timeline">
-  <h2 class="timeline-title">归档: 26篇</h2>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2019-12-09
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Django admin后台常用设置汇总
+  </h1>
   
-    
-      <h3 class="timeline-subtitle">2019</h3>
-    
-    <div class="timeline-item">
-      <time>2019-09-25</time>
-      <a target="_self" href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">浅谈Flask目录结构以及与Vue.js整合注意事项</a>
-    </div>
+  <article class="passage-article">
+    <p>一开始学Django的时候基本都有接触django admin管理员后台，但是之后的开发基本很少用，写API测试的时候要修好后台数据基本都是命令行或者数据库直接修改，完全没有接触到admin。但是最近方便公司订饭，写了个订饭系统，前后端分离，本想让前端根据登录员工判断是否是管理员角色，然后在页面上增加管理员操作元素，有点麻烦，。之后，我直接傻了，拍了下自己头，为啥不用django自带的管理员后台呢，好用方便快捷。</p>
+<h4 id="信手拈来"><a href="#信手拈来" class="headerlink" title="信手拈来"></a>信手拈来</h4><p><a href="https://www.cnblogs.com/huchong/p/7894660.html" target="_blank" rel="noopener">Django admin 一些有用的设置</a><br><a href="https://www.jianshu.com/p/69e6f9c97b48" target="_blank" rel="noopener">如何修改django的app在admin中显示的名称</a></p>
+<h4 id="柳暗花明"><a href="#柳暗花明" class="headerlink" title="柳暗花明"></a>柳暗花明</h4><p>在搜寻资料的过程中，反现了一本好书 <a href="https://books.agiliq.com/projects/django-admin-cookbook/en/latest/two_admin.html" target="_blank" rel="noopener">django-admin-cookbook</a>，我把各个topic翻译过来，以便以后方便翻阅。</p>
+<ol>
+<li>如何更改“ Django admin”文本？ （常用的site_header，site_title，index_title）</li>
+<li>如何为Django 模型设置复数文本？ （verbose_name_plural参数）</li>
+<li>如何创建两个独立的管理站点？ （继承AdminSite）</li>
+<li>如何从“Django admin”删除默认app？ （比如默认的Groups Users）</li>
+<li>如何为“Django admin”添加一个log？</li>
+<li>如何覆盖“Django admin”的页面模板？</li>
+<li>如何在列表视图页面上显示计算字段？ (其他Model可计算获得的字段)</li>
+<li>如何在“Django admin”中优化查询？ （<code>get_queryset</code>方法覆盖）</li>
+<li>如何启用对计算字段的排序？ （接第七条）</li>
+<li>如何启用对计算字段的过滤？ （同上）</li>
+<li>如何显示计算出的布尔字段的“开”或“关”图标？（同上）</li>
+<li>如何在“Django admin”添加其他操作？ （actions）</li>
+<li>如何从“Django admin”中导出CSV？</li>
+<li>如何在“Django admin”删除“deleted”操作？</li>
+<li>如何将自定义操作按钮（不是操作）添加到“Django admin”列表页面？</li>
+<li>如何使用“Django admin”导入CSV？</li>
+<li>如何将Django管理员限制为特定用户？ （<code>is_staff=True</code>，<code>is_superuser=True</code>）</li>
+<li>如何限制对Django管理员部分的访问？ （<code>has_xxx_permission</code>等）</li>
+<li>如何允许管理员只能创建一个对象？ (同上)</li>
+<li>如何删除模型的“添加”或者“删除”按钮？ （同上）</li>
+<li>如何让一位Django管理员编辑多个模型？ （需要使用内联）</li>
+<li>如何将一对一关系添加为管理员内联？（同上）</li>
+<li>如何在“Django admin”中添加嵌套的内联？ （同上）</li>
+<li>如何为两个不同的模型创建一个“Django admin”？</li>
+<li>如何在列表视图页面上显示更多行？ （<code>list_per_page</code>）</li>
+<li>如何禁用分页？ （同上）</li>
+<li>如何在“Django admin”中添加基于日期的过滤？ （<code>date_hierarchy = &#39;added_on&#39;</code>）</li>
+<li>如何在列表视图页面上显示多对多或反转FK字段？</li>
+<li>如何在”Django admin“中显示Imagefield中的图像？</li>
+<li>保存时如何将模型与当前用户关联？</li>
+<li>如何在”Django admin“中将字段标记为只读？ （<code>readonly_fields</code>）</li>
+<li>如何在”Django admin“中显示不可编辑的字段 （同上）</li>
+<li>如何使字段在创建时可编辑，但在现有对象中只能读取？ （<code>get_readonly_fields</code>）</li>
+<li>如何在”django admin“中过滤FK下拉值？</li>
+<li>如何使用带有大量对象的FK管理模型？</li>
+<li>如何更改下拉菜单中的ForeignKey显示文本？</li>
+<li>如何在”Django更改视图页面“中添加自定义按钮？</li>
+<li>如何获取特定对象的”Django admin“ URL？</li>
+<li>如何向”Django adimn“添加两次模型？</li>
+<li>如何在”Django admin“覆盖保存行为？ （<code>save_model</code>）</li>
+<li>如何将数据库视图添加到“Django admin”？</li>
+<li>如何在“Django admin”中设置应用程序和模型的顺序？</li>
+</ol>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#信手拈来"><span class="toc-text">信手拈来</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#柳暗花明"><span class="toc-text">柳暗花明</span></a></li></ol>
+  </div>
+</aside>
   
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2019/12/09/django-admin-action/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Django/"><i class="fa fa-tags"></i>Django</a>
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
     
-    <div class="timeline-item">
-      <time>2019-09-20</time>
-      <a target="_self" href="/2019/09/20/MCP23017-raspberrypi-expander/">用Python在树莓派中使用MCP23017 I/O扩展模块</a>
     </div>
   
 </div>
+
     </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
     
     <div class="site-footer-wrapper">
   <footer class="site-footer">
@@ -269,16 +365,16 @@
     <a href="javascript:void(0);" data-enable="false">
       <i class="fa fa-arrow-left"></i>
     </a>
-    <a href="javascript:void(0);" data-enable="false">
+    <a href="/2019/10/17/python-m-option/" data-enable="true">
       <i class="fa fa-arrow-right"></i>
     </a>
   </div>
   <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="false" id="site-toc-show-btn">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
       <i class="fa fa-bars"></i>
     </a>
     
-      <a href="javascript:void(0);" data-enable="false">
+      <a href="#site-comment" data-enable="true">
         <i class="fa fa-commenting"></i>
       </a>
     
