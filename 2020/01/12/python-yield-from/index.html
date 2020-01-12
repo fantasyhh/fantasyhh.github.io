@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>Python3 yield from 用法详解 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,Python,yield from,">
+  
+
+  
+  <meta name="description" content="yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2020-01-12
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Python3 yield from 用法详解
+  </h1>
+  
+  <article class="passage-article">
+    <br><code>yield from</code>是Python3.3以后全新的语言结构，它的作用比<code>yield</code>多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用<code>await</code>关键字，这个名称就好多了。当然，后面Python也改成了<code>await</code>，这个我们在结尾说，少废话，先看东西。<p></p>
+<h2 id="1-替代内层for循环"><a href="#1-替代内层for循环" class="headerlink" title="1. 替代内层for循环"></a>1. 替代内层for循环</h2><p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span><span class="params">(*iterables)</span>:</span></span><br><span class="line">...		<span class="keyword">for</span> it <span class="keyword">in</span> iterables:</span><br><span class="line">...			<span class="keyword">for</span> i <span class="keyword">in</span> it:</span><br><span class="line">...				<span class="keyword">yield</span> i</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">'ABC'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t = tuple(range(<span class="number">3</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list(chain(s, t))</span><br><span class="line">[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br></pre></td></tr></table></figure></p>
+<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Python3<span class="number">.3</span>之后引入了新语法：</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">chain</span><span class="params">(*iterables)</span>:</span></span><br><span class="line"><span class="meta">... </span>	<span class="keyword">for</span> i <span class="keyword">in</span> iterables:</span><br><span class="line"><span class="meta">... </span>		<span class="keyword">yield</span> <span class="keyword">from</span> i</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list(chain(s, t))</span><br><span class="line">[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>yield from</code> 完全代替了内层的 for 循环。</li>
+<li><code>yield from x</code> 表达式对 x 对象所做的第一件事是，调用 iter(x)，从中获取迭代器。因此，x 可以是任何可迭代的对象。</li>
+<li>在这个示例中使用 <code>yield from</code>代码读起来更顺畅，不过感觉更像是语法糖。 </li>
+</ul>
+<p>上面这个例子看上去比较简单（传统意义上说因为我们只是for循环一次就完事，因为只嵌套了一层），我们再来看几个<code>yield from</code>的例子。<br><strong>例子1：我们有一个嵌套型的序列，想将它扁平化处理为一列单独的值。</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Iterable</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">flatten</span><span class="params">(items, ignore_types=<span class="params">(str, bytes)</span>)</span>:</span></span><br><span class="line">	<span class="keyword">for</span> x <span class="keyword">in</span> items:</span><br><span class="line">		<span class="keyword">if</span> isinstance(x, Iterable) <span class="keyword">and</span> <span class="keyword">not</span> isinstance(x, ignore_types):</span><br><span class="line">			<span class="keyword">yield</span> <span class="keyword">from</span> flatten(x)</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">yield</span> x</span><br><span class="line"></span><br><span class="line">items = [<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>], <span class="number">7</span>], <span class="number">8</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> flatten(items):</span><br><span class="line">	print(x)</span><br><span class="line"><span class="comment"># output：</span></span><br><span class="line"> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span></span><br><span class="line">-----------------------------------------------</span><br><span class="line">items = [<span class="string">'Dave'</span>, <span class="string">'Paula'</span>, [<span class="string">'Thomas'</span>, <span class="string">'Lewis'</span>]]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> flatten(items):</span><br><span class="line">	print(x)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output：</span></span><br><span class="line">Dave</span><br><span class="line">Paula</span><br><span class="line">Thomas</span><br><span class="line">Lewis</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>collections.Iterable</code>是一个抽象基类，我们用<code>isinstance(x, Iterable)</code>检查某个元素是否是可迭代的.如果是的话,那么就用<code>yield from</code>将这个可迭代对象作为一种子例程进行递归。最终返回结果就是一个没有嵌套的单值序列了。</li>
+<li>代码中额外的参数<code>ignore types</code>和检测语句<code>isinstance(x, ignore types)</code>用来将字符<br>串和字节排除在可迭代对象外，防止将它们再展开成单个的字符。<ul>
+<li>如果这里不用<code>yield from</code>的话，那么就需要另外一个for来嵌套，并不是一种优雅的操作</li>
+</ul>
+</li>
+</ul>
+<p><strong>例子2：利用一个Node类来表示树结构</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value)</span>:</span></span><br><span class="line">		self._value = value</span><br><span class="line">		self._children = []</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">'Node(&#123;!r&#125;)'</span>.format(self._value)</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">add_child</span><span class="params">(self, node)</span>:</span></span><br><span class="line">		self._children.append(node)</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="keyword">return</span> iter(self._children)</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">depth_first</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="keyword">yield</span> self</span><br><span class="line">		<span class="keyword">for</span> c <span class="keyword">in</span> self:</span><br><span class="line">			<span class="keyword">yield</span> <span class="keyword">from</span> c.depth_first()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	root = Node(<span class="number">0</span>)</span><br><span class="line">	child1 = Node(<span class="number">1</span>)</span><br><span class="line">	child2 = Node(<span class="number">2</span>)</span><br><span class="line">	root.add_child(child1)</span><br><span class="line">	root.add_child(child2)</span><br><span class="line">	child1.add_child(Node(<span class="number">3</span>))</span><br><span class="line">	child1.add_child(Node(<span class="number">4</span>))</span><br><span class="line">	child2.add_child(Node(<span class="number">5</span>))</span><br><span class="line">	<span class="keyword">for</span> ch <span class="keyword">in</span> root.depth_first():</span><br><span class="line">		print(ch)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>__iter__</code>代表一个Pyton的迭代协议，返回一个迭代器对象,就能迭代了</li>
+<li><code>depth_frist</code>返回一个生成器，仔细体会其中的<code>yield</code>与 <code>yield from</code>用法</li>
+</ul>
+<p>上面两个例子无论是树还是嵌套序列，都比较复杂，观察这里<code>yield from</code>跟的是什么,跟的是函数,生成器函数,而且都是在函数内递归。虽然我也不是理解的很透彻 =,= 。但现在应该知道，这是<code>yield from</code>一种常用的方法了（认真体会，手动滑稽）。</p>
+<h2 id="2-打开双通道"><a href="#2-打开双通道" class="headerlink" title="2. 打开双通道"></a>2. 打开双通道</h2><p>如果 <code>yield from</code> 结构唯一的作用是替代产出值的嵌套 for 循环，这个结构很有可能不会添加到 Python 语言中。<code>yield from</code> 结构的本质作用无法通过简单的可迭代对象说明，而要发散思维，使用嵌套的生成器。<br><strong>yield from 的主要功能是打开双向通道，把最外层的调用方与最内层的子生成器连接起来，这样二者可以直接发送和产出值，还可以直接传入异常，而不用在位于中间的协程中添加大量处理异常的样板代码。有了这个结构，协程可以通过以前不可能的方式委托职责。</strong><br>这里有张详细图来说明三者关系:<a href="http://flupy.org/resources/yield-from.pdf" title="委派生成器,子生成器与调用方" target="_blank" rel="noopener">http://flupy.org/resources/yield-from.pdf</a><br>例子就不展开了，有兴趣的童鞋可以去 <strong>Fluent Python</strong>这本书上 查看 <strong>示例16-17</strong>。并且结合示例图好好体会（我也有待好好体会）</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><ul>
+<li><p><code>yield from</code>伴随着Python3.4新加入的asyncio模块得以发扬光大, <code>asynico + yield from</code>双枪组合，但当时定义协程还是需要<code>@asyncio.coroutine</code>装饰器，之前都是我们手工切换协程，现在当声明函数为协程后，我们通过事件循环来调度协程</p>
+</li>
+<li><p>从Python 3.5开始引入了新的语法 <code>async</code> 和 <code>await</code> ，<code>yield from</code>换成了<code>await</code>（为了不与实现内层for循环的<code>yield from</code>误解？！），<code>@asyncio.coroutine</code>换成了<code>async</code>， <code>asynico + await</code>成了新的双枪组合，一直到未来… 从Python设计的角度来说，它们让协程表面上独立于生成器而存在，将细节都隐藏于<code>asyncio</code>模块之下，语法更Pythonic。</p>
+</li>
+<li><p>从Python3.5加入以来，<code>asynico</code>官方文档有点混乱，毕竟是新模块，语法也一直在变换中，到了Python 3.7，3.8才趋于稳定，文档也好像重写了，清晰明了，如果要细品<code>asynico</code>，那么不如看最新文档搞起来，能节省不少功夫！。</p>
+</li>
+</ul>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-替代内层for循环"><span class="toc-text">1. 替代内层for循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-打开双通道"><span class="toc-text">2. 打开双通道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-总结"><span class="toc-text">3. 总结</span></a></li></ol>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2020/01/12/python-yield-from/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+     
+      <a href="/tags/yield-from/"><i class="fa fa-tags"></i>yield from</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2020/01/06/python-yield-2/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
+  <script async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-143610066-1');
+  </script>
+
+
+
+  <script async>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+
+
+
+
+    
+  </body>
+</html>

@@ -207,7 +207,7 @@
   
   <article class="passage-article">
     <p>谈到物联网就会谈到MQTT协议，之前一段时间我虽然在书上看到过，也是粗略一看也没深究，主要自己只是维度不够，项目中也没有用到，就不了了之了。最近老板找了个架构师准备用心好好搞一搞公司那个平台，提出新的架构，用到了MQTT协议，用心研究了一番，发现以前写了好多的功能都是MQTT自带的，花了好多时间重复造轮子。最近看了好多相关的东西，虽然蛮多深层次的东西都没有摸到，但也有些了解，故搜集了一些资料有序的记录下来，大部分内容来自<a href="http://www.steves-internet-guide.com/" target="_blank" rel="noopener">Steve</a>以及<a href="https://mntolia.com/" target="_blank" rel="noopener">Maulin Tolia</a>的博客，十分感谢。</p>
-<h2 id="1-MQTT基础"><a href="#1-MQTT基础" class="headerlink" title="1. MQTT基础"></a>1. MQTT基础</h2><p>图文并茂的<a href="https://mntolia.com/fundamentals-mqtt/" target="_blank" rel="noopener">MQTT基础学习</a></p>
+<h2 id="1-MQTT基础"><a href="#1-MQTT基础" class="headerlink" title="1. MQTT基础"></a>1. MQTT基础</h2><p>图文并茂的<a href="https://mntolia.com/fundamentals-mqtt/" target="_blank" rel="noopener">MQTT基础学习</a>，后来又发现了个湾湾的<a href="https://swf.com.tw/?p=1002" target="_blank" rel="noopener">MQTT教学</a>，同为两岸同胞，感觉切实际更好一点</p>
 <p>其他补充：</p>
 <h5 id="关于MQTT版本："><a href="#关于MQTT版本：" class="headerlink" title="关于MQTT版本："></a>关于MQTT版本：</h5><p>最初的MQT T是在1999年设计的，已经使用了很多年，并且基于TCP/IP网络设计。<br>MQTTv3.1.1是常用版本。</p>
 <ul>
@@ -215,7 +215,6 @@
 <li>MQTT v3.1.1 – 常用的版本，想看底层的MQTT协议数据包结构，可以看<a href="http://www.steves-internet-guide.com/mqtt-protocol-messages-overview/" target="_blank" rel="noopener">这里</a></li>
 <li>MQTT v5 – 当前受限使用，目前只有C语言客户端支持，<a href="http://www.steves-internet-guide.com/mqttv5/" target="_blank" rel="noopener">新功能阐述</a>以及<a href="https://github.com/wialon/gmqtt" target="_blank" rel="noopener">正在开发的Python客户端</a></li>
 <li>MQTT-SN – 旨在通过UDP，ZigBee和其他传输进行工作,但当前并不流行</li>
-<li></li>
 </ul>
 <h6 id="关于MQTT与HTTP"><a href="#关于MQTT与HTTP" class="headerlink" title="关于MQTT与HTTP"></a>关于MQTT与HTTP</h6><ul>
 <li><a href="https://www.linkedin.com/pulse/internet-things-http-vs-websockets-mqtt-ronak-singh-cspo/" target="_blank" rel="noopener">物联网：协议之战（HTTP，Websocket和MQTT）</a></li>
