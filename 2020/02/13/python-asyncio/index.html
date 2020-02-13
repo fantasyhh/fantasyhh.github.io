@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>Python并发之异步I/O(async,await） | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Python,Python,asyncio,">
+  
+
+  
+  <meta name="description" content="前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2020-02-13
+    </span>
+    
+      <span>
+        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Python并发之异步I/O(async,await）
+  </h1>
+  
+  <article class="passage-article">
+    <p></p>
+<p>前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！</p>
+<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>Python有很长一段的异步编程历史,特别是<code>twisted</code>，<code>gevent</code>和一些无堆栈的Python项目。<br>异步编程因为一些好的原因在这些年来越来越受关注。尽管相对于传统的线性风格更难一点，但是却是值得的：因为异步编程有更高的效率。<br>举个例子：在Http请求方面，Python异步协程可以提交请求然后去做队列中其他等待的任务，让它慢慢请求，而不是传统的一直等它请求到完成为止，这样的话会浪费更多的时间与资源。总之异步编程能让你的代码在处于等待资源状态时处理其他任务。<br>在Python3.4中，<code>asyncio</code>产生了。而在Python3.5中，有加入了对<code>async def</code> 和<code>await</code>新的语法支持。</p>
+<h2 id="2-四个核心概念"><a href="#2-四个核心概念" class="headerlink" title="2. 四个核心概念"></a>2. 四个核心概念</h2><h4 id="Eventloop"><a href="#Eventloop" class="headerlink" title="Eventloop"></a>Eventloop</h4><p>Eventloop 可以说是 asyncio 应用的核心，是中央总控。Eventloop 实例提供了注册、取消和执行任务和回调的方法。<br>把一些异步函数 (就是任务，Task，一会就会说到) 注册到这个事件循环上，事件循环会循环执行这些函数 (但同时只能执行一个)，当执行到某个函数时，如果它正在等待 I/O 返回，事件循环会暂停它的执行去执行其他的函数；当某个函数完成 I/O 后会恢复，下次循环到它的时候继续执行。因此，这些异步函数可以协同 (Cooperative) 运行：这就是事件循环的目标。</p>
+<h4 id="Coroutine"><a href="#Coroutine" class="headerlink" title="Coroutine"></a>Coroutine</h4><p>协程 (Coroutine) 本质上是一个函数，特点是在代码块中可以将执行权交给其他协程：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在Python 3.4中, 创建一个协程我们用asyncio.coroutine装饰器，但现在基本弃用</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">a</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'Suspending a'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">0</span>)</span><br><span class="line">    print(<span class="string">'Resuming a'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">b</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'In b'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(a(), b())</span><br><span class="line"></span><br><span class="line"><span class="comment">#asyncio.run 是 Python 3.7 新加的接口，要不然你得这么写:</span></span><br><span class="line"><span class="comment">#loop = asyncio.get_event_loop()</span></span><br><span class="line"><span class="comment">#loop.run_until_complete(main())</span></span><br><span class="line"><span class="comment">#loop.close()</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    asyncio.run(main())</span><br><span class="line"></span><br><span class="line">&gt;&gt;Suspending a</span><br><span class="line">&gt;&gt;In b</span><br><span class="line">&gt;&gt;Resuming a</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>asyncio.gather 用来并发运行任务，在这里表示协同的执行 a 和 b两个协程<br>在协程 a 中，有一句 await asyncio.sleep (0)，await 表示调用协程，sleep 0 并不会真的 sleep（因为时间为 0），但是却可以把控制权交出去了。</p>
+</blockquote>
+<h4 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h4><p>接着说 Future，它代表了一个「未来」对象，异步操作结束后会把最终结果设置到这个 Future 对象上。Future 是对协程的封装，不过日常开发基本是不需要直接用这个底层 Future 类的</p>
+<h4 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h4><p>Eventloop 除了支持协程，还支持注册 Future 和 Task2 种类型的对象，那为什么要存在 Future 和 Task 这 2 种类型呢？<br>Future 是协程的封装，Future 对象提供了很多任务方法 (如完成后的回调、取消、设置任务结果等等)，但是开发者并不需要直接操作 Future 这种底层对象，而是用 Future 的子类 Task 协同的调度协程以实现并发。</p>
+<p>Task 非常容易创建和使用:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 或者用task = loop.create_task(a())</span></span><br><span class="line">In : task = asyncio.ensure_future(a())</span><br><span class="line"></span><br><span class="line">In : task</span><br><span class="line">Out: &lt;Task pending coro=&lt;a() running at /Users/dongwm/mp/<span class="number">2019</span><span class="number">-05</span><span class="number">-22</span>/coro1.py:<span class="number">4</span>&gt;&gt;</span><br><span class="line"></span><br><span class="line">In : task.done()</span><br><span class="line">Out: <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">In : <span class="keyword">await</span> task</span><br><span class="line">Suspending a</span><br><span class="line">Resuming a</span><br><span class="line"></span><br><span class="line">In : task</span><br><span class="line">Out: &lt;Task finished coro=&lt;a() done, defined at /Users/dongwm/mp/<span class="number">2019</span><span class="number">-05</span><span class="number">-22</span>/coro1.py:<span class="number">4</span>&gt; result=<span class="literal">None</span>&gt;</span><br><span class="line"></span><br><span class="line">In : task.done()</span><br><span class="line">Out: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p><strong>在这边的时候我卡了很长时间：future与Task的区别是什么？？？？</strong></p>
+<p>future在多线程说过，future表示终将发生的事情，而确定某件事会发生的唯一方式是执行的时间已经排定。（你不排定它，它就是个协程），那怎么排定？</p>
+<p>BaseEventLoop.create_task(…) 或者 asyncio.ensure_future方法接收一个协程，排定它的运行时间，然后返回一个asyncio.Task 实例——也是 asyncio.Future 类的实例，因为 Task 是Future 的子类，用于包装协程。这与调用 Executor.submit(…) 方法创建Future实例是一个道理</p>
+<p>这句话我读了好多遍，意思是不是说future跟task是同一样东西。对于event loop来说，一个包装了协程的future，就是循环中的一个task？我是这么理解的。</p>
+<p>我们无法确定future啥时完成结束，但是总归结束（无论报错还是返回值）的，因为我们已经给它排定了时间。</p>
+<h2 id="3-如何准确使用asyncio"><a href="#3-如何准确使用asyncio" class="headerlink" title="3. 如何准确使用asyncio"></a>3. 如何准确使用asyncio</h2><p>自从Python3.5加入了<code>async def</code> 和<code>await</code>新的语法，在往后Python大版本更新中一直对该部分的语法有更新修改，从前期的乱而杂，到最新的Python3.8语法渐渐稳定下来，优雅了很多，文档也条理了很多，其实要使用真正的语法还是要多看看<a href="https://docs.python.org/3/library/asyncio-task.html#coroutines" target="_blank" rel="noopener">官网例子</a>。</p>
+<p>初阶选手使用时，一般的<code>High-level APIs</code>完全可以满足需求，当理解了高阶API时，在去查看源代码，查看<code>Low-level APIs</code>，深层次的理解！<a href="https://www.dongwm.com/post/understand-asyncio-3/" target="_blank" rel="noopener">这里有个较新的教程，分三个部分，很好！</a>，推荐阅读！</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-背景"><span class="toc-text">1. 背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-四个核心概念"><span class="toc-text">2. 四个核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Eventloop"><span class="toc-text">Eventloop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Coroutine"><span class="toc-text">Coroutine</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Future"><span class="toc-text">Future</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Task"><span class="toc-text">Task</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#3-如何准确使用asyncio"><span class="toc-text">3. 如何准确使用asyncio</span></a></li>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2020/02/13/python-asyncio/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+     
+      <a href="/tags/asyncio/"><i class="fa fa-tags"></i>asyncio</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2020/02/10/Raspberrypi-PWM/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
+  <script async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-143610066-1');
+  </script>
+
+
+
+  <script async>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+
+
+
+
+    
+  </body>
+</html>
