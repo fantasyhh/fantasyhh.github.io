@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="Jiahuan Shi">
+  
+  
+  <title>Invoke与Fabric注意事项详解教程 | 烛影小札</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Fabric,Python,Linux,Fabric,Invoke,">
+  
+
+  
+  <meta name="description" content="说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！">
+
+  
+
+  
+    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+  
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
+    welcome: {"enable":false,"interval":30},
+    start_time: "2019-04-24",
+    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
+    is_post: true,
+    lock: false,
+    author: "Jiahuan Shi",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: "",
+    root: "/"
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">Jiahuan Shi</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/friends/" target="_self">友链</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+        <a href="/" target="_self"></a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/friends/" target="_self">
+            友链
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2020-02-28
+    </span>
+    
+      <span>
+        | <a href="/categories/Fabric/"><i class="fa fa-bookmark"></i>Fabric</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Invoke与Fabric注意事项详解教程
+  </h1>
+  
+  <article class="passage-article">
+    <p></p>
+<p>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护<br>刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！</p>
+<h2 id="1-Fabric前世今生"><a href="#1-Fabric前世今生" class="headerlink" title="1. Fabric前世今生"></a>1. Fabric前世今生</h2><p>我从一开始接触的就是Python3，之后因为远程打包部署接触到了Fabric，当时官网Fabric还不支持Python3，所以我用了民间的Fabric3，十分好用，对新手很友好。后来，发现Fabric支持Python3了，但是看了文档，看的稀里糊涂，看了别人的教程才成功连接到远程主机上，我就又撒手转向了民间的Fabric3。<br>所以我们先区分下 Fabric1，Fabric2，Fabric3，它们的python官网发布的地址：</p>
+<p>安装方式分别是：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> https://pypi.org/project/Fabric/</span></span><br><span class="line">pip install Fabric</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> https://pypi.org/project/fabric2/</span></span><br><span class="line">pip install fabric2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> https://pypi.org/project/Fabric3/</span></span><br><span class="line">pip install fabric3</span><br></pre></td></tr></table></figure></p>
+<p>Fabric1和Fabric2，在pypi中的页面，就是同一个东西：</p>
+<ul>
+<li>都是Fabric的最新版：Fabric 2.x，截至到20200227，安装出来的版本是：2.5</li>
+<li>而官网之所以弄出来个Fabric2是因为：Fabric2和Fabric1相比，完全重写了，接口和功能都有很大改动,官网也不建议你继续用Fabric1，建议升级到Fabric2,最新版也早就支持Python 3.4+，和之前的Python2.7</li>
+</ul>
+<p>而Fabric3，是非官网的是当之前Fabric1还没有支持Python3时，别人去fork出来，加了Python 3的支持的现在好像基本上不维护了</p>
+<p>总结就是：</p>
+<blockquote>
+<p>尽量不要用之前旧的版本的Fabric1了，如果还在用，建议升级到最新的Fabric2<br>不需要操心、忽略掉，所谓的、非官网的，现在已没价值的：Fabric3</p>
+</blockquote>
+<p><strong>因为要同时远程部署七八个树莓派，又要用到Fabric，趁着这次疫情在家，啃了一个星期的文档，蛮多人也觉得新版的Fabric比较难用，原因在于完全重写了，其实我们可以把这个库分开学习，分为Inovke和Paramiko，为什么重写之后要将Invoke独立出来，可以看这里<a href="http://www.pyinvoke.org/faq.html#invoke-split-from-fabric" target="_blank" rel="noopener">Why was Invoke split off from the Fabric project?</a>，那接下去就分别讲讲！</strong></p>
+<h2 id="2-Invoke使用"><a href="#2-Invoke使用" class="headerlink" title="2. Invoke使用"></a>2. Invoke使用</h2><p><strong>Invoke 实现CLI解析，任务组织和Shell命令执行（通用框架以及本地命令的特定实现</strong>），关于Shell命令的执行其实和<code>subprocess</code>库挺像的，当然Invoke不仅于此。</p>
+<h4 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h4><p>关于基础教程我就不说了，看<a href="http://docs.pyinvoke.org/en/latest/getting-started.html" target="_blank" rel="noopener">官网例子</a>一目了然，我在这里记录一些重点与自己的理解。</p>
+<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><p>关于invoke的配置方面我们大体看一下<a href="http://docs.pyinvoke.org/en/latest/concepts/configuration.html" target="_blank" rel="noopener">配置继承</a><br>配置很多层，有内部默认，系统级别，用户级别，项目级别…甚至可以在<a href="http://docs.pyinvoke.org/en/latest/invoke.html" target="_blank" rel="noopener">命令行运行</a>的时候我们再添加配置也是可行的。<br>我这里推荐使用<strong>用户级别</strong>的配置文件（<code>~/.invoke.yaml</code>，也可以是json，py文件），刚开始我自己测试的时候用的<strong>项目级别</strong>的配置文件（<code>/home/user/myproject/invoke.yaml</code>），一个原因是我在windows下测试，没有所谓的<code>~/.invoke.yaml</code>，还有个就是我想万一这个项目到别的机器上运行，我可能把隐藏的配置文件忘了，想显示放在项目里，结果这样就跳入了一个火坑，琢磨了我好久，原因在于：</p>
+<blockquote>
+<p>Project-level configuration file living next to your top level tasks.py. For example, if your run of Invoke loads /home/user/myproject/tasks.py (see our docs on the load process), this might be /home/user/myproject/invoke.yaml.</p>
+</blockquote>
+<p>项目级别的配置文件只有在你识别到tasks文件时才会调用同文件夹里的配置，其他方式你会没法识别到，比如你想单独用python3拍这个invoke脚本（把invoke当成subprocess那样）！下面会讲到相关例子。<br>其实，invoke本身没有啥配置修改，所以我也建议在执行<code>invoke ... task1 ...</code>时通过一些命令行参数来传递配置，省了配置文件的存在。</p>
+<h4 id="导入集合"><a href="#导入集合" class="headerlink" title="导入集合"></a>导入集合</h4><p>Invoke执行模型的核心涉及一个或多个Collection对象，就是集合的意思。<br>默认调用<code>invoke</code>命令我们会查找同目录中的<code>tasks.py</code>或者<code>tasks</code>包，tasks就算是一个集合，具体我们可以看<a href="http://docs.pyinvoke.org/en/latest/concepts/loading.html" target="_blank" rel="noopener">Loading collections</a>，所以有接下来一个例子我上面说的火坑。<br>假如我tasks名字被占用了…我想换个任务名字来让Invoke搜索到，比如叫mytasks，常见的设置方法有两种，一种是设置<code>tasks.collection_name</code> 配置选项，或使用 <code>--collection</code>。集合名应该是Python模块名称，而不是文件名（所以mytasks，不是mytasks.py或 mytasks/。）<br>用<code>--collection</code>没问题，问题在于设置<code>tasks.collection_name</code> 配置选项，我一开始是用的<strong>项目级别</strong>配置，则报错<code>Can&#39;t find any collection named &#39;tasks&#39;!</code>，我明明设置文件里设置了，为什么还是在查找<code>tasks.py</code>,哪里有问题！问题在于上一节引用的英文里，<strong>项目级别</strong>配置是在同目录的<code>tasks.py</code>文件被找到后才会引入该配置，问题是一开始我都没有<code>tasks.py</code>我怎么引入配置文件，更别说里面的<code>tasks.collection_name</code> 配置选项了</p>
+<h4 id="集合的命名空间"><a href="#集合的命名空间" class="headerlink" title="集合的命名空间"></a>集合的命名空间</h4><p>当任务很多，存在不同类别层级的时候我们就需要<a href="http://docs.pyinvoke.org/en/stable/concepts/namespaces.html" target="_blank" rel="noopener">构建命名空间</a>（看<code>Importing modules as collections</code>部分就行），单纯的<code>tasks.py</code>满足不了我们了，使用<code>tasks</code>包，包里有多个python文件代表个各种任务，然后在<code>tasks/__init__.py</code>中做<code>导入模块作为集合</code>操作就行，不展开。</p>
+<h4 id="上下文Context"><a href="#上下文Context" class="headerlink" title="上下文Context"></a>上下文Context</h4><p>上下文Context这个参数出现了,很神奇，就好像Flask中的Context一样神奇。</p>
+<p>what exactly is this ‘context’ arg anyway?</p>
+<blockquote>
+<p>A common problem task runners face is transmission of “global” data - values loaded from configuration files or other configuration vectors, given via CLI flags, generated in ‘setup’ tasks, etc.<br>Some libraries (such as Fabric 1.x) implement this via module-level attributes, which makes testing difficult and error prone, limits concurrency, and increases implementation complexity.<br>Invoke encapsulates state in explicit Context objects, handed to tasks when they execute . The context is the primary API endpoint, offering methods which honor the current state (such as Context.run) as well as access to that state itself.</p>
+</blockquote>
+<p>Context对象是在命令行解析过程中创建的（如果需要的话，可以手动创建），并用于与执行的任务共享解析器和配置状态，下面两种例子是一样的.<br>第一种通过命令行，过程中创建ｃ，即为context,会自动导入文件配置:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> invoke <span class="keyword">import</span> task</span><br><span class="line"><span class="meta">@task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(c)</span>:</span></span><br><span class="line">	print(config)</span><br><span class="line">    c.run(<span class="string">"ls"</span>)</span><br><span class="line">	</span><br><span class="line">$ invoke ls</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>第二种手动创建,如果有配置我们需要手动添加配置而没法用文件配置,比如:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> invoke <span class="keyword">import</span> Config,Context</span><br><span class="line"><span class="comment"># 默认配置</span></span><br><span class="line">config = Config()</span><br><span class="line"><span class="comment"># 添加一些配置</span></span><br><span class="line">config[<span class="string">'sudo'</span>] = &#123;<span class="string">'password'</span>:<span class="string">'mypassoword'</span>&#125;</span><br><span class="line">print(config)</span><br><span class="line"><span class="comment"># 传入配置,如果没有额外配置可以省略不填</span></span><br><span class="line">c = Context(config=config)</span><br><span class="line">c.run(<span class="string">'ls'</span>)</span><br></pre></td></tr></table></figure></p>
+<h4 id="sudo运行以及自动响应"><a href="#sudo运行以及自动响应" class="headerlink" title="sudo运行以及自动响应"></a>sudo运行以及自动响应</h4><p>最后我们说运行sudo命令时如何免密码以及与一运行一些其他命令时的提示互动.<br>我们可以先配置好文件:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"tasks"</span>: &#123;</span><br><span class="line">        <span class="attr">"auto_dash_names"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"sudo"</span>: &#123;</span><br><span class="line">		<span class="attr">"password"</span>:<span class="string">"mypassword"</span></span><br><span class="line">        <span class="string">"prompt"</span>: <span class="string">"[sudo] password:"</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后在脚本里<code>c.sudo(&#39;rm test.txt&#39;)</code>就行.<br>或者我们简单点:直接在在函数里面加入<code>c.sudo(&#39;rm test.txt&#39;,user=&#39;baird&#39;,password=&#39;mypassword&#39;)</code><br>关于自动响应程序输出的,我们可以看<a href="http://docs.pyinvoke.org/en/stable/concepts/watchers.html" target="_blank" rel="noopener">Automatically responding to program output</a></p>
+<h2 id="3-Fabric使用"><a href="#3-Fabric使用" class="headerlink" title="3. Fabric使用"></a>3. Fabric使用</h2><p>Fabric与Invoke基本上属于继承创新的关系,很多都是相同操作,所以这一部分就不重复讲了.<br><strong>Fabric相对于Invoke来说增加了Paramiko库的功能</strong>,也就是说实现了低/中级别SSH功能-SSH和SFTP会话，密钥管理等.但作为用户我们很少会直接从Paramiko导入,而是Fabric把它融合进来了,我们在看教程前,先来看看SSH认证</p>
+<h4 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h4><p>即使在<strong>原始</strong> OpenSSH客户端中，对远程服务器的身份验证也涉及多个潜在的秘密和配置来源。Fabric不仅支持其中的大多数，而且还具有自己的功能,下面是认证方式以及对应的配置:</p>
+<ul>
+<li>私人秘钥文件,通过<code>connect_kwargs.key_filename</code>配置</li>
+<li>如果私钥文件通过密码保护,通过<code>connect_kwargs.passphrase</code>配置</li>
+<li>私钥对象,通过<code>connect_kwargs.pkey</code>配置</li>
+<li>SSH代理</li>
+<li>密码,通过<code>connect_kwargs.password</code>配置或者<code>--prompt-for-login-password</code>手动提示输入</li>
+<li>GSSAPI,不太懂,pass<br>上面的认证方式基本就全了,当然,每种认证方式的配置选择有很多,不止一种,很灵活,具体看<a href="http://docs.fabfile.org/en/2.5/concepts/authentication.html" target="_blank" rel="noopener">Authentication</a>.<br><strong>其实我们不用管那么多啥认证方式,密码就完事了~,方便省略</strong></li>
+</ul>
+<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>有了认证之后,就得到了一个连接(connection),用于SSH守护程序的连接，其中包含命令和文件传输的方法.这个connection其实跟context是一样的,一个远程一个本机,我们可以看下,在<code>fabfile.py</code>里代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from fabric import task</span><br><span class="line"></span><br><span class="line">@task</span><br><span class="line">def show(c):</span><br><span class="line">    c.run(&apos;ls&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>当我们用<code>fab -H host1 show</code>时是连接的host1再运行ls命令,而<code>fab show</code>是直接在本机运行ls命令,也就是Invoke的作用,当然我么需要一个配置文件,我用的是密码:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"user"</span>: <span class="string">"pi"</span>,</span><br><span class="line">    <span class="attr">"connect_kwargs"</span>: &#123;</span><br><span class="line">        <span class="attr">"password"</span>: <span class="string">"mypassword"</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上是使用命令行调用,或者我们可以使用connection函数:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fabric <span class="keyword">import</span> Connection</span><br><span class="line"></span><br><span class="line">c = Connection(<span class="string">'pi@host1'</span>,connect_kwargs=&#123;<span class="string">'password'</span>:<span class="string">'mypassword'</span>&#125;)</span><br><span class="line">c.run(<span class="string">'ls'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>更多例子我们可以看<a href="http://docs.fabfile.org/en/2.5/getting-started.html" target="_blank" rel="noopener">官方教程</a>,其实我最早看这上面例子时,我有点彷徨,没密码怎么连上去跑命令的,后来发现密码都是认证配置,连接并不重要,重要的是给你展示用法..</p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p><a href="http://docs.fabfile.org/en/2.5/concepts/configuration.html" target="_blank" rel="noopener">Fabric配置系统的核心</a>依赖于Invoke功能（与Fabric的其余大部分一样),只是配置文件名从<code>invoke</code>(不包括后缀)改为<code>fabfile</code>,然后是多了一些关于远程主机认证的配置,最常用的就是<code>connect_kwargs</code>,上面例子也出现过了,就不过多强调了</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>这篇文章总结下来,花了我蛮多时间的,也算是打开了2020的新篇章。以为过程中一切都很顺利，结果写着写着就卡住了，打了自己”自以为很懂”的脸，也算有了更多收获，接下来更多加油!</p>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Fabric前世今生"><span class="toc-text">1. Fabric前世今生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Invoke使用"><span class="toc-text">2. Invoke使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基础使用"><span class="toc-text">基础使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件"><span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#导入集合"><span class="toc-text">导入集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#集合的命名空间"><span class="toc-text">集合的命名空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#上下文Context"><span class="toc-text">上下文Context</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sudo运行以及自动响应"><span class="toc-text">sudo运行以及自动响应</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Fabric使用"><span class="toc-text">3. Fabric使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#认证"><span class="toc-text">认证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#连接"><span class="toc-text">连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置"><span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-总结"><span class="toc-text">4.总结</span></a></li>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: Jiahuan Shi</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">https://fantasyhh.github.io/2020/02/28/invoke-fabric/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
+     
+      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
+     
+      <a href="/tags/Fabric/"><i class="fa fa-tags"></i>Fabric</a>
+     
+      <a href="/tags/Invoke/"><i class="fa fa-tags"></i>Invoke</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      
+<div class="site-comment-contanier" data-plateform="leancloud">
+  
+    <p id="site-comment-info">
+      <i class="fa fa-spinner fa-spin"></i> 评论加载中
+    </p>
+    <div id="site-comment"></div>
+  
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      
+        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+          
+            <div>
+              <img src="/images/wechat.jpg" alt="WeChat">
+              
+                <p>WeChat</p>
+              
+            </div>
+          
+            <div>
+              <img src="/images/alipay.jpg" alt="AliPay">
+              
+                <p>AliPay</p>
+              
+            </div>
+          
+        </div>
+      
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="javascript:void(0);" data-enable="false">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2020/02/13/python-asyncio/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    
+      <a href="javascript:void(0);" id="site-reward">
+        <i class="fa fa-thumbs-up"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
+  <script async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-143610066-1');
+  </script>
+
+
+
+  <script async>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+  </script>
+
+
+
+
+    
+  </body>
+</html>
