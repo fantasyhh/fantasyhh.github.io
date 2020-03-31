@@ -1,212 +1,180 @@
 <!DOCTYPE html>
-<html>
-  
+<html lang="zh-CN">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
+  <link rel="icon" type="image/png" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  
-  
-  <title>Arduino Serial使用以及各种读写函数区别 | 烛影小札</title>
+  <meta name="keywords" content>
+  <title>Arduino Serial使用以及各种读写函数区别 - 烛影小札</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
-  
-    <meta name="keywords" content="Arduino,Serial,Soc,">
-  
 
-  
-  <meta name="description" content="之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-  
+<link rel="stylesheet" href="/css/main.css">
 
-  
-    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
-  
 
-  
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-  
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
 
-  
-    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
-  
 
-  
+<!-- 自定义样式保持在最底部 -->
 
-  <script>
-  // theme-ad's config script
-  // it can be used in every script
-  
-  window.AD_CONFIG = {
-    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
-    welcome: {"enable":false,"interval":30},
-    start_time: "2019-04-24",
-    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: true,
-    lock: false,
-    author: "Jiahuan Shi",
-    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
-    mathjax: true,
-    page_type: "",
-    root: "/"
-  };
-</script>
 
-  <script src="/vendor/sha256.min.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/index.js"></script>
-<script src="/vendor/qrcode.min.js"></script>
-
-  
-    <link rel="icon" href="/images/favicon.ico">
-    <link rel="apple-touch-icon" href="/images/touch-icon.png">
-  
-
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/index.css">
-<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
-
-  
 </head>
-  <body>
-    <header class="site-header">
-  <div class="site-header-brand">
-    
-      <span class="site-header-brand-title">
-        <a href="/">Jiahuan Shi</a>
-      </span>
-    
-    
-      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
-    
-  </div>
-  <div class="site-header-right">
-    <nav class="site-header-navigation">
-      
-        <a href="/" target="_self">首页</a>
-      
-        <a href="/archives/" target="_self">归档</a>
-      
-        <a href="/tags/" target="_self">标签</a>
-      
-        <a href="/categories/" target="_self">分类</a>
-      
-        <a href="/friends/" target="_self">友链</a>
-      
-        <a href="/about/" target="_self">关于</a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-    </nav>
-    <div class="site-header-btn">
-      
-        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
-          <i class="fa fa-github-alt"></i>
-        </a>
-      
-      <a href="javascript:void(0);" id="site-search">
-        <i class="fa fa-search"></i>
-      </a>
-      <a href="javascript:void(0);" id="site-nav-btn">
-        <i class="fa fa-ellipsis-v"></i>
-      </a>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</header>
-<nav class="table-content" id="site-nav">
-  <div class="table-content-title">
-    <span>导航</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc">
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            首页
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/archives/" target="_self">
-            归档
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/tags/" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/categories/" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/friends/" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/about/" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-    </ol>
-  </div>
 </nav>
-<div id="site-process"></div>
-    <main>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期四, 八月 1日 2019, 10:01 上午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    2.7k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      11 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
       
-  <div class="passage">
-  <div class="passage-meta">
-    <span>
-      <i class="fa fa-calendar"></i>2019-08-01
-    </span>
-    
-      <span>
-        | <a href="/categories/Arduino/"><i class="fa fa-bookmark"></i>Arduino</a>
-      </span>
-    
-    
-      <span>
-        | <i class="fa fa-unlock-alt"></i>UNLOCK
-      </span>
-    
-  </div>
-  <h1 class="passage-title">
-    Arduino Serial使用以及各种读写函数区别
-  </h1>
-  
-  <article class="passage-article">
-    <p>之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….</p>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
+            
+            <div class="markdown-body">
+              <p>之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….</p>
+<a id="more"></a>
+<p>之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>常见的串口调试是将Arduino与PC相连，然后利用PC上的串口助手与其通信调试，但是有一个注意点是，调试Arduino串口时，用串口助手调试与跟程序语言(比如Python，Arduino语言)调试的传输的数据有区别，比如串口助手输入框中输入<code>97</code>时你可能输入的是两个字符<code>9</code>与<code>7</code>，而在用Arduino语法（Serial.write(97)）写的时候就是代表ASCII的<code>a</code>，或者在Python中是<code>ser.write(b&#39;a&#39;)</code>也可写成<code>ser.write([97])</code>）,两者调试方法有明显的差别性。</p>
 <h2 id="2-两个重要的写函数（write，print）"><a href="#2-两个重要的写函数（write，print）" class="headerlink" title="2. 两个重要的写函数（write，print）"></a>2. 两个重要的写函数（write，print）</h2><h3 id="Serial-write"><a href="#Serial-write" class="headerlink" title="Serial.write()"></a>Serial.write()</h3><p>串口中通信的一定是byte（字节），也就是八位Bit（二进制位），可以为一个字节，也可为多个字节；如果想发送代表数字的字符，应该使用print()函数（这个后面说）；该函数返回有几个字节被发送了。</p>
 <p><code>Serial.write()</code>一共有三种语法</p>
@@ -229,8 +197,30 @@
 <p><strong>Prints data to the serial port as human-readable ASCII text.</strong></p>
 </blockquote>
 <p>println与print类似，只是多了换行符，这里只介绍print函数。<br>上面这行英文已经把它跟read()函数的关系分的很清楚了。这个命令可以有多种形式。每个数字都使用ASCII字符打印。浮点数类似地打印为ASCII数字，默认为两位小数。字节作为单个字符发送。字符和字符串按原样发送。例如：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Serial.print(<span class="number">78</span>) gives <span class="string">"78"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>) gives <span class="string">"1.23"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="string">'N'</span>) gives <span class="string">"N"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="string">"Hello world."</span>) gives <span class="string">"Hello world."</span></span><br></pre></td></tr></table></figure>
-<p>还有第二个可选参数<code>format</code>是具体的格式，允许二进制八进制十六进制等，例如：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Serial.print(<span class="number">78</span>, BIN) gives <span class="string">"1001110"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">78</span>, OCT) gives <span class="string">"116"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">78</span>, DEC) gives <span class="string">"78"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">78</span>, HEX) gives <span class="string">"4E"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>, <span class="number">0</span>) gives <span class="string">"1"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>, <span class="number">2</span>) gives <span class="string">"1.23"</span></span><br><span class="line"></span><br><span class="line">Serial.print(<span class="number">1.23456</span>, <span class="number">4</span>) gives <span class="string">"1.2346"</span></span><br></pre></td></tr></table></figure></p>
+<pre><code class="cpp">Serial.print(78) gives &quot;78&quot;
+
+Serial.print(1.23456) gives &quot;1.23&quot;
+
+Serial.print(&#39;N&#39;) gives &quot;N&quot;
+
+Serial.print(&quot;Hello world.&quot;) gives &quot;Hello world.&quot;
+
+</code></pre>
+<p>还有第二个可选参数<code>format</code>是具体的格式，允许二进制八进制十六进制等，例如：</p>
+<pre><code class="cpp">Serial.print(78, BIN) gives &quot;1001110&quot;
+
+Serial.print(78, OCT) gives &quot;116&quot;
+
+Serial.print(78, DEC) gives &quot;78&quot;
+
+Serial.print(78, HEX) gives &quot;4E&quot;
+
+Serial.print(1.23456, 0) gives &quot;1&quot;
+
+Serial.print(1.23456, 2) gives &quot;1.23&quot;
+
+Serial.print(1.23456, 4) gives &quot;1.2346&quot;
+</code></pre>
 <h3 id="Serial-write与Serial-print函数的区别"><a href="#Serial-write与Serial-print函数的区别" class="headerlink" title="Serial.write与Serial.print函数的区别"></a>Serial.write与Serial.print函数的区别</h3><blockquote>
 <p>谢邀，我觉得print，printf是开发出来专门针对pc端显示的，write则是用来与串口设备通信的，当然在老手眼里怎么用都行     ——————from逼乎某大佬回答</p>
 </blockquote>
@@ -257,211 +247,467 @@
 <p><strong>print主要用于”给人看”的地方. 电脑内部通讯, 如果程序内不需要用人眼再检查, 用 write 会比较好, 直接快捷.</strong></p>
 <h2 id="3-Serial-read-相关函数"><a href="#3-Serial-read-相关函数" class="headerlink" title="3. Serial.read 相关函数"></a>3. Serial.read 相关函数</h2><h3 id="Serial-read"><a href="#Serial-read" class="headerlink" title="Serial.read()"></a>Serial.read()</h3><p>读取即将来的串口数据，但是只读取第一个字节，且这个字节的数据类型为int，即ASCII码值。</p>
 <p>通常与<code>Serial.available()</code>一起用，例子如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> incomingByte = <span class="number">0</span>; <span class="comment">// for incoming serial data</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Serial.begin(<span class="number">9600</span>); <span class="comment">// opens serial port, sets data rate to 9600 bps</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// send data only when you receive data:</span></span><br><span class="line">  <span class="keyword">if</span> (Serial.available() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// read the incoming byte:</span></span><br><span class="line">    incomingByte = Serial.read();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// say what you got:</span></span><br><span class="line">    Serial.print(<span class="string">"I received: "</span>);</span><br><span class="line">    Serial.println(incomingByte, DEC);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="cpp">int incomingByte = 0; // for incoming serial data
+
+void setup() {
+  Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
+}
+
+void loop() {
+  // send data only when you receive data:
+  if (Serial.available() &gt; 0) {
+    // read the incoming byte:
+    incomingByte = Serial.read();
+
+    // say what you got:
+    Serial.print(&quot;I received: &quot;);
+    Serial.println(incomingByte, DEC);
+  }
+}
+</code></pre>
 <p>串口发送数据与读到数据都为字节，所以该函数return回来int 型数据很正常，但是我们可以直接拿来跟字符比较或者用到某些话函数中，这得益于在C语言中单引号括起一个字符实际上代表一个整数，即ASCII码值</p>
 <p>，从Arduino内置的例子就能看到：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Open serial communications and wait for port to open:</span></span><br><span class="line">  Serial.begin(<span class="number">9600</span>);</span><br><span class="line">  <span class="keyword">while</span> (!Serial) &#123;</span><br><span class="line">    ; <span class="comment">// wait for serial port to connect. Needed for native USB port only</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// send an intro:</span></span><br><span class="line">  Serial.println(<span class="string">"send any byte and I'll tell you everything I can about it"</span>);</span><br><span class="line">  Serial.println();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// get any incoming bytes:</span></span><br><span class="line">  <span class="keyword">if</span> (Serial.available() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">int</span> thisChar = Serial.read();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// say what was sent:</span></span><br><span class="line">    Serial.print(<span class="string">"You sent me: \'"</span>);</span><br><span class="line">    Serial.write(thisChar);</span><br><span class="line">    Serial.print(<span class="string">"\'  ASCII Value: "</span>);</span><br><span class="line">    Serial.println(thisChar);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// analyze what was sent:</span></span><br><span class="line">    <span class="keyword">if</span> (isAlphaNumeric(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's alphanumeric"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isAlpha(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's alphabetic"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isAscii(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's ASCII"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isWhitespace(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's whitespace"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isControl(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a control character"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isDigit(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a numeric digit"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isGraph(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a printable character that's not whitespace"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isLowerCase(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's lower case"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isPrintable(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's printable"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isPunct(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's punctuation"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isSpace(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a space character"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isUpperCase(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's upper case"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isHexadecimalDigit(thisChar)) &#123;</span><br><span class="line">      Serial.println(<span class="string">"it's a valid hexadecimaldigit (i.e. 0 - 9, a - F, or A - F)"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add some space and ask for another byte:</span></span><br><span class="line">    Serial.println();</span><br><span class="line">    Serial.println(<span class="string">"Give me another byte:"</span>);</span><br><span class="line">    Serial.println();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="cpp">void setup() {
+  // Open serial communications and wait for port to open:
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+
+  // send an intro:
+  Serial.println(&quot;send any byte and I&#39;ll tell you everything I can about it&quot;);
+  Serial.println();
+}
+
+void loop() {
+  // get any incoming bytes:
+  if (Serial.available() &gt; 0) {
+    int thisChar = Serial.read();
+
+    // say what was sent:
+    Serial.print(&quot;You sent me: \&#39;&quot;);
+    Serial.write(thisChar);
+    Serial.print(&quot;\&#39;  ASCII Value: &quot;);
+    Serial.println(thisChar);
+
+    // analyze what was sent:
+    if (isAlphaNumeric(thisChar)) {
+      Serial.println(&quot;it&#39;s alphanumeric&quot;);
+    }
+    if (isAlpha(thisChar)) {
+      Serial.println(&quot;it&#39;s alphabetic&quot;);
+    }
+    if (isAscii(thisChar)) {
+      Serial.println(&quot;it&#39;s ASCII&quot;);
+    }
+    if (isWhitespace(thisChar)) {
+      Serial.println(&quot;it&#39;s whitespace&quot;);
+    }
+    if (isControl(thisChar)) {
+      Serial.println(&quot;it&#39;s a control character&quot;);
+    }
+    if (isDigit(thisChar)) {
+      Serial.println(&quot;it&#39;s a numeric digit&quot;);
+    }
+    if (isGraph(thisChar)) {
+      Serial.println(&quot;it&#39;s a printable character that&#39;s not whitespace&quot;);
+    }
+    if (isLowerCase(thisChar)) {
+      Serial.println(&quot;it&#39;s lower case&quot;);
+    }
+    if (isPrintable(thisChar)) {
+      Serial.println(&quot;it&#39;s printable&quot;);
+    }
+    if (isPunct(thisChar)) {
+      Serial.println(&quot;it&#39;s punctuation&quot;);
+    }
+    if (isSpace(thisChar)) {
+      Serial.println(&quot;it&#39;s a space character&quot;);
+    }
+    if (isUpperCase(thisChar)) {
+      Serial.println(&quot;it&#39;s upper case&quot;);
+    }
+    if (isHexadecimalDigit(thisChar)) {
+      Serial.println(&quot;it&#39;s a valid hexadecimaldigit (i.e. 0 - 9, a - F, or A - F)&quot;);
+    }
+
+    // add some space and ask for another byte:
+    Serial.println();
+    Serial.println(&quot;Give me another byte:&quot;);
+    Serial.println();
+  }
+}
+</code></pre>
 <h3 id="Serial-readBytes-buffer-length"><a href="#Serial-readBytes-buffer-length" class="headerlink" title="Serial.readBytes(buffer, length)"></a>Serial.readBytes(buffer, length)</h3><p><code>Serial.readBytes</code>从串行端口读取字符到缓冲区,返回放入缓冲区的字节数，如果超时该函数将中断</p>
-<p>这个函数我看到的用法是放在字符数组中，然后再利用数组的特性进行一些操作，例子如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> mystr[<span class="number">10</span>]; <span class="comment">//Initialized variable to store recieved data</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Begin the Serial at 9600 Baud</span></span><br><span class="line">  Serial.begin(<span class="number">9600</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  Serial.readBytes(mystr,<span class="number">5</span>); <span class="comment">//Read the serial data and store in var</span></span><br><span class="line">  Serial.println(mystr); <span class="comment">//Print data on Serial Monitor</span></span><br><span class="line">  <span class="keyword">for</span> (byte i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i = i + <span class="number">1</span>) &#123;</span><br><span class="line">      Serial.println(mystr[i]);</span><br><span class="line">  delay(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个函数我看到的用法是放在字符数组中，然后再利用数组的特性进行一些操作，例子如下：</p>
+<pre><code class="C">char mystr[10]; //Initialized variable to store recieved data
+
+void setup() {
+  // Begin the Serial at 9600 Baud
+  Serial.begin(9600);
+}
+
+void loop() {
+  Serial.readBytes(mystr,5); //Read the serial data and store in var
+  Serial.println(mystr); //Print data on Serial Monitor
+  for (byte i = 0; i &lt; 5; i = i + 1) {
+      Serial.println(mystr[i]);
+  delay(1000);
+}
+</code></pre>
 <h3 id="Serial-readString"><a href="#Serial-readString" class="headerlink" title="Serial.readString()"></a>Serial.readString()</h3><p><code>Serial.readString</code>将串行缓冲区中的字符读入String，如果超时该函数将中断</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String a;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">Serial.begin(<span class="number">9600</span>); <span class="comment">// opens serial port, sets data rate to 9600 bps</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(Serial.available()) &#123;</span><br><span class="line">        a= Serial.readString();<span class="comment">// read the incoming data as string</span></span><br><span class="line">        Serial.println(a);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="C">String a;
+
+void setup() {
+Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
+}
+void loop() {
+
+    while(Serial.available()) {
+        a= Serial.readString();// read the incoming data as string
+        Serial.println(a);
+}
+}
+</code></pre>
 <p>当时这个函数与上面的搞不太清楚，所以试了下。其实这个函数是读取发送过来的字符串，存到一个String类型的变量里，用来打印，或者处理（<code>Serial.write()无法字节发送String类型的变量</code>）再发出去等等，可以看一下String类型的变量很多个方法比如<code>toCharArray()</code>，<code>toInt()</code>之类的</p>
 <h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>经历了两天的疑惑解惑过程，发现自己关于串口的基本功还是不够扎实，这个过程中需要自己不断反复地尝试与验证，剥开代码语言的皮囊，看到更下面真实的骨架，其实也挺开心的，故再花点时间整理在这里留作总结以及反思！</p>
-  </article>
-  <aside class="table-content" id="site-toc">
-  <div class="table-content-title">
-    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
-    <span>目录</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-text">1. 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-两个重要的写函数（write，print）"><span class="toc-text">2. 两个重要的写函数（write，print）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-write"><span class="toc-text">Serial.write()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-print"><span class="toc-text">Serial.print()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-write与Serial-print函数的区别"><span class="toc-text">Serial.write与Serial.print函数的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Serial-read-相关函数"><span class="toc-text">3. Serial.read 相关函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-read"><span class="toc-text">Serial.read()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-readBytes-buffer-length"><span class="toc-text">Serial.readBytes(buffer, length)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-readString"><span class="toc-text">Serial.readString()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-总结"><span class="toc-text">4. 总结</span></a></li></ol></li></ol>
-  </div>
-</aside>
-  
-    <aside class="passage-copyright">
-      <div>本文作者: Jiahuan Shi</div>
-      
-        <div>
-          原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2019/08/01/Arduino-Serial/</a>
-        </div>
-      
-      <div>
-        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
-      </div>
-    </aside>
-  
-  
-    <div class="passage-tags">
-     
-      <a href="/tags/Serial/"><i class="fa fa-tags"></i>Serial</a>
-     
-      <a href="/tags/Soc/"><i class="fa fa-tags"></i>Soc</a>
-    
-    </div>
-  
-</div>
 
-    </main>
-    
-      
-<div class="site-comment-contanier" data-plateform="leancloud">
-  
-    <p id="site-comment-info">
-      <i class="fa fa-spinner fa-spin"></i> 评论加载中
-    </p>
-    <div id="site-comment"></div>
-  
-</div>
-    
-    <div class="site-footer-wrapper">
-  <footer class="site-footer">
-    
-    <div class="site-footer-info">
-      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
-    </div>
-    
-      <div class="site-footer-info">
-        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
-      </div>
-    
-    
-      <div class="site-footer-info">
-        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
-      </div>
-    
-    <div class="site-footer-info">
-      <i class="fa fa-copyright"></i> 
-      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
-      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
-      All rights reserved.
-    </div>
-  </footer>
-</div>
-    <div id="site-layer" style="display:none;">
-  <div class="site-layer-content">
-    <div class="site-layer-header">
-      <span class="site-layer-header-title" id="site-layer-title"></span>
-      <i class="fa fa-close" id="site-layer-close"></i>
-    </div>
-    <div class="site-layer-body" id="site-layer-container">
-      <div class="site-layer-input" id="site-layer-search" style="display: none;">
-        <input type="text">
-        <i class="fa fa-search"></i>
-      </div>
-      
-        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
-          
+            </div>
+            <hr>
             <div>
-              <img src="/images/wechat.jpg" alt="WeChat">
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Arduino/">Arduino</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Serial/">Serial</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Soc/">Soc</a>
+                    
+                  </span>
+                
+              </p>
               
-                <p>WeChat</p>
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/09/20/MCP23017-raspberrypi-expander/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">用Python在树莓派中使用MCP23017 I/O扩展模块</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/25/python-about-keyboard/">
+                        <span class="hidden-mobile">Python中关于键盘行为的方法总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
               
             </div>
-          
-            <div>
-              <img src="/images/alipay.jpg" alt="AliPay">
+
               
-                <p>AliPay</p>
-              
-            </div>
-          
+          </div>
         </div>
-      
-      <div id="site-layer-welcome" style="display:none;"></div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
 </div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
     
 
-<div class="bottom-bar">
-  <div class="bottom-bar-left">
-    <a href="/2019/09/20/MCP23017-raspberrypi-expander/" data-enable="true">
-      <i class="fa fa-arrow-left"></i>
-    </a>
-    <a href="/2019/07/25/python-about-keyboard/" data-enable="true">
-      <i class="fa fa-arrow-right"></i>
-    </a>
-  </div>
-  <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
-      <i class="fa fa-bars"></i>
-    </a>
     
-      <a href="#site-comment" data-enable="true">
-        <i class="fa fa-commenting"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="site-toggle-share-btn">
-      <i class="fa fa-share-alt"></i>
-    </a>
-    
-      <a href="javascript:void(0);" id="site-reward">
-        <i class="fa fa-thumbs-up"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="back-top-btn">
-      <i class="fa fa-chevron-up"></i>
-    </a>
-  </div>
-</div>
-    <div id="share-btn">
-  
-    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-twitter"></i>
-    </a>
-  
-  
-    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-facebook"></i>
-    </a>
-  
-  
-    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-weibo"></i>
-    </a>
-  
-  
-    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-qq"></i>
-    </a>
-  
-  
-    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-wechat"></i>
-    </a>
-  
-</div>
-    
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
-  <script async>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'UA-143610066-1');
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
   </script>
 
 
 
-  <script async>
-  (function(){
-      var bp = document.createElement('script');
-      var curProtocol = window.location.protocol.split(':')[0];
-      if (curProtocol === 'https') {
-          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Arduino Serial使用以及各种读写函数区别&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
       }
-      else {
-          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-      }
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(bp, s);
-  })();
+    );
   </script>
 
 
 
 
-    
-  </body>
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
 </html>

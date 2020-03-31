@@ -1,215 +1,190 @@
 <!DOCTYPE html>
-<html>
-  
+<html lang="zh-CN">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
+  <link rel="icon" type="image/png" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  
-  
-  <title>Invoke与Fabric注意事项详解教程 | 烛影小札</title>
+  <meta name="keywords" content>
+  <title>Invoke与Fabric注意事项详解教程 - 烛影小札</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
-  
-    <meta name="keywords" content="Fabric,Python,Linux,Fabric,Invoke,">
-  
 
-  
-  <meta name="description" content="说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-  
+<link rel="stylesheet" href="/css/main.css">
 
-  
-    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
-  
 
-  
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-  
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
 
-  
-    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
-  
 
-  
+<!-- 自定义样式保持在最底部 -->
 
-  <script>
-  // theme-ad's config script
-  // it can be used in every script
-  
-  window.AD_CONFIG = {
-    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
-    welcome: {"enable":false,"interval":30},
-    start_time: "2019-04-24",
-    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: true,
-    lock: false,
-    author: "Jiahuan Shi",
-    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
-    mathjax: true,
-    page_type: "",
-    root: "/"
-  };
-</script>
 
-  <script src="/vendor/sha256.min.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/index.js"></script>
-<script src="/vendor/qrcode.min.js"></script>
-
-  
-    <link rel="icon" href="/images/favicon.ico">
-    <link rel="apple-touch-icon" href="/images/touch-icon.png">
-  
-
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/index.css">
-<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
-
-  
 </head>
-  <body>
-    <header class="site-header">
-  <div class="site-header-brand">
-    
-      <span class="site-header-brand-title">
-        <a href="/">Jiahuan Shi</a>
-      </span>
-    
-    
-      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
-    
-  </div>
-  <div class="site-header-right">
-    <nav class="site-header-navigation">
-      
-        <a href="/" target="_self">首页</a>
-      
-        <a href="/archives/" target="_self">归档</a>
-      
-        <a href="/tags/" target="_self">标签</a>
-      
-        <a href="/categories/" target="_self">分类</a>
-      
-        <a href="/friends/" target="_self">友链</a>
-      
-        <a href="/about/" target="_self">关于</a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-    </nav>
-    <div class="site-header-btn">
-      
-        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
-          <i class="fa fa-github-alt"></i>
-        </a>
-      
-      <a href="javascript:void(0);" id="site-search">
-        <i class="fa fa-search"></i>
-      </a>
-      <a href="javascript:void(0);" id="site-nav-btn">
-        <i class="fa fa-ellipsis-v"></i>
-      </a>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</header>
-<nav class="table-content" id="site-nav">
-  <div class="table-content-title">
-    <span>导航</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc">
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            首页
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/archives/" target="_self">
-            归档
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/tags/" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/categories/" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/friends/" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/about/" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-    </ol>
-  </div>
 </nav>
-<div id="site-process"></div>
-    <main>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期五, 二月 28日 2020, 2:13 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    3.2k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      12 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
       
-  <div class="passage">
-  <div class="passage-meta">
-    <span>
-      <i class="fa fa-calendar"></i>2020-02-28
-    </span>
-    
-      <span>
-        | <a href="/categories/Fabric/"><i class="fa fa-bookmark"></i>Fabric</a>
-      </span>
-    
-    
-      <span>
-        | <i class="fa fa-unlock-alt"></i>UNLOCK
-      </span>
-    
-  </div>
-  <h1 class="passage-title">
-    Invoke与Fabric注意事项详解教程
-  </h1>
-  
-  <article class="passage-article">
-    <p></p>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:51 下午</p>
+            
+            <div class="markdown-body">
+              <p>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护<br>刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！<br><a id="more"></a></p>
 <p>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护<br>刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！</p>
 <h2 id="1-Fabric前世今生"><a href="#1-Fabric前世今生" class="headerlink" title="1. Fabric前世今生"></a>1. Fabric前世今生</h2><p>我从一开始接触的就是Python3，之后因为远程打包部署接触到了Fabric，当时官网Fabric还不支持Python3，所以我用了民间的Fabric3，十分好用，对新手很友好。后来，发现Fabric支持Python3了，但是看了文档，看的稀里糊涂，看了别人的教程才成功连接到远程主机上，我就又撒手转向了民间的Fabric3。<br>所以我们先区分下 Fabric1，Fabric2，Fabric3，它们的python官网发布的地址：</p>
-<p>安装方式分别是：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> https://pypi.org/project/Fabric/</span></span><br><span class="line">pip install Fabric</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> https://pypi.org/project/fabric2/</span></span><br><span class="line">pip install fabric2</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> https://pypi.org/project/Fabric3/</span></span><br><span class="line">pip install fabric3</span><br></pre></td></tr></table></figure></p>
+<p>安装方式分别是：</p>
+<pre><code class="shell"># https://pypi.org/project/Fabric/
+pip install Fabric
+
+# https://pypi.org/project/fabric2/
+pip install fabric2
+
+# https://pypi.org/project/Fabric3/
+pip install fabric3
+</code></pre>
 <p>Fabric1和Fabric2，在pypi中的页面，就是同一个东西：</p>
 <ul>
 <li>都是Fabric的最新版：Fabric 2.x，截至到20200227，安装出来的版本是：2.5</li>
@@ -235,9 +210,38 @@
 <blockquote>
 <p>A common problem task runners face is transmission of “global” data - values loaded from configuration files or other configuration vectors, given via CLI flags, generated in ‘setup’ tasks, etc.<br>Some libraries (such as Fabric 1.x) implement this via module-level attributes, which makes testing difficult and error prone, limits concurrency, and increases implementation complexity.<br>Invoke encapsulates state in explicit Context objects, handed to tasks when they execute . The context is the primary API endpoint, offering methods which honor the current state (such as Context.run) as well as access to that state itself.</p>
 </blockquote>
-<p>Context对象是在命令行解析过程中创建的（如果需要的话，可以手动创建），并用于与执行的任务共享解析器和配置状态，下面两种例子是一样的.<br>第一种通过命令行，过程中创建ｃ，即为context,会自动导入文件配置:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> invoke <span class="keyword">import</span> task</span><br><span class="line"><span class="meta">@task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(c)</span>:</span></span><br><span class="line">	print(config)</span><br><span class="line">    c.run(<span class="string">"ls"</span>)</span><br><span class="line">	</span><br><span class="line">$ invoke ls</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>第二种手动创建,如果有配置我们需要手动添加配置而没法用文件配置,比如:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> invoke <span class="keyword">import</span> Config,Context</span><br><span class="line"><span class="comment"># 默认配置</span></span><br><span class="line">config = Config()</span><br><span class="line"><span class="comment"># 添加一些配置</span></span><br><span class="line">config[<span class="string">'sudo'</span>] = &#123;<span class="string">'password'</span>:<span class="string">'mypassoword'</span>&#125;</span><br><span class="line">print(config)</span><br><span class="line"><span class="comment"># 传入配置,如果没有额外配置可以省略不填</span></span><br><span class="line">c = Context(config=config)</span><br><span class="line">c.run(<span class="string">'ls'</span>)</span><br></pre></td></tr></table></figure></p>
-<h4 id="sudo运行以及自动响应"><a href="#sudo运行以及自动响应" class="headerlink" title="sudo运行以及自动响应"></a>sudo运行以及自动响应</h4><p>最后我们说运行sudo命令时如何免密码以及与一运行一些其他命令时的提示互动.<br>我们可以先配置好文件:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"tasks"</span>: &#123;</span><br><span class="line">        <span class="attr">"auto_dash_names"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"sudo"</span>: &#123;</span><br><span class="line">		<span class="attr">"password"</span>:<span class="string">"mypassword"</span></span><br><span class="line">        <span class="string">"prompt"</span>: <span class="string">"[sudo] password:"</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Context对象是在命令行解析过程中创建的（如果需要的话，可以手动创建），并用于与执行的任务共享解析器和配置状态，下面两种例子是一样的.<br>第一种通过命令行，过程中创建ｃ，即为context,会自动导入文件配置:</p>
+<pre><code class="python">from invoke import task
+@task
+def show(c):
+    print(config)
+    c.run(&quot;ls&quot;)
+
+$ invoke ls
+...
+</code></pre>
+<p>第二种手动创建,如果有配置我们需要手动添加配置而没法用文件配置,比如:</p>
+<pre><code class="python">from invoke import Config,Context
+# 默认配置
+config = Config()
+# 添加一些配置
+config[&#39;sudo&#39;] = {&#39;password&#39;:&#39;mypassoword&#39;}
+print(config)
+# 传入配置,如果没有额外配置可以省略不填
+c = Context(config=config)
+c.run(&#39;ls&#39;)
+</code></pre>
+<h4 id="sudo运行以及自动响应"><a href="#sudo运行以及自动响应" class="headerlink" title="sudo运行以及自动响应"></a>sudo运行以及自动响应</h4><p>最后我们说运行sudo命令时如何免密码以及与一运行一些其他命令时的提示互动.<br>我们可以先配置好文件:</p>
+<pre><code class="json">{
+    &quot;tasks&quot;: {
+        &quot;auto_dash_names&quot;: false
+    },
+    &quot;sudo&quot;: {
+        &quot;password&quot;:&quot;mypassword&quot;
+        &quot;prompt&quot;: &quot;[sudo] password:&quot;,
+    }
+}
+</code></pre>
 <p>然后在脚本里<code>c.sudo(&#39;rm test.txt&#39;)</code>就行.<br>或者我们简单点:直接在在函数里面加入<code>c.sudo(&#39;rm test.txt&#39;,user=&#39;baird&#39;,password=&#39;mypassword&#39;)</code><br>关于自动响应程序输出的,我们可以看<a href="http://docs.pyinvoke.org/en/stable/concepts/watchers.html" target="_blank" rel="noopener">Automatically responding to program output</a></p>
 <h2 id="3-Fabric使用"><a href="#3-Fabric使用" class="headerlink" title="3. Fabric使用"></a>3. Fabric使用</h2><p>Fabric与Invoke基本上属于继承创新的关系,很多都是相同操作,所以这一部分就不重复讲了.<br><strong>Fabric相对于Invoke来说增加了Paramiko库的功能</strong>,也就是说实现了低/中级别SSH功能-SSH和SFTP会话，密钥管理等.但作为用户我们很少会直接从Paramiko导入,而是Fabric把它融合进来了,我们在看教程前,先来看看SSH认证</p>
 <h4 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h4><p>即使在<strong>原始</strong> OpenSSH客户端中，对远程服务器的身份验证也涉及多个潜在的秘密和配置来源。Fabric不仅支持其中的大多数，而且还具有自己的功能,下面是认证方式以及对应的配置:</p>
@@ -249,214 +253,367 @@
 <li>密码,通过<code>connect_kwargs.password</code>配置或者<code>--prompt-for-login-password</code>手动提示输入</li>
 <li>GSSAPI,不太懂,pass<br>上面的认证方式基本就全了,当然,每种认证方式的配置选择有很多,不止一种,很灵活,具体看<a href="http://docs.fabfile.org/en/2.5/concepts/authentication.html" target="_blank" rel="noopener">Authentication</a>.<br><strong>其实我们不用管那么多啥认证方式,密码就完事了~,方便省略</strong></li>
 </ul>
-<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>有了认证之后,就得到了一个连接(connection),用于SSH守护程序的连接，其中包含命令和文件传输的方法.这个connection其实跟context是一样的,一个远程一个本机,我们可以看下,在<code>fabfile.py</code>里代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from fabric import task</span><br><span class="line"></span><br><span class="line">@task</span><br><span class="line">def show(c):</span><br><span class="line">    c.run(&apos;ls&apos;)</span><br></pre></td></tr></table></figure></p>
-<p>当我们用<code>fab -H host1 show</code>时是连接的host1再运行ls命令,而<code>fab show</code>是直接在本机运行ls命令,也就是Invoke的作用,当然我么需要一个配置文件,我用的是密码:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"user"</span>: <span class="string">"pi"</span>,</span><br><span class="line">    <span class="attr">"connect_kwargs"</span>: &#123;</span><br><span class="line">        <span class="attr">"password"</span>: <span class="string">"mypassword"</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>以上是使用命令行调用,或者我们可以使用connection函数:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fabric <span class="keyword">import</span> Connection</span><br><span class="line"></span><br><span class="line">c = Connection(<span class="string">'pi@host1'</span>,connect_kwargs=&#123;<span class="string">'password'</span>:<span class="string">'mypassword'</span>&#125;)</span><br><span class="line">c.run(<span class="string">'ls'</span>)</span><br></pre></td></tr></table></figure></p>
+<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>有了认证之后,就得到了一个连接(connection),用于SSH守护程序的连接，其中包含命令和文件传输的方法.这个connection其实跟context是一样的,一个远程一个本机,我们可以看下,在<code>fabfile.py</code>里代码如下:</p>
+<pre><code>from fabric import task
+
+@task
+def show(c):
+    c.run(&#39;ls&#39;)
+</code></pre><p>当我们用<code>fab -H host1 show</code>时是连接的host1再运行ls命令,而<code>fab show</code>是直接在本机运行ls命令,也就是Invoke的作用,当然我么需要一个配置文件,我用的是密码:</p>
+<pre><code class="json">{
+    &quot;user&quot;: &quot;pi&quot;,
+    &quot;connect_kwargs&quot;: {
+        &quot;password&quot;: &quot;mypassword&quot;
+    },
+}
+</code></pre>
+<p>以上是使用命令行调用,或者我们可以使用connection函数:</p>
+<pre><code class="python">from fabric import Connection
+
+c = Connection(&#39;pi@host1&#39;,connect_kwargs={&#39;password&#39;:&#39;mypassword&#39;})
+c.run(&#39;ls&#39;)
+</code></pre>
 <p>更多例子我们可以看<a href="http://docs.fabfile.org/en/2.5/getting-started.html" target="_blank" rel="noopener">官方教程</a>,其实我最早看这上面例子时,我有点彷徨,没密码怎么连上去跑命令的,后来发现密码都是认证配置,连接并不重要,重要的是给你展示用法。</p>
 <blockquote>
 <p>从上面这个例子我们可以看出，可以用各种灵活的配置以及实现方式来创建一个远程连接。我的项目中有涉及远程部署多台机器， 我开始的想法是一把梭，创建所有机器的connection，然后上传上去，即我不需要-H来指定哪些机器，我已全部手动实例化，这就意味着用Fabric的Connection类实例化再加Facric中的Invoke功能。这是一种选择。后来发现，我应该采用一种更通用的方法，函数里我就执行相应动作，然后用-H指定主机，但是这样的话，比如我想同时部署多台机器，或者一半的机器，我还得在-H之后一个个输地址，这很耗时间，但好处就是一台台调试的时候更方便。所以我们还需外的任务，来根据条件快速输出-H后面的值做一个辅助工具，比如说输入1～7，那就自动把1~7七台机器的ip提示出来买，也算是曲线救国</p>
 </blockquote>
 <h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p><a href="http://docs.fabfile.org/en/2.5/concepts/configuration.html" target="_blank" rel="noopener">Fabric配置系统的核心</a>依赖于Invoke功能（与Fabric的其余大部分一样),只是配置文件名从<code>invoke</code>(不包括后缀)改为<code>fabfile</code>,然后是多了一些关于远程主机认证的配置,最常用的就是<code>connect_kwargs</code>,上面例子也出现过了,就不过多强调了</p>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>这篇文章总结下来,花了我蛮多时间的,也算是打开了2020的新篇章。以为过程中一切都很顺利，结果写着写着就卡住了，打了自己”自以为很懂”的脸，也算有了更多收获，接下来更多加油!</p>
-  </article>
-  <aside class="table-content" id="site-toc">
-  <div class="table-content-title">
-    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
-    <span>目录</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Fabric前世今生"><span class="toc-text">1. Fabric前世今生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Invoke使用"><span class="toc-text">2. Invoke使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基础使用"><span class="toc-text">基础使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件"><span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#导入集合"><span class="toc-text">导入集合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#集合的命名空间"><span class="toc-text">集合的命名空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#上下文Context"><span class="toc-text">上下文Context</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sudo运行以及自动响应"><span class="toc-text">sudo运行以及自动响应</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Fabric使用"><span class="toc-text">3. Fabric使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#认证"><span class="toc-text">认证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#连接"><span class="toc-text">连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置"><span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-总结"><span class="toc-text">4.总结</span></a></li>
-  </div>
-</aside>
-  
-    <aside class="passage-copyright">
-      <div>本文作者: Jiahuan Shi</div>
-      
-        <div>
-          原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2020/02/28/invoke-fabric/</a>
-        </div>
-      
-      <div>
-        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
-      </div>
-    </aside>
-  
-  
-    <div class="passage-tags">
-     
-      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
-     
-      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
-     
-      <a href="/tags/Fabric/"><i class="fa fa-tags"></i>Fabric</a>
-     
-      <a href="/tags/Invoke/"><i class="fa fa-tags"></i>Invoke</a>
-    
-    </div>
-  
-</div>
 
-    </main>
-    
-      
-<div class="site-comment-contanier" data-plateform="leancloud">
-  
-    <p id="site-comment-info">
-      <i class="fa fa-spinner fa-spin"></i> 评论加载中
-    </p>
-    <div id="site-comment"></div>
-  
-</div>
-    
-    <div class="site-footer-wrapper">
-  <footer class="site-footer">
-    
-    <div class="site-footer-info">
-      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
-    </div>
-    
-      <div class="site-footer-info">
-        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
-      </div>
-    
-    
-      <div class="site-footer-info">
-        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
-      </div>
-    
-    <div class="site-footer-info">
-      <i class="fa fa-copyright"></i> 
-      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
-      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
-      All rights reserved.
-    </div>
-  </footer>
-</div>
-    <div id="site-layer" style="display:none;">
-  <div class="site-layer-content">
-    <div class="site-layer-header">
-      <span class="site-layer-header-title" id="site-layer-title"></span>
-      <i class="fa fa-close" id="site-layer-close"></i>
-    </div>
-    <div class="site-layer-body" id="site-layer-container">
-      <div class="site-layer-input" id="site-layer-search" style="display: none;">
-        <input type="text">
-        <i class="fa fa-search"></i>
-      </div>
-      
-        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
-          
+            </div>
+            <hr>
             <div>
-              <img src="/images/wechat.jpg" alt="WeChat">
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Fabric/">Fabric</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Fabric/">Fabric</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Invoke/">Invoke</a>
+                    
+                  </span>
+                
+              </p>
               
-                <p>WeChat</p>
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/13/python-asyncio/">
+                        <span class="hidden-mobile">Python并发之异步I/O(async,await）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
               
             </div>
-          
-            <div>
-              <img src="/images/alipay.jpg" alt="AliPay">
+
               
-                <p>AliPay</p>
-              
-            </div>
-          
+          </div>
         </div>
-      
-      <div id="site-layer-welcome" style="display:none;"></div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
 </div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
     
 
-<div class="bottom-bar">
-  <div class="bottom-bar-left">
-    <a href="javascript:void(0);" data-enable="false">
-      <i class="fa fa-arrow-left"></i>
-    </a>
-    <a href="/2020/02/13/python-asyncio/" data-enable="true">
-      <i class="fa fa-arrow-right"></i>
-    </a>
+    
+
+    
   </div>
-  <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
-      <i class="fa fa-bars"></i>
-    </a>
-    
-      <a href="#site-comment" data-enable="true">
-        <i class="fa fa-commenting"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="site-toggle-share-btn">
-      <i class="fa fa-share-alt"></i>
-    </a>
-    
-      <a href="javascript:void(0);" id="site-reward">
-        <i class="fa fa-thumbs-up"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="back-top-btn">
-      <i class="fa fa-chevron-up"></i>
-    </a>
-  </div>
-</div>
-    <div id="share-btn">
-  
-    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-twitter"></i>
-    </a>
-  
-  
-    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-facebook"></i>
-    </a>
-  
-  
-    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-weibo"></i>
-    </a>
-  
-  
-    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-qq"></i>
-    </a>
-  
-  
-    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-wechat"></i>
-    </a>
-  
-</div>
-    
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
-  <script async>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+</footer>
 
-    gtag('config', 'UA-143610066-1');
-  </script>
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
 
 
 
-  <script async>
-  (function(){
-      var bp = document.createElement('script');
-      var curProtocol = window.location.protocol.split(':')[0];
-      if (curProtocol === 'https') {
-          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
       }
-      else {
-          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-      }
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(bp, s);
-  })();
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
   </script>
 
 
 
 
-    
-  </body>
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Invoke与Fabric注意事项详解教程&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
 </html>

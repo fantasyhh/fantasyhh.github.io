@@ -1,214 +1,182 @@
 <!DOCTYPE html>
-<html>
-  
+<html lang="zh-CN">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
+  <link rel="icon" type="image/png" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  
-  
-  <title>梳理Python WSGI与WSGI服务器等概念 | 烛影小札</title>
+  <meta name="keywords" content>
+  <title>梳理Python WSGI与WSGI服务器等概念 - 烛影小札</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
-  
-    <meta name="keywords" content="Python,Django,Wsgi,Gunicorn,">
-  
 
-  
-  <meta name="description" content="经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-  
+<link rel="stylesheet" href="/css/main.css">
 
-  
-    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
-  
 
-  
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-  
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
 
-  
-    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
-  
 
-  
+<!-- 自定义样式保持在最底部 -->
 
-  <script>
-  // theme-ad's config script
-  // it can be used in every script
-  
-  window.AD_CONFIG = {
-    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
-    welcome: {"enable":false,"interval":30},
-    start_time: "2019-04-24",
-    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: true,
-    lock: false,
-    author: "Jiahuan Shi",
-    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
-    mathjax: true,
-    page_type: "",
-    root: "/"
-  };
-</script>
 
-  <script src="/vendor/sha256.min.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/index.js"></script>
-<script src="/vendor/qrcode.min.js"></script>
-
-  
-    <link rel="icon" href="/images/favicon.ico">
-    <link rel="apple-touch-icon" href="/images/touch-icon.png">
-  
-
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/index.css">
-<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
-
-  
 </head>
-  <body>
-    <header class="site-header">
-  <div class="site-header-brand">
-    
-      <span class="site-header-brand-title">
-        <a href="/">Jiahuan Shi</a>
-      </span>
-    
-    
-      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
-    
-  </div>
-  <div class="site-header-right">
-    <nav class="site-header-navigation">
-      
-        <a href="/" target="_self">首页</a>
-      
-        <a href="/archives/" target="_self">归档</a>
-      
-        <a href="/tags/" target="_self">标签</a>
-      
-        <a href="/categories/" target="_self">分类</a>
-      
-        <a href="/friends/" target="_self">友链</a>
-      
-        <a href="/about/" target="_self">关于</a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-    </nav>
-    <div class="site-header-btn">
-      
-        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
-          <i class="fa fa-github-alt"></i>
-        </a>
-      
-      <a href="javascript:void(0);" id="site-search">
-        <i class="fa fa-search"></i>
-      </a>
-      <a href="javascript:void(0);" id="site-nav-btn">
-        <i class="fa fa-ellipsis-v"></i>
-      </a>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</header>
-<nav class="table-content" id="site-nav">
-  <div class="table-content-title">
-    <span>导航</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc">
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            首页
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/archives/" target="_self">
-            归档
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/tags/" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/categories/" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/friends/" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/about/" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-    </ol>
-  </div>
 </nav>
-<div id="site-process"></div>
-    <main>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期四, 六月 27日 2019, 8:53 早上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    2.4k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      8 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
       
-  <div class="passage">
-  <div class="passage-meta">
-    <span>
-      <i class="fa fa-calendar"></i>2019-06-27
-    </span>
-    
-      <span>
-        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
-      </span>
-    
-    
-      <span>
-        | <i class="fa fa-unlock-alt"></i>UNLOCK
-      </span>
-    
-  </div>
-  <h1 class="passage-title">
-    梳理Python WSGI与WSGI服务器等概念
-  </h1>
-  
-  <article class="passage-article">
-    <p>经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。</p>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
+            
+            <div class="markdown-body">
+              <p>经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。</p>
+<a id="more"></a>
+<p>经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。</p>
 <h2 id="1-首先弄清下面几个概念"><a href="#1-首先弄清下面几个概念" class="headerlink" title="1. 首先弄清下面几个概念"></a>1. 首先弄清下面几个概念</h2><p><strong>WSGI</strong>：全称是Web Server Gateway Interface，WSGI不是服务器，python模块，框架，API或者任何软件，只是一种规范，描述web server如何与web application通信的规范。server和application的规范在PEP 3333中有具体描述。要实现WSGI协议，必须同时实现web server和web application，当前运行在WSGI协议之上的web框架有Bottle, Flask, Django。</p>
-<p><img src="/images/wsgi/wsgi.png" alt=" " title="wsgi"></p>
+<p><img src="/images/wsgi/wsgi.png" srcset="/img/loading.gif" alt=" " title="wsgi"></p>
 <blockquote>
 <p>WSGI存在的目的有两个：</p>
 <ol>
@@ -228,7 +196,7 @@
 <blockquote>
 <p>​ WSGI Middleware（中间件）也是WSGI规范的一部分。上一章我们已经说明了WSGI的两个角色：server和application。那么middleware是一种运行在server和application中间的应用（一般都是Python应用）。middleware同时具备server和application角色，对于server来说，它是一个application；对于application来说，它是一个server。middleware并不修改server端和application端的规范，只是同时实现了这两个角色的功能而已。</p>
 </blockquote>
-<p><img src="/images/wsgi/middleware.png" alt="middleware"> </p>
+<p><img src="/images/wsgi/middleware.png" srcset="/img/loading.gif" alt="middleware"> </p>
 <p>WSGI协议其实是定义了一种server与application解耦的规范，即可以有多个实现WSGI server的服务器，也可以有多个实现WSGI application的框架，那么就可以选择任意的server和application组合实现自己的web应用。例如<strong>uWSGI和Gunicorn</strong>都是实现了WSGI server协议的服务器，<strong>Django，Flask</strong>是实现了WSGI application协议的web框架，可以根据项目实际情况搭配使用，详细的我们后面说。</p>
 <h2 id="2-WSGI实现原理以及”兄弟”CGI-FastCGI"><a href="#2-WSGI实现原理以及”兄弟”CGI-FastCGI" class="headerlink" title="2. WSGI实现原理以及”兄弟”CGI FastCGI?"></a>2. WSGI实现原理以及”兄弟”CGI FastCGI?</h2><p>WSGI原理的内部实现，说简单不简单说复杂却不复杂，这里不细说，我们可以<strong><a href="http://luckylau.tech/2017/02/28/python%E7%9A%84wsgi%E7%90%86%E8%A7%A3/" target="_blank" rel="noopener">用简单实例来理解Python WSGI</a> </strong></p>
 <p>那么<code>CGI</code> <code>FastCGI</code>又是什么？是不是跟WSGI有什么关系？我们可以翻阅下<a href="https://blog.callmewhy.com/2015/12/07/what-is-wsgi-and-cgi/" target="_blank" rel="noopener">CGI FastCGI WSGI 学习笔记 </a> 就会豁然开朗了</p>
@@ -239,9 +207,12 @@
 <blockquote>
 <p> <strong>使用Gunicorn，除非你在Windows上部署，在这种情况下使用mod_wsgi。</strong></p>
 </blockquote>
-<p><img src="/images/wsgi/which_wsgi_server.png" alt="which_server"> </p>
+<p><img src="/images/wsgi/which_wsgi_server.png" srcset="/img/loading.gif" alt="which_server"> </p>
 <p>具体的解释我这里用这篇英文原文<a href="https://djangodeployment.com/2017/01/02/which-wsgi-server-should-i-use/" target="_blank" rel="noopener">Which WSGI server should I use?</a> 翻译一下来回答。</p>
-<p>如图所示（我们可以暂时忽略掉图中的Web Server，这是下一小节要说的），Web浏览器与Web服务器通信，Web服务器又与WSGI服务器通信。该WSGI服务器不会直接与你的Django项目通信，而是导入 Django项目。它是这么做的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django_project.wsgi <span class="keyword">import</span> application</span><br><span class="line">application(args)</span><br></pre></td></tr></table></figure></p>
+<p>如图所示（我们可以暂时忽略掉图中的Web Server，这是下一小节要说的），Web浏览器与Web服务器通信，Web服务器又与WSGI服务器通信。该WSGI服务器不会直接与你的Django项目通信，而是导入 Django项目。它是这么做的：</p>
+<pre><code class="python">from django_project.wsgi import application
+application(args)
+</code></pre>
 <p>因此，从操作系统的角度来看，你的Django项目将成为WSGI服务器的一部分; 这是同一个过程。调用<strong><code>application()</code></strong>的方式由WSGI规范标准化。这个函数的接口是标准化的，这使得你可以在许多不同的WSGI服务器（如Gunicorn，uWSGI或mod_wsgi）之间进行选择，以及为什么每个服务器都可以与许多Python应用程序框架（如Django或Flask）进行交互。</p>
 <p>mod_wsgi仅适用于Apache，我更偏向于可与Apache或nginx一起使用的方法。这样的话，使更改Web服务器变得更容易。我也发现Gunicorn更容易设置和维护。</p>
 <p>我使用了uWSGI几年，并且被它的功能所震撼。其中许多都复制了Apache或nginx或堆栈其他部分中已存在的功能，因此很少需要它们。它的文档有点混乱。开发人员自己承认：“我们尽力提供良好的文档，但这是一项艰苦的工作。对不起。“我记得每周都会遇到问题并且每次花费数小时来解决问题。</p>
@@ -250,206 +221,348 @@
 <h2 id="4-既然有了WSGI-Server，为什么我们还需要Nginx（Web-Server）"><a href="#4-既然有了WSGI-Server，为什么我们还需要Nginx（Web-Server）" class="headerlink" title="4. 既然有了WSGI Server，为什么我们还需要Nginx（Web Server）?"></a>4. 既然有了WSGI Server，为什么我们还需要Nginx（Web Server）?</h2><blockquote>
 <p>如果只有一个应用，不需要负载均衡；只提供api服务，没有静态文件；不需要额外的访问控制等功能这样是不是就不需要nginx等反向代理？答案是需要。nginx可以缓冲请求和响应。如果让Gunicorn直接提供服务，浏览器发起一个请求，鉴于浏览器和网络情况都是未知的，http请求的发起过程可能比较慢，而Gunicorn只能等待请求发起完成后，才去真正处理请求，处理完成后，等客户端完全接收请求后，才继续下一个。nginx缓存客户端发起的请求，直到收完整个请求，转发给Gunicorn，等Gunicorn处理完成后，拿到响应，再发给客户端，这个流程是nginx擅长处理，而Gunicorn不擅长处理的。因此将Gunicorn置于nginx后面，可以有效提高Gunicorn的处理能力。  ——摘自知乎<a href="https://www.zhihu.com/question/38528616" target="_blank" rel="noopener">Nginx、Gunicorn在服务器中分别起什么作用？</a> 某回答</p>
 </blockquote>
-<p><img src="/images/wsgi/nginx+gunicorn.png" alt="nginx+gunicorn"></p>
+<p><img src="/images/wsgi/nginx+gunicorn.png" srcset="/img/loading.gif" alt="nginx+gunicorn"></p>
 <p>当我们为Gunicorn运行我们的django应用程序而开心时，然而，最后，我们看到管理面板的样式已经消失了。原因是Gunicorn是一个应用程序服务器，只运行应用程序（在我们的例子中是django app）和django，正如我们所知，<strong>除了开发之外，它不提供静态文件</strong>。Nginx来救援！它将是Gunicorn的反向代理。到底是什么反向代理？好问题！我们都知道VPN是什么，对吧？我们使用它们访问某些因某种原因被阻止的网站。在这种情况下，我们通过VPN访问该网站：我们 - &gt; VPN - &gt;某些网站。这种代理称为正向代理。至于反向代理，可以将它们视为强制代理。例如，用户正在尝试访问我们在gunicorn中运行的django应用程序。它认为它正在直接访问该应用程序。然而，真正的过程是它首先访问Nginx服务器，该服务器决定下一步该做什么，如果用户正在访问静态文件，Nginx服务器将自行提供服务。否则，它会将其重定向到Gunicorn。简单来说，<strong>http请求将由Gunicorn处理，而静态处理则由Nginx处理。这就是我们需要Nginx的原因</strong>。<br>除此之外，<strong>Nginx还提高了性能，可靠性，安全性和规模</strong>。</p>
 <h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>这几天晚上睡觉前花了一点时间来对这些概念进行了一些整理，收获颇多。要想真正的成为一名Web开发，并不是简单的套用框架写写逻辑层，而是框架背后的原理与流程，这才是重中之重，了解了这些，所有的类似框架以后上手都能快半分。接下去，会对Gunicorn，Nginx的配置文件做个记录（这中间也踩了点坑），再往后就是Nginx与docker的理解与实践了，加油～</p>
-  </article>
-  <aside class="table-content" id="site-toc">
-  <div class="table-content-title">
-    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
-    <span>目录</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-首先弄清下面几个概念"><span class="toc-text">1. 首先弄清下面几个概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-WSGI实现原理以及”兄弟”CGI-FastCGI"><span class="toc-text">2. WSGI实现原理以及”兄弟”CGI FastCGI?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-WSGI服务器的选择？"><span class="toc-text">3. WSGI服务器的选择？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-既然有了WSGI-Server，为什么我们还需要Nginx（Web-Server）"><span class="toc-text">4. 既然有了WSGI Server，为什么我们还需要Nginx（Web Server）?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-总结"><span class="toc-text">5. 总结</span></a></li></ol>
-  </div>
-</aside>
-  
-    <aside class="passage-copyright">
-      <div>本文作者: Jiahuan Shi</div>
-      
-        <div>
-          原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2019/06/27/python3-wsgi-concept/</a>
-        </div>
-      
-      <div>
-        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
-      </div>
-    </aside>
-  
-  
-    <div class="passage-tags">
-     
-      <a href="/tags/Django/"><i class="fa fa-tags"></i>Django</a>
-     
-      <a href="/tags/Wsgi/"><i class="fa fa-tags"></i>Wsgi</a>
-     
-      <a href="/tags/Gunicorn/"><i class="fa fa-tags"></i>Gunicorn</a>
-    
-    </div>
-  
-</div>
 
-    </main>
-    
-      
-<div class="site-comment-contanier" data-plateform="leancloud">
-  
-    <p id="site-comment-info">
-      <i class="fa fa-spinner fa-spin"></i> 评论加载中
-    </p>
-    <div id="site-comment"></div>
-  
-</div>
-    
-    <div class="site-footer-wrapper">
-  <footer class="site-footer">
-    
-    <div class="site-footer-info">
-      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
-    </div>
-    
-      <div class="site-footer-info">
-        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
-      </div>
-    
-    
-      <div class="site-footer-info">
-        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
-      </div>
-    
-    <div class="site-footer-info">
-      <i class="fa fa-copyright"></i> 
-      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
-      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
-      All rights reserved.
-    </div>
-  </footer>
-</div>
-    <div id="site-layer" style="display:none;">
-  <div class="site-layer-content">
-    <div class="site-layer-header">
-      <span class="site-layer-header-title" id="site-layer-title"></span>
-      <i class="fa fa-close" id="site-layer-close"></i>
-    </div>
-    <div class="site-layer-body" id="site-layer-container">
-      <div class="site-layer-input" id="site-layer-search" style="display: none;">
-        <input type="text">
-        <i class="fa fa-search"></i>
-      </div>
-      
-        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
-          
+            </div>
+            <hr>
             <div>
-              <img src="/images/wechat.jpg" alt="WeChat">
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Django/">Django</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Wsgi/">Wsgi</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Gunicorn/">Gunicorn</a>
+                    
+                  </span>
+                
+              </p>
               
-                <p>WeChat</p>
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/07/08/django-gunicorn-nginx-config/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Django+Gunicorn+Nginx配置整理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/06/24/revpi-install-img/">
+                        <span class="hidden-mobile">Revpi 重装系统以及本地化配置的注意项</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
               
             </div>
-          
-            <div>
-              <img src="/images/alipay.jpg" alt="AliPay">
+
               
-                <p>AliPay</p>
-              
-            </div>
-          
+          </div>
         </div>
-      
-      <div id="site-layer-welcome" style="display:none;"></div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
 </div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
     
 
-<div class="bottom-bar">
-  <div class="bottom-bar-left">
-    <a href="/2019/07/08/django-gunicorn-nginx-config/" data-enable="true">
-      <i class="fa fa-arrow-left"></i>
-    </a>
-    <a href="/2019/06/24/revpi-install-img/" data-enable="true">
-      <i class="fa fa-arrow-right"></i>
-    </a>
-  </div>
-  <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
-      <i class="fa fa-bars"></i>
-    </a>
     
-      <a href="#site-comment" data-enable="true">
-        <i class="fa fa-commenting"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="site-toggle-share-btn">
-      <i class="fa fa-share-alt"></i>
-    </a>
-    
-      <a href="javascript:void(0);" id="site-reward">
-        <i class="fa fa-thumbs-up"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="back-top-btn">
-      <i class="fa fa-chevron-up"></i>
-    </a>
-  </div>
-</div>
-    <div id="share-btn">
-  
-    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-twitter"></i>
-    </a>
-  
-  
-    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-facebook"></i>
-    </a>
-  
-  
-    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-weibo"></i>
-    </a>
-  
-  
-    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-qq"></i>
-    </a>
-  
-  
-    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-wechat"></i>
-    </a>
-  
-</div>
-    
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
-  <script async>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'UA-143610066-1');
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
   </script>
 
 
 
-  <script async>
-  (function(){
-      var bp = document.createElement('script');
-      var curProtocol = window.location.protocol.split(':')[0];
-      if (curProtocol === 'https') {
-          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "梳理Python WSGI与WSGI服务器等概念&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
       }
-      else {
-          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-      }
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(bp, s);
-  })();
+    );
   </script>
 
 
 
 
-    
-  </body>
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
 </html>

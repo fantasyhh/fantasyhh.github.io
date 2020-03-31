@@ -1,415 +1,618 @@
 <!DOCTYPE html>
-<html>
-  
+<html lang="zh-CN">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
+  <link rel="icon" type="image/png" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  
-  
-  <title>Python中关于键盘行为的方法总结 | 烛影小札</title>
+  <meta name="keywords" content>
+  <title>Python中关于键盘行为的方法总结 - 烛影小札</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
-  
-    <meta name="keywords" content="Python,Python,">
-  
 
-  
-  <meta name="description" content="最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-  
+<link rel="stylesheet" href="/css/main.css">
 
-  
-    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
-  
 
-  
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-  
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
 
-  
-    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
-  
 
-  
+<!-- 自定义样式保持在最底部 -->
 
-  <script>
-  // theme-ad's config script
-  // it can be used in every script
-  
-  window.AD_CONFIG = {
-    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
-    welcome: {"enable":false,"interval":30},
-    start_time: "2019-04-24",
-    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: true,
-    lock: false,
-    author: "Jiahuan Shi",
-    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
-    mathjax: true,
-    page_type: "",
-    root: "/"
-  };
-</script>
 
-  <script src="/vendor/sha256.min.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/index.js"></script>
-<script src="/vendor/qrcode.min.js"></script>
-
-  
-    <link rel="icon" href="/images/favicon.ico">
-    <link rel="apple-touch-icon" href="/images/touch-icon.png">
-  
-
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/index.css">
-<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
-
-  
 </head>
-  <body>
-    <header class="site-header">
-  <div class="site-header-brand">
-    
-      <span class="site-header-brand-title">
-        <a href="/">Jiahuan Shi</a>
-      </span>
-    
-    
-      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
-    
-  </div>
-  <div class="site-header-right">
-    <nav class="site-header-navigation">
-      
-        <a href="/" target="_self">首页</a>
-      
-        <a href="/archives/" target="_self">归档</a>
-      
-        <a href="/tags/" target="_self">标签</a>
-      
-        <a href="/categories/" target="_self">分类</a>
-      
-        <a href="/friends/" target="_self">友链</a>
-      
-        <a href="/about/" target="_self">关于</a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-    </nav>
-    <div class="site-header-btn">
-      
-        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
-          <i class="fa fa-github-alt"></i>
-        </a>
-      
-      <a href="javascript:void(0);" id="site-search">
-        <i class="fa fa-search"></i>
-      </a>
-      <a href="javascript:void(0);" id="site-nav-btn">
-        <i class="fa fa-ellipsis-v"></i>
-      </a>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</header>
-<nav class="table-content" id="site-nav">
-  <div class="table-content-title">
-    <span>导航</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc">
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            首页
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/archives/" target="_self">
-            归档
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/tags/" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/categories/" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/friends/" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/about/" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-    </ol>
-  </div>
 </nav>
-<div id="site-process"></div>
-    <main>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期四, 七月 25日 2019, 2:30 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      4 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
       
-  <div class="passage">
-  <div class="passage-meta">
-    <span>
-      <i class="fa fa-calendar"></i>2019-07-25
-    </span>
-    
-      <span>
-        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
-      </span>
-    
-    
-      <span>
-        | <i class="fa fa-unlock-alt"></i>UNLOCK
-      </span>
-    
-  </div>
-  <h1 class="passage-title">
-    Python中关于键盘行为的方法总结
-  </h1>
-  
-  <article class="passage-article">
-    <p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
+            
+            <div class="markdown-body">
+              <p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
+<a id="more"></a>
+<p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者。</p>
 <h3 id="2-pynput库"><a href="#2-pynput库" class="headerlink" title="2. pynput库"></a>2. pynput库</h3><p>这个库允许你控制和监视输入设备。 目前，支持鼠标和键盘输入和监视</p>
-<h5 id="控制键盘示例"><a href="#控制键盘示例" class="headerlink" title="控制键盘示例"></a>控制键盘示例</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pynput.keyboard <span class="keyword">import</span> Key, Controller</span><br><span class="line"></span><br><span class="line">keyboard = Controller()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Press and release space</span></span><br><span class="line">keyboard.press(Key.space)</span><br><span class="line">keyboard.release(Key.space)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Type a lower case A; this will work even if no key on the</span></span><br><span class="line"><span class="comment"># physical keyboard is labelled 'A'</span></span><br><span class="line">keyboard.press(<span class="string">'a'</span>)</span><br><span class="line">keyboard.release(<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Type two upper case As</span></span><br><span class="line">keyboard.press(<span class="string">'A'</span>)</span><br><span class="line">keyboard.release(<span class="string">'A'</span>)</span><br><span class="line"><span class="keyword">with</span> keyboard.pressed(Key.shift):</span><br><span class="line">    keyboard.press(<span class="string">'a'</span>)</span><br><span class="line">    keyboard.release(<span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Type 'Hello World' using the shortcut type method</span></span><br><span class="line">keyboard.type(<span class="string">'Hello World'</span>)</span><br></pre></td></tr></table></figure>
-<h5 id="监听鼠标示例"><a href="#监听鼠标示例" class="headerlink" title="监听鼠标示例"></a>监听鼠标示例</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pynput <span class="keyword">import</span> keyboard</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_press</span><span class="params">(key)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        print(<span class="string">'alphanumeric key &#123;0&#125; pressed'</span>.format(key.char))</span><br><span class="line">    <span class="keyword">except</span> AttributeError:</span><br><span class="line">        print(<span class="string">'special key &#123;0&#125; pressed'</span>.format(key))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">on_release</span><span class="params">(key)</span>:</span></span><br><span class="line">    print(<span class="string">'&#123;0&#125; released'</span>.format(key))</span><br><span class="line">    <span class="keyword">if</span> key == keyboard.Key.esc:</span><br><span class="line">        <span class="comment"># Stop listener</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Collect events until released</span></span><br><span class="line"><span class="keyword">with</span> keyboard.Listener(</span><br><span class="line">        on_press=on_press,</span><br><span class="line">        on_release=on_release) <span class="keyword">as</span> listener:</span><br><span class="line">    listener.join()</span><br><span class="line"></span><br><span class="line"><span class="comment"># ...or, in a non-blocking fashion:</span></span><br><span class="line">listener = mouse.Listener(</span><br><span class="line">    on_press=on_press,</span><br><span class="line">    on_release=on_release)</span><br><span class="line">listener.start()</span><br></pre></td></tr></table></figure>
+<h5 id="控制键盘示例"><a href="#控制键盘示例" class="headerlink" title="控制键盘示例"></a>控制键盘示例</h5><pre><code class="python">from pynput.keyboard import Key, Controller
+
+keyboard = Controller()
+
+# Press and release space
+keyboard.press(Key.space)
+keyboard.release(Key.space)
+
+# Type a lower case A; this will work even if no key on the
+# physical keyboard is labelled &#39;A&#39;
+keyboard.press(&#39;a&#39;)
+keyboard.release(&#39;a&#39;)
+
+# Type two upper case As
+keyboard.press(&#39;A&#39;)
+keyboard.release(&#39;A&#39;)
+with keyboard.pressed(Key.shift):
+    keyboard.press(&#39;a&#39;)
+    keyboard.release(&#39;a&#39;)
+
+# Type &#39;Hello World&#39; using the shortcut type method
+keyboard.type(&#39;Hello World&#39;)
+</code></pre>
+<h5 id="监听鼠标示例"><a href="#监听鼠标示例" class="headerlink" title="监听鼠标示例"></a>监听鼠标示例</h5><pre><code class="python">from pynput import keyboard
+
+def on_press(key):
+    try:
+        print(&#39;alphanumeric key {0} pressed&#39;.format(key.char))
+    except AttributeError:
+        print(&#39;special key {0} pressed&#39;.format(key))
+
+def on_release(key):
+    print(&#39;{0} released&#39;.format(key))
+    if key == keyboard.Key.esc:
+        # Stop listener
+        return False
+
+# Collect events until released
+with keyboard.Listener(
+        on_press=on_press,
+        on_release=on_release) as listener:
+    listener.join()
+
+# ...or, in a non-blocking fashion:
+listener = mouse.Listener(
+    on_press=on_press,
+    on_release=on_release)
+listener.start()
+</code></pre>
 <p><strong>我对这个库的第一印象是简洁好用，监听部分的callback函数很优雅，很是喜欢，也简单测试成功了，于是我噗呲噗呲地开始写，然后把代码扔到树莓派上准备run一下，结果悲剧了，报错<code>Xlib.error.DisplayNameError: Bad display name &quot;&quot;</code>，网上说通过ssh使用这个库的时候会报错，没法正常监听，具体可以看<a href="https://github.com/moses-palmer/pynput/issues/6" target="_blank" rel="noopener">这个issue</a>，虽然上面有着解决方法，但是我没有得到解决，只能忍痛弃之 （或者可以曲线救国，采用蓝牙键盘？没试过）</strong></p>
 <h3 id="3-keyboard库"><a href="#3-keyboard库" class="headerlink" title="3. keyboard库"></a>3. keyboard库</h3><p><a href="https://github.com/boppreh/keyboard" target="_blank" rel="noopener">keyboard库</a>在github上是有较多star的，内容非常多，功能十分强大，你能想到的基本都有….不过我看着头疼，当然，没有选择的另外一个原因是发现了另外一个小脚本来实现我所需要的键盘监听功能，这也是我待会要说的，如果要用其他关于键盘的行为操作，建议好好琢磨下这个库。</p>
 <h3 id="4-神奇小脚本"><a href="#4-神奇小脚本" class="headerlink" title="4. 神奇小脚本"></a>4. 神奇小脚本</h3><p>网上看着看着，突然发现了国外大佬的这篇文章<a href="https://www.jonwitts.co.uk/archives/896" target="_blank" rel="noopener">Detecting keyboard input in Python
-</a>，完美测试，感觉好极了！先贴代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> sys, termios, tty, os, time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getch</span><span class="params">()</span>:</span></span><br><span class="line">    fd = sys.stdin.fileno()</span><br><span class="line">    old_settings = termios.tcgetattr(fd)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        tty.setraw(sys.stdin.fileno())</span><br><span class="line">        ch = sys.stdin.read(<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)</span><br><span class="line">    <span class="keyword">return</span> ch</span><br><span class="line"> </span><br><span class="line">button_delay = <span class="number">0.2</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    char = getch()</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (char == <span class="string">"p"</span>):</span><br><span class="line">        print(<span class="string">"Stop!"</span>)</span><br><span class="line">        exit(<span class="number">0</span>)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (char == <span class="string">"a"</span>):</span><br><span class="line">        print(<span class="string">"Left pressed"</span>)</span><br><span class="line">        time.sleep(button_delay)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">elif</span> (char == <span class="string">"d"</span>):</span><br><span class="line">        print(<span class="string">"Right pressed"</span>)</span><br><span class="line">        time.sleep(button_delay)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">elif</span> (char == <span class="string">"w"</span>):</span><br><span class="line">        print(<span class="string">"Up pressed"</span>)</span><br><span class="line">        time.sleep(button_delay)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">elif</span> (char == <span class="string">"s"</span>):</span><br><span class="line">        print(<span class="string">"Down pressed"</span>)</span><br><span class="line">        time.sleep(button_delay)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">elif</span> (char == <span class="string">"1"</span>):</span><br><span class="line">        print(<span class="string">"Number 1 pressed"</span>)</span><br><span class="line">        time.sleep(button_delay)</span><br></pre></td></tr></table></figure></p>
+</a>，完美测试，感觉好极了！先贴代码：</p>
+<pre><code class="python">#!/usr/bin/python3
+
+# adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py
+
+import sys, termios, tty, os, time
+
+def getch():
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        ch = sys.stdin.read(1)
+
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+button_delay = 0.2
+
+while True:
+    char = getch()
+
+    if (char == &quot;p&quot;):
+        print(&quot;Stop!&quot;)
+        exit(0)
+
+    if (char == &quot;a&quot;):
+        print(&quot;Left pressed&quot;)
+        time.sleep(button_delay)
+
+    elif (char == &quot;d&quot;):
+        print(&quot;Right pressed&quot;)
+        time.sleep(button_delay)
+
+    elif (char == &quot;w&quot;):
+        print(&quot;Up pressed&quot;)
+        time.sleep(button_delay)
+
+    elif (char == &quot;s&quot;):
+        print(&quot;Down pressed&quot;)
+        time.sleep(button_delay)
+
+    elif (char == &quot;1&quot;):
+        print(&quot;Number 1 pressed&quot;)
+        time.sleep(button_delay)
+</code></pre>
 <p><strong>说实话其实<code>getch</code>这个函数我没太看懂，我也不想花时间研究它了，轮子已经造好了，正如这篇文章的作者一样，他也进行了一些搜索并找到了一些示例代码，但是没有一个完全符合要求，直到github上发现了<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章，也是感叹极客的给力！</strong></p>
 <h3 id="5-碎碎念"><a href="#5-碎碎念" class="headerlink" title="5. 碎碎念"></a>5. 碎碎念</h3><p>回过头来整理时发现了更巧的事情，<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章也是用键盘来控制两个马达，控制前进后退（虽然马达类型不一样），真是太巧了，哈哈哈哈哈～</p>
-  </article>
-  <aside class="table-content" id="site-toc">
-  <div class="table-content-title">
-    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
-    <span>目录</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-前言"><span class="toc-text">1. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-pynput库"><span class="toc-text">2. pynput库</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#控制键盘示例"><span class="toc-text">控制键盘示例</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#监听鼠标示例"><span class="toc-text">监听鼠标示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-keyboard库"><span class="toc-text">3. keyboard库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-神奇小脚本"><span class="toc-text">4. 神奇小脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-碎碎念"><span class="toc-text">5. 碎碎念</span></a></li></ol>
-  </div>
-</aside>
-  
-    <aside class="passage-copyright">
-      <div>本文作者: Jiahuan Shi</div>
-      
-        <div>
-          原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2019/07/25/python-about-keyboard/</a>
-        </div>
-      
-      <div>
-        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
-      </div>
-    </aside>
-  
-  
-    <div class="passage-tags">
-     
-      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
-    
-    </div>
-  
-</div>
 
-    </main>
-    
-      
-<div class="site-comment-contanier" data-plateform="leancloud">
-  
-    <p id="site-comment-info">
-      <i class="fa fa-spinner fa-spin"></i> 评论加载中
-    </p>
-    <div id="site-comment"></div>
-  
-</div>
-    
-    <div class="site-footer-wrapper">
-  <footer class="site-footer">
-    
-    <div class="site-footer-info">
-      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
-    </div>
-    
-      <div class="site-footer-info">
-        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
-      </div>
-    
-    
-      <div class="site-footer-info">
-        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
-      </div>
-    
-    <div class="site-footer-info">
-      <i class="fa fa-copyright"></i> 
-      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
-      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
-      All rights reserved.
-    </div>
-  </footer>
-</div>
-    <div id="site-layer" style="display:none;">
-  <div class="site-layer-content">
-    <div class="site-layer-header">
-      <span class="site-layer-header-title" id="site-layer-title"></span>
-      <i class="fa fa-close" id="site-layer-close"></i>
-    </div>
-    <div class="site-layer-body" id="site-layer-container">
-      <div class="site-layer-input" id="site-layer-search" style="display: none;">
-        <input type="text">
-        <i class="fa fa-search"></i>
-      </div>
-      
-        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
-          
+            </div>
+            <hr>
             <div>
-              <img src="/images/wechat.jpg" alt="WeChat">
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                  </span>
+                
+              </p>
               
-                <p>WeChat</p>
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/08/01/Arduino-Serial/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Arduino Serial使用以及各种读写函数区别</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/10/docker-common-commands/">
+                        <span class="hidden-mobile">Docker常用命令整理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
               
             </div>
-          
-            <div>
-              <img src="/images/alipay.jpg" alt="AliPay">
+
               
-                <p>AliPay</p>
-              
-            </div>
-          
+          </div>
         </div>
-      
-      <div id="site-layer-welcome" style="display:none;"></div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
 </div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
     
 
-<div class="bottom-bar">
-  <div class="bottom-bar-left">
-    <a href="/2019/08/01/Arduino-Serial/" data-enable="true">
-      <i class="fa fa-arrow-left"></i>
-    </a>
-    <a href="/2019/07/10/docker-common-commands/" data-enable="true">
-      <i class="fa fa-arrow-right"></i>
-    </a>
-  </div>
-  <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
-      <i class="fa fa-bars"></i>
-    </a>
     
-      <a href="#site-comment" data-enable="true">
-        <i class="fa fa-commenting"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="site-toggle-share-btn">
-      <i class="fa fa-share-alt"></i>
-    </a>
-    
-      <a href="javascript:void(0);" id="site-reward">
-        <i class="fa fa-thumbs-up"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="back-top-btn">
-      <i class="fa fa-chevron-up"></i>
-    </a>
-  </div>
-</div>
-    <div id="share-btn">
-  
-    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-twitter"></i>
-    </a>
-  
-  
-    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-facebook"></i>
-    </a>
-  
-  
-    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-weibo"></i>
-    </a>
-  
-  
-    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-qq"></i>
-    </a>
-  
-  
-    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-wechat"></i>
-    </a>
-  
-</div>
-    
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
-  <script async>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'UA-143610066-1');
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
   </script>
 
 
 
-  <script async>
-  (function(){
-      var bp = document.createElement('script');
-      var curProtocol = window.location.protocol.split(':')[0];
-      if (curProtocol === 'https') {
-          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Python中关于键盘行为的方法总结&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
       }
-      else {
-          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-      }
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(bp, s);
-  })();
+    );
   </script>
 
 
 
 
-    
-  </body>
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
 </html>

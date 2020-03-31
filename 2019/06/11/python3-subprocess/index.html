@@ -1,227 +1,254 @@
 <!DOCTYPE html>
-<html>
-  
+<html lang="zh-CN">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
+  <link rel="icon" type="image/png" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  
-  
-  <title>python3.5+ subprocess用法概括以及使用场景分析 | 烛影小札</title>
+  <meta name="keywords" content>
+  <title>python3.5+ subprocess用法概括以及使用场景分析 - 烛影小札</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
 
-  
-    <meta name="keywords" content="Python,Shell,Python,Linux,">
-  
 
-  
-  <meta name="description" content="Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用os.system，但是后来被subprocess模块替代，也是这篇文章所要讲的。">
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
 
-  
+<link rel="stylesheet" href="/css/main.css">
 
-  
-    <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
-  
 
-  
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-  
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
 
-  
-    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
-  
 
-  
+<!-- 自定义样式保持在最底部 -->
 
-  <script>
-  // theme-ad's config script
-  // it can be used in every script
-  
-  window.AD_CONFIG = {
-    leancloud: {"appid":"DnX4ytr7FUR5PljqJyjKgotS-gzGzoHsz","appkey":"8MIAmHtHLxcvMSNR7BiwLm7t","comment":true,"count":true},
-    welcome: {"enable":false,"interval":30},
-    start_time: "2019-04-24",
-    passwords: ["efe07af7441da2b69c4a41e42e73be4db47f66010a56900788a458354a7373ec", ],
-    is_post: true,
-    lock: false,
-    author: "Jiahuan Shi",
-    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
-    mathjax: true,
-    page_type: "",
-    root: "/"
-  };
-</script>
 
-  <script src="/vendor/sha256.min.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/index.js"></script>
-<script src="/vendor/qrcode.min.js"></script>
-
-  
-    <link rel="icon" href="/images/favicon.ico">
-    <link rel="apple-touch-icon" href="/images/touch-icon.png">
-  
-
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="/css/index.css">
-<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
-
-  
 </head>
-  <body>
-    <header class="site-header">
-  <div class="site-header-brand">
-    
-      <span class="site-header-brand-title">
-        <a href="/">Jiahuan Shi</a>
-      </span>
-    
-    
-      <span class="site-header-brand-motto"> | 作为意志和表象的世界</span>
-    
-  </div>
-  <div class="site-header-right">
-    <nav class="site-header-navigation">
-      
-        <a href="/" target="_self">首页</a>
-      
-        <a href="/archives/" target="_self">归档</a>
-      
-        <a href="/tags/" target="_self">标签</a>
-      
-        <a href="/categories/" target="_self">分类</a>
-      
-        <a href="/friends/" target="_self">友链</a>
-      
-        <a href="/about/" target="_self">关于</a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-        <a href="/" target="_self"></a>
-      
-    </nav>
-    <div class="site-header-btn">
-      
-        <a href="https://github.com/fantasyhh/" target="_blank" id="site-github">
-          <i class="fa fa-github-alt"></i>
-        </a>
-      
-      <a href="javascript:void(0);" id="site-search">
-        <i class="fa fa-search"></i>
-      </a>
-      <a href="javascript:void(0);" id="site-nav-btn">
-        <i class="fa fa-ellipsis-v"></i>
-      </a>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
   </div>
-</header>
-<nav class="table-content" id="site-nav">
-  <div class="table-content-title">
-    <span>导航</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc">
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            首页
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/archives/" target="_self">
-            归档
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/tags/" target="_self">
-            标签
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/categories/" target="_self">
-            分类
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/friends/" target="_self">
-            友链
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/about/" target="_self">
-            关于
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-        <li class="toc-item">
-          <a href="/" target="_self">
-            
-          </a>
-        </li>
-      
-    </ol>
-  </div>
 </nav>
-<div id="site-process"></div>
-    <main>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 六月 11日 2019, 1:52 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.5k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      6 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
       
-  <div class="passage">
-  <div class="passage-meta">
-    <span>
-      <i class="fa fa-calendar"></i>2019-06-11
-    </span>
-    
-      <span>
-        | <a href="/categories/Python/"><i class="fa fa-bookmark"></i>Python</a>
-      </span>
-    
-    
-      <span>
-        | <i class="fa fa-unlock-alt"></i>UNLOCK
-      </span>
-    
-  </div>
-  <h1 class="passage-title">
-    python3.5+ subprocess用法概括以及使用场景分析
-  </h1>
-  
-  <article class="passage-article">
-    <p>Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用<strong><code>os.system</code></strong>，但是后来被subprocess模块替代，也是这篇文章所要讲的。</p>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
+            
+            <div class="markdown-body">
+              <p>Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用<strong><code>os.system</code></strong>，但是后来被subprocess模块替代，也是这篇文章所要讲的。</p>
+<a id="more"></a>
+<p>Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用<strong><code>os.system</code></strong>，但是后来被subprocess模块替代，也是这篇文章所要讲的。</p>
 <h2 id="1-侃侃run-用法"><a href="#1-侃侃run-用法" class="headerlink" title="1. 侃侃run()用法"></a>1. 侃侃run()用法</h2><blockquote>
 <p>我只用<strong><code>subprocess.run()</code></strong>，其他的都是垃圾？！</p>
 </blockquote>
 <p>Python中关于多进程协程异步等一些较新用法，官方一直在更新完善其用法，然后趋于稳定。<strong>subprocess</strong>模块旨在替换几个较旧的模块和功能，比如<strong><code>os.system</code></strong>，<strong><code>os.spawn*</code></strong>。而对于<strong>Python3.5 +</strong> <strong><code>subprocess.run()</code></strong>用来代替之前的call等几个老方法，万剑归一。</p>
 <h4 id="run-示例1：运行命令并获取返回代码"><a href="#run-示例1：运行命令并获取返回代码" class="headerlink" title="run()示例1：运行命令并获取返回代码"></a>run()示例1：运行命令并获取返回代码</h4><p><strong>run()的行为与call()的行为大致相同，Python3.5+之后应该放弃使用call()，但是call()方法还是保留着，可以使用</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">cp = subprocess.run([<span class="string">"ls"</span>,<span class="string">"-lha"</span>])</span><br><span class="line">cp</span><br><span class="line"><span class="comment"># CompletedProcess(args=['ls', '-lha'], returncode=0)</span></span><br></pre></td></tr></table></figure>
-<h4 id="run-示例2-运行命令，如果底层进程报错，强制抛出异常"><a href="#run-示例2-运行命令，如果底层进程报错，强制抛出异常" class="headerlink" title="run()示例2:运行命令，如果底层进程报错，强制抛出异常"></a>run()示例2:运行命令，如果底层进程报错，强制抛出异常</h4><p>加入<code>check=True</code>即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">subprocess.run([<span class="string">"ls"</span>,<span class="string">"foo bar"</span>], check=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># -------------------------------------------------------------------</span></span><br><span class="line"><span class="comment"># CalledProcessError                Traceback (most recent call last)</span></span><br><span class="line"><span class="comment"># ----&gt; 1 subprocess.run(["ls","foo bar"], check=True)</span></span><br><span class="line"><span class="comment"># /usr/lib/python3.6/subprocess.py in run(input, timeout, check, *popenargs, **kwargs)</span></span><br><span class="line"><span class="comment">#     416         if check and retcode:</span></span><br><span class="line"><span class="comment">#     417             raise CalledProcessError(retcode, process.args,</span></span><br><span class="line"><span class="comment"># --&gt; 418                                      output=stdout, stderr=stderr)</span></span><br><span class="line"><span class="comment">#     419     return CompletedProcess(process.args, retcode, stdout, stderr)</span></span><br><span class="line"><span class="comment">#     420 </span></span><br><span class="line"><span class="comment"># CalledProcessError: Command '['ls', 'foo bar']' returned non-zero exit status 2.</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="run-示例3：流畅使用shell"><a href="#run-示例3：流畅使用shell" class="headerlink" title="run()示例3：流畅使用shell"></a>run()示例3：流畅使用shell</h4><p>如果想要正常使用shell命令，只要加入<code>shell=True</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">cp = subprocess.run(<span class="string">"ls -lha"</span>,shell=<span class="literal">True</span>)</span><br><span class="line">cp</span><br><span class="line"><span class="comment"># CompletedProcess(args='ls -lha', returncode=0)</span></span><br></pre></td></tr></table></figure></p>
+<pre><code class="python">import subprocess
+
+cp = subprocess.run([&quot;ls&quot;,&quot;-lha&quot;])
+cp
+# CompletedProcess(args=[&#39;ls&#39;, &#39;-lha&#39;], returncode=0)
+</code></pre>
+<h4 id="run-示例2-运行命令，如果底层进程报错，强制抛出异常"><a href="#run-示例2-运行命令，如果底层进程报错，强制抛出异常" class="headerlink" title="run()示例2:运行命令，如果底层进程报错，强制抛出异常"></a>run()示例2:运行命令，如果底层进程报错，强制抛出异常</h4><p>加入<code>check=True</code>即可</p>
+<pre><code class="python">import subprocess
+
+subprocess.run([&quot;ls&quot;,&quot;foo bar&quot;], check=True)
+# -------------------------------------------------------------------
+# CalledProcessError                Traceback (most recent call last)
+# ----&gt; 1 subprocess.run([&quot;ls&quot;,&quot;foo bar&quot;], check=True)
+# /usr/lib/python3.6/subprocess.py in run(input, timeout, check, *popenargs, **kwargs)
+#     416         if check and retcode:
+#     417             raise CalledProcessError(retcode, process.args,
+# --&gt; 418                                      output=stdout, stderr=stderr)
+#     419     return CompletedProcess(process.args, retcode, stdout, stderr)
+#     420 
+# CalledProcessError: Command &#39;[&#39;ls&#39;, &#39;foo bar&#39;]&#39; returned non-zero exit status 2.
+</code></pre>
+<h4 id="run-示例3：流畅使用shell"><a href="#run-示例3：流畅使用shell" class="headerlink" title="run()示例3：流畅使用shell"></a>run()示例3：流畅使用shell</h4><p>如果想要正常使用shell命令，只要加入<code>shell=True</code></p>
+<pre><code class="python">import subprocess
+
+cp = subprocess.run(&quot;ls -lha&quot;,shell=True)
+cp
+# CompletedProcess(args=&#39;ls -lha&#39;, returncode=0)
+</code></pre>
 <blockquote>
 <p>如果使用用户输入作为参数来构建命令字符串，加上shell = True的话可能有潜在的安全威胁（代码注入）</p>
 </blockquote>
 <h4 id="run-示例4：以字符串形式存储输出和错误消息"><a href="#run-示例4：以字符串形式存储输出和错误消息" class="headerlink" title="run()示例4：以字符串形式存储输出和错误消息"></a>run()示例4：以字符串形式存储输出和错误消息</h4><p>如果底层进程返回非零退出代码，则不会出现异常;可以通过CompletedProcess对象中的stderr属性访问错误消息。</p>
-<p>不报错的例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">cp = subprocess.run([<span class="string">"ls"</span>,<span class="string">"-lha"</span>], universal_newlines=<span class="literal">True</span>, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line"></span><br><span class="line">cp.stdout</span><br><span class="line"><span class="comment"># total 20K</span></span><br><span class="line"><span class="comment"># drwxrwxr-x  3 felipe felipe 4,0K Nov  4 15:28 .</span></span><br><span class="line"><span class="comment"># drwxrwxr-x 39 felipe felipe 4,0K Nov  3 18:31 ..</span></span><br><span class="line"><span class="comment"># drwxrwxr-x  2 felipe felipe 4,0K Nov  3 19:32 .ipynb_checkpoints</span></span><br><span class="line"><span class="comment"># -rw-rw-r--  1 felipe felipe 5,5K Nov  4 15:28 main.ipynb</span></span><br><span class="line">cp.stderr</span><br><span class="line"><span class="comment"># '' (empty string)</span></span><br><span class="line">cp.returncode</span><br><span class="line"><span class="comment"># 0</span></span><br></pre></td></tr></table></figure></p>
-<p>报错的例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">cp = subprocess.run([<span class="string">"ls"</span>,<span class="string">"foo bar"</span>], universal_newlines=<span class="literal">True</span>, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line"></span><br><span class="line">cp.output</span><br><span class="line"><span class="comment"># '' (empty string)</span></span><br><span class="line">cp.stderr</span><br><span class="line"><span class="comment"># ls: cannot access 'foo bar': No such file or directory</span></span><br><span class="line">cp.returncode</span><br><span class="line"><span class="comment"># 2</span></span><br></pre></td></tr></table></figure></p>
-<p>命令不存在的例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    cp = subprocess.run([<span class="string">"xxxx"</span>,<span class="string">"foo bar"</span>], universal_newlines=<span class="literal">True</span>, stdout=subprocess.PIPE, stderr=subprocess.PIPE)</span><br><span class="line"><span class="keyword">except</span> FileNotFoundError <span class="keyword">as</span> e:</span><br><span class="line">    print(e)</span><br><span class="line">    <span class="comment"># [Errno 2] No such file or directory: 'xxxx'</span></span><br></pre></td></tr></table></figure></p>
+<p>不报错的例子：</p>
+<pre><code class="python">import subprocess
+
+cp = subprocess.run([&quot;ls&quot;,&quot;-lha&quot;], universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+cp.stdout
+# total 20K
+# drwxrwxr-x  3 felipe felipe 4,0K Nov  4 15:28 .
+# drwxrwxr-x 39 felipe felipe 4,0K Nov  3 18:31 ..
+# drwxrwxr-x  2 felipe felipe 4,0K Nov  3 19:32 .ipynb_checkpoints
+# -rw-rw-r--  1 felipe felipe 5,5K Nov  4 15:28 main.ipynb
+cp.stderr
+# &#39;&#39; (empty string)
+cp.returncode
+# 0
+</code></pre>
+<p>报错的例子：</p>
+<pre><code class="python">import subprocess
+
+cp = subprocess.run([&quot;ls&quot;,&quot;foo bar&quot;], universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+cp.output
+# &#39;&#39; (empty string)
+cp.stderr
+# ls: cannot access &#39;foo bar&#39;: No such file or directory
+cp.returncode
+# 2
+</code></pre>
+<p>命令不存在的例子：</p>
+<pre><code class="python">import subprocess
+
+try:
+    cp = subprocess.run([&quot;xxxx&quot;,&quot;foo bar&quot;], universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+except FileNotFoundError as e:
+    print(e)
+    # [Errno 2] No such file or directory: &#39;xxxx&#39;
+</code></pre>
 <h2 id="2-更底层的Popen用法"><a href="#2-更底层的Popen用法" class="headerlink" title="2. 更底层的Popen用法"></a>2. 更底层的Popen用法</h2><p>关于调用子进程，官方的推荐方法是用可以处理所有用例的run(函数。对于更高级的用例，可以直接使用底层的Popen接口。但这个方法在我看来用不太到（个人拙见），上面的run能满足99%的场景，理由我会在下面的使用场景中说出。</p>
 <p><strong>这里推荐几篇好的文章,它们都在讲解subprocess的时候讲了popen方法：</strong><br><a href="http://queirozf.com/entries/python-3-subprocess-examples#run-example-run-command-and-get-return-code" target="_blank" rel="noopener">1. Python 3 Subprocess Examples</a><br><a href="https://pymotw.com/3/subprocess/" target="_blank" rel="noopener">2. subprocess — Spawning Additional Processes</a><br><a href="https://janakiev.com/til/python-shell-commands/" target="_blank" rel="noopener">3. How to Execute Shell Commands with Python</a></p>
 <h2 id="3-使用场景分析与选择"><a href="#3-使用场景分析与选择" class="headerlink" title="3. 使用场景分析与选择"></a>3. 使用场景分析与选择</h2><p>我表达下我个人拙见。<br>Python能做很多事，大多数脚本都能胜任。但是对于Linux本身的操作，像是重启服务命令，一般系统特有命令，或者是Linux强大的三剑客（sed，awk，grep）在处理文本时有很大的优势，这些Python脚本都不好去代替。</p>
@@ -230,203 +257,345 @@
 <li>对于一些麻烦的命令集合，类似于部署脚本、驱动类、开启关闭脚本，我们可以采用写shell脚本，把相关的一部分用shell脚本来代替，然后如果要在Python中调用的话只要<strong><code>run(&#39;./xx.sh&#39;,shell=True)</code></strong>（或者调皮一点bash中前嵌入运行python脚本），我不知道这优不优雅，有空去查查。</li>
 </ol>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>如何在Python中运行外部命令，最有效的方法是使用子进程模块及其提供的所有功能。最值得注意的是，应该考虑使用subprocess.run。<br>还有其他有用的库支持Python中的shell命令，拓展了一些其他功能，比如与tty终端交互，获取系统CPU信息等，如plumbum，sh，psutils和pexpect，这里不做拓展。</p>
-  </article>
-  <aside class="table-content" id="site-toc">
-  <div class="table-content-title">
-    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
-    <span>目录</span>
-  </div>
-  <div class="table-content-main">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-侃侃run-用法"><span class="toc-text">1. 侃侃run()用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#run-示例1：运行命令并获取返回代码"><span class="toc-text">run()示例1：运行命令并获取返回代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#run-示例2-运行命令，如果底层进程报错，强制抛出异常"><span class="toc-text">run()示例2:运行命令，如果底层进程报错，强制抛出异常</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#run-示例3：流畅使用shell"><span class="toc-text">run()示例3：流畅使用shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#run-示例4：以字符串形式存储输出和错误消息"><span class="toc-text">run()示例4：以字符串形式存储输出和错误消息</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#2-更底层的Popen用法"><span class="toc-text">2. 更底层的Popen用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-使用场景分析与选择"><span class="toc-text">3. 使用场景分析与选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-总结"><span class="toc-text">4. 总结</span></a></li>
-  </div>
-</aside>
-  
-    <aside class="passage-copyright">
-      <div>本文作者: Jiahuan Shi</div>
-      
-        <div>
-          原文链接: 
-          <a href target="_blank">https://fantasyhh.github.io/2019/06/11/python3-subprocess/</a>
-        </div>
-      
-      <div>
-        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
-      </div>
-    </aside>
-  
-  
-    <div class="passage-tags">
-     
-      <a href="/tags/Shell/"><i class="fa fa-tags"></i>Shell</a>
-     
-      <a href="/tags/Python/"><i class="fa fa-tags"></i>Python</a>
-     
-      <a href="/tags/Linux/"><i class="fa fa-tags"></i>Linux</a>
-    
-    </div>
-  
-</div>
 
-    </main>
-    
-      
-<div class="site-comment-contanier" data-plateform="leancloud">
-  
-    <p id="site-comment-info">
-      <i class="fa fa-spinner fa-spin"></i> 评论加载中
-    </p>
-    <div id="site-comment"></div>
-  
-</div>
-    
-    <div class="site-footer-wrapper">
-  <footer class="site-footer">
-    
-    <div class="site-footer-info">
-      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
-    </div>
-    
-      <div class="site-footer-info">
-        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
-      </div>
-    
-    
-      <div class="site-footer-info">
-        <i class="fa fa-at"></i> Email: shijiahuan2610@gmail.com
-      </div>
-    
-    <div class="site-footer-info">
-      <i class="fa fa-copyright"></i> 
-      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
-      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
-      All rights reserved.
-    </div>
-  </footer>
-</div>
-    <div id="site-layer" style="display:none;">
-  <div class="site-layer-content">
-    <div class="site-layer-header">
-      <span class="site-layer-header-title" id="site-layer-title"></span>
-      <i class="fa fa-close" id="site-layer-close"></i>
-    </div>
-    <div class="site-layer-body" id="site-layer-container">
-      <div class="site-layer-input" id="site-layer-search" style="display: none;">
-        <input type="text">
-        <i class="fa fa-search"></i>
-      </div>
-      
-        <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
-          
+            </div>
+            <hr>
             <div>
-              <img src="/images/wechat.jpg" alt="WeChat">
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Shell/">Shell</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                    
+                  </span>
+                
+              </p>
               
-                <p>WeChat</p>
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/06/13/python3-queue/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Python3 队列用法整理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/06/10/MCP2515-CAN-BUS/">
+                        <span class="hidden-mobile">利用MCP2515芯片在树莓派上使用CAN BUS协议</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
               
             </div>
-          
-            <div>
-              <img src="/images/alipay.jpg" alt="AliPay">
+
               
-                <p>AliPay</p>
-              
-            </div>
-          
+          </div>
         </div>
-      
-      <div id="site-layer-welcome" style="display:none;"></div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
 </div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
     
 
-<div class="bottom-bar">
-  <div class="bottom-bar-left">
-    <a href="/2019/06/13/python3-queue/" data-enable="true">
-      <i class="fa fa-arrow-left"></i>
-    </a>
-    <a href="/2019/06/10/MCP2515-CAN-BUS/" data-enable="true">
-      <i class="fa fa-arrow-right"></i>
-    </a>
-  </div>
-  <div class="bottom-bar-right">
-    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
-      <i class="fa fa-bars"></i>
-    </a>
     
-      <a href="#site-comment" data-enable="true">
-        <i class="fa fa-commenting"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="site-toggle-share-btn">
-      <i class="fa fa-share-alt"></i>
-    </a>
-    
-      <a href="javascript:void(0);" id="site-reward">
-        <i class="fa fa-thumbs-up"></i>
-      </a>
-    
-    <a href="javascript:void(0);" id="back-top-btn">
-      <i class="fa fa-chevron-up"></i>
-    </a>
-  </div>
-</div>
-    <div id="share-btn">
-  
-    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-twitter"></i>
-    </a>
-  
-  
-    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-facebook"></i>
-    </a>
-  
-  
-    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-weibo"></i>
-    </a>
-  
-  
-    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-qq"></i>
-    </a>
-  
-  
-    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
-      <i class="fa fa-wechat"></i>
-    </a>
-  
-</div>
-    
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143610066-1"></script>
-  <script async>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'UA-143610066-1');
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
   </script>
 
 
 
-  <script async>
-  (function(){
-      var bp = document.createElement('script');
-      var curProtocol = window.location.protocol.split(':')[0];
-      if (curProtocol === 'https') {
-          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "python3.5+ subprocess用法概括以及使用场景分析&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
       }
-      else {
-          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-      }
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(bp, s);
-  })();
+    );
   </script>
 
 
 
 
-    
-  </body>
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
 </html>
