@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.5k 字
+                    1.3k 字
                   </span>
                 
 
@@ -169,10 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
-            
             <div class="markdown-body">
-              <p>没用Flask之前，我对Flask的只有一个概念，那就是<strong><code>Micro</code></strong>，官网对其的解释是这样的：<strong><code>Micro</code></strong>并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的<strong><code>Micro</code></strong>意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此Flask可以满足你的所有需求，而无所不包。<br><a id="more"></a><br>没用Flask之前，我对Flask的只有一个概念，那就是<strong><code>Micro</code></strong>，官网对其的解释是这样的：<strong><code>Micro</code></strong>并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的<strong><code>Micro</code></strong>意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此Flask可以满足你的所有需求，而无所不包。</p>
+              <p>没用Flask之前，我对Flask的只有一个概念，那就是<strong><code>Micro</code></strong>，官网对其的解释是这样的：<strong><code>Micro</code></strong>并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的<strong><code>Micro</code></strong>意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此Flask可以满足你的所有需求，而无所不包。</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>由于工作性质，要求写的小web应用都要涉及一些底层，不如串口通信，或者GPIO调用。而串口这种东西不像数据库连接一样，开几个都可以，也不能开了之后关然后再开（效率比数据库连接差多了）。所以最好写个全局的，开了一次就不用关了，代码量也不多，哪个简单用哪个，我就想到了用Flask。例如一个最小的应用就可以这么简单的写：</p>
 <pre><code class="python">from flask import Flask
 app = Flask(__name__)
@@ -288,9 +286,9 @@ def index(path):
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
-                      <a class="hover-with-bg" href="/tags/Flask/">Flask</a>
-                    
                       <a class="hover-with-bg" href="/tags/Vue/">Vue</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Flask/">Flask</a>
                     
                   </span>
                 
@@ -324,6 +322,21 @@ def index(path):
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -473,6 +486,51 @@ def index(path):
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

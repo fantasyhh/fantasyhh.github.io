@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    850 字
+                    779 字
                   </span>
                 
 
@@ -169,41 +169,37 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
-            
             <div class="markdown-body">
-              <p>最近在翻阅剖析Python源码的时候讲到了内部Python变量的实现，以及当运行Python命令时，隐藏在内部的一些过程，于是<code>python3 --help</code>之后对某些运行参数产生了一些疑问，还涉及到了包与模块的内容，略微生僻，特此整理记录下</p>
-<a id="more"></a>
-<p>最近在翻阅剖析Python源码的时候讲到了内部Python变量的实现，以及当运行Python命令时，隐藏在内部的一些过程，于是<code>python3 --help</code>之后对某些运行参数产生了一些疑问，还涉及到了包与模块的内容，略微生僻，特此整理记录下～</p>
+              <p>最近在翻阅剖析Python源码的时候讲到了内部Python变量的实现，以及当运行Python命令时，隐藏在内部的一些过程，于是<code>python3 --help</code>之后对某些运行参数产生了一些疑问，还涉及到了包与模块的内容，略微生僻，特此整理记录下～</p>
 <h2 id="1-大杂烩"><a href="#1-大杂烩" class="headerlink" title="1. 大杂烩"></a>1. 大杂烩</h2><blockquote>
 <p>旨在由用户直接执行的包含Python代码的纯文本文件通常称为<strong>脚本(script)</strong>，这是一个非正式术语，表示顶级程序文件。<br> 另一方面，包含设计用于从另一个Python文件导入和使用的Python代码的纯文本文件称为<strong>模块(modules)</strong>。</p>
 </blockquote>
-<h5 id="使用importlib导入模块"><a href="#使用importlib导入模块" class="headerlink" title="使用importlib导入模块"></a>使用importlib导入模块</h5><pre><code class="python">import importlib
+<h3 id="1-1-使用importlib导入模块"><a href="#1-1-使用importlib导入模块" class="headerlink" title="1.1 使用importlib导入模块"></a>1.1 使用importlib导入模块</h3><pre><code class="python">import importlib
 importlib.import_module(&#39;math&#39;)
 </code></pre>
 <p>当我们想要导入自己写的<code>test.py</code>中的函数hello时，我们可以这样曲线救国: 首先每个模块导入后是一个对象(object), 它里面的各个变量都是以属性(attr)的形式挂靠在里面, 所以我们可以使用getattr来找到制定的函数</p>
 <p><code>hello = getattr(importlib.import_module(&#39;test&#39;), &#39;hello&#39;)</code> 等价于<code>from test import hello</code></p>
 <p>或者包中的某个模块：</p>
 <p><code>ClassA = getattr(importlib.import_module(&#39;packege.module&#39;), &#39;ClassA&#39;)</code>等价于<br><code>from packege.module import ClassA</code></p>
-<h5 id="重新导入"><a href="#重新导入" class="headerlink" title="重新导入"></a>重新导入</h5><pre><code class="python">import math
+<h3 id="1-2-重新导入"><a href="#1-2-重新导入" class="headerlink" title="1.2 重新导入"></a>1.2 重新导入</h3><pre><code class="python">import math
 import math   # Second import, which does nothing ,need to reload
 importlib.reload(math)
 </code></pre>
 <p>这里的注意点，<code>reload</code>函数是一个模块对象，而不是一个字符串</p>
-<h5 id="使用-runpy-run-module-and-runpy-run-path-运行脚本"><a href="#使用-runpy-run-module-and-runpy-run-path-运行脚本" class="headerlink" title="使用 runpy.run_module() and runpy.run_path()运行脚本"></a>使用 runpy.run_module() and runpy.run_path()运行脚本</h5><pre><code class="python">import runpy
+<h3 id="1-3-使用-runpy-run-module-and-runpy-run-path-运行脚本"><a href="#1-3-使用-runpy-run-module-and-runpy-run-path-运行脚本" class="headerlink" title="1.3 使用 runpy.run_module() and runpy.run_path()运行脚本"></a>1.3 使用 runpy.run_module() and runpy.run_path()运行脚本</h3><pre><code class="python">import runpy
 runpy.run_module(mod_name=&#39;hello&#39;)
 runpy.run_path(file_path=&#39;hello.py&#39;)
 </code></pre>
-<h5 id="使用exec-运行脚本"><a href="#使用exec-运行脚本" class="headerlink" title="使用exec()运行脚本"></a>使用exec()运行脚本</h5><pre><code class="python">exec(open(&#39;hello.py&#39;).read())
+<h3 id="1-4-使用exec-运行脚本"><a href="#1-4-使用exec-运行脚本" class="headerlink" title="1.4 使用exec()运行脚本"></a>1.4 使用exec()运行脚本</h3><pre><code class="python">exec(open(&#39;hello.py&#39;).read())
 </code></pre>
-<h5 id="python-c参数"><a href="#python-c参数" class="headerlink" title="python -c参数"></a>python -c参数</h5><pre><code class="python">python -c &quot;import math;print(math.pi)&quot;
+<h3 id="1-5-python-c参数"><a href="#1-5-python-c参数" class="headerlink" title="1.5 python -c参数"></a>1.5 python -c参数</h3><pre><code class="python">python -c &quot;import math;print(math.pi)&quot;
 </code></pre>
 <h2 id="2-Python-m-参数"><a href="#2-Python-m-参数" class="headerlink" title="2. Python -m 参数"></a>2. Python -m 参数</h2><blockquote>
 <p>-m参数显示为run library module as a script，常见于 <code>Python3 -m http.server 8080</code></p>
 </blockquote>
 <p>因为<code>http</code>是<strong>标准库</strong>（已经存在于sys.path中），这也是包，我们用<code>http.server</code>来调用server文件并把它作为脚本来运行，运行其中<code>__name__ == &quot;__main__&quot;</code>部分</p>
 <p>那假设我们是自己创建的的包呢，那也是同样的道理，我们<a href="https://www.cnblogs.com/xueweihan/p/5118222.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="noopener">python自问自答：python -m参数？</a>，直接运行与-m运行的区别在于：<br><strong>直接启动脚本是把脚本所在的目录添加在sys.path中<br>-m模块启动脚本是把你输入命令的目录（也就是当前路径），放到了sys.path属性中</strong></p>
-<h2 id="3-其他谈谈"><a href="#3-其他谈谈" class="headerlink" title="3. 其他谈谈"></a>3. 其他谈谈</h2><h5 id="当使用from-module-import-语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量-all-来明确地列出需要导出的内容（强烈反对使用-from-module-import-）"><a href="#当使用from-module-import-语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量-all-来明确地列出需要导出的内容（强烈反对使用-from-module-import-）" class="headerlink" title="当使用from module import * 语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量 all 来明确地列出需要导出的内容（强烈反对使用 from module import *）"></a>当使用<code>from module import *</code> 语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量 <strong>all</strong> 来明确地列出需要导出的内容（强烈反对使用 <code>from module import *</code>）</h5><pre><code class="python"># somemodule.py
+<h2 id="3-其他谈谈"><a href="#3-其他谈谈" class="headerlink" title="3. 其他谈谈"></a>3. 其他谈谈</h2><h3 id="3-1-当使用from-module-import-语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量-all-来明确地列出需要导出的内容（强烈反对使用-from-module-import-）"><a href="#3-1-当使用from-module-import-语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量-all-来明确地列出需要导出的内容（强烈反对使用-from-module-import-）" class="headerlink" title="3.1 当使用from module import * 语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量 all 来明确地列出需要导出的内容（强烈反对使用 from module import *）"></a>3.1 当使用<code>from module import *</code> 语句时，希望对从模块或包导出的符号进行精确控制时，定义一个变量 <strong>all</strong> 来明确地列出需要导出的内容（强烈反对使用 <code>from module import *</code>）</h3><pre><code class="python"># somemodule.py
 def spam():
     pass
 
@@ -214,7 +210,7 @@ blah = 42
 # Only export &#39;spam&#39; and &#39;grok&#39;
 __all__ = [&#39;spam&#39;, &#39;grok&#39;]
 </code></pre>
-<h4 id="运行目录或压缩文件"><a href="#运行目录或压缩文件" class="headerlink" title="运行目录或压缩文件"></a>运行目录或压缩文件</h4><p>如果你的应用程序已经有多个文件，你可以把你的应用程序放进它自己的目录并添加一个<strong>main</strong>.py文件。 举个例子，你可以像这样创建目录：</p>
+<h3 id="3-2-运行目录或压缩文件"><a href="#3-2-运行目录或压缩文件" class="headerlink" title="3.2 运行目录或压缩文件"></a>3.2 运行目录或压缩文件</h3><p>如果你的应用程序已经有多个文件，你可以把你的应用程序放进它自己的目录并添加一个<strong>main</strong>.py文件。 举个例子，你可以像这样创建目录：</p>
 <pre><code>myapplication/
         spam.py
         bar.py
@@ -273,6 +269,21 @@ __all__ = [&#39;spam&#39;, &#39;grok&#39;]
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -422,6 +433,51 @@ __all__ = [&#39;spam&#39;, &#39;grok&#39;]
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

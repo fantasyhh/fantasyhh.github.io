@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.1k 字
+                    1k 字
                   </span>
                 
 
@@ -169,15 +169,11 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
-            
             <div class="markdown-body">
               <p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
-<a id="more"></a>
-<p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者。</p>
-<h3 id="2-pynput库"><a href="#2-pynput库" class="headerlink" title="2. pynput库"></a>2. pynput库</h3><p>这个库允许你控制和监视输入设备。 目前，支持鼠标和键盘输入和监视</p>
-<h5 id="控制键盘示例"><a href="#控制键盘示例" class="headerlink" title="控制键盘示例"></a>控制键盘示例</h5><pre><code class="python">from pynput.keyboard import Key, Controller
+<h2 id="2-pynput库"><a href="#2-pynput库" class="headerlink" title="2. pynput库"></a>2. pynput库</h2><p>这个库允许你控制和监视输入设备。 目前，支持鼠标和键盘输入和监视</p>
+<h3 id="2-1-控制键盘示例"><a href="#2-1-控制键盘示例" class="headerlink" title="2.1 控制键盘示例"></a>2.1 控制键盘示例</h3><pre><code class="python">from pynput.keyboard import Key, Controller
 
 keyboard = Controller()
 
@@ -200,7 +196,7 @@ with keyboard.pressed(Key.shift):
 # Type &#39;Hello World&#39; using the shortcut type method
 keyboard.type(&#39;Hello World&#39;)
 </code></pre>
-<h5 id="监听鼠标示例"><a href="#监听鼠标示例" class="headerlink" title="监听鼠标示例"></a>监听鼠标示例</h5><pre><code class="python">from pynput import keyboard
+<h3 id="2-2-监听鼠标示例"><a href="#2-2-监听鼠标示例" class="headerlink" title="2.2 监听鼠标示例"></a>2.2 监听鼠标示例</h3><pre><code class="python">from pynput import keyboard
 
 def on_press(key):
     try:
@@ -227,8 +223,8 @@ listener = mouse.Listener(
 listener.start()
 </code></pre>
 <p><strong>我对这个库的第一印象是简洁好用，监听部分的callback函数很优雅，很是喜欢，也简单测试成功了，于是我噗呲噗呲地开始写，然后把代码扔到树莓派上准备run一下，结果悲剧了，报错<code>Xlib.error.DisplayNameError: Bad display name &quot;&quot;</code>，网上说通过ssh使用这个库的时候会报错，没法正常监听，具体可以看<a href="https://github.com/moses-palmer/pynput/issues/6" target="_blank" rel="noopener">这个issue</a>，虽然上面有着解决方法，但是我没有得到解决，只能忍痛弃之 （或者可以曲线救国，采用蓝牙键盘？没试过）</strong></p>
-<h3 id="3-keyboard库"><a href="#3-keyboard库" class="headerlink" title="3. keyboard库"></a>3. keyboard库</h3><p><a href="https://github.com/boppreh/keyboard" target="_blank" rel="noopener">keyboard库</a>在github上是有较多star的，内容非常多，功能十分强大，你能想到的基本都有….不过我看着头疼，当然，没有选择的另外一个原因是发现了另外一个小脚本来实现我所需要的键盘监听功能，这也是我待会要说的，如果要用其他关于键盘的行为操作，建议好好琢磨下这个库。</p>
-<h3 id="4-神奇小脚本"><a href="#4-神奇小脚本" class="headerlink" title="4. 神奇小脚本"></a>4. 神奇小脚本</h3><p>网上看着看着，突然发现了国外大佬的这篇文章<a href="https://www.jonwitts.co.uk/archives/896" target="_blank" rel="noopener">Detecting keyboard input in Python
+<h2 id="3-keyboard库"><a href="#3-keyboard库" class="headerlink" title="3. keyboard库"></a>3. keyboard库</h2><p><a href="https://github.com/boppreh/keyboard" target="_blank" rel="noopener">keyboard库</a>在github上是有较多star的，内容非常多，功能十分强大，你能想到的基本都有….不过我看着头疼，当然，没有选择的另外一个原因是发现了另外一个小脚本来实现我所需要的键盘监听功能，这也是我待会要说的，如果要用其他关于键盘的行为操作，建议好好琢磨下这个库。</p>
+<h2 id="4-神奇小脚本"><a href="#4-神奇小脚本" class="headerlink" title="4. 神奇小脚本"></a>4. 神奇小脚本</h2><p>网上看着看着，突然发现了国外大佬的这篇文章<a href="https://www.jonwitts.co.uk/archives/896" target="_blank" rel="noopener">Detecting keyboard input in Python
 </a>，完美测试，感觉好极了！先贴代码：</p>
 <pre><code class="python">#!/usr/bin/python3
 
@@ -277,7 +273,7 @@ while True:
         time.sleep(button_delay)
 </code></pre>
 <p><strong>说实话其实<code>getch</code>这个函数我没太看懂，我也不想花时间研究它了，轮子已经造好了，正如这篇文章的作者一样，他也进行了一些搜索并找到了一些示例代码，但是没有一个完全符合要求，直到github上发现了<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章，也是感叹极客的给力！</strong></p>
-<h3 id="5-碎碎念"><a href="#5-碎碎念" class="headerlink" title="5. 碎碎念"></a>5. 碎碎念</h3><p>回过头来整理时发现了更巧的事情，<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章也是用键盘来控制两个马达，控制前进后退（虽然马达类型不一样），真是太巧了，哈哈哈哈哈～</p>
+<h2 id="5-碎碎念"><a href="#5-碎碎念" class="headerlink" title="5. 碎碎念"></a>5. 碎碎念</h2><p>回过头来整理时发现了更巧的事情，<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章也是用键盘来控制两个马达，控制前进后退（虽然马达类型不一样），真是太巧了，哈哈哈哈哈～</p>
 
             </div>
             <hr>
@@ -330,6 +326,21 @@ while True:
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -479,6 +490,51 @@ while True:
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

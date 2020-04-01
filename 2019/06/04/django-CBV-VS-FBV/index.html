@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.7k 字
+                    1.6k 字
                   </span>
                 
 
@@ -169,14 +169,10 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
-            
             <div class="markdown-body">
-              <p>从一开始学习Django时候的Hello world的函数视图，到自带的View视图，再到restframework的APIView以及viewset。回过头来看看，好像有种从稚嫩到成熟再到老奸巨猾的感觉，代码量越来越少了，第三方库封装的越来越多，但是真正包含在其中的实现和理解我们却愈发忽视。作为一个web框架，我们在使用时应该更多在于一个完整的流程的实现过程，所以，无论是CBV还是FBV本质都是一样的。</p>
-<a id="more"></a>
-<p>从一开始学习Django时候的Hello world的函数视图，到自带的View视图，再到restframework的APIView以及viewset。回过头来看看，好像有种从稚嫩到成熟再到老奸巨猾的感觉，代码量越来越少了，第三方库封装的越来越多，但是真正包含在其中的实现和理解我们却愈发忽视。作为一个web框架，我们在使用时应该更多在于一个完整的流程的实现过程，所以，无论是CBV还是FBV本质都是一样的</p>
+              <p>从一开始学习Django时候的Hello world的函数视图，到自带的View视图，再到restframework的APIView以及viewset。回过头来看看，好像有种从稚嫩到成熟再到老奸巨猾的感觉，代码量越来越少了，第三方库封装的越来越多，但是真正包含在其中的实现和理解我们却愈发忽视。作为一个web框架，我们在使用时应该更多在于一个完整的流程的实现过程，所以，无论是CBV还是FBV本质都是一样的</p>
 <p>本文翻译国外作者Vitor Freitas博客，<a href="https://simpleisbetterthancomplex.com/article/2017/03/21/class-based-views-vs-function-based-views.html" target="_blank" rel="noopener">原文地址</a>在这里。如有侵权，立即删除。</p>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在django很老的版本时候，只有<code>function-based views</code>，但问题是是基于函数的视图太过于简单，很难去拓展,自定义它们,没法达到视图重用的地步。<br>为了解决这个问题，<code>class-based views</code>诞生了。所以，现在的django有基于函数或者基于类这两种视图。<br>当我们将<code>class-based views</code>加入到路由配置的时候。通常使用<code>View.as_view()</code>类方法，它返回一个函数，跟<code>function-based views</code>类似。</p>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h2><p>在django很老的版本时候，只有<code>function-based views</code>，但问题是是基于函数的视图太过于简单，很难去拓展,自定义它们,没法达到视图重用的地步。<br>为了解决这个问题，<code>class-based views</code>诞生了。所以，现在的django有基于函数或者基于类这两种视图。<br>当我们将<code>class-based views</code>加入到路由配置的时候。通常使用<code>View.as_view()</code>类方法，它返回一个函数，跟<code>function-based views</code>类似。</p>
 <p>下面是源码中<code>as_view</code>方法的实现，相去看完整源码可以去看django完整源码：</p>
 <pre><code class="python">class View:
     @classonlymethod
@@ -206,7 +202,7 @@
 return view_function(request)
 </code></pre>
 <p><strong>通过<code>as_view()</code>返回的视图函数是每个<code>class-based view</code>的外面一部分。调用视图函数之后，它将传递请求（request）给<code>dispatch()</code>方法，<code>dispatch()</code>方法将会根据request type (GET, POST, PUT, etc)来执行正确的方法。</strong></p>
-<h3 id="Class-Based-View-例子"><a href="#Class-Based-View-例子" class="headerlink" title="Class-Based View 例子"></a>Class-Based View 例子</h3><p>如果你通过<code>django.views.View</code>基类拓展一个视图，<code>dispatch()</code>方法会按照逻辑自动处理HTTP方法。如果请求是一个POST，它将在视图里执行<code>post()</code>方法  </p>
+<h2 id="2-Class-Based-View-例子"><a href="#2-Class-Based-View-例子" class="headerlink" title="2. Class-Based View 例子"></a>2. Class-Based View 例子</h2><p>如果你通过<code>django.views.View</code>基类拓展一个视图，<code>dispatch()</code>方法会按照逻辑自动处理HTTP方法。如果请求是一个POST，它将在视图里执行<code>post()</code>方法  </p>
 <p>views.py </p>
 <pre><code class="python">from django.views import View
 
@@ -222,7 +218,7 @@ class ContactView(View):
     url(r&#39;contact/$&#39;, views.ContactView.as_view(), name=&#39;contact&#39;),
 ]
 </code></pre>
-<h3 id="Function-Based-View-例子"><a href="#Function-Based-View-例子" class="headerlink" title="Function-Based View 例子"></a>Function-Based View 例子</h3><p>在<code>Function-Based View</code>中，通过表达式处理请求逻辑。</p>
+<h2 id="3-Function-Based-View-例子"><a href="#3-Function-Based-View-例子" class="headerlink" title="3. Function-Based View 例子"></a>3. Function-Based View 例子</h2><p>在<code>Function-Based View</code>中，通过表达式处理请求逻辑。</p>
 <p>views.py</p>
 <pre><code class="python">def contact(request):
     if request.method == &#39;POST&#39;:
@@ -236,7 +232,7 @@ class ContactView(View):
 ]
 </code></pre>
 <p>这两张视图主要的区别就在这。但是通用类视图（<code>generic class-based views</code>）就有更多故事了。</p>
-<h3 id="Generic-Class-Based-Views"><a href="#Generic-Class-Based-Views" class="headerlink" title="Generic Class-Based Views"></a>Generic Class-Based Views</h3><p>通用类视图在web应用中被用来解决一些常用操作，比如：创建一个新模型对象，表格处理，数据list，分页，档案视图等。<br>通用类视图包括在django核心包中，可以从<code>django.views.generic</code>导入。它们能很好地加快开发过程。下面大体列一下可用的视图：</p>
+<h2 id="4-Generic-Class-Based-Views"><a href="#4-Generic-Class-Based-Views" class="headerlink" title="4. Generic Class-Based Views"></a>4. Generic Class-Based Views</h2><p>通用类视图在web应用中被用来解决一些常用操作，比如：创建一个新模型对象，表格处理，数据list，分页，档案视图等。<br>通用类视图包括在django核心包中，可以从<code>django.views.generic</code>导入。它们能很好地加快开发过程。下面大体列一下可用的视图：</p>
 <p><strong>Simple Generic Views</strong>  </p>
 <ul>
 <li>View</li>
@@ -271,7 +267,7 @@ class ContactView(View):
 <p>你可以从django官方手册上寻找更加详细的内容。</p>
 <p>看到那么多视图时可能有点头晕，因为通用类的实现用了大量混合类（minixs）。</p>
 <p>django文档上有个很好的资源，写着每个通用类视图的属性跟方法：<a href="https://docs.djangoproject.com/en/2.0/ref/class-based-views/flattened-index/" title=" Class-based generic views - flattened index." target="_blank" rel="noopener">Class-based generic views - flattened index</a>，我一直放在书签中。</p>
-<h3 id="关于django视图的见仁见智"><a href="#关于django视图的见仁见智" class="headerlink" title="关于django视图的见仁见智"></a>关于django视图的见仁见智</h3><p><strong>观点1： 使用所有的通用视图</strong>！ </p>
+<h2 id="5-关于django视图的见仁见智"><a href="#5-关于django视图的见仁见智" class="headerlink" title="5. 关于django视图的见仁见智"></a>5. 关于django视图的见仁见智</h2><p><strong>观点1： 使用所有的通用视图</strong>！ </p>
 <p>这个观点认为.django提供常用的基础的视图让你用来减少工作量，为什么不用呢？我们可以尝试以这种观点来实践，能更快更成功地构建大量项目。</p>
 <p><strong>观点2:仅使用<code>django.views.generic.View</code></strong></p>
 <p>这个观点认为,django的通用视图函数都继承与一个<code>Generic CBV</code>,通吃所有,想怎么自定义就怎么自定义.</p>
@@ -299,7 +295,7 @@ class ContactView(View):
 </tbody>
 </table>
 <p> 对于这两种视图的使用没有对与错,完全取决于开发状况与需求。就像文章一开始所说的，类视图不能代替函数视图。两者各有千秋。如果你想实现一个list view，那么你只需要继承<code>ListView</code>然覆盖它们的属性就行了。当然，如果你想进行一个更复杂的操作，比如同时处理多个表单，那么函数视图将会更适合你。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这里是我本人（并非原作者）的一些想法。一开始学django的时候，只知道基于函数的视图，这对于初学者来说是友好的。后来写的东西复杂的时候，特别是HTTP 请求不止是一开始单一的GET时，我更偏向于继承<code>django.views.generic.View</code>，简单覆盖方法就可以处理请求了。而对于内置的通用类视图，以及一些混合类啥的，我有些难以理解，再加上平时的开发都是前后端分离，利用django自带的模版系统的机会越来越少，所以我基本不用通用类视图。但是当你构建restful api的时候，运用到DRF框架时，里面也有类似的通用类，这个不依赖模版，真的很好用，我会在以后的章节里讲解。</p>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>这里是我本人（并非原作者）的一些想法。一开始学django的时候，只知道基于函数的视图，这对于初学者来说是友好的。后来写的东西复杂的时候，特别是HTTP 请求不止是一开始单一的GET时，我更偏向于继承<code>django.views.generic.View</code>，简单覆盖方法就可以处理请求了。而对于内置的通用类视图，以及一些混合类啥的，我有些难以理解，再加上平时的开发都是前后端分离，利用django自带的模版系统的机会越来越少，所以我基本不用通用类视图。但是当你构建restful api的时候，运用到DRF框架时，里面也有类似的通用类，这个不依赖模版，真的很好用，我会在以后的章节里讲解。</p>
 
             </div>
             <hr>
@@ -309,7 +305,7 @@ class ContactView(View):
                   <span>
                 <i class="iconfont icon-inbox"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Django/">Django</a>
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
                       &nbsp;
                     
                   </span>&nbsp;&nbsp;
@@ -354,6 +350,21 @@ class ContactView(View):
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -503,6 +514,51 @@ class ContactView(View):
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

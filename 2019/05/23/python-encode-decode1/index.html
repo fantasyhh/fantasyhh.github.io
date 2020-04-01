@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.2k 字
+                    1.1k 字
                   </span>
                 
 
@@ -142,7 +142,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      5 分钟
+                      4 分钟
                   </span>
                 
 
@@ -169,11 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
-            
             <div class="markdown-body">
-              <p>由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..<br><a id="more"></a></p>
-<p>由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..</p>
+              <p>由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..</p>
 <h2 id="1-按部就班"><a href="#1-按部就班" class="headerlink" title="1. 按部就班"></a>1. 按部就班</h2><p>设备手册里写的读距离命令是这样的： 68,04,01,01,06 ，发送后结果数据以数据输出格式输出。<br>数据一个十个字节，输出格式为=&gt;数据帧字头（1Byte）+数据长度（6Byte）+地址（1Byte）+数据（6Byte）+校验和（1Byte）。</p>
 <blockquote>
 <p> <strong>可先用python3 -m  serial.tools.list_ports 查看可用串口</strong></p>
@@ -313,6 +310,21 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -462,6 +474,51 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

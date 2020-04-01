@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.5k 字
+                    1.4k 字
                   </span>
                 
 
@@ -169,14 +169,11 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:51 下午</p>
-            
             <div class="markdown-body">
-              <p>前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！<br><a id="more"></a></p>
-<p>前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！</p>
+              <p>前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！</p>
 <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>Python有很长一段的异步编程历史,特别是<code>twisted</code>，<code>gevent</code>和一些无堆栈的Python项目。<br>异步编程因为一些好的原因在这些年来越来越受关注。尽管相对于传统的线性风格更难一点，但是却是值得的：因为异步编程有更高的效率。<br>举个例子：在Http请求方面，Python异步协程可以提交请求然后去做队列中其他等待的任务，让它慢慢请求，而不是传统的一直等它请求到完成为止，这样的话会浪费更多的时间与资源。总之异步编程能让你的代码在处于等待资源状态时处理其他任务。<br>在Python3.4中，<code>asyncio</code>产生了。而在Python3.5中，有加入了对<code>async def</code> 和<code>await</code>新的语法支持。</p>
-<h2 id="2-四个核心概念"><a href="#2-四个核心概念" class="headerlink" title="2. 四个核心概念"></a>2. 四个核心概念</h2><h4 id="Eventloop"><a href="#Eventloop" class="headerlink" title="Eventloop"></a>Eventloop</h4><p>Eventloop 可以说是 asyncio 应用的核心，是中央总控。Eventloop 实例提供了注册、取消和执行任务和回调的方法。<br>把一些异步函数 (就是任务，Task，一会就会说到) 注册到这个事件循环上，事件循环会循环执行这些函数 (但同时只能执行一个)，当执行到某个函数时，如果它正在等待 I/O 返回，事件循环会暂停它的执行去执行其他的函数；当某个函数完成 I/O 后会恢复，下次循环到它的时候继续执行。因此，这些异步函数可以协同 (Cooperative) 运行：这就是事件循环的目标。</p>
-<h4 id="Coroutine"><a href="#Coroutine" class="headerlink" title="Coroutine"></a>Coroutine</h4><p>协程 (Coroutine) 本质上是一个函数，特点是在代码块中可以将执行权交给其他协程：</p>
+<h2 id="2-四个核心概念"><a href="#2-四个核心概念" class="headerlink" title="2. 四个核心概念"></a>2. 四个核心概念</h2><h3 id="2-1-Eventloop"><a href="#2-1-Eventloop" class="headerlink" title="2.1 Eventloop"></a>2.1 Eventloop</h3><p>Eventloop 可以说是 asyncio 应用的核心，是中央总控。Eventloop 实例提供了注册、取消和执行任务和回调的方法。<br>把一些异步函数 (就是任务，Task，一会就会说到) 注册到这个事件循环上，事件循环会循环执行这些函数 (但同时只能执行一个)，当执行到某个函数时，如果它正在等待 I/O 返回，事件循环会暂停它的执行去执行其他的函数；当某个函数完成 I/O 后会恢复，下次循环到它的时候继续执行。因此，这些异步函数可以协同 (Cooperative) 运行：这就是事件循环的目标。</p>
+<h3 id="2-2-Coroutine"><a href="#2-2-Coroutine" class="headerlink" title="2.2 Coroutine"></a>2.2 Coroutine</h3><p>协程 (Coroutine) 本质上是一个函数，特点是在代码块中可以将执行权交给其他协程：</p>
 <pre><code class="python">import asyncio
 
 # 在Python 3.4中, 创建一个协程我们用asyncio.coroutine装饰器，但现在基本弃用
@@ -206,8 +203,8 @@ if __name__ == &#39;__main__&#39;:
 <blockquote>
 <p>asyncio.gather 用来并发运行任务，在这里表示协同的执行 a 和 b两个协程<br>在协程 a 中，有一句 await asyncio.sleep (0)，await 表示调用协程，sleep 0 并不会真的 sleep（因为时间为 0），但是却可以把控制权交出去了。</p>
 </blockquote>
-<h4 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h4><p>接着说 Future，它代表了一个「未来」对象，异步操作结束后会把最终结果设置到这个 Future 对象上。Future 是对协程的封装，不过日常开发基本是不需要直接用这个底层 Future 类的</p>
-<h4 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h4><p>Eventloop 除了支持协程，还支持注册 Future 和 Task2 种类型的对象，那为什么要存在 Future 和 Task 这 2 种类型呢？<br>Future 是协程的封装，Future 对象提供了很多任务方法 (如完成后的回调、取消、设置任务结果等等)，但是开发者并不需要直接操作 Future 这种底层对象，而是用 Future 的子类 Task 协同的调度协程以实现并发。</p>
+<h3 id="2-3-Future"><a href="#2-3-Future" class="headerlink" title="2.3 Future"></a>2.3 Future</h3><p>接着说 Future，它代表了一个「未来」对象，异步操作结束后会把最终结果设置到这个 Future 对象上。Future 是对协程的封装，不过日常开发基本是不需要直接用这个底层 Future 类的</p>
+<h3 id="2-4-Task"><a href="#2-4-Task" class="headerlink" title="2.4  Task"></a>2.4  Task</h3><p>Eventloop 除了支持协程，还支持注册 Future 和 Task2 种类型的对象，那为什么要存在 Future 和 Task 这 2 种类型呢？<br>Future 是协程的封装，Future 对象提供了很多任务方法 (如完成后的回调、取消、设置任务结果等等)，但是开发者并不需要直接操作 Future 这种底层对象，而是用 Future 的子类 Task 协同的调度协程以实现并发。</p>
 <p>Task 非常容易创建和使用:</p>
 <pre><code class="python"># 或者用task = loop.create_task(a())
 In : task = asyncio.ensure_future(a())
@@ -289,6 +286,21 @@ Out: True
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -438,6 +450,51 @@ Out: True
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

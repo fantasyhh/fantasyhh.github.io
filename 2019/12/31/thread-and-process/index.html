@@ -169,11 +169,10 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
-            
             <div class="markdown-body">
-              <p>这篇文章总结本来记录于两年前，是在写Python多线程时对一些概念的疑惑的解答，当初查阅了很多资料，对于操作系统层面的线程进程概念很模糊。而今，随着Python版本的更新，本身异步的新特性逐渐完善，在学习异步的时候难免与常用的多进程多线程进行比较来说明异步的优越性，把以前的文章拿出来，并且在现在自己的理解上查阅一些资料进行适当修改，达到温故而知新的效果。<br><a id="more"></a><br>看了一天的相关概念,很多涉及到操作系统与底层硬件层面,脑子有点晕,对自己所理解的东西清理一下并记录下来,有些不对的地方还请指出.</p>
-<h2 id="线程与进程"><a href="#线程与进程" class="headerlink" title="线程与进程"></a>线程与进程</h2><p><strong>进程</strong>： </p>
+              <p>这篇文章总结本来记录于两年前，是在写Python多线程时对一些概念的疑惑的解答，当初查阅了很多资料，对于操作系统层面的线程进程概念很模糊。而今，随着Python版本的更新，本身异步的新特性逐渐完善，在学习异步的时候难免与常用的多进程多线程进行比较来说明异步的优越性，把以前的文章拿出来，并且在现在自己的理解上查阅一些资料进行适当修改，达到温故而知新的效果。</p>
+<p>看了一天的相关概念,很多涉及到操作系统与底层硬件层面,脑子有点晕,对自己所理解的东西清理一下并记录下来,有些不对的地方还请指出.</p>
+<h2 id="1-线程与进程"><a href="#1-线程与进程" class="headerlink" title="1. 线程与进程"></a>1. 线程与进程</h2><p><strong>进程</strong>： </p>
 <blockquote>
 <p>我们都知道计算机的核心是CPU，它承担了所有的计算任务；而操作系统是计算机的管理者，它负责任务的调度、资源的分配和管理，统领整个计算机硬件；应用程序侧是具有某种功能的程序，程序是运行于操作系统之上的。 (为了缓解头脑胀痛, 斜体字大体过一遍即可)<br><em>进程是一个具有一定独立功能的程序在一个数据集上的一次动态执行的过程，是操作系统进行资源分配和调度的一个独立单位，是应用程序运行的载体。进程是一种抽象的概念，从来没有统一的标准定义。进程一般由程序、数据集合和进程控制块三部分组成。程序用于描述进程要完成的功能，是控制进程执行的指令集；数据集合是程序在执行时所需要的数据和工作区；程序控制块(Program Control Block，简称PCB)，包含进程的描述信息和控制信息，是进程存在的唯一标志。</em></p>
 </blockquote>
@@ -191,7 +190,7 @@
 <p><strong>线程与进程关系的示意图：</strong><br><img src="/images/thread_and_process/线程与进程关系.png" srcset="/img/loading.gif" alt="线程与进程关系"></p>
 <p><strong>某个进程中单线程与多线程的关系:</strong></p>
 <h2 id><a href="#" class="headerlink" title></a><img src="/images/thread_and_process/单线程与多线程.png" srcset="/img/loading.gif" alt="单线程与多线程"></h2><p>从别处看到线程是进程的一个实体,是程序执行的最小单位(线程也被称为<strong>轻量级进程</strong>).<br>按照我的理解：QQ音乐正在运行,QQ音乐就是个进程,而这个进程中有多个线程在跑着(各有各的任务);我们平常编写的所有的Python程序，都是执行单任务的进程，也就是只有一个线程。<br>如果我们要同时执行多个任务怎么办：一种是启动多个进程，每个进程虽然只有一个线程，但多个进程可以一块执行多个任务;还有一种方法是启动一个进程，在一个进程内启动多个线程，这样，多个线程也可以一块执行多个任务（之后详细讲）。  </p>
-<h2 id="线程与cpu核心数的关系"><a href="#线程与cpu核心数的关系" class="headerlink" title="线程与cpu核心数的关系"></a>线程与cpu核心数的关系</h2><p>现在都是多核的处理器,那么在多核处理器的情况下，线程是怎样执行呢？这就需要了解内核线程。  </p>
+<h2 id="2-线程与cpu核心数的关系"><a href="#2-线程与cpu核心数的关系" class="headerlink" title="2. 线程与cpu核心数的关系"></a>2. 线程与cpu核心数的关系</h2><p>现在都是多核的处理器,那么在多核处理器的情况下，线程是怎样执行呢？这就需要了解内核线程。  </p>
 <blockquote>
 <p>多核(心)处理器是指在一个处理器上集成多个运算核心从而提高计算能力，也就是有多个真正并行计算的处理核心，每一个处理核心对应一个内核线程。<strong>内核线程</strong>（Kernel Thread， KLT）就是直接由操作系统内核支持的线程，这种线程由内核来完成线程切换，内核通过操作调度器对线程进行调度，并负责将线程的任务映射到各个处理器上。一般一个处理核心对应一个内核线程，比如单核处理器对应一个内核线程，双核处理器对应两个内核线程，四核处理器对应四个内核线程。<br>现在的电脑一般是双核四线程、四核八线程，是采用超线程技术将一个物理处理核心模拟成两个逻辑处理核心，对应两个内核线程，所以在操作系统中看到的CPU数量是实际物理CPU数量的两倍，如你的电脑是双核四线程，打开“任务管理器\性能”可以看到4个CPU的监视器，四核八线程可以看到8个CPU的监视器。  </p>
 </blockquote>
@@ -210,7 +209,7 @@
 <blockquote>
 <p>（不是很确定），多核就是系统同时可以运行多个线程，比如双核可以<strong>同时</strong>执行两个线程。单核只能一次执行一个线程。<br>如果答案真如上面那样：那为什么能有百来个多线程同时存在？那么就可以引申到下面的话题了。</p>
 </blockquote>
-<h2 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h2><p><strong>并行（parallelism）</strong>：</p>
+<h2 id="3-并发和并行"><a href="#3-并发和并行" class="headerlink" title="3. 并发和并行"></a>3. 并发和并行</h2><p><strong>并行（parallelism）</strong>：</p>
 <blockquote>
 <p>这个概念很好理解。所谓并行，就是同时执行的意思，无需过度解读（在日本跟台湾，翻译成平行，这就更好理解了）。判断程序是否处于并行的状态，就看同一时刻是否有超过一个“工作单位”在运行就好了。所以，单线程永远无法达到并行状态。<br>要达到并行状态，最简单的就是利用多线程和多进程。但是 Python 的多线程由于存在著名的 GIL，无法让两个线程真正“同时运行”，所以实际上是无法到达并行状态的。  </p>
 </blockquote>
@@ -228,8 +227,8 @@
 <p><strong>task1, task2 是两段不同的代码，比如两个函数，其中黑色块代表某段代码正在执行。注意，这里从始至终，在任何一个时间点上都只有一段代码在执行，但是，由于 task1 和 task2 在重叠的时间段内执行，所以这是一个支持并发的设计。与并行不同，单核单线程能支持并发（特指协程）。</strong></p>
 <p>那么，如何实现支持并发的设计？两个字：拆分。<br>之所以并发设计往往需要把流程拆开，是因为如果不拆分也就不可能在同一时间段进行多个任务了。这种拆分可以是平行的拆分，比如抽象成同类的任务，也可以是不平行的，比如分为多个步骤。  </p>
 <p><strong>并发和并行的区别</strong>：<br>并行指物理上同时执行，并发指能够让多个任务在逻辑上交织执行的程序设计</p>
-<h2 id="同步和异步理解"><a href="#同步和异步理解" class="headerlink" title="同步和异步理解"></a>同步和异步理解</h2><p>这里我就简单举个例子就好了:web网页,点一下发送邮件按钮,然后发送（发送过程5秒）,发送成功之网页显示跳转成功。<br>同步：点了发送之后，慢慢等五秒，然后显示成功<br>异步：点了发送之后，直接显示成功，后台默默的还在发送，知道发送完毕。<br>关于阻塞啥的我这里就不提了，已经有些晕了。毕竟在python中有些集成的库已经将这些问题考虑进去了，不需要重复造轮子，具体可以看看<a href="https://cloud.tencent.com/developer/article/1187407" target="_blank" rel="noopener">这篇文章前半部分</a></p>
-<h2 id="python的相关模块"><a href="#python的相关模块" class="headerlink" title="python的相关模块"></a>python的相关模块</h2><ul>
+<h2 id="3-同步和异步理解"><a href="#3-同步和异步理解" class="headerlink" title="3. 同步和异步理解"></a>3. 同步和异步理解</h2><p>这里我就简单举个例子就好了:web网页,点一下发送邮件按钮,然后发送（发送过程5秒）,发送成功之网页显示跳转成功。<br>同步：点了发送之后，慢慢等五秒，然后显示成功<br>异步：点了发送之后，直接显示成功，后台默默的还在发送，知道发送完毕。<br>关于阻塞啥的我这里就不提了，已经有些晕了。毕竟在python中有些集成的库已经将这些问题考虑进去了，不需要重复造轮子，具体可以看看<a href="https://cloud.tencent.com/developer/article/1187407" target="_blank" rel="noopener">这篇文章前半部分</a></p>
+<h2 id="5-python的相关模块"><a href="#5-python的相关模块" class="headerlink" title="5. python的相关模块"></a>5. python的相关模块</h2><ul>
 <li><code>threading</code> 多线程库</li>
 <li><code>concurrent.futures</code>中的<code>ThreadpoolExecutor</code> 线程池</li>
 <li><code>concurrent.futures</code>中的<code>ProcesspoolExecutor</code> 进程池</li>
@@ -237,7 +236,7 @@
 <li><code>yield</code>关键字 协程</li>
 <li><code>async</code>和<code>await</code>(python3.5新加入)  协程库</li>
 </ul>
-<h2 id="其他我想要说的几个点"><a href="#其他我想要说的几个点" class="headerlink" title="其他我想要说的几个点"></a>其他我想要说的几个点</h2><ol>
+<h2 id="6-其他我想要说的几个点"><a href="#6-其他我想要说的几个点" class="headerlink" title="6. 其他我想要说的几个点"></a>6. 其他我想要说的几个点</h2><ol>
 <li>在多线程这方面我代码中用的比较少.有时偶尔用到,我会直接选用<code>ThreadpoolExecutor</code>类。这个接口抽象层级很高，多线程直接使用，无需关心任何实现细节，啥线程死锁等问题都不需要担心。  </li>
 <li>多线程在单cpu中其实也是顺序执行的，不过系统可以帮你切换那个执行而已，其实并没有快（反而慢）；多个cpu的话就可以在两个cpu中同时执行了。</li>
 <li>接上面那一条，虽然python有GIL锁，启用多线程的时候只能用一个cpu核心，但python线程仍然适合I/O密集型应用:标准库中每个使用 C 语言编写的 I/O 函数都会释放 GIL，因此，当某个线程在等待 I/O 时， Python 调度程序会切换到另一个线程。 （意思就是说I/O操作的延迟大于过程中程序运行时间,我完全可以在延迟的时候,切换到其他线程，做其他操作，如下图情况C）<br><img src="/images/thread_and_process/单线程多线程.jpg" srcset="/img/loading.gif" alt="单线程多线程"></li>
@@ -300,6 +299,21 @@
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -449,6 +463,51 @@
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

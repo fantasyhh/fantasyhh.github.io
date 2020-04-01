@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.6k 字
+                    1.5k 字
                   </span>
                 
 
@@ -142,7 +142,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      6 分钟
+                      5 分钟
                   </span>
                 
 
@@ -169,11 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
-            
             <div class="markdown-body">
-              <p>在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。<br><a id="more"></a></p>
-<p>在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。</p>
+              <p>在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。</p>
 <h2 id="1-熟悉而又陌生的HTTP"><a href="#1-熟悉而又陌生的HTTP" class="headerlink" title="1. 熟悉而又陌生的HTTP"></a>1. 熟悉而又陌生的HTTP</h2><blockquote>
 <p>某大佬云：学习Web开发不好好学习HTTP报文，将会“打拳不练功，到老一场空”，你花在犯迷糊上的时间比你沉下心来学习HTTP的时间肯定会多很多。</p>
 </blockquote>
@@ -183,7 +180,7 @@
 <ul>
 <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status" target="_blank" rel="noopener">HTTP状态码</a></li>
 <li><a href="https://blog.csdn.net/u010256388/article/details/68491509" target="_blank" rel="noopener">HTTP请求行、请求头、请求体详解</a></li>
-<li><a href="https://blog.csdn.net/hguisu/article/details/8680808" target="_blank" rel="noopener">HTTP详解(1)-工作原理</a>，当然还有2，这篇文章中有两张图要贴出来方便自己直接看。</li>
+<li><a href="https://blog.csdn.net/hguisu/article/details/8680808" target="_blank" rel="noopener">HTTP详解(1)-工作原理</a>，当然还有两张图要贴出来方便自己直接看。</li>
 </ul>
 <p>一张是TCP/IP模型</p>
 <p><img src="/images/TCP_IP.gif" srcset="/img/loading.gif" alt="TCP/IP"></p>
@@ -298,8 +295,6 @@ if settings.DEBUG:
                     
                       <a class="hover-with-bg" href="/tags/DRF/">DRF</a>
                     
-                      <a class="hover-with-bg" href="/tags/Http/">Http</a>
-                    
                   </span>
                 
               </p>
@@ -332,6 +327,21 @@ if settings.DEBUG:
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -481,6 +491,51 @@ if settings.DEBUG:
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

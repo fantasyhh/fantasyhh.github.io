@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.1k 字
+                    920 字
                   </span>
                 
 
@@ -169,23 +169,19 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 10:01 晚上</p>
-            
             <div class="markdown-body">
               <p>树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。</p>
-<a id="more"></a>
-<p>树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。</p>
-<h2 id="1-树莓派上PWM的分类"><a href="#1-树莓派上PWM的分类" class="headerlink" title="1. 树莓派上PWM的分类"></a>1. 树莓派上PWM的分类</h2><h4 id="Fully-hardware-PWM-全硬件PWM"><a href="#Fully-hardware-PWM-全硬件PWM" class="headerlink" title="Fully hardware PWM (全硬件PWM)"></a>Fully hardware PWM (全硬件PWM)</h4><blockquote>
+<h2 id="1-树莓派上PWM的分类"><a href="#1-树莓派上PWM的分类" class="headerlink" title="1. 树莓派上PWM的分类"></a>1. 树莓派上PWM的分类</h2><h3 id="1-1-Fully-hardware-PWM-全硬件PWM"><a href="#1-1-Fully-hardware-PWM-全硬件PWM" class="headerlink" title="1.1 Fully hardware PWM (全硬件PWM)"></a>1.1 Fully hardware PWM (全硬件PWM)</h3><blockquote>
 <p>这种类型的PWM由树莓派的PWM外设产生。脉冲的时序由PWM外设控制。它是最准确的，而且可以说是最灵活的。<br>它可以在GPIO 12/13/18/19上生成。但是，只有两个通道，因此一次只能生成两个不同的PWM流。GPIO 12/18在一个通道上，GPIO 13/19在另一个通道上。<br>适用于无抖动的伺服，无干扰的LED亮度控制，电机速度控制。</p>
 </blockquote>
-<h4 id="DMA-timed-PWM-（DMA定时PWM）"><a href="#DMA-timed-PWM-（DMA定时PWM）" class="headerlink" title="DMA timed PWM （DMA定时PWM）"></a>DMA timed PWM （DMA定时PWM）</h4><blockquote>
+<h3 id="1-2-DMA-timed-PWM-（DMA定时PWM）"><a href="#1-2-DMA-timed-PWM-（DMA定时PWM）" class="headerlink" title="1.2 DMA timed PWM （DMA定时PWM）"></a>1.2 DMA timed PWM （DMA定时PWM）</h3><blockquote>
 <p>这种类型的PWM由树莓派的DMA外设产生。<br>脉冲的时序由DMA控制。它的定时精度不如完全硬件的PWM精确，但比软件定时的PWM精确得多。取决于实现方式，它不如完全硬件的PWM灵活，例如，频率的数量要受限制得多，开和关之间的步数要受限制得多。<br>此类PWM可以在扩展头上的任何GPIO上生成。所有GPIO可能具有不同的设置。<br>适用于无抖动的伺服，无干扰的LED亮度控制，电机速度控制。</p>
 </blockquote>
-<h4 id="Software-Timed-PWM-（软件定时PWM）"><a href="#Software-Timed-PWM-（软件定时PWM）" class="headerlink" title="Software Timed PWM （软件定时PWM）"></a>Software Timed PWM （软件定时PWM）</h4><blockquote>
+<h3 id="1-3-Software-Timed-PWM-（软件定时PWM）"><a href="#1-3-Software-Timed-PWM-（软件定时PWM）" class="headerlink" title="1.3 Software Timed PWM （软件定时PWM）"></a>1.3 Software Timed PWM （软件定时PWM）</h3><blockquote>
 <p>这种类型的PWM由软件生成。<br>脉冲的时序由（Linux）调度程序控制。与完全硬件PWM或DMA定时PWM相比，它的定时精度明显降低。它比DMA定时PWM灵活得多，并且与完全硬件PWM一样灵活，例如，频率数量是无限的，开和关之间的步数是无限的。<br>此类PWM可以在扩展头上的任何GPIO上生成。所有GPIO可能具有不同的设置。时序精度将根据用于PWM的GPIO数量而变化。<br>不太适合伺服器，可以控制LED的亮度，但会出现毛刺，适合于电机速度控制。</p>
 </blockquote>
 <p>脉冲稳定性当然是：全硬件PWM &gt;&gt; DMA定时PWM &gt;&gt; 软件定时PWM</p>
-<h2 id="2-树莓派上PWM的实现方式"><a href="#2-树莓派上PWM的实现方式" class="headerlink" title="2. 树莓派上PWM的实现方式"></a>2. 树莓派上PWM的实现方式</h2><h4 id="传统的实现方式"><a href="#传统的实现方式" class="headerlink" title="传统的实现方式"></a>传统的实现方式</h4><p>手动sleep来实现pwm功能，步进马达连接与传统实现可以看<a href="https://www.raspberrypi.org/forums/viewtopic.php?t=186016" target="_blank" rel="noopener">这里</a></p>
+<h2 id="2-树莓派上PWM的实现方式"><a href="#2-树莓派上PWM的实现方式" class="headerlink" title="2. 树莓派上PWM的实现方式"></a>2. 树莓派上PWM的实现方式</h2><h3 id="2-1-传统的实现方式"><a href="#2-1-传统的实现方式" class="headerlink" title="2.1 传统的实现方式"></a>2.1 传统的实现方式</h3><p>手动sleep来实现pwm功能，步进马达连接与传统实现可以看<a href="https://www.raspberrypi.org/forums/viewtopic.php?t=186016" target="_blank" rel="noopener">这里</a></p>
 <pre><code class="python">while True:
     print (&quot;Move Backward&quot;)
     for i in range (5*200):
@@ -197,14 +193,14 @@
         print (&quot;Moving&quot;)
     ...
 </code></pre>
-<h4 id="神级武器gpiozero"><a href="#神级武器gpiozero" class="headerlink" title="神级武器gpiozero"></a>神级武器gpiozero</h4><p>这里我们可以用gpiozero中的<a href="https://gpiozero.readthedocs.io/en/stable/api_output.html#pwmoutputdevice" target="_blank" rel="noopener">PWMOutputDevice类</a></p>
+<h3 id="2-2-神级武器gpiozero"><a href="#2-2-神级武器gpiozero" class="headerlink" title="2.2 神级武器gpiozero"></a>2.2 神级武器gpiozero</h3><p>这里我们可以用gpiozero中的<a href="https://gpiozero.readthedocs.io/en/stable/api_output.html#pwmoutputdevice" target="_blank" rel="noopener">PWMOutputDevice类</a></p>
 <pre><code class="python"># 初始化完即运行，initial_value为占空比，frequency为频率
 p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pin_factory=None)
 </code></pre>
 <blockquote>
 <p>注意，这里有一个点，<code>pin_factory=None</code>一般情况下默认使用的是<code>RPi.GPIO</code>，而<code>RPi.GPIO</code>默认的PWM是Software Timed PWM，所以可能稳定性不太好，所以我们可以使用<code>factory = PiGPIOFactory(host=&#39;127.0.0.1&#39;)</code>， <code>PiGPIO</code>支持DMA timed PWM，这个比较好</p>
 </blockquote>
-<h4 id="庞大的pigpio-（不推荐新手）"><a href="#庞大的pigpio-（不推荐新手）" class="headerlink" title="庞大的pigpio （不推荐新手）"></a>庞大的pigpio （不推荐新手）</h4><p>piggio python库中的set_PWM_dutycycle函数和hardware_PWM函数分别对应DMA，以及Fully hardware，这里不做过多阐述，自己也不是很懂 =。= ，有点尴尬，感觉相对于gpiozero稍微有点麻烦，可以看<a href="https://raspberrypi.stackexchange.com/questions/40243/pigpio-set-pwm-dutycycle-vs-hardware-pwm" target="_blank" rel="noopener">两者区别</a>和<a href="http://abyz.me.uk/rpi/pigpio/python.html" target="_blank" rel="noopener">pigpio文档</a></p>
+<h3 id="2-3-庞大的pigpio-（不推荐新手）"><a href="#2-3-庞大的pigpio-（不推荐新手）" class="headerlink" title="2.3 庞大的pigpio （不推荐新手）"></a>2.3 庞大的pigpio （不推荐新手）</h3><p>piggio python库中的set_PWM_dutycycle函数和hardware_PWM函数分别对应DMA，以及Fully hardware，这里不做过多阐述，自己也不是很懂 =。= ，有点尴尬，感觉相对于gpiozero稍微有点麻烦，可以看<a href="https://raspberrypi.stackexchange.com/questions/40243/pigpio-set-pwm-dutycycle-vs-hardware-pwm" target="_blank" rel="noopener">两者区别</a>和<a href="http://abyz.me.uk/rpi/pigpio/python.html" target="_blank" rel="noopener">pigpio文档</a></p>
 
             </div>
             <hr>
@@ -261,6 +257,21 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -410,6 +421,51 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

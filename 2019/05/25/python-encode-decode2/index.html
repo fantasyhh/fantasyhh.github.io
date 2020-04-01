@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    3k 字
+                    2.9k 字
                   </span>
                 
 
@@ -169,12 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
-            
             <div class="markdown-body">
               <p>之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。</p>
-<a id="more"></a>
-<p>之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。</p>
 <h2 id="1-先从概念理解开始"><a href="#1-先从概念理解开始" class="headerlink" title="1. 先从概念理解开始"></a>1. 先从概念理解开始</h2><blockquote>
 <p>某大佬云：人类使用文本，计算机使用字节序列</p>
 </blockquote>
@@ -205,7 +201,7 @@ b&#39;caf\xc3\xa9&#39; # ➌
 <blockquote>
 <p>如果想帮助自己记住 .decode() 和 .encode() 的区别,可以把字节序列想成晦涩难懂的机器磁芯转储,把 Unicode 字符串想成“人类可读”的文本。那么,把字节序列变成人类可读的文本字符串就是解码,而把字符串变成用于存储或传输的字节序列就是编码。</p>
 </blockquote>
-<h2 id="2-几个常会看到的函数"><a href="#2-几个常会看到的函数" class="headerlink" title="2. 几个常会看到的函数"></a>2. 几个常会看到的函数</h2><h4 id="数字转换"><a href="#数字转换" class="headerlink" title="数字转换"></a>数字转换</h4><p> <code>bin()</code>,<code>oct()</code>,<code>int()</code>,<code>hex()</code>，这些函数就不说了，数字转换手算算也是非常简单的。但是我们要知道Python中各种进制数据的表示，以十进制的23为例，二进制前缀为0b，<code>0b10111</code>，八进制前缀为0o，<code>0o27</code>，十六进制前缀为0x，<code>0x17</code>.</p>
+<h2 id="2-几个常会看到的函数"><a href="#2-几个常会看到的函数" class="headerlink" title="2. 几个常会看到的函数"></a>2. 几个常会看到的函数</h2><h3 id="2-1-数字转换"><a href="#2-1-数字转换" class="headerlink" title="2.1 数字转换"></a>2.1 数字转换</h3><p> <code>bin()</code>,<code>oct()</code>,<code>int()</code>,<code>hex()</code>，这些函数就不说了，数字转换手算算也是非常简单的。但是我们要知道Python中各种进制数据的表示，以十进制的23为例，二进制前缀为0b，<code>0b10111</code>，八进制前缀为0o，<code>0o27</code>，十六进制前缀为0x，<code>0x17</code>.</p>
 <p>一个在转换进制的同时高位补零的小技巧：</p>
 <pre><code class="python">&gt;&gt;&gt; bin(2)
 0b10&#39;
@@ -217,10 +213,10 @@ b&#39;caf\xc3\xa9&#39; # ➌
 &gt;&gt;&gt; int(&#39;00000010&#39;,2)
 2
 </code></pre>
-<h4 id="不起眼的主角"><a href="#不起眼的主角" class="headerlink" title="不起眼的主角"></a>不起眼的主角</h4><p><code>chr(i)</code>：<strong>返回 Unicode 码位为整数 i （ 0 &lt;= i &lt;= 0x10ffff）的字符的字符串格式。例如，chr(97) 返回字符串 ‘a’，chr(8364) 返回字符串 ‘€’。这是 ord() 的逆函数</strong>。</p>
+<h3 id="2-2-不起眼的主角"><a href="#2-2-不起眼的主角" class="headerlink" title="2.2 不起眼的主角"></a>2.2 不起眼的主角</h3><p><code>chr(i)</code>：<strong>返回 Unicode 码位为整数 i （ 0 &lt;= i &lt;= 0x10ffff）的字符的字符串格式。例如，chr(97) 返回字符串 ‘a’，chr(8364) 返回字符串 ‘€’。这是 ord() 的逆函数</strong>。</p>
 <p><code>ord(c)</code>： <strong>对表示单个 Unicode 字符的字符串，返回代表它 Unicode 码点的整数。例如 ord(‘a’) 返回整数 97， ord(‘€’) （欧元符合）返回 8364 。这是 chr() 的逆函数。</strong></p>
 <p>所以上面chr函数里面i的范围最大为0x10ffff，转换成十进制就是码位概念里字符标识数字的1114111，欧元符号转换也是同理，0x20AC就是8364。</p>
-<h2 id="3-计算机所能理解的字节"><a href="#3-计算机所能理解的字节" class="headerlink" title="3. 计算机所能理解的字节"></a>3. 计算机所能理解的字节</h2><h4 id="Python中的字节对象"><a href="#Python中的字节对象" class="headerlink" title="Python中的字节对象"></a>Python中的字节对象</h4><p><strong>操作二进制数据的核心内置类型是 bytes 和 bytearray。 它们由 memoryview 提供支持，该对象使用 缓冲区协议 来访问其他二进制对象所在内存，不需要创建对象的副本。</strong>、<br><code>bytearray(）</code>:返回一个新的 bytes 数组。 bytearray 类是一个可变序列，包含范围为 0 &lt;= x &lt; 256 的整数。它有可变序列大部分常见的方法<br><code>bytes()</code>:返回一个新的“bytes”对象， 是一个不可变序列，包含范围为 0 &lt;= x &lt; 256 的整数,bytes 是 bytearray 的不可变版本 - 它有其中不改变序列的方法和相同的索引、切片操作。<br><strong>Python中bytes 字面值中只允许 ASCII 字符（无论源代码声明的编码为何）。 任何超出 127 的二进制值必须使用相应的转义序列形式加入 bytes 字面值。</strong></p>
+<h2 id="3-计算机所能理解的字节"><a href="#3-计算机所能理解的字节" class="headerlink" title="3. 计算机所能理解的字节"></a>3. 计算机所能理解的字节</h2><h3 id="3-1-Python中的字节对象"><a href="#3-1-Python中的字节对象" class="headerlink" title="3.1 Python中的字节对象"></a>3.1 Python中的字节对象</h3><p><strong>操作二进制数据的核心内置类型是 bytes 和 bytearray。 它们由 memoryview 提供支持，该对象使用 缓冲区协议 来访问其他二进制对象所在内存，不需要创建对象的副本。</strong>、<br><code>bytearray(）</code>:返回一个新的 bytes 数组。 bytearray 类是一个可变序列，包含范围为 0 &lt;= x &lt; 256 的整数。它有可变序列大部分常见的方法<br><code>bytes()</code>:返回一个新的“bytes”对象， 是一个不可变序列，包含范围为 0 &lt;= x &lt; 256 的整数,bytes 是 bytearray 的不可变版本 - 它有其中不改变序列的方法和相同的索引、切片操作。<br><strong>Python中bytes 字面值中只允许 ASCII 字符（无论源代码声明的编码为何）。 任何超出 127 的二进制值必须使用相应的转义序列形式加入 bytes 字面值。</strong></p>
 <blockquote>
 <p>bytearray和bytes不一样的地方在于，bytearray是可变的,它们的关系就相当于list与tuple</p>
 </blockquote>
@@ -242,12 +238,12 @@ bytearray(b&#39;\xa9&#39;)
 <blockquote>
 <p>my_bytes[0] 获取的是一个整数,而 my_bytes[:1] 返回的是一个长度为 1的 bytes 对象——这一点应该不会让人意外。s[0] == s[:1] 只对 str 这个序列类型成立。不过,str 类型的这个行为十分罕见。对其他各个序列类型来说,s[i] 返回一个元素,而 s[i:i+1] 返回一个相同类型的序列,里面是 s[i] 元素。</p>
 </blockquote>
-<h4 id="简单分析"><a href="#简单分析" class="headerlink" title="简单分析"></a>简单分析</h4><p>上面的例子中，我们看到Python中字节用的是<code>b&#39;caf\xc3\xa9&#39;</code>来表示，通过一个前缀b来表示字节，也是为了让人更明白，<code>cafe[0]</code>得到的是99，我们打开<a href="https://www.ascii-code.com/" target="_blank" rel="noopener">ascii码表</a>，或者用<code>ord(&#39;c&#39;)</code>知道了，99代表的就是’c’。从内部来看，这个字节在计算机中的真正存在方式是用<code>01100011</code>来表示，后面的af类似，而<code>é</code>在utf8编码中要用两个字节表示，而且这两个字节都大于127，所有只能使用十六进制转义。<br>那为什么要用十六进制呢，而不是二进制来表明字节？</p>
+<h3 id="3-2-简单分析"><a href="#3-2-简单分析" class="headerlink" title="3.2 简单分析"></a>3.2 简单分析</h3><p>上面的例子中，我们看到Python中字节用的是<code>b&#39;caf\xc3\xa9&#39;</code>来表示，通过一个前缀b来表示字节，也是为了让人更明白，<code>cafe[0]</code>得到的是99，我们打开<a href="https://www.ascii-code.com/" target="_blank" rel="noopener">ascii码表</a>，或者用<code>ord(&#39;c&#39;)</code>知道了，99代表的就是’c’。从内部来看，这个字节在计算机中的真正存在方式是用<code>01100011</code>来表示，后面的af类似，而<code>é</code>在utf8编码中要用两个字节表示，而且这两个字节都大于127，所有只能使用十六进制转义。<br>那为什么要用十六进制呢，而不是二进制来表明字节？</p>
 <blockquote>
 <p>由于字节(byte)在计算机内部出现的频率较高，如果可以使用一种简洁的方式将它的内在含义准确表达出来，将会给我们带来很多方便。选择十六进制，是因为8位二进制的数字可以方便的转换为2个十六进制的数字。一个字节能且只能由一对十六进制来表示，比如10110110可以表示为B6。如果使用4进制的话则需要使用4个数字来表示一个字节，不够简洁；使用8进制的话，最靠左的8进制数是由2位二进制数字来表示的，相比于使用16进制有些美中不足。</p>
 </blockquote>
 <p>说到底，Python给我们返回来的字节形式还是<strong>“给人看的”</strong>，让我们以一种看字符的方式来看字节。</p>
-<h4 id="字节的两个好用方法来应对十六进制"><a href="#字节的两个好用方法来应对十六进制" class="headerlink" title="字节的两个好用方法来应对十六进制"></a>字节的两个好用方法来应对十六进制</h4><p><code>fromhex(string) （与binascii.b2a_hex(string)类似）</code>:此 bytes 类方法返回一个解码给定字符串的 bytes 对象。 字符串必须由表示每个字节的两个十六进制数码构成，其中的 ASCII 空白符会被忽略<br><code>hex(h)（与binascii.a2b_hex(string)类似））</code>：返回一个字符串对象，该对象包含实例中每个字节的两个十六进制数字。</p>
+<h3 id="3-3-字节的两个好用方法来应对十六进制"><a href="#3-3-字节的两个好用方法来应对十六进制" class="headerlink" title="3.3 字节的两个好用方法来应对十六进制"></a>3.3 字节的两个好用方法来应对十六进制</h3><p><code>fromhex(string) （与binascii.b2a_hex(string)类似）</code>:此 bytes 类方法返回一个解码给定字符串的 bytes 对象。 字符串必须由表示每个字节的两个十六进制数码构成，其中的 ASCII 空白符会被忽略<br><code>hex(h)（与binascii.a2b_hex(string)类似））</code>：返回一个字符串对象，该对象包含实例中每个字节的两个十六进制数字。</p>
 <pre><code class="python">&gt;&gt;&gt; cafe = bytes(&#39;café&#39;, encoding=&#39;utf_8&#39;)
 &gt;&gt;&gt; cafe
 b&#39;caf\xc3\xa9&#39;
@@ -306,7 +302,7 @@ b&#39;\xe6\xac\xa2&#39; # ➊
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
-                      <a class="hover-with-bg" href="/tags/bytes/">bytes</a>
+                      <a class="hover-with-bg" href="/tags/Bytes/">Bytes</a>
                     
                   </span>
                 
@@ -340,6 +336,21 @@ b&#39;\xe6\xac\xa2&#39; # ➊
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -489,6 +500,51 @@ b&#39;\xe6\xac\xa2&#39; # ➊
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

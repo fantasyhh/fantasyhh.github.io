@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.6k 字
+                    1.4k 字
                   </span>
                 
 
@@ -142,7 +142,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      6 分钟
+                      5 分钟
                   </span>
                 
 
@@ -169,12 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
-            
             <div class="markdown-body">
               <p>刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就从篇文章往下看。</p>
-<a id="more"></a>
-<p>刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就从篇文章往下看。</p>
 <h2 id="1-生成器"><a href="#1-生成器" class="headerlink" title="1. 生成器"></a>1. 生成器</h2><p><strong>yield语句可以作为生成器</strong></p>
 <pre><code class="python">def countdown(n):
     while n &gt; 0:
@@ -204,7 +200,7 @@ StopIteration
 <p><strong>生成器类似于UNIX管道的作用</strong></p>
 <p><img src="/images/yield/yield1_1.png" srcset="/img/loading.gif" alt></p>
 <p>这个process会有难以置信的作用，比如实现UNIX中grep的作用。不展开，以后肯定会用到它。</p>
-<h2 id="2-生成器进化为协程"><a href="#2-生成器进化为协程" class="headerlink" title="2. 生成器进化为协程"></a>2. 生成器进化为协程</h2><h4 id="一个协程例子"><a href="#一个协程例子" class="headerlink" title="一个协程例子"></a>一个协程例子</h4><p>重头戏来了。<br>如果你想更多的使用yield，那么就是协程了。<strong>协程就不仅仅是产出值了，而是能消费发送给它的值。</strong><br>那么这里的例子就用协程实现上面的UNIX的grep作用</p>
+<h2 id="2-生成器进化为协程"><a href="#2-生成器进化为协程" class="headerlink" title="2. 生成器进化为协程"></a>2. 生成器进化为协程</h2><h3 id="2-1-一个协程例子"><a href="#2-1-一个协程例子" class="headerlink" title="2.1 一个协程例子"></a>2.1 一个协程例子</h3><p>重头戏来了。<br>如果你想更多的使用yield，那么就是协程了。<strong>协程就不仅仅是产出值了，而是能消费发送给它的值。</strong><br>那么这里的例子就用协程实现上面的UNIX的grep作用</p>
 <pre><code class="python">def grep(pattern):
     print(&quot;Looking for {}&quot;.format(pattern))
     while True:
@@ -237,9 +233,9 @@ python generators rock! : grep success
 <li>协程与迭代无关</li>
 <li>注意，虽然在协程值会使用yield产出值，但这与迭代无关</li>
 </ul>
-<h4 id="发送数据给协程"><a href="#发送数据给协程" class="headerlink" title="发送数据给协程"></a>发送数据给协程</h4><p><img src="/images/yield/yield1_2.png" srcset="/img/loading.gif" alt></p>
+<h3 id="2-2-发送数据给协程"><a href="#2-2-发送数据给协程" class="headerlink" title="2.2 发送数据给协程"></a>2.2 发送数据给协程</h3><p><img src="/images/yield/yield1_2.png" srcset="/img/loading.gif" alt></p>
 <p>预激活，到yield处暂停。然后发送item值，协程继续了，协程中item接收到发送的那个值，然后到下一个yield再暂停。</p>
-<h4 id="使用一个装饰器"><a href="#使用一个装饰器" class="headerlink" title="使用一个装饰器"></a>使用一个装饰器</h4><p>如果不预激(<code>primer</code>),那么协程没什么用，调用g.send(x)之前。记住一定要调用next(g)。为了简化协程用法，有时会使用一个预激装饰器，如下。</p>
+<h3 id="2-3-使用一个装饰器"><a href="#2-3-使用一个装饰器" class="headerlink" title="2.3 使用一个装饰器"></a>2.3 使用一个装饰器</h3><p>如果不预激(<code>primer</code>),那么协程没什么用，调用g.send(x)之前。记住一定要调用next(g)。为了简化协程用法，有时会使用一个预激装饰器，如下。</p>
 <pre><code class="python">def coroutine(func):
     def primer(*args,**kwargs):
         cr = func(*args,**kwargs)
@@ -251,11 +247,11 @@ python generators rock! : grep success
 def grep(pattern):
  ...  
 </code></pre>
-<h4 id="关闭一个协程"><a href="#关闭一个协程" class="headerlink" title="关闭一个协程"></a>关闭一个协程</h4><ul>
+<h3 id="2-4-关闭一个协程"><a href="#2-4-关闭一个协程" class="headerlink" title="2.4 关闭一个协程"></a>2.4 关闭一个协程</h3><ul>
 <li>一个协程有可能永远运行下去</li>
 <li>可以 .close()让它停下来<br>例子中已经体现，不展开。</li>
 </ul>
-<h4 id="捕捉close"><a href="#捕捉close" class="headerlink" title="捕捉close()"></a>捕捉close()</h4><pre><code class="python">def grep(pattern):
+<h3 id="2-5-捕捉close"><a href="#2-5-捕捉close" class="headerlink" title="2.5 捕捉close()"></a>2.5 捕捉close()</h3><pre><code class="python">def grep(pattern):
     print(&quot;Looking for {}&quot;.format(pattern))
     try:
         while True:
@@ -266,7 +262,7 @@ def grep(pattern):
         print(&quot;Going away. Goodbye&quot;)
 </code></pre>
 <p>捕捉到.close()方法，然后会打印<code>&quot;Going away. Goodbye&quot;</code>。</p>
-<h4 id="抛出异常"><a href="#抛出异常" class="headerlink" title="抛出异常"></a>抛出异常</h4><pre><code class="python">&gt;&gt;&gt; g = grep(&quot;python&quot;)
+<h3 id="2-6-抛出异常"><a href="#2-6-抛出异常" class="headerlink" title="2.6 抛出异常"></a>2.6 抛出异常</h3><pre><code class="python">&gt;&gt;&gt; g = grep(&quot;python&quot;)
 &gt;&gt;&gt; next(g) # Prime it
 Looking for python
 &gt;&gt;&gt; g.send(&quot;python generators rock!&quot;)
@@ -284,7 +280,7 @@ RuntimeError: You&#39;re hosed
 <li>异常发生于yield表达式</li>
 <li>不慌，我们可以平常的方法处理它</li>
 </ul>
-<h4 id="生成器返回数值"><a href="#生成器返回数值" class="headerlink" title="生成器返回数值"></a>生成器返回数值</h4><p>鉴于上面的例子是一直run下去的，所以稍加修改：</p>
+<h3 id="2-7-生成器返回数值"><a href="#2-7-生成器返回数值" class="headerlink" title="2.7 生成器返回数值"></a>2.7 生成器返回数值</h3><p>鉴于上面的例子是一直run下去的，所以稍加修改：</p>
 <pre><code class="python">def grep(pattern):
     print(&quot;Looking for {}&quot;.format(pattern))
     while True:
@@ -378,6 +374,21 @@ StopIteration: End
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -527,6 +538,51 @@ StopIteration: End
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

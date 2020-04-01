@@ -169,34 +169,32 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:48 下午</p>
-            
             <div class="markdown-body">
-              <p>shell、grep、sed 和 awk 是 Unix 的基础。如果你不能非常轻松的使用它们，你将会被自己束缚住，因为它们构成了通过命令行和脚本与 Unix 系统交互的基础。<br>自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。<br><a id="more"></a></p>
+              <p>shell、grep、sed 和 awk 是 Unix 的基础。如果你不能非常轻松的使用它们，你将会被自己束缚住，因为它们构成了通过命令行和脚本与 Unix 系统交互的基础。<br>自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。</p>
 <p><strong>注：以下用法如果用到 </strong>-i<strong> 参数 ，直接修改读取的文件内容，而不是输出到终端（危险动作）</strong></p>
-<h2 id="显示"><a href="#显示" class="headerlink" title="显示"></a>显示</h2><h4 id="1-以行为单位的显示"><a href="#1-以行为单位的显示" class="headerlink" title="1. 以行为单位的显示"></a>1. 以行为单位的显示</h4><pre><code class="bash">sed -n &#39;5,7p&#39; demo.txt
+<h2 id="1-显示"><a href="#1-显示" class="headerlink" title="1. 显示"></a>1. 显示</h2><h3 id="1-1-以行为单位的显示"><a href="#1-1-以行为单位的显示" class="headerlink" title="1.1 以行为单位的显示"></a>1.1 以行为单位的显示</h3><pre><code class="bash">sed -n &#39;5,7p&#39; demo.txt
 </code></pre>
-<h4 id="2-搜寻关键词显示"><a href="#2-搜寻关键词显示" class="headerlink" title="2. 搜寻关键词显示"></a>2. 搜寻关键词显示</h4><pre><code class="bash">sed -n &#39;/baird/p&#39; demo.txt
+<h3 id="1-2-搜寻关键词显示"><a href="#1-2-搜寻关键词显示" class="headerlink" title="1.2 搜寻关键词显示"></a>1.2 搜寻关键词显示</h3><pre><code class="bash">sed -n &#39;/baird/p&#39; demo.txt
 </code></pre>
 <p><strong>-n ：使用安静(silent)模式</strong><br><strong>p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行</strong><br>关于指定内容搜寻并显示也可尝试选择<strong>grep</strong>命令，更好明白一点，<a href="https://linux.cn/article-5453-1.html" target="_blank" rel="noopener">例子在这。</a></p>
-<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>两种方式与上面显示同理，只需将<strong> p </strong>改成<strong> d </strong></p>
-<h2 id="新增"><a href="#新增" class="headerlink" title="新增"></a>新增</h2><p>增加有两种方式：<br><strong>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)<br>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)</strong></p>
-<h4 id="1-以行为单位的新增"><a href="#1-以行为单位的新增" class="headerlink" title="1. 以行为单位的新增"></a>1. 以行为单位的新增</h4><pre><code class="bash">sed &#39;2a  new_line&#39; demo.txt
+<h2 id="2-删除"><a href="#2-删除" class="headerlink" title="2. 删除"></a>2. 删除</h2><p>两种方式与上面显示同理，只需将<strong> p </strong>改成<strong> d </strong></p>
+<h2 id="3-新增"><a href="#3-新增" class="headerlink" title="3. 新增"></a>3. 新增</h2><p>增加有两种方式：<br><strong>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)<br>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)</strong></p>
+<h3 id="3-1-以行为单位的新增"><a href="#3-1-以行为单位的新增" class="headerlink" title="3.1 以行为单位的新增"></a>3.1 以行为单位的新增</h3><pre><code class="bash">sed &#39;2a  new_line&#39; demo.txt
 </code></pre>
 <p>2表示第二行，也可用2,5a表示二到五行</p>
-<h4 id="2-搜寻关键词新增"><a href="#2-搜寻关键词新增" class="headerlink" title="2. 搜寻关键词新增"></a>2. 搜寻关键词新增</h4><pre><code class="bash">sed &#39;/baird/i  new_line&#39; demo.txt 
+<h3 id="3-2-搜寻关键词新增"><a href="#3-2-搜寻关键词新增" class="headerlink" title="3.2 搜寻关键词新增"></a>3.2 搜寻关键词新增</h3><pre><code class="bash">sed &#39;/baird/i  new_line&#39; demo.txt 
 </code></pre>
-<h2 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h2><h4 id="1-以行为单位的替换"><a href="#1-以行为单位的替换" class="headerlink" title="1. 以行为单位的替换"></a>1. 以行为单位的替换</h4><p><strong>c ： 取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！倒是跟上面的新增差不多</strong></p>
+<h2 id="4-替换"><a href="#4-替换" class="headerlink" title="4. 替换"></a>4. 替换</h2><h4 id="4-1-以行为单位的替换"><a href="#4-1-以行为单位的替换" class="headerlink" title="4.1 以行为单位的替换"></a>4.1 以行为单位的替换</h4><p><strong>c ： 取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！倒是跟上面的新增差不多</strong></p>
 <pre><code class="bash">sed &#39;2,5c No 2-5 number&#39; demo.txt
 </code></pre>
-<h4 id="2-搜寻关键词替换"><a href="#2-搜寻关键词替换" class="headerlink" title="2. 搜寻关键词替换"></a>2. 搜寻关键词替换</h4><pre><code class="bash">sed &#39;s/要被取代的字串/新的字串/g
+<h4 id="4-2-搜寻关键词替换"><a href="#4-2-搜寻关键词替换" class="headerlink" title="4.2 搜寻关键词替换"></a>4.2 搜寻关键词替换</h4><pre><code class="bash">sed &#39;s/要被取代的字串/新的字串/g
 </code></pre>
 <p><strong>s: 每行，也可以选择固定在哪几行 <code>1,20s/old/new/g</code><br>g: 一行上替换所有的匹配，不加表示只替换第一个，2表示替换第二个（场景很少）</strong></p>
-<h2 id="多点编辑"><a href="#多点编辑" class="headerlink" title="多点编辑"></a>多点编辑</h2><p>用的场景不多，sed写于shell脚本中，多写几行就是了</p>
+<h2 id="5-多点编辑"><a href="#5-多点编辑" class="headerlink" title="5. 多点编辑"></a>5. 多点编辑</h2><p>用的场景不多，sed写于shell脚本中，多写几行就是了</p>
 <p><code>-e是编辑命令，用于sed执行多个编辑任务的情况下。在下一行开始编辑前，所有的编辑动作都将应用到模式缓冲区中的行上。因为是逐行进行多重编辑（即每个命令都在模式空间的当前行上执行），所以编辑命令的顺序会影响结果</code></p>
 <pre><code class="bash">sed -e action1 -e action2 
 </code></pre>
-<h2 id="记录自己遇到的几个坑问题"><a href="#记录自己遇到的几个坑问题" class="headerlink" title="记录自己遇到的几个坑问题"></a>记录自己遇到的几个坑问题</h2><h4 id="1-单双引号"><a href="#1-单双引号" class="headerlink" title="1. 单双引号"></a>1. 单双引号</h4><p>自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。</p>
+<h2 id="6-记录自己遇到的几个坑问题"><a href="#6-记录自己遇到的几个坑问题" class="headerlink" title="6. 记录自己遇到的几个坑问题"></a>6. 记录自己遇到的几个坑问题</h2><h3 id="6-1-单双引号"><a href="#6-1-单双引号" class="headerlink" title="6.1 单双引号"></a>6.1 单双引号</h3><p>自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。</p>
 <pre><code class="bash">sed -i &#39;/ALLOWED_HOSTS/c ALLOWED_HOSTS = \[&#39;\&#39;&#39;*&#39;\&#39;&#39;\]&#39; setting.py
 </code></pre>
 <p>注意到跟在sed后面的命令是用单引号的，如果我增加的文本中有本身有单引号，比如<code>ALLOWED_HOSTS = [&#39;*&#39;]</code>，那么我们需要用<code>&#39;\&#39;&#39;</code>来表示单引号，当然还有一些其他方法比如啥十六进制<code>\x27</code>，记不太清了，但是这个一些太乱了。后来发现个更好的方法：<br><code>sed -i &quot;/ALLOWED_HOSTS/c ALLOWED_HOSTS = \[\&#39;*\&#39;\]&quot; settings.py</code><br>用双引号括起来，这样里面的单引号用转义符号表示<code>\&#39;</code>,简洁多了。</p>
@@ -211,10 +209,10 @@
 </code></pre>
 <p><strong>所以遇到修改单引号或者了要用变量时，尽量用双引号来操作<code>sed</code>
 </strong></p>
-<h4 id="2-新增一行时增加空格或者Tab"><a href="#2-新增一行时增加空格或者Tab" class="headerlink" title="2. 新增一行时增加空格或者Tab"></a>2. 新增一行时增加空格或者Tab</h4><pre><code class="bash">sed -i &quot;/common/i \    \&#39;corsheaders.middleware.CorsMiddleware\&#39;,&quot; $Filename
+<h3 id="6-2-新增一行时增加空格或者Tab"><a href="#6-2-新增一行时增加空格或者Tab" class="headerlink" title="6.2 新增一行时增加空格或者Tab"></a>6.2 新增一行时增加空格或者Tab</h3><pre><code class="bash">sed -i &quot;/common/i \    \&#39;corsheaders.middleware.CorsMiddleware\&#39;,&quot; $Filename
 </code></pre>
 <p>需要在i后面加一个<code>\</code>然后在加<code>\t</code>或者按几个空格</p>
-<h4 id="3-替换时如果变量里有"><a href="#3-替换时如果变量里有" class="headerlink" title="3.替换时如果变量里有/"></a>3.替换时如果变量里有/</h4><pre><code class="bash">sed -i &quot;s/youdir/$Shell_folder/g&quot;
+<h3 id="6-3-替换时如果变量里有"><a href="#6-3-替换时如果变量里有" class="headerlink" title="6.3 替换时如果变量里有/"></a>6.3 替换时如果变量里有/</h3><pre><code class="bash">sed -i &quot;s/youdir/$Shell_folder/g&quot;
 </code></pre>
 <p>达不到自己想要的状态，当遇到情况时可以选择整行替代!</p>
 
@@ -269,6 +267,21 @@
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -418,6 +431,51 @@
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

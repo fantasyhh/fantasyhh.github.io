@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    2.3k 字
+                    2k 字
                   </span>
                 
 
@@ -142,7 +142,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      8 分钟
+                      7 分钟
                   </span>
                 
 
@@ -169,14 +169,11 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:48 下午</p>
-            
             <div class="markdown-body">
-              <p>说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生常谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能更容易接受，达到慢慢积累的效果。这对于自己写代码也有一定帮助，看的语法少，那就稳稳当当码代码，不搞花里胡哨的写法。<br><a id="more"></a></p>
-<p>说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能更容易接受，达到慢慢积累的效果。这对于自己写代码也有一定帮助，看的语法少，那就稳稳当当码代码，不搞花里胡哨的写法。</p>
+              <p>说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能更容易接受，达到慢慢积累的效果。这对于自己写代码也有一定帮助，看的语法少，那就稳稳当当码代码，不搞花里胡哨的写法。</p>
 <p><a href="https://juejin.im/post/5b9cb3336fb9a05d290ee47e" target="_blank" rel="noopener">ES6、ES7、ES8特性一锅炖</a>，这里是Js近几年来的新特性，其实新特性对于初学者还是很有好的，相关用法只用看新的就行，老的完全摒弃不闻不问，多清净。</p>
 <h2 id="1-箭头函数"><a href="#1-箭头函数" class="headerlink" title="1. 箭头函数"></a>1. 箭头函数</h2><p>类似于Python的匿名函数，lambda表达式，但又有一些不一样。lambda只能是一条单独的表达式，而箭头函数却可以有多个表达式，中间用分好隔开，我认为两者差异的原因很大程度上在于，<strong>匿名函数本身就是为回调函数量身定做的，而Js中回调用法真的是家常便饭，要是像Python那样仅仅是单行表达式，那真的是太不方便了。</strong></p>
-<h4 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h4><pre><code class="js">(参数1, 参数2, …, 参数N) =&gt; { 函数声明 }
+<h3 id="1-1-基础用法"><a href="#1-1-基础用法" class="headerlink" title="1.1 基础用法"></a>1.1 基础用法</h3><pre><code class="js">(参数1, 参数2, …, 参数N) =&gt; { 函数声明 }
 
 //相当于：(参数1, 参数2, …, 参数N) =&gt;{ return 表达式; }
 (参数1, 参数2, …, 参数N) =&gt; 表达式（单一）
@@ -188,7 +185,7 @@
 // 没有参数的函数应该写成一对圆括号。
 () =&gt; {函数声明}
 </code></pre>
-<h4 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h4><pre><code class="js">//加括号的函数体返回对象字面表达式：
+<h3 id="1-2-高级用法"><a href="#1-2-高级用法" class="headerlink" title="1.2 高级用法"></a>1.2 高级用法</h3><pre><code class="js">//加括号的函数体返回对象字面表达式：
 参数=&gt; ({foo: bar})
 
 //支持剩余参数和默认参数
@@ -242,7 +239,7 @@ console.log(bb); // 5
 const b = `foo${a}bar`;</code></p>
 </blockquote>
 <p>打印字符串这种常用到语法,一定需要个优雅的写法,才有动力让程序员代码继续搞下去。跟<a href="http://ju.outofmemory.cn/entry/198922" target="_blank" rel="noopener">神一样的python的<code>format</code>语法</a>差不多，不过好像不能在格式化字符串的同时对传入变量进行一些转换操作，比如进制，小数点转换等。<br>还有种更高级的用法：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/template_strings#%E5%B8%A6%E6%A0%87%E7%AD%BE%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2" target="_blank" rel="noopener">带标签的模板字符串</a>，不展开。</p>
-<h4 id="拓展：条件运算符"><a href="#拓展：条件运算符" class="headerlink" title="拓展：条件运算符"></a>拓展：条件运算符</h4><blockquote>
+<h3 id="4-1-拓展：条件运算符"><a href="#4-1-拓展：条件运算符" class="headerlink" title="4.1 拓展：条件运算符"></a>4.1 拓展：条件运算符</h3><blockquote>
 <p>条件（三元）运算符是 JavaScript 仅有的使用三个操作数的运算符。本运算符经常作为if语句的简短形式来使用。<br>condition ? expr1 : expr2</p>
 </blockquote>
 <pre><code class="js">var age = 26;
@@ -285,7 +282,7 @@ console.log(output); // &quot;True, over 21&quot;
 <blockquote>
 <p>在Python中异步编程更多的体验是在高效率，替换多线程的作用，而在nodejs中，本身函数的异步性，我感觉这个语法的核心在于取代回调函数的地狱，重在更好代码书写方式，即用同步方式写异步编程 ; promise与future含义接近，都代表未来会完成的事物，尽量不要对它们进行手动实例化，很多都是内部实现的，我们做的只是理解异步，然后用专家们定义的“async”与“await”就好</p>
 </blockquote>
-<h2 id="杂谈"><a href="#杂谈" class="headerlink" title="杂谈"></a>杂谈</h2><p><strong>作为一门语言，繁多的语法是免不了的，真的很多，js中还看到了Python中见过的但是不怎么熟悉用不到的语法的影子，都是一一对应。对于这些，不可能一口吃成胖子,任重而道远。碰到新语法就先去揣测它的意思然后去翻阅官方手册更容易去记住它～</strong></p>
+<h2 id="8-杂谈"><a href="#8-杂谈" class="headerlink" title="8. 杂谈"></a>8. 杂谈</h2><p><strong>作为一门语言，繁多的语法是免不了的，真的很多，js中还看到了Python中见过的但是不怎么熟悉用不到的语法的影子，都是一一对应。对于这些，不可能一口吃成胖子,任重而道远。碰到新语法就先去揣测它的意思然后去翻阅官方手册更容易去记住它～</strong></p>
 
             </div>
             <hr>
@@ -305,8 +302,6 @@ console.log(output); // &quot;True, over 21&quot;
                 <i class="iconfont icon-tag"></i>
                     
                       <a class="hover-with-bg" href="/tags/Nodejs/">Nodejs</a>
-                    
-                      <a class="hover-with-bg" href="/tags/js/">js</a>
                     
                   </span>
                 
@@ -340,6 +335,21 @@ console.log(output); // &quot;True, over 21&quot;
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -489,6 +499,51 @@ console.log(output); // &quot;True, over 21&quot;
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

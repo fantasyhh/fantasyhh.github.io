@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.2k 字
+                    1k 字
                   </span>
                 
 
@@ -142,7 +142,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      4 分钟
+                      3 分钟
                   </span>
                 
 
@@ -169,13 +169,9 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:48 下午</p>
-            
             <div class="markdown-body">
               <p>最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的<code>source url</code>换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用<code>pip freeze</code> 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是<a href="https://zhuanlan.zhihu.com/p/22332669" target="_blank" rel="noopener">Kenneth Reitz</a>（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。</p>
-<a id="more"></a>
-<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的<code>source url</code>换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用<code>pip freeze</code> 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是<a href="https://zhuanlan.zhihu.com/p/22332669" target="_blank" rel="noopener">Kenneth Reitz</a>（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。</p>
-<h3 id="Pipenv燥起来"><a href="#Pipenv燥起来" class="headerlink" title="Pipenv燥起来"></a>Pipenv燥起来</h3><p>pipenv 参考了其他语言的包管理工具（bundler, composer, npm, cargo, yarn, etc.），旨在将最好的包管理工具带入 python 世界。pipevn 可以解决哪些问题：</p>
+<h2 id="1-Pipenv燥起来"><a href="#1-Pipenv燥起来" class="headerlink" title="1. Pipenv燥起来"></a>1. Pipenv燥起来</h2><p>pipenv 参考了其他语言的包管理工具（bundler, composer, npm, cargo, yarn, etc.），旨在将最好的包管理工具带入 python 世界。pipevn 可以解决哪些问题：</p>
 <ul>
 <li><p>使用 pipenv 就相当于同时使用了 pip 和 virtualenv ，即做到包管理又可以管理虚拟环境。</p>
 </li>
@@ -186,12 +182,12 @@
 <li>让你深入了解库的依赖图（例如<code>$ pipenv graph</code>）</li>
 <li>通过加载.env文件简化开发工作流程</li>
 </ul>
-<h4 id="1-基础用法"><a href="#1-基础用法" class="headerlink" title="1. 基础用法"></a>1. 基础用法</h4><p>这里不过多介绍用法，<code>pipenv --help</code>或者官网即可查询。只推荐两篇文章当做小手册快速查看<br><a href="https://www.jianshu.com/p/00af447f0005" target="_blank" rel="noopener">pipenv利器</a> ， 以及 <a href="https://crazygit.wiseturtles.com/2018/01/08/pipenv-tour/" target="_blank" rel="noopener">pipenv使用指南</a></p>
-<h4 id="2-项目中如何使用"><a href="#2-项目中如何使用" class="headerlink" title="2. 项目中如何使用"></a>2. 项目中如何使用</h4><p>在pipenv的目录中，我我以前总是放弃用<code>pipenv install</code>而是<code>pipenv shell</code>进入虚拟环境然后<code>pip</code>，因为<code>pienv install</code>的时候会有lock这一个步骤导致很慢（<a href="https://github.com/pypa/pipenv/issues/1914" target="_blank" rel="noopener">因为lock文件中要记录哈希值等</a>），lock文件的作用上面说过就不说了。但是用pip后库的名称版本不会记录到Pipfile，所以如果想完全摒弃requirement就应该用<code>pipenv install</code>。（其实可以完全不用到pipenv 进入虚拟环境,用<strong><code>pipenv run python|pip</code> </strong>即可）</p>
+<h3 id="1-1-基础用法"><a href="#1-1-基础用法" class="headerlink" title="1.1 基础用法"></a>1.1 基础用法</h3><p>这里不过多介绍用法，<code>pipenv --help</code>或者官网即可查询。只推荐两篇文章当做小手册快速查看<br><a href="https://www.jianshu.com/p/00af447f0005" target="_blank" rel="noopener">pipenv利器</a> ， 以及 <a href="https://crazygit.wiseturtles.com/2018/01/08/pipenv-tour/" target="_blank" rel="noopener">pipenv使用指南</a></p>
+<h3 id="1-2-项目中如何使用"><a href="#1-2-项目中如何使用" class="headerlink" title="1.2 项目中如何使用"></a>1.2 项目中如何使用</h3><p>在pipenv的目录中，我我以前总是放弃用<code>pipenv install</code>而是<code>pipenv shell</code>进入虚拟环境然后<code>pip</code>，因为<code>pienv install</code>的时候会有lock这一个步骤导致很慢（<a href="https://github.com/pypa/pipenv/issues/1914" target="_blank" rel="noopener">因为lock文件中要记录哈希值等</a>），lock文件的作用上面说过就不说了。但是用pip后库的名称版本不会记录到Pipfile，所以如果想完全摒弃requirement就应该用<code>pipenv install</code>。（其实可以完全不用到pipenv 进入虚拟环境,用<strong><code>pipenv run python|pip</code> </strong>即可）</p>
 <blockquote>
 <p>以Django项目为例。生成虚拟环境之前设置PIPENV_PYPI_MIRROR环境变量为<code>https://pypi.tuna.tsinghua.edu.cn/simple</code>，<a href="https://pipenv.readthedocs.io/en/latest/advanced/#pipenv.environments.PIPENV_PYPI_MIRROR" target="_blank" rel="noopener">详情见这里</a>，目的是pipenv安装库的时候都会使用清华源，免得每次都要改。然后生成一个envdir，进入该目录，安装django，新建django。app等。项目完成之后，将与djang项目平级的Pipfile以及lock文件放入项目，然后版本控制，上传git。之后就是别人clone下来，进入django项目，pipenv install就能将python环境与Pipfile中的文件生成，方便省事。这是我暂时的想法，以后有更好的方案会换</p>
 </blockquote>
-<h4 id="3-Pipfile与Pipfile-lock"><a href="#3-Pipfile与Pipfile-lock" class="headerlink" title="3. Pipfile与Pipfile.lock"></a>3. Pipfile与Pipfile.lock</h4><p>那为什么有了Pipfile还有Pipfile.lock</p>
+<h3 id="1-3-Pipfile与Pipfile-lock"><a href="#1-3-Pipfile与Pipfile-lock" class="headerlink" title="1.3 Pipfile与Pipfile.lock"></a>1.3 Pipfile与Pipfile.lock</h3><p>那为什么有了Pipfile还有Pipfile.lock</p>
 <blockquote>
 <p>Python应用程序的具体要求来自Pipfile。这将包括应该从哪里获取包以及它们的松散版本约束。<br>Pipfile.lock为了再现性，将存储环境的详细信息（所有已安装的包含固定版本和其他详细信息的包）。该文件将自动生成，用户不应修改。</p>
 </blockquote>
@@ -203,7 +199,7 @@
 <li>在Pipfile的[requires]部分中指定目标Python版本。理想情况下，你应该只有一个目标Python版本，因为这是一个部署工具。</li>
 <li>pipenv install与语法完全兼容，可在此处找到完整的文档。pip install请注意，Pipfile使用TOML Spec。</li>
 </ul>
-<h3 id="顺便说说npm"><a href="#顺便说说npm" class="headerlink" title="顺便说说npm"></a>顺便说说npm</h3><p><a href="https://www.cnblogs.com/tzyy/p/5193811.html" target="_blank" rel="noopener">package.json的字段详解</a>在这里，同样的按上面的说法，lock文件应该也要放入版本控制，但有一篇文章写道<a href="https://www.codementor.io/johnkennedy/get-rid-of-that-npm-package-lock-json-e0bj7ai42" target="_blank" rel="noopener">package-lock.json文件是地狱</a>。哈哈哈23333</p>
+<h2 id="2-顺便说说npm"><a href="#2-顺便说说npm" class="headerlink" title="2. 顺便说说npm"></a>2. 顺便说说npm</h2><p><a href="https://www.cnblogs.com/tzyy/p/5193811.html" target="_blank" rel="noopener">package.json的字段详解</a>在这里，同样的按上面的说法，lock文件应该也要放入版本控制，但有一篇文章写道<a href="https://www.codementor.io/johnkennedy/get-rid-of-that-npm-package-lock-json-e0bj7ai42" target="_blank" rel="noopener">package-lock.json文件是地狱</a>。哈哈哈23333</p>
 
             </div>
             <hr>
@@ -222,7 +218,7 @@
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/python/">python</a>
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
                       <a class="hover-with-bg" href="/tags/npm/">npm</a>
                     
@@ -258,6 +254,21 @@
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -407,6 +418,51 @@
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

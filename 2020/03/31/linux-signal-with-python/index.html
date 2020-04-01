@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
+  <link rel="icon" type="image/png" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="hello">
+  <meta name="author" content="Jiahuan Shi">
+  <meta name="keywords" content>
+  <title>Linux的信号以及Python处理 - 烛影小札</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/links/">友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  星期二, 三月 31日 2020, 1:49 下午
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.7k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      6 分钟
+                  </span>
+                
+
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <div class="markdown-body">
+              <p>初次接触信号这个概念实在gpiozero库文档中的这么一个专题，<code>How do I keep my script running?</code>,我最最开始是在<code>button.when_pressed = hello</code>用一个<code>while True</code>的无限循环保持脚本运行，后来发现有个个内置库的<code>signal.pause()</code>函数可以保持脚本运行，直到按下<strong>Ctrl+C</strong>程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来一次mqtt没加loop循环之后自动断开，我后来就在想我用<code>pause</code>还是<code>loop_forever</code>呢? 接下来我就慢慢揭开了信号的序幕，也算当补了下操作系统的一些知识。</p>
+<h2 id="1-信号基础"><a href="#1-信号基础" class="headerlink" title="1. 信号基础"></a>1. 信号基础</h2><p>Linux信号是一种较高层的软件形式的异常，它允许进程和内核中断其他进程。<br>一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件，Linux系统上支持30种不同类型的信号，每种信号类型都对应某种系统事件，红笔标注为常见信号：<br><img src="/images/signal/signals.jpeg" srcset="/img/loading.gif" alt="Linux信号"></p>
+<blockquote>
+<p>可以用<code>man 7 signal</code> 查看signal信息</p>
+</blockquote>
+<p>如果觉得上面专业的术语较为枯燥，可以查看<strong>Vamei</strong>大神（看了这篇文章才知道Vamei博主因为抑郁症去世，R.I.P.）的<a href="https://www.cnblogs.com/vamei/archive/2012/10/04/2711818.html" target="_blank" rel="noopener">Linux信号基础</a>以及之前几篇关于进程的文章，通熟易懂</p>
+<h2 id="2-信号发送"><a href="#2-信号发送" class="headerlink" title="2. 信号发送"></a>2. 信号发送</h2><h3 id="2-1-用-bin-kill发送信号"><a href="#2-1-用-bin-kill发送信号" class="headerlink" title="2.1 用/bin/kill发送信号"></a>2.1 用<code>/bin/kill</code>发送信号</h3><p>我之前一直用<code>kill -9 15213</code>强制杀掉某个pid进程，对这个数字9一直没啥反应，其实就是信号9，也就是SIGKILL，等同于<code>kill -SIGTSTP 15213</code></p>
+<h3 id="2-2-从键盘发送信号"><a href="#2-2-从键盘发送信号" class="headerlink" title="2.2 从键盘发送信号"></a>2.2 从键盘发送信号</h3><p>键盘快捷键我已经在上面图中用红笔写出来，不展开</p>
+<h3 id="2-3-用函数发送信号"><a href="#2-3-用函数发送信号" class="headerlink" title="2.3 用函数发送信号"></a>2.3 用函数发送信号</h3><p>Python的<code>os.kill()</code>函数： <code>os.kill(os.getpid(), signal.SIGUSR1)</code></p>
+<h3 id="2-4-用alarm函数向它自己发送信号"><a href="#2-4-用alarm函数向它自己发送信号" class="headerlink" title="2.4 用alarm函数向它自己发送信号"></a>2.4 用alarm函数向它自己发送信号</h3><p><code>signal.alarm(n)</code>函数会安排内核在n秒后发送一个<strong>SIGALRM</strong>信号给调用进程。如果n是0，那么不会调度安排新的alarm</p>
+<h2 id="3-接收以及处理信号"><a href="#3-接收以及处理信号" class="headerlink" title="3. 接收以及处理信号"></a>3. 接收以及处理信号</h2><p><img src="/images/signal/signal_handler.jpg" srcset="/img/loading.gif" alt="Linux信号处理"></p>
+<p>当进程决定执行信号的时候，有下面几种可能：</p>
+<ul>
+<li>无视(ignore)信号，信号被清除，进程本身不采取任何特殊的操作</li>
+<li>默认(default)操作。每个信号对应有一定的默认操作。比如上面SIGCONT用于继续进程。</li>
+<li>自定义操作。也叫做获取 (catch) 信号。执行进程中预设的对应于该信号的操作。</li>
+</ul>
+<p>进程会采取哪种操作，要根据该进程的程序设计。特别是获取信号的情况，程序往往会设置一些比较长而复杂的操作(通常将这些操作放到一个函数中)。</p>
+<h3 id="3-1-Python-signal函数信号处理"><a href="#3-1-Python-signal函数信号处理" class="headerlink" title="3.1 Python signal函数信号处理"></a>3.1 Python signal函数信号处理</h3><p><strong>signal包定义了各个信号名及其对应的整数，核心是使用signal.signal()函数来预设(register)信号处理函数</strong>，<code>singnal.signal(signalnum, handler)</code>中signalnum为某个信号，handler为该信号的处理函数。我们在信号基础里提到，进程可以无视信号，可以采取默认操作，还可以自定义操作。当handler为<code>signal.SIG_IGN</code>时，信号被无视(ignore)。当handler为<code>singal.SIG_DFL</code>，进程采取默认操作(default)。当handler为一个函数名时，进程采取函数中定义的操作。</p>
+<pre><code class="python">import signal
+# Define signal handler function
+def myHandler(signum, frame):
+    print(&#39;I received: &#39;, signum)
+
+# register signal.SIGTSTP&#39;s handler 
+signal.signal(signal.SIGTSTP, myHandler)
+signal.pause()
+print(&#39;End of Signal Demo&#39;)
+</code></pre>
+<blockquote>
+<p>信号处理程序和主程序以及其他信号处理程序并发地进行，如果处理程序和主程序并发的访问同样的全局数据结构，那么结果可能就是不可预知的，而且经常是致命的！</p>
+</blockquote>
+<p>在主程序中，我们首先使用<code>signal.signal()</code>函数来预设信号处理函数。然后我们执行<code>signal.pause()</code>来让该进程暂停以等待信号，以等待信号。当信号SIGUSR1被传递给该进程时，进程从暂停中恢复，并根据预设，执行SIGTSTP的信号处理函数<code>myHandler()</code>。<code>myHandler</code>的两个参数一个用来识别信号(signum)，另一个用来获得信号发生时，进程栈的状况(stack frame)。这两个参数都是由<code>signal.singnal()</code>函数来传递的。</p>
+<p>上面的程序可以保存在一个文件中(比如<code>test.py</code>)。我们使用如下方法运行:<br><code>$python3 test.py</code></p>
+<p>以便让进程运行。当程序运行到<code>signal.pause()</code>的时候，进程暂停并等待信号。此时，通过按下<strong>CTRL+Z</strong>向该进程发送SIGTSTP信号。我们可以看到，进程执行了<code>myHandle()</code>函数, 随后返回主程序，继续执行。(当然，也可以用<code>$ps</code>查询process ID, 再使用<code>$kill</code>来发出信号。)</p>
+<p>(进程并不一定要使用<code>signal.pause()</code>暂停以等待信号，它也可以在进行工作中接受信号，比如将上面的<code>signal.pause()</code>改为一个需要长时间工作的循环。)</p>
+<p>我们可以根据自己的需要更改<code>myHandler()</code>中的操作，以针对不同的信号实现个性化的处理。</p>
+<h3 id="3-2-Python-alarm函数自发自收信号"><a href="#3-2-Python-alarm函数自发自收信号" class="headerlink" title="3.2 Python alarm函数自发自收信号"></a>3.2 Python alarm函数自发自收信号</h3><p>再来看个官网的例子，它使用<code>alarm()</code>函数来限制等待打开文件所花费的时间；这很有用，因为如果该文件作用于可能无法打开的串行设备，这通常会导致<code>os.open()</code>然后无限期挂起。解决的办法是在打开文件之前设置5秒警报。如果操作花费的时间太长，则会发送警报信号，并且处理程序将引发异常。</p>
+<pre><code class="python">import signal, os
+
+def handler(signum, frame):
+    print(&#39;Signal handler called with signal&#39;, signum)
+    raise OSError(&quot;Couldn&#39;t open device!&quot;)
+
+# Set the signal handler and a 5-second alarm
+signal.signal(signal.SIGALRM, handler)
+signal.alarm(5)
+
+# This open() may hang indefinitely
+fd = os.open(&#39;/dev/ttyS0&#39;, os.O_RDWR)
+
+signal.alarm(0)          # Disable the alarm
+</code></pre>
+<h2 id="4-说说在C语言中的实现"><a href="#4-说说在C语言中的实现" class="headerlink" title="4. 说说在C语言中的实现"></a>4. 说说在C语言中的实现</h2><p>在<strong>深入理解计算机系统</strong>书中，讲解Linux信号用了shell以及C来进行演示，这是必须的，理解这些底层机制用C实在是太契合了，但是回过头来看，Python实现这些功能时是完全照着C来的，无论是函数名参数名，只要底层原理相通，编程语言的函数实现也大体一致，如果想看更多关于C的演示，可以看<a href="https://jin-yang.github.io/post/kernel-signal-introduce.html" target="_blank" rel="noopener">Linux 信号机制</a>，很棒的教程！</p>
+<p>但是，Python3的文档中明确指出，handler并不是运行在底层的C handler中的，所以不要希望捕捉同步错误例如SIGFPE与SIGSEGV。<br>同时新增了几个功能，大概用于阻塞signal这种，不过我还不太会用：<br><code>signal.pthread_kill(thread_id, signum)</code><br><code>signal.pthread_sigmask(how, mask)</code></p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/02/28/invoke-fabric/">
+                        <span class="hidden-mobile">Invoke与Fabric注意事项详解教程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="fa fa-chevron-right"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var toc = $('#toc');
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+      var tocLimMax = 2 * boardTop + boardCtn.height();
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = boardCtn.css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+
+
+  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Linux的信号以及Python处理&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
+</html>

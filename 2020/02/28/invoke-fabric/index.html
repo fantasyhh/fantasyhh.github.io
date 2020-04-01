@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    3.2k 字
+                    3k 字
                   </span>
                 
 
@@ -142,7 +142,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      12 分钟
+                      11 分钟
                   </span>
                 
 
@@ -169,11 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:51 下午</p>
-            
             <div class="markdown-body">
-              <p>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护<br>刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！<br><a id="more"></a></p>
-<p>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护<br>刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！</p>
+              <p>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护<br>刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！</p>
 <h2 id="1-Fabric前世今生"><a href="#1-Fabric前世今生" class="headerlink" title="1. Fabric前世今生"></a>1. Fabric前世今生</h2><p>我从一开始接触的就是Python3，之后因为远程打包部署接触到了Fabric，当时官网Fabric还不支持Python3，所以我用了民间的Fabric3，十分好用，对新手很友好。后来，发现Fabric支持Python3了，但是看了文档，看的稀里糊涂，看了别人的教程才成功连接到远程主机上，我就又撒手转向了民间的Fabric3。<br>所以我们先区分下 Fabric1，Fabric2，Fabric3，它们的python官网发布的地址：</p>
 <p>安装方式分别是：</p>
 <pre><code class="shell"># https://pypi.org/project/Fabric/
@@ -197,15 +194,15 @@ pip install fabric3
 </blockquote>
 <p><strong>因为要同时远程部署七八个树莓派，又要用到Fabric，趁着这次疫情在家，啃了一个星期的文档，蛮多人也觉得新版的Fabric比较难用，原因在于完全重写了，其实我们可以把这个库分开学习，分为Inovke和Paramiko，为什么重写之后要将Invoke独立出来，可以看这里<a href="http://www.pyinvoke.org/faq.html#invoke-split-from-fabric" target="_blank" rel="noopener">Why was Invoke split off from the Fabric project?</a>，那接下去就分别讲讲！</strong></p>
 <h2 id="2-Invoke使用"><a href="#2-Invoke使用" class="headerlink" title="2. Invoke使用"></a>2. Invoke使用</h2><p><strong>Invoke 实现CLI解析，任务组织和Shell命令执行（通用框架以及本地命令的特定实现</strong>），关于Shell命令的执行其实和<code>subprocess</code>库挺像的，当然Invoke不仅于此。</p>
-<h4 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h4><p>关于基础教程我就不说了，看<a href="http://docs.pyinvoke.org/en/latest/getting-started.html" target="_blank" rel="noopener">官网例子</a>一目了然，我在这里记录一些重点与自己的理解。</p>
-<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><p>关于invoke的配置方面我们大体看一下<a href="http://docs.pyinvoke.org/en/latest/concepts/configuration.html" target="_blank" rel="noopener">配置继承</a><br>配置很多层，有内部默认，系统级别，用户级别，项目级别…甚至可以在<a href="http://docs.pyinvoke.org/en/latest/invoke.html" target="_blank" rel="noopener">命令行运行</a>的时候我们再添加配置也是可行的。<br>我这里推荐使用<strong>用户级别</strong>的配置文件（<code>~/.invoke.yaml</code>，也可以是json，py文件），刚开始我自己测试的时候用的<strong>项目级别</strong>的配置文件（<code>/home/user/myproject/invoke.yaml</code>），一个原因是我在windows下测试，没有所谓的<code>~/.invoke.yaml</code>，还有个就是我想万一这个项目到别的机器上运行，我可能把隐藏的配置文件忘了，想显示放在项目里，结果这样就跳入了一个火坑，琢磨了我好久，原因在于：</p>
+<h3 id="2-1-基础使用"><a href="#2-1-基础使用" class="headerlink" title="2.1 基础使用"></a>2.1 基础使用</h3><p>关于基础教程我就不说了，看<a href="http://docs.pyinvoke.org/en/latest/getting-started.html" target="_blank" rel="noopener">官网例子</a>一目了然，我在这里记录一些重点与自己的理解。</p>
+<h3 id="2-2-配置文件"><a href="#2-2-配置文件" class="headerlink" title="2.2 配置文件"></a>2.2 配置文件</h3><p>关于invoke的配置方面我们大体看一下<a href="http://docs.pyinvoke.org/en/latest/concepts/configuration.html" target="_blank" rel="noopener">配置继承</a><br>配置很多层，有内部默认，系统级别，用户级别，项目级别…甚至可以在<a href="http://docs.pyinvoke.org/en/latest/invoke.html" target="_blank" rel="noopener">命令行运行</a>的时候我们再添加配置也是可行的。<br>我这里推荐使用<strong>用户级别</strong>的配置文件（<code>~/.invoke.yaml</code>，也可以是json，py文件），刚开始我自己测试的时候用的<strong>项目级别</strong>的配置文件（<code>/home/user/myproject/invoke.yaml</code>），一个原因是我在windows下测试，没有所谓的<code>~/.invoke.yaml</code>，还有个就是我想万一这个项目到别的机器上运行，我可能把隐藏的配置文件忘了，想显示放在项目里，结果这样就跳入了一个火坑，琢磨了我好久，原因在于：</p>
 <blockquote>
 <p>Project-level configuration file living next to your top level tasks.py. For example, if your run of Invoke loads /home/user/myproject/tasks.py (see our docs on the load process), this might be /home/user/myproject/invoke.yaml.</p>
 </blockquote>
 <p>项目级别的配置文件只有在你识别到tasks文件时才会调用同文件夹里的配置，其他方式你会没法识别到，比如你想单独用python3拍这个invoke脚本（把invoke当成subprocess那样）！下面会讲到相关例子。<br>其实，invoke本身没有啥配置修改，所以我也建议在执行<code>invoke ... task1 ...</code>时通过一些命令行参数来传递配置，省了配置文件的存在。</p>
-<h4 id="导入集合"><a href="#导入集合" class="headerlink" title="导入集合"></a>导入集合</h4><p>Invoke执行模型的核心涉及一个或多个Collection对象，就是集合的意思。<br>默认调用<code>invoke</code>命令我们会查找同目录中的<code>tasks.py</code>或者<code>tasks</code>包，tasks就算是一个集合，具体我们可以看<a href="http://docs.pyinvoke.org/en/latest/concepts/loading.html" target="_blank" rel="noopener">Loading collections</a>，所以有接下来一个例子我上面说的火坑。<br>假如我tasks名字被占用了…我想换个任务名字来让Invoke搜索到，比如叫mytasks，常见的设置方法有两种，一种是设置<code>tasks.collection_name</code> 配置选项，或使用 <code>--collection</code>。集合名应该是Python模块名称，而不是文件名（所以mytasks，不是mytasks.py或 mytasks/。）<br>用<code>--collection</code>没问题，问题在于设置<code>tasks.collection_name</code> 配置选项，我一开始是用的<strong>项目级别</strong>配置，则报错<code>Can&#39;t find any collection named &#39;tasks&#39;!</code>，我明明设置文件里设置了，为什么还是在查找<code>tasks.py</code>,哪里有问题！问题在于上一节引用的英文里，<strong>项目级别</strong>配置是在同目录的<code>tasks.py</code>文件被找到后才会引入该配置，问题是一开始我都没有<code>tasks.py</code>我怎么引入配置文件，更别说里面的<code>tasks.collection_name</code> 配置选项了</p>
-<h4 id="集合的命名空间"><a href="#集合的命名空间" class="headerlink" title="集合的命名空间"></a>集合的命名空间</h4><p>当任务很多，存在不同类别层级的时候我们就需要<a href="http://docs.pyinvoke.org/en/stable/concepts/namespaces.html" target="_blank" rel="noopener">构建命名空间</a>（看<code>Importing modules as collections</code>部分就行），单纯的<code>tasks.py</code>满足不了我们了，使用<code>tasks</code>包，包里有多个python文件代表个各种任务，然后在<code>tasks/__init__.py</code>中做<code>导入模块作为集合</code>操作就行，不展开。</p>
-<h4 id="上下文Context"><a href="#上下文Context" class="headerlink" title="上下文Context"></a>上下文Context</h4><p>上下文Context这个参数出现了,很神奇，就好像Flask中的Context一样神奇。</p>
+<h3 id="2-3-导入集合"><a href="#2-3-导入集合" class="headerlink" title="2.3 导入集合"></a>2.3 导入集合</h3><p>Invoke执行模型的核心涉及一个或多个Collection对象，就是集合的意思。<br>默认调用<code>invoke</code>命令我们会查找同目录中的<code>tasks.py</code>或者<code>tasks</code>包，tasks就算是一个集合，具体我们可以看<a href="http://docs.pyinvoke.org/en/latest/concepts/loading.html" target="_blank" rel="noopener">Loading collections</a>，所以有接下来一个例子我上面说的火坑。<br>假如我tasks名字被占用了…我想换个任务名字来让Invoke搜索到，比如叫mytasks，常见的设置方法有两种，一种是设置<code>tasks.collection_name</code> 配置选项，或使用 <code>--collection</code>。集合名应该是Python模块名称，而不是文件名（所以mytasks，不是mytasks.py或 mytasks/。）<br>用<code>--collection</code>没问题，问题在于设置<code>tasks.collection_name</code> 配置选项，我一开始是用的<strong>项目级别</strong>配置，则报错<code>Can&#39;t find any collection named &#39;tasks&#39;!</code>，我明明设置文件里设置了，为什么还是在查找<code>tasks.py</code>,哪里有问题！问题在于上一节引用的英文里，<strong>项目级别</strong>配置是在同目录的<code>tasks.py</code>文件被找到后才会引入该配置，问题是一开始我都没有<code>tasks.py</code>我怎么引入配置文件，更别说里面的<code>tasks.collection_name</code> 配置选项了</p>
+<h3 id="2-4-集合的命名空间"><a href="#2-4-集合的命名空间" class="headerlink" title="2.4 集合的命名空间"></a>2.4 集合的命名空间</h3><p>当任务很多，存在不同类别层级的时候我们就需要<a href="http://docs.pyinvoke.org/en/stable/concepts/namespaces.html" target="_blank" rel="noopener">构建命名空间</a>（看<code>Importing modules as collections</code>部分就行），单纯的<code>tasks.py</code>满足不了我们了，使用<code>tasks</code>包，包里有多个python文件代表个各种任务，然后在<code>tasks/__init__.py</code>中做<code>导入模块作为集合</code>操作就行，不展开。</p>
+<h3 id="2-5-上下文Context"><a href="#2-5-上下文Context" class="headerlink" title="2.5 上下文Context"></a>2.5 上下文Context</h3><p>上下文Context这个参数出现了,很神奇，就好像Flask中的Context一样神奇。</p>
 <p>what exactly is this ‘context’ arg anyway?</p>
 <blockquote>
 <p>A common problem task runners face is transmission of “global” data - values loaded from configuration files or other configuration vectors, given via CLI flags, generated in ‘setup’ tasks, etc.<br>Some libraries (such as Fabric 1.x) implement this via module-level attributes, which makes testing difficult and error prone, limits concurrency, and increases implementation complexity.<br>Invoke encapsulates state in explicit Context objects, handed to tasks when they execute . The context is the primary API endpoint, offering methods which honor the current state (such as Context.run) as well as access to that state itself.</p>
@@ -231,7 +228,7 @@ print(config)
 c = Context(config=config)
 c.run(&#39;ls&#39;)
 </code></pre>
-<h4 id="sudo运行以及自动响应"><a href="#sudo运行以及自动响应" class="headerlink" title="sudo运行以及自动响应"></a>sudo运行以及自动响应</h4><p>最后我们说运行sudo命令时如何免密码以及与一运行一些其他命令时的提示互动.<br>我们可以先配置好文件:</p>
+<h3 id="2-6-sudo运行以及自动响应"><a href="#2-6-sudo运行以及自动响应" class="headerlink" title="2.6 sudo运行以及自动响应"></a>2.6 sudo运行以及自动响应</h3><p>最后我们说运行sudo命令时如何免密码以及与一运行一些其他命令时的提示互动.<br>我们可以先配置好文件:</p>
 <pre><code class="json">{
     &quot;tasks&quot;: {
         &quot;auto_dash_names&quot;: false
@@ -244,7 +241,7 @@ c.run(&#39;ls&#39;)
 </code></pre>
 <p>然后在脚本里<code>c.sudo(&#39;rm test.txt&#39;)</code>就行.<br>或者我们简单点:直接在在函数里面加入<code>c.sudo(&#39;rm test.txt&#39;,user=&#39;baird&#39;,password=&#39;mypassword&#39;)</code><br>关于自动响应程序输出的,我们可以看<a href="http://docs.pyinvoke.org/en/stable/concepts/watchers.html" target="_blank" rel="noopener">Automatically responding to program output</a></p>
 <h2 id="3-Fabric使用"><a href="#3-Fabric使用" class="headerlink" title="3. Fabric使用"></a>3. Fabric使用</h2><p>Fabric与Invoke基本上属于继承创新的关系,很多都是相同操作,所以这一部分就不重复讲了.<br><strong>Fabric相对于Invoke来说增加了Paramiko库的功能</strong>,也就是说实现了低/中级别SSH功能-SSH和SFTP会话，密钥管理等.但作为用户我们很少会直接从Paramiko导入,而是Fabric把它融合进来了,我们在看教程前,先来看看SSH认证</p>
-<h4 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h4><p>即使在<strong>原始</strong> OpenSSH客户端中，对远程服务器的身份验证也涉及多个潜在的秘密和配置来源。Fabric不仅支持其中的大多数，而且还具有自己的功能,下面是认证方式以及对应的配置:</p>
+<h3 id="3-1-认证"><a href="#3-1-认证" class="headerlink" title="3.1 认证"></a>3.1 认证</h3><p>即使在<strong>原始</strong> OpenSSH客户端中，对远程服务器的身份验证也涉及多个潜在的秘密和配置来源。Fabric不仅支持其中的大多数，而且还具有自己的功能,下面是认证方式以及对应的配置:</p>
 <ul>
 <li>私人秘钥文件,通过<code>connect_kwargs.key_filename</code>配置</li>
 <li>如果私钥文件通过密码保护,通过<code>connect_kwargs.passphrase</code>配置</li>
@@ -253,7 +250,7 @@ c.run(&#39;ls&#39;)
 <li>密码,通过<code>connect_kwargs.password</code>配置或者<code>--prompt-for-login-password</code>手动提示输入</li>
 <li>GSSAPI,不太懂,pass<br>上面的认证方式基本就全了,当然,每种认证方式的配置选择有很多,不止一种,很灵活,具体看<a href="http://docs.fabfile.org/en/2.5/concepts/authentication.html" target="_blank" rel="noopener">Authentication</a>.<br><strong>其实我们不用管那么多啥认证方式,密码就完事了~,方便省略</strong></li>
 </ul>
-<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>有了认证之后,就得到了一个连接(connection),用于SSH守护程序的连接，其中包含命令和文件传输的方法.这个connection其实跟context是一样的,一个远程一个本机,我们可以看下,在<code>fabfile.py</code>里代码如下:</p>
+<h3 id="3-2-连接"><a href="#3-2-连接" class="headerlink" title="3.2 连接"></a>3.2 连接</h3><p>有了认证之后,就得到了一个连接(connection),用于SSH守护程序的连接，其中包含命令和文件传输的方法.这个connection其实跟context是一样的,一个远程一个本机,我们可以看下,在<code>fabfile.py</code>里代码如下:</p>
 <pre><code>from fabric import task
 
 @task
@@ -277,7 +274,7 @@ c.run(&#39;ls&#39;)
 <blockquote>
 <p>从上面这个例子我们可以看出，可以用各种灵活的配置以及实现方式来创建一个远程连接。我的项目中有涉及远程部署多台机器， 我开始的想法是一把梭，创建所有机器的connection，然后上传上去，即我不需要-H来指定哪些机器，我已全部手动实例化，这就意味着用Fabric的Connection类实例化再加Facric中的Invoke功能。这是一种选择。后来发现，我应该采用一种更通用的方法，函数里我就执行相应动作，然后用-H指定主机，但是这样的话，比如我想同时部署多台机器，或者一半的机器，我还得在-H之后一个个输地址，这很耗时间，但好处就是一台台调试的时候更方便。所以我们还需外的任务，来根据条件快速输出-H后面的值做一个辅助工具，比如说输入1～7，那就自动把1~7七台机器的ip提示出来买，也算是曲线救国</p>
 </blockquote>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p><a href="http://docs.fabfile.org/en/2.5/concepts/configuration.html" target="_blank" rel="noopener">Fabric配置系统的核心</a>依赖于Invoke功能（与Fabric的其余大部分一样),只是配置文件名从<code>invoke</code>(不包括后缀)改为<code>fabfile</code>,然后是多了一些关于远程主机认证的配置,最常用的就是<code>connect_kwargs</code>,上面例子也出现过了,就不过多强调了</p>
+<h3 id="3-3-配置"><a href="#3-3-配置" class="headerlink" title="3.3 配置"></a>3.3 配置</h3><p><a href="http://docs.fabfile.org/en/2.5/concepts/configuration.html" target="_blank" rel="noopener">Fabric配置系统的核心</a>依赖于Invoke功能（与Fabric的其余大部分一样),只是配置文件名从<code>invoke</code>(不包括后缀)改为<code>fabfile</code>,然后是多了一些关于远程主机认证的配置,最常用的就是<code>connect_kwargs</code>,上面例子也出现过了,就不过多强调了</p>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>这篇文章总结下来,花了我蛮多时间的,也算是打开了2020的新篇章。以为过程中一切都很顺利，结果写着写着就卡住了，打了自己”自以为很懂”的脸，也算有了更多收获，接下来更多加油!</p>
 
             </div>
@@ -316,6 +313,12 @@ c.run(&#39;ls&#39;)
                   <div class="post-prev col-6">
                     
                     
+                      <a href="/2020/03/31/linux-signal-with-python/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="hidden-mobile">Linux的信号以及Python处理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </div>
                   <div class="post-next col-6">
                     
@@ -331,6 +334,21 @@ c.run(&#39;ls&#39;)
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -480,6 +498,51 @@ c.run(&#39;ls&#39;)
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

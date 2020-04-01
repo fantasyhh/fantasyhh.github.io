@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.7k 字
+                    1.5k 字
                   </span>
                 
 
@@ -169,12 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
-            
             <div class="markdown-body">
               <p>先进先出队列(或简称队列)是一种基于先进先出(FIFO)策略的集合类型.</p>
-<p>队列的最简单的例子是我们平时不时会参与的列。排队等待电影，在杂货店的收营台等待，在自助餐厅排队等待（这样我们可以弹出托盘栈）。行为良好的线或队列是有限制的，因为它只有一条路，只有一条出路。不能插队，也不能离开。你只有等待了一定的时间才能到前面。<br><a id="more"></a></p>
-<p>先进先出队列(或简称队列)是一种基于先进先出(FIFO)策略的集合类型.</p>
 <p>队列的最简单的例子是我们平时不时会参与的列。排队等待电影，在杂货店的收营台等待，在自助餐厅排队等待（这样我们可以弹出托盘栈）。行为良好的线或队列是有限制的，因为它只有一条路，只有一条出路。不能插队，也不能离开。你只有等待了一定的时间才能到前面。下图展示了一个简单的 Python 对象队列。<br>    <img src="/images/queue.png" srcset="/img/loading.gif" alt="队列"></p>
 <h2 id="1-队列"><a href="#1-队列" class="headerlink" title="1. 队列"></a>1. 队列</h2><blockquote>
 <p>队列是有序数据集合，队列的特点，删除数据项是在头部，称为前端(front)，增加数据在尾部，称为后端(rear)</p>
@@ -276,7 +272,7 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 <h2 id="4-自己队列实现"><a href="#4-自己队列实现" class="headerlink" title="4. 自己队列实现"></a>4. 自己队列实现</h2><blockquote>
 <p>在实际编码中不会自己来实现一个队列.因为python本身就有自带的队列库.如果想自己实现可以利用列表的一些特性,比如.append或者.pop来实现.也可以抛开列表重新定义一个队列.这里有一个很好的例子来实现，<a href="http://zhaochj.github.io/2016/05/15/2016-05-15-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E5%8D%95%E7%AB%AF%E9%98%9F%E5%88%97/" target="_blank" rel="noopener">Python队列实现例子</a></p>
 </blockquote>
-<h4 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a><strong>相关链接</strong></h4><p><a href="https://facert.gitbooks.io/python-data-structure-cn/3.%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/3.10.%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%9F%E5%88%97/" target="_blank" rel="noopener">https://facert.gitbooks.io/python-data-structure-cn/3.%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/3.10.%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%9F%E5%88%97/</a><br><a href="https://docs.lvrui.io/2016/07/20/Python%E4%B8%AD%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E9%98%9F%E5%88%97queue%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" target="_blank" rel="noopener">https://docs.lvrui.io/2016/07/20/Python%E4%B8%AD%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E9%98%9F%E5%88%97queue%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</a></p>
+<p><strong>相关链接</strong><br><a href="https://facert.gitbooks.io/python-data-structure-cn/3.%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/3.10.%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%9F%E5%88%97/" target="_blank" rel="noopener">https://facert.gitbooks.io/python-data-structure-cn/3.%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/3.10.%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%9F%E5%88%97/</a><br><a href="https://docs.lvrui.io/2016/07/20/Python%E4%B8%AD%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E9%98%9F%E5%88%97queue%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" target="_blank" rel="noopener">https://docs.lvrui.io/2016/07/20/Python%E4%B8%AD%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E9%98%9F%E5%88%97queue%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</a></p>
 
             </div>
             <hr>
@@ -321,7 +317,7 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
                     
                     
                       <a href="/2019/06/11/python3-subprocess/">
-                        <span class="hidden-mobile">python3.5+ subprocess用法概括以及使用场景分析</span>
+                        <span class="hidden-mobile">Python3.5+ subprocess用法概括以及使用场景分析</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="fa fa-chevron-right"></i>
                       </a>
@@ -331,6 +327,21 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -480,6 +491,51 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

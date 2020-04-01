@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    621 字
+                    529 字
                   </span>
                 
 
@@ -169,12 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:49 下午</p>
-            
             <div class="markdown-body">
               <p>supvisor经常用来打包服务（领导喜欢service这个词，无语），celery用来做异步任务以及定时任务。web项目常常使用前后端分离，django+vue的组合，但是也要做一些配置,这里对一些以往的配置做一些整理,省的每次都要翻以前的项目，权当记录手册。</p>
-<a id="more"></a>
-<p>supvisor经常用来打包服务（领导喜欢service这个词，无语），celery用来做异步任务以及定时任务。web项目常常使用前后端分离，django+vue的组合，但是也要做一些配置,这里对一些以往的配置做一些整理,省的每次都要翻以前的项目，权当记录手册。</p>
 <h2 id="1-Supvisor-Celery配置"><a href="#1-Supvisor-Celery配置" class="headerlink" title="1. Supvisor+Celery配置"></a>1. Supvisor+Celery配置</h2><p>假设有个叫smartmp的项目，那么有如下配置。<br><strong>supvisor对celery beat的配置文件：</strong></p>
 <pre><code class="bash">[program:smartmpbeat]
 
@@ -261,13 +257,11 @@ CELERY_BEAT_SCHEDULE = {
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/supvisorctl/">supvisorctl</a>
+                      <a class="hover-with-bg" href="/tags/Django/">Django</a>
                     
-                      <a class="hover-with-bg" href="/tags/celery/">celery</a>
+                      <a class="hover-with-bg" href="/tags/Celery/">Celery</a>
                     
-                      <a class="hover-with-bg" href="/tags/django/">django</a>
-                    
-                      <a class="hover-with-bg" href="/tags/vue/">vue</a>
+                      <a class="hover-with-bg" href="/tags/Vue/">Vue</a>
                     
                   </span>
                 
@@ -301,6 +295,21 @@ CELERY_BEAT_SCHEDULE = {
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -450,6 +459,51 @@ CELERY_BEAT_SCHEDULE = {
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.6k 字
+                    1.4k 字
                   </span>
                 
 
@@ -169,13 +169,9 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:48 下午</p>
-            
             <div class="markdown-body">
-              <p>上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳</p>
-<a id="more"></a>
-<p>上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整与基础，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳</p>
-<h2 id="Nodejs安装"><a href="#Nodejs安装" class="headerlink" title="Nodejs安装"></a>Nodejs安装</h2><pre><code class="bash"># Using Ubuntu
+              <p>上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整与基础，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳</p>
+<h2 id="1-Nodejs安装"><a href="#1-Nodejs安装" class="headerlink" title="1. Nodejs安装"></a>1. Nodejs安装</h2><pre><code class="bash"># Using Ubuntu
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 # update npm
@@ -187,7 +183,7 @@ npm -v
 <blockquote>
 <p>其实我一开始直接下载官网编译好的nodejs，之后做命令的链接，如<a href="https://blog.csdn.net/tengxing007/article/details/78903807" target="_blank" rel="noopener">这边的安装教程</a>，也很好理解。但是后来发现一个问题，全局装一些带有命令行的库时，比如express-generator，命令行没有express该命令，需要将express库的bin文件手动连接到/usr/local/bin/express，略微麻烦<br>当然还有最稳妥的方法，源码安装，去nodejs官网下载source code，然后<code>./configure</code>,<code>make</code>,<code>make install</code>（我在命令前加sudo，然后发现npm install也需要加sudo，不太一样），源码安装有点耗时，我那破机器花了半小时</p>
 </blockquote>
-<h2 id="Nodejs模块包库的解释与代码的组织"><a href="#Nodejs模块包库的解释与代码的组织" class="headerlink" title="Nodejs模块包库的解释与代码的组织"></a>Nodejs模块包库的解释与代码的组织</h2><p>写到这边时，遇到一些基础概念，自己都有些蒙了，查了蛮久资料，理了一下</p>
+<h2 id="2-Nodejs模块包库的解释与代码的组织"><a href="#2-Nodejs模块包库的解释与代码的组织" class="headerlink" title="2. Nodejs模块包库的解释与代码的组织"></a>2. Nodejs模块包库的解释与代码的组织</h2><p>写到这边时，遇到一些基础概念，自己都有些蒙了，查了蛮久资料，理了一下</p>
 <p><strong>先回味下Python的相关含义:</strong></p>
 <blockquote>
 <p>module：一个 .py 文件就是个 module<br> lib：抽象概念，和另外两个不是一类，只要你喜欢，什么都是 lib，就算只有个 hello world<br> package：就是个带 <strong>init</strong>.py 的文件夹，并不在乎里面有什么，不过一般来讲会包含一些    packages/modulesscrapy、flask、Django、numpy、scipy、NLTK、jieba 在你的语境下，一般都被认为是 lib，因为关注点不是他们的代码是怎么组织的。</p>
@@ -195,28 +191,25 @@ npm -v
 <p>看了上面的解释,再结合这篇文章 <a href="https://liam.page/2017/07/23/modules-and-packages-of-python/" target="_blank" rel="noopener">Python 中的黑暗角落（三）：模块与包</a>我明白的更多了</p>
 <p>再来说说Nodejs,其实也可以同样的理解,一个打印‘hello world’的js文件是一个模块（module），一个带有package.json的文件夹都是包（package）比如express框架，但是它们都是库（lib），因为都是给别人或者自己来用的，只是我们平常接触的一个些库都不是单个文件那么简单的，大多以包的形式存在。</p>
 <p>接下来是<a href="https://nqdeng.github.io/7-days-nodejs/#2" target="_blank" rel="noopener">Nodejs代码组织与部署</a>中间有困惑记录下来</p>
-<ol>
-<li><strong>Node.js模块里exports与module.exports的区别?</strong><br><a href="https://www.zhihu.com/question/26621212http://" target="_blank" rel="noopener">相关笔记1</a>，<a href="https://liuzhichao.com/p/1669.html" target="_blank" rel="noopener">相关笔记2</a></li>
-</ol>
-<p><strong>2. 待记录….</strong></p>
-<h2 id="npm命令"><a href="#npm命令" class="headerlink" title="npm命令"></a>npm命令</h2><blockquote>
+<p><strong>Node.js模块里exports与module.exports的区别?</strong><br> <a href="https://www.zhihu.com/question/26621212http://" target="_blank" rel="noopener">相关笔记1</a>，<a href="https://liuzhichao.com/p/1669.html" target="_blank" rel="noopener">相关笔记2</a></p>
+<h2 id="3-npm命令"><a href="#3-npm命令" class="headerlink" title="3. npm命令"></a>3. npm命令</h2><blockquote>
 <p>npm之于Nodejs，如，pip之余Python</p>
 </blockquote>
 <p>所以这里把一些常用的命令记录下来，以后就方便翻了</p>
-<h5 id="查看npm拥有的全部命令"><a href="#查看npm拥有的全部命令" class="headerlink" title="查看npm拥有的全部命令"></a>查看npm拥有的全部命令</h5><p><code>$ npm - -help</code><br><code>$ npm help</code></p>
-<h5 id="查看某一个npm命令的详细用法"><a href="#查看某一个npm命令的详细用法" class="headerlink" title="查看某一个npm命令的详细用法"></a>查看某一个npm命令的详细用法</h5><p><code>$ npm &lt;command&gt; --help</code><br><code>$ npm help &lt;command&gt;</code></p>
-<h5 id="与npmrc相关的三个文件："><a href="#与npmrc相关的三个文件：" class="headerlink" title="与npmrc相关的三个文件："></a>与npmrc相关的三个文件：</h5><p>npm项目配置文件：/path/to/my/project/.npmrc<br>用户配置文件：~/.npmrc (可通过<code>npm config get userconfig</code>查看)<br>全局配置文件：$PREFIX/etc/npmrc (可通过<code>npm config get globalconfig</code>查看)<br>npm内置配置文件：/path/to/npm/npmrc</p>
-<h5 id="npm获取配置的6种方式（优先级从高到低）："><a href="#npm获取配置的6种方式（优先级从高到低）：" class="headerlink" title="npm获取配置的6种方式（优先级从高到低）："></a>npm获取配置的6种方式（优先级从高到低）：</h5><h6 id="1-命令行参数"><a href="#1-命令行参数" class="headerlink" title="1.命令行参数"></a>1.<strong>命令行参数</strong></h6><p><code>$ --proxy http://&lt;server&gt;:&lt;port&gt;</code></p>
-<h6 id="2-环境变量"><a href="#2-环境变量" class="headerlink" title="2.环境变量"></a>2.<strong>环境变量</strong></h6><p>以”npmconfig”为前缀的环境变量将会被认为是npm的配置属性。<br><code>$ npm_config_proxy=http://&lt;server&gt;:&lt;port&gt;</code></p>
-<h6 id="3-用户配置文件"><a href="#3-用户配置文件" class="headerlink" title="3.用户配置文件"></a>3.<strong>用户配置文件</strong></h6><p>//查看用户配置文件路径<br><code>$ npm config get userconfig</code><br>//Linux系统默认路径<br><code>$HOME/.npmrc</code></p>
-<h6 id="4-全局配置文件"><a href="#4-全局配置文件" class="headerlink" title="4.全局配置文件"></a>4.<strong>全局配置文件</strong></h6><p>//查看文件路径<br><code>$ npm config get globalconfig</code><br>//我的ubuntu文件路径<br><code>/usr/local/node-v10.15.3-linux-x64/etc/npmrc</code></p>
-<h6 id="5-内置配置文件"><a href="#5-内置配置文件" class="headerlink" title="5.内置配置文件"></a>5.<strong>内置配置文件</strong></h6><p>安装npm的目录下的npmrc文件。</p>
-<h6 id="6-默认配置"><a href="#6-默认配置" class="headerlink" title="6.默认配置"></a>6.<strong>默认配置</strong></h6><p>如果前5条均未设置，npm会使用默认配置参数。</p>
+<h3 id="查看npm拥有的全部命令"><a href="#查看npm拥有的全部命令" class="headerlink" title="查看npm拥有的全部命令"></a>查看npm拥有的全部命令</h3><p><code>$ npm - -help</code><br><code>$ npm help</code></p>
+<h3 id="查看某一个npm命令的详细用法"><a href="#查看某一个npm命令的详细用法" class="headerlink" title="查看某一个npm命令的详细用法"></a>查看某一个npm命令的详细用法</h3><p><code>$ npm &lt;command&gt; --help</code><br><code>$ npm help &lt;command&gt;</code></p>
+<h3 id="与npmrc相关的三个文件："><a href="#与npmrc相关的三个文件：" class="headerlink" title="与npmrc相关的三个文件："></a>与npmrc相关的三个文件：</h3><p>npm项目配置文件：/path/to/my/project/.npmrc<br>用户配置文件：~/.npmrc (可通过<code>npm config get userconfig</code>查看)<br>全局配置文件：$PREFIX/etc/npmrc (可通过<code>npm config get globalconfig</code>查看)<br>npm内置配置文件：/path/to/npm/npmrc</p>
+<h3 id="npm获取配置的6种方式（优先级从高到低）："><a href="#npm获取配置的6种方式（优先级从高到低）：" class="headerlink" title="npm获取配置的6种方式（优先级从高到低）："></a>npm获取配置的6种方式（优先级从高到低）：</h3><h4 id="1-命令行参数"><a href="#1-命令行参数" class="headerlink" title="1.命令行参数"></a>1.<strong>命令行参数</strong></h4><p><code>$ --proxy http://&lt;server&gt;:&lt;port&gt;</code></p>
+<h4 id="2-环境变量"><a href="#2-环境变量" class="headerlink" title="2.环境变量"></a>2.<strong>环境变量</strong></h4><p>以”npmconfig”为前缀的环境变量将会被认为是npm的配置属性。<br><code>$ npm_config_proxy=http://&lt;server&gt;:&lt;port&gt;</code></p>
+<h4 id="3-用户配置文件"><a href="#3-用户配置文件" class="headerlink" title="3.用户配置文件"></a>3.<strong>用户配置文件</strong></h4><p>查看用户配置文件路径<br><code>$ npm config get userconfig</code><br>Linux系统默认路径<br><code>$HOME/.npmrc</code></p>
+<h4 id="4-全局配置文件"><a href="#4-全局配置文件" class="headerlink" title="4.全局配置文件"></a>4.<strong>全局配置文件</strong></h4><p>查看文件路径<br><code>$ npm config get globalconfig</code><br>我的ubuntu文件路径<br><code>/usr/local/node-v10.15.3-linux-x64/etc/npmrc</code></p>
+<h4 id="5-内置配置文件"><a href="#5-内置配置文件" class="headerlink" title="5.内置配置文件"></a>5.<strong>内置配置文件</strong></h4><p>安装npm的目录下的npmrc文件。</p>
+<h4 id="6-默认配置"><a href="#6-默认配置" class="headerlink" title="6.默认配置"></a>6.<strong>默认配置</strong></h4><p>如果前5条均未设置，npm会使用默认配置参数。</p>
 <blockquote>
 <p>关于npm的配置主要命令可通过npm config - -help来查看（比如用npm config ls -l查看npm全部默认配置）。但是一样，作为简单用户我们没必要用的这么多，我们平常只要设置一个user config，我pip就是这么搞2333。设置也就换换npm注册源来增加下载速度（将registry=<a href="https://registry.npm.taobao.org放入~/.npmrc，没有这个文件则新建一个，npm" target="_blank" rel="noopener">https://registry.npm.taobao.org放入~/.npmrc，没有这个文件则新建一个，npm</a> c get registry来验证换了没，上传包记得换回来，不过基本用不到）</p>
 </blockquote>
-<h5 id="npm-info-命令可以查看每个模块的具体信息"><a href="#npm-info-命令可以查看每个模块的具体信息" class="headerlink" title="npm info 命令可以查看每个模块的具体信息"></a>npm info 命令可以查看每个模块的具体信息</h5><p><code>$ npm info &lt;package&gt;</code></p>
-<h5 id="以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"><a href="#以树形结构列出当前项目安装的所有模块，以及它们依赖的模块" class="headerlink" title="以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"></a>以树形结构列出当前项目安装的所有模块，以及它们依赖的模块</h5><pre><code class="bash">$ npm list
+<h3 id="npm-info-命令可以查看每个模块的具体信息"><a href="#npm-info-命令可以查看每个模块的具体信息" class="headerlink" title="npm info 命令可以查看每个模块的具体信息"></a>npm info 命令可以查看每个模块的具体信息</h3><p><code>$ npm info &lt;package&gt;</code></p>
+<h3 id="以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"><a href="#以树形结构列出当前项目安装的所有模块，以及它们依赖的模块" class="headerlink" title="以树形结构列出当前项目安装的所有模块，以及它们依赖的模块"></a>以树形结构列出当前项目安装的所有模块，以及它们依赖的模块</h3><pre><code class="bash">$ npm list
 
 # 加上 global 参数，会列出全局安装的模块
 $ npm list -global
@@ -224,13 +217,13 @@ $ npm list -global
 # npm list 命令也可以列出单个模块
 $ npm list express
 </code></pre>
-<h5 id="使用-npm-安装包"><a href="#使用-npm-安装包" class="headerlink" title="使用 npm 安装包"></a>使用 npm 安装包</h5><p><code>npm install/i &lt;package_name&gt;</code></p>
+<h3 id="使用-npm-安装包"><a href="#使用-npm-安装包" class="headerlink" title="使用 npm 安装包"></a>使用 npm 安装包</h3><p><code>npm install/i &lt;package_name&gt;</code></p>
 <blockquote>
 <p>在npm install部分，有很多东西值得注意的，比如全局与本地的区别，npm是默认本地安装，像极了python的虚拟环境，完全独立，不用了把文件夹删了就行，很赞。还有开发依赖，生产依赖。所以后来python的pipenv诞生了，吸取了其他包管理器比如npm等的一些优点，已被官方推荐使用</p>
 </blockquote>
-<h5 id="执行package-json中的脚本"><a href="#执行package-json中的脚本" class="headerlink" title="执行package.json中的脚本"></a>执行package.json中的脚本</h5><p><code>npm run</code></p>
+<h3 id="执行package-json中的脚本"><a href="#执行package-json中的脚本" class="headerlink" title="执行package.json中的脚本"></a>执行package.json中的脚本</h3><p><code>npm run</code></p>
 <p><strong>以上都是些简单的概括，具体的看这<a href="https://neveryu.github.io/2017/04/10/npm/" target="_blank" rel="noopener">npm全面介绍</a></strong>以及官网手册，东西很多，挑你用得着的看</p>
-<h5 id="推荐的npm库版本管理工具"><a href="#推荐的npm库版本管理工具" class="headerlink" title="推荐的npm库版本管理工具"></a>推荐的npm库版本管理工具</h5><p><a href="https://segmentfault.com/a/1190000011085967" target="_blank" rel="noopener">npm-check</a>,检查过期的不正确的和未使用的依赖项,版本神器，中文翻译<a href="https://www.helplib.com/GitHub/article_120756" target="_blank" rel="noopener">文档在这</a></p>
+<h3 id="推荐的npm库版本管理工具"><a href="#推荐的npm库版本管理工具" class="headerlink" title="推荐的npm库版本管理工具"></a>推荐的npm库版本管理工具</h3><p><a href="https://segmentfault.com/a/1190000011085967" target="_blank" rel="noopener">npm-check</a>,检查过期的不正确的和未使用的依赖项,版本神器，中文翻译<a href="https://www.helplib.com/GitHub/article_120756" target="_blank" rel="noopener">文档在这</a></p>
 
             </div>
             <hr>
@@ -283,6 +276,21 @@ $ npm list express
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -432,6 +440,51 @@ $ npm list express
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 

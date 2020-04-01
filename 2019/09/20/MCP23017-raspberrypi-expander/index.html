@@ -134,7 +134,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    1.4k 字
+                    1.3k 字
                   </span>
                 
 
@@ -142,7 +142,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      6 分钟
+                      5 分钟
                   </span>
                 
 
@@ -169,14 +169,8 @@
         <div class="py-5 z-depth-3" id="board">
           <div class="post-content mx-auto" id="post">
             
-              <p class="note note-warning">本文最后更新于：星期一, 三月 30日 2020, 5:50 下午</p>
-            
             <div class="markdown-body">
-              <p>For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more?</p>
-<p>The easiest way of getting more inputs and outputs is to use an “i/o port expander”. This is a device that allows you to control a number of ports using data you send to the device.</p>
-<p>MCP23017 Example CircuitOther people have has lots of success using I2C devices so I decided to give one a try. I2C is a serial communications protocol which allows chips to swap data on the same “bus”. A port expander takes the data and controls the appropriate pins. This allows lots of sensors and devices to be controlled using only a few of the Pi’s GPIO pins.</p>
-<a id="more"></a>
-<p><strong>摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景:</strong></p>
+              <p><strong>摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景:</strong></p>
 <p>For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more?</p>
 <p>The easiest way of getting more inputs and outputs is to use an “i/o port expander”. This is a device that allows you to control a number of ports using data you send to the device.</p>
 <p>MCP23017 Example CircuitOther people have has lots of success using I2C devices so I decided to give one a try. I2C is a serial communications protocol which allows chips to swap data on the same “bus”. A port expander takes the data and controls the appropriate pins. This allows lots of sensors and devices to be controlled using only a few of the Pi’s GPIO pins.</p>
@@ -224,8 +218,8 @@
 </li>
 </ul>
 <h2 id="4-在Python脚本中使用拓展模块"><a href="#4-在Python脚本中使用拓展模块" class="headerlink" title="4. 在Python脚本中使用拓展模块"></a>4. 在Python脚本中使用拓展模块</h2><p>习惯了在树莓派中用<code>gpiozero</code>简单丝滑流畅地操控IO,不用关乎太多底层,实在爽的很. 而在这里,我们是I2C bus协议,我们一般是用到<code>smbus</code>库,但是还是有些底层(特别是拓展模块上各个引脚代表的寄存器地址好像有点难以理解)的有些费力,所以找阿找,找到了一个新库,依旧保持优雅!</p>
-<h4 id="什么是CircuitPython"><a href="#什么是CircuitPython" class="headerlink" title="什么是CircuitPython?"></a>什么是CircuitPython?</h4><p><code>CircuitPython</code>基于<code>Python</code>,在<code>Python</code>上添加了硬件支持.<code>CircuitPython</code>旨在在微控制器板上运行。微控制器板是一块带有微控制器芯片的电路板，它本质上是一个多功能的一体机。你持有的电路板是微控制器板！ <code>CircuitPython</code>可以在小型Linux板上运行,这里正好可以用我们的树莓派试试手.先安装库<code>sudo pip3 install adafruit-circuitpython-mcp230xx</code>，然后是代码演示。</p>
-<h4 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h4><pre><code class="python">import time
+<h3 id="4-1-什么是CircuitPython"><a href="#4-1-什么是CircuitPython" class="headerlink" title="4.1 什么是CircuitPython?"></a>4.1 什么是CircuitPython?</h3><p><code>CircuitPython</code>基于<code>Python</code>,在<code>Python</code>上添加了硬件支持.<code>CircuitPython</code>旨在在微控制器板上运行。微控制器板是一块带有微控制器芯片的电路板，它本质上是一个多功能的一体机。你持有的电路板是微控制器板！ <code>CircuitPython</code>可以在小型Linux板上运行,这里正好可以用我们的树莓派试试手.先安装库<code>sudo pip3 install adafruit-circuitpython-mcp230xx</code>，然后是代码演示。</p>
+<h3 id="4-2-代码演示"><a href="#4-2-代码演示" class="headerlink" title="4.2 代码演示"></a>4.2 代码演示</h3><pre><code class="python">import time
 import board
 import busio
 from digitalio import Direction, Pull
@@ -250,8 +244,8 @@ while True:
     time.sleep(2)
 </code></pre>
 <p>具体的代码解释都在注释上写这个了,很简单,不展开.想要查看更多的例子或者源代码可以看<a href="https://github.com/adafruit/Adafruit_CircuitPython_MCP230xx/blob/master/examples/mcp230xx_simpletest.py" target="_blank" rel="noopener"><strong>官方库手册</strong></a></p>
-<h4 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h4><p><strong>当树莓派GPIO口要连接较多设备,数量紧张时,可以用MCP23017拓展模块了来增加,最多可以加128个….<code>adafruit_mcp230xx.mcp23017</code>库也可以很Python地写出控制代码,但是一些监听事件要自己实现,不像<code>gpiozero</code>都有现成的轮子.当然我们可以转换下思路,把一些简单的output设备接在拓展模块上用来简单控制就行,把一些实现复杂的input设备接在树莓派自带的GPIO上,就可以用<code>gpiozero</code>库的高级内容了.</strong></p>
-<p><br><br><br></p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p><strong>当树莓派GPIO口要连接较多设备,数量紧张时,可以用MCP23017拓展模块了来增加,最多可以加128个….<code>adafruit_mcp230xx.mcp23017</code>库也可以很Python地写出控制代码,但是一些监听事件要自己实现,不像<code>gpiozero</code>都有现成的轮子.当然我们可以转换下思路,把一些简单的output设备接在拓展模块上用来简单控制就行,把一些实现复杂的input设备接在树莓派自带的GPIO上,就可以用<code>gpiozero</code>库的高级内容了.</strong></p>
+<p><br></p>
 <p>一些资料整理:<br><a href="https://www.raspberrypi-spy.co.uk/2013/07/how-to-use-a-mcp23017-i2c-port-expander-with-the-raspberry-pi-part-1/#prettyPhoto" target="_blank" rel="noopener">How To Use A MCP23017 I2C Port Expander With The Raspberry Pi – Part 1</a></p>
 <p><a href="https://learn.adafruit.com/using-mcp23008-mcp23017-with-circuitpython/python-circuitpython" target="_blank" rel="noopener">Using MCP23008 &amp; MCP23017 with CircuitPython</a></p>
 <p><a href="https://raspi.tv/2013/using-the-mcp23017-port-expander-with-wiringpi2-to-give-you-16-new-gpio-ports-part-3" target="_blank" rel="noopener">Using the MCP23017 port expander with WiringPi2 to give you 16 new GPIO ports – part 3</a></p>
@@ -312,6 +306,21 @@ while True:
               
             </div>
 
+              
+                <!-- Comments -->
+                <div class="comments" id="comments">
+                  
+                  
+    <section id="comments" class="comments">
+      <style>
+        .utterances{max-width: 100%;}
+      </style>
+        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
+        </script>
+  </section>
+
+
+                </div>
               
           </div>
         </div>
@@ -461,6 +470,51 @@ while True:
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+    <!-- Tencent Analytics -->
+    <script defer>
+      var _mtac = {};
+      (function () {
+        var mta = document.createElement("script");
+        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+        mta.setAttribute("name", "MTAH5");
+        mta.setAttribute("sid", "");
+        
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(mta, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
 
 
 
