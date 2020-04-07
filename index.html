@@ -40,7 +40,7 @@
 
 
 <body>
-  <header style="height: 100vh;">
+  <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
@@ -112,7 +112,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/home3.jpg') no-repeat center center;
+         style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -125,10 +125,6 @@
           </div>
 
           
-            <div class="scroll-down-bar">
-              <i class="fas fa-angle-down scroll-down-arrow"></i>
-            </div>
-          
         </div>
       </div>
     </div>
@@ -138,7 +134,7 @@
     
       <div class="container nopadding-md">
         <div class="py-5 z-depth-3" id="board"
-          style=margin-top:0>
+          >
           
           <div class="container">
             <div class="row">
@@ -150,8 +146,57 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/04/02/python-rsyslog/" target="_self">
+          <img src="/images/suolue/rsyslog.png" srcset="/img/loading.gif" alt="Python rsyslog日志集中化" class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/2020/04/02/python-rsyslog/">
+        <p class="h4 index-header">Python rsyslog日志集中化</p>
+      </a>
+
+      <a href="/2020/04/02/python-rsyslog/">
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。
+1. 什么是rsyslog1.1 基本介绍开始之前想说说什么是 syslog，在 Linux中，有很多后台程序都是以后台进程的形式存在运行，例如 crontab／sshd／nginx 等，有些是系统</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-02&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python/">Python</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Python/">Python</a>&nbsp;
+          
+            <a href="/tags/Linux/">Linux</a>&nbsp;
+          
+            <a href="/tags/rsyslog/">rsyslog</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2020/03/31/linux-signal-with-python/" target="_self">
-          <img src="/img/index/signal.png" srcset="/img/loading.gif" alt="Linux的信号以及Python处理" class="index-img img-fluid rounded index-thumbnails">
+          <img src="/images/suolue/signal.png" srcset="/img/loading.gif" alt="Linux的信号以及Python处理" class="index-img img-fluid rounded index-thumbnails">
         </a>
       </div>
     
@@ -584,50 +629,6 @@ def countdown(n):
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/12/10/python-mqtt/">
-        <p class="h4 index-header">MQTT知识指南以及在Python的应用</p>
-      </a>
-
-      <a href="/2019/12/10/python-mqtt/">
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">谈到物联网就会谈到MQTT协议，之前一段时间我虽然在书上看到过，也是粗略一看也没深究，主要自己只是维度不够，项目中也没有用到，就不了了之了。最近老板找了个架构师准备用心好好搞一搞公司那个平台，提出新的架构，用到了MQTT协议，用心研究了一番，发现以前写了好多的功能都是MQTT自带的，花了好多时间重复造轮子。最近看了好多相关的东西，虽然蛮多深层次的东西都没有摸到，但也有些了解，故搜集了一些资料有序的记录下来，大部分内容来自Steve以及Maulin Tolia的博客，十分感谢。
-1. MQTT基础图文并茂的MQTT基础学习，后来又发现了个湾湾的MQTT教学，同为两岸同胞，感觉切实际更好一点
-其他</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-10&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/MQTT/">MQTT</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/MQTT/">MQTT</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -787,7 +788,7 @@ def countdown(n):
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "静和&nbsp;",
+        "日拱一卒, 知足常乐&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

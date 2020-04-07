@@ -40,7 +40,7 @@
 
 
 <body>
-  <header style="height: 100vh;">
+  <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
@@ -112,7 +112,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/home3.jpg') no-repeat center center;
+         style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -125,10 +125,6 @@
           </div>
 
           
-            <div class="scroll-down-bar">
-              <i class="fas fa-angle-down scroll-down-arrow"></i>
-            </div>
-          
         </div>
       </div>
     </div>
@@ -138,13 +134,56 @@
     
       <div class="container nopadding-md">
         <div class="py-5 z-depth-3" id="board"
-          style=margin-top:0>
+          >
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/07/08/django-gunicorn-nginx-config/">
+        <p class="h4 index-header">Django+Gunicorn+Nginx配置整理</p>
+      </a>
+
+      <a href="/2019/07/08/django-gunicorn-nginx-config/">
+        
+        
+          
+          
+        
+        <div class="index-excerpt" style="max-height: none;">
+          <div class="index-text mb-1">之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅...</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-08&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python/">Python</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django/">Django</a>&nbsp;
+          
+            <a href="/tags/Gunicorn/">Gunicorn</a>&nbsp;
+          
+            <a href="/tags/Nginx/">Nginx</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
 
   <div class="row mx-auto index-card">
     
@@ -553,49 +592,6 @@ byte：字节，是计算机中数据处理的基本单位，计</div>
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/23/python-encode-decode1/">
-        <p class="h4 index-header">通过串口发送16进制数据引发的Python3编码血案</p>
-      </a>
-
-      <a href="/2019/05/23/python-encode-decode1/">
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..
-1. 按部就班设备手册里写的读距离命令是这样的： 68,04,01,01,06 ，发送后结果数据以数据输出格式输出。数据一个十个字节，输出格式为=&gt;数据帧字头（1Byte）+数据长度（6Byte）+地址（1Byte）+数据（</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-23&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/Serial/">Serial</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -755,7 +751,7 @@ byte：字节，是计算机中数据处理的基本单位，计</div>
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "静和&nbsp;",
+        "日拱一卒, 知足常乐&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

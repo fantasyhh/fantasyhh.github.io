@@ -40,7 +40,7 @@
 
 
 <body>
-  <header style="height: 100vh;">
+  <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
@@ -112,7 +112,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/home3.jpg') no-repeat center center;
+         style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -125,10 +125,6 @@
           </div>
 
           
-            <div class="scroll-down-bar">
-              <i class="fas fa-angle-down scroll-down-arrow"></i>
-            </div>
-          
         </div>
       </div>
     </div>
@@ -138,13 +134,57 @@
     
       <div class="container nopadding-md">
         <div class="py-5 z-depth-3" id="board"
-          style=margin-top:0>
+          >
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a href="/2019/12/10/python-mqtt/">
+        <p class="h4 index-header">MQTT知识指南以及在Python的应用</p>
+      </a>
+
+      <a href="/2019/12/10/python-mqtt/">
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">谈到物联网就会谈到MQTT协议，之前一段时间我虽然在书上看到过，也是粗略一看也没深究，主要自己只是维度不够，项目中也没有用到，就不了了之了。最近老板找了个架构师准备用心好好搞一搞公司那个平台，提出新的架构，用到了MQTT协议，用心研究了一番，发现以前写了好多的功能都是MQTT自带的，花了好多时间重复造轮子。最近看了好多相关的东西，虽然蛮多深层次的东西都没有摸到，但也有些了解，故搜集了一些资料有序的记录下来，大部分内容来自Steve以及Maulin Tolia的博客，十分感谢。
+1. MQTT基础图文并茂的MQTT基础学习，后来又发现了个湾湾的MQTT教学，同为两岸同胞，感觉切实际更好一点
+其他</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-10&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/MQTT/">MQTT</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Python/">Python</a>&nbsp;
+          
+            <a href="/tags/Linux/">Linux</a>&nbsp;
+          
+            <a href="/tags/MQTT/">MQTT</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
 
   <div class="row mx-auto index-card">
     
@@ -526,49 +566,6 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/07/08/django-gunicorn-nginx-config/">
-        <p class="h4 index-header">Django+Gunicorn+Nginx配置整理</p>
-      </a>
-
-      <a href="/2019/07/08/django-gunicorn-nginx-config/">
-        
-        
-          
-          
-        
-        <div class="index-excerpt" style="max-height: none;">
-          <div class="index-text mb-1">之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅...</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-08&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django/">Django</a>&nbsp;
-          
-            <a href="/tags/Gunicorn/">Gunicorn</a>&nbsp;
-          
-            <a href="/tags/Nginx/">Nginx</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="index posts navigation">
@@ -728,7 +725,7 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "静和&nbsp;",
+        "日拱一卒, 知足常乐&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
