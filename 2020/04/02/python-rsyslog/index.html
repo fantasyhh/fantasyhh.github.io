@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Python rsyslog日志集中化 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 四月 2日 2020, 4:00 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-04-02 16:00">
+                    2020年4月2日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     2.4k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      10 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    12
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭<br>上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 <code>rsyslog</code>即可，<code>Python</code> 日志库也自带了 <code>SysLogHandler</code>. 简单配置一下即可使用。</p>
 <h2 id="1-什么是rsyslog"><a href="#1-什么是rsyslog" class="headerlink" title="1. 什么是rsyslog"></a>1. 什么是rsyslog</h2><h3 id="1-1-基本介绍"><a href="#1-1-基本介绍" class="headerlink" title="1.1 基本介绍"></a>1.1 基本介绍</h3><p>开始之前想说说什么是 <code>syslog</code>，在 <code>Linux</code>中，有很多后台程序都是以后台进程的形式存在运行，例如 <code>crontab／sshd／nginx</code> 等，有些是系统的，有些是我们自己添加的，但是，他们都有一些相同的特点：</p>
 <ul>
@@ -203,30 +215,30 @@
 <p>PRIORITY指定系统日志消息的优先级。可以通过以下关键字之一（或数字）来表示优先级：<code>debug (7), info (6), notice (5), warning (4), err (3), crit (2), alert (1), and emerg (0)</code></p>
 <p> To select all kernel syslog messages with any priority, add the following text into the configuration file:</p>
 <p>选择任何优先级的所有内核syslog消息：</p>
-<pre><code>kern.*
-</code></pre><p>要选择优先级crit更高的所有邮件系统日志消息，请使用以下形式：</p>
-<pre><code>mail.crit
-</code></pre><p>要选择除具有info或debug优先级的消息外的所有cron syslog消息，请以以下形式设置配置：</p>
-<pre><code>cron.!info,!debug
-</code></pre><p>此外，还支持比较符过滤，比如：</p>
-<pre><code>:msg, contains, &quot;error&quot;
+<div class="hljs"><pre><code>kern.*
+</code></pre></div><p>要选择优先级crit更高的所有邮件系统日志消息，请使用以下形式：</p>
+<div class="hljs"><pre><code>mail.crit
+</code></pre></div><p>要选择除具有info或debug优先级的消息外的所有cron syslog消息，请以以下形式设置配置：</p>
+<div class="hljs"><pre><code>cron.!info,!debug
+</code></pre></div><p>此外，还支持比较符过滤，比如：</p>
+<div class="hljs"><pre><code>:msg, contains, &quot;error&quot;
 :hostname, isequal, &quot;host1&quot;
 :msg, !regex, &quot;fatal .* error&quot;
-</code></pre><p>以及表达式过滤器：</p>
-<pre><code>  if EXPRESSION then ACTION else ACTION
-</code></pre><h3 id="2-2-Actions（动作）"><a href="#2-2-Actions（动作）" class="headerlink" title="2.2  Actions（动作）"></a>2.2  Actions（动作）</h3><h4 id="2-2-1-将syslog消息存入文件"><a href="#2-2-1-将syslog消息存入文件" class="headerlink" title="2.2.1 将syslog消息存入文件"></a>2.2.1 将syslog消息存入文件</h4><p>大多数操作指定将系统日志消息保存到哪个日志文件。这是通过在已定义的选择器之后指定文件(    FILTER PATH)路径来完成的：</p>
-<pre><code>cron.* /var/log/cron.log
-</code></pre><p>默认情况下，每次生成系统日志消息时都会同步日志文件。使用破折号（-）作为指定的文件路径的前缀以省略同步：</p>
-<pre><code>FILTER -PATH
-</code></pre><p>指定的文件路径可以是静态或动态的。如上例所示，静态文件由固定文件路径表示。动态文件路径可能会根据收到的消息而有所不同。动态文件路径由模板和问号（?）前缀表示，<br><code>FILTER ?DynamicFile</code></p>
-<pre><code>template(name=&quot;DynFile&quot; type=&quot;string&quot; string=&quot;/var/log/line/%fromhost%.log&quot;)
+</code></pre></div><p>以及表达式过滤器：</p>
+<div class="hljs"><pre><code>if EXPRESSION then ACTION else ACTION
+</code></pre></div><h3 id="2-2-Actions（动作）"><a href="#2-2-Actions（动作）" class="headerlink" title="2.2  Actions（动作）"></a>2.2  Actions（动作）</h3><h4 id="2-2-1-将syslog消息存入文件"><a href="#2-2-1-将syslog消息存入文件" class="headerlink" title="2.2.1 将syslog消息存入文件"></a>2.2.1 将syslog消息存入文件</h4><p>大多数操作指定将系统日志消息保存到哪个日志文件。这是通过在已定义的选择器之后指定文件(    FILTER PATH)路径来完成的：</p>
+<div class="hljs"><pre><code>cron.* /var/log/cron.log
+</code></pre></div><p>默认情况下，每次生成系统日志消息时都会同步日志文件。使用破折号（-）作为指定的文件路径的前缀以省略同步：</p>
+<div class="hljs"><pre><code>FILTER -PATH
+</code></pre></div><p>指定的文件路径可以是静态或动态的。如上例所示，静态文件由固定文件路径表示。动态文件路径可能会根据收到的消息而有所不同。动态文件路径由模板和问号（?）前缀表示，<br><code>FILTER ?DynamicFile</code></p>
+<div class="hljs"><pre><code>template(name=&quot;DynFile&quot; type=&quot;string&quot; string=&quot;/var/log/line/%fromhost%.log&quot;)
 local7.* ?DynFile
-</code></pre><p>动态模板是很大的一块内容，具体的不展开我用到的不多，就上面这个例子。详情可以看<a href="https://dulishu.top/linux-rsyslog-template/" target="_blank" rel="noopener">rsyslog template</a>以及<a href="https://www.rsyslog.com/doc/master/configuration/properties.html" target="_blank" rel="noopener">需要用到的属性</a></p>
+</code></pre></div><p>动态模板是很大的一块内容，具体的不展开我用到的不多，就上面这个例子。详情可以看<a href="https://dulishu.top/linux-rsyslog-template/" target="_blank" rel="noopener">rsyslog template</a>以及<a href="https://www.rsyslog.com/doc/master/configuration/properties.html" target="_blank" rel="noopener">需要用到的属性</a></p>
 <h4 id="2-2-2-通过网络发送syslog消息"><a href="#2-2-2-通过网络发送syslog消息" class="headerlink" title="2.2.2 通过网络发送syslog消息"></a>2.2.2 通过网络发送syslog消息</h4><p>rsyslog允许您通过网络发送和接收syslog消息。此功能使您可以在一台计算机上管理多个主机的系统日志消息。要将系统日志消息转发到远程计算机，请使用以下语法，<code>@[(zNUMBER)]HOST:[PORT]</code>，<code>@</code>代表udp，<code>@@</code>代表TCP</p>
-<pre><code>*.* @192.168.0.1
+<div class="hljs"><pre><code>*.* @192.168.0.1
 *.* @@example.com:6514
 *.* @(z9)[2001:db8::1]
-</code></pre><p>Storing syslog messages in a database</p>
+</code></pre></div><p>Storing syslog messages in a database</p>
 <h4 id="2-2-3-其他传输方式"><a href="#2-2-3-其他传输方式" class="headerlink" title="2.2.3 其他传输方式"></a>2.2.3 其他传输方式</h4><ul>
 <li>Output channels</li>
 <li>Sending syslog messages to specific users</li>
@@ -235,86 +247,82 @@ local7.* ?DynFile
 <li>Discarding syslog messages  （丢弃日志<code>local5.* stop</code>）</li>
 </ul>
 <h4 id="2-2-4-指定多个动作"><a href="#2-2-4-指定多个动作" class="headerlink" title="2.2.4 指定多个动作"></a>2.2.4 指定多个动作</h4><p>可以为每个选择器指定多个操作。要为一个选择器指定多个动作，请将每个动作写在单独的行上，并在其前面加上一个＆字符</p>
-<pre><code>FILTER ACTION
+<div class="hljs"><pre><code>FILTER ACTION
 &amp; ACTION
 &amp; ACTION
 
 kern.=crit user1
 &amp; ^test-program;temp
 &amp; @192.168.0.1
-</code></pre><h3 id="2-3-Log-Rotation-（日志轮替）"><a href="#2-3-Log-Rotation-（日志轮替）" class="headerlink" title="2.3 Log Rotation （日志轮替）"></a>2.3 Log Rotation （日志轮替）</h3><p>我们可以在<code>/etc/logrotate.conf</code>配置文件中进行<strong>日志轮替</strong>的配置</p>
-<pre><code># rotate log files weekly
+</code></pre></div><h3 id="2-3-Log-Rotation-（日志轮替）"><a href="#2-3-Log-Rotation-（日志轮替）" class="headerlink" title="2.3 Log Rotation （日志轮替）"></a>2.3 Log Rotation （日志轮替）</h3><p>我们可以在<code>/etc/logrotate.conf</code>配置文件中进行<strong>日志轮替</strong>的配置</p>
+<div class="hljs"><pre><code># rotate log files weekly
 weekly
 # keep 4 weeks worth of backlogs
 rotate 4
 # uncomment this if you want your log files compressed
 compress
-</code></pre><h2 id="3-使用Python发送日志到rsyslog"><a href="#3-使用Python发送日志到rsyslog" class="headerlink" title="3. 使用Python发送日志到rsyslog"></a>3. 使用Python发送日志到rsyslog</h2><p>我们查阅一下 Python 文档中的 logging 模块的文档，可以发现又一个 handler 叫做：SysLogHandler，看一下参数，并不比 syslog 的原始函数简单，但是，我们可以忽略所有这些参数，而简单得控制日志输出：</p>
-<pre><code>class logging.handlers.SysLogHandler(address=(&#39;localhost&#39;, SYSLOG_UDP_PORT), facility=LOG_USER, socktype=socket.SOCK_DGRAM)
-</code></pre><p><code>address</code>: 前面说了 rsyslog 是一个套接字，这里可以制定套接字的地址，注意：这个可以是不在同一台机器,默认为(‘localhost’, 514)<br><code>facility</code>：这个参数的作用是告诉 rsyslog 日志的类型，从而可以让他根据不同的类型执行不同的操作，默认为LOG_USER,下面的例子我们使用<strong>自定义的日志设备local7</strong><br><code>socktype</code>：默认UDP，想换TCP用<code>socket.SOCK_STREAM</code><br>使用的话就和其他的 Handler 一致，简单得记一下：</p>
-<pre><code class="python">import logging
-from logging.handlers import SysLogHandler
+</code></pre></div><h2 id="3-使用Python发送日志到rsyslog"><a href="#3-使用Python发送日志到rsyslog" class="headerlink" title="3. 使用Python发送日志到rsyslog"></a>3. 使用Python发送日志到rsyslog</h2><p>我们查阅一下 Python 文档中的 logging 模块的文档，可以发现又一个 handler 叫做：SysLogHandler，看一下参数，并不比 syslog 的原始函数简单，但是，我们可以忽略所有这些参数，而简单得控制日志输出：</p>
+<div class="hljs"><pre><code>class logging.handlers.SysLogHandler(address=(&apos;localhost&apos;, SYSLOG_UDP_PORT), facility=LOG_USER, socktype=socket.SOCK_DGRAM)
+</code></pre></div><p><code>address</code>: 前面说了 rsyslog 是一个套接字，这里可以制定套接字的地址，注意：这个可以是不在同一台机器,默认为(‘localhost’, 514)<br><code>facility</code>：这个参数的作用是告诉 rsyslog 日志的类型，从而可以让他根据不同的类型执行不同的操作，默认为LOG_USER,下面的例子我们使用<strong>自定义的日志设备local7</strong><br><code>socktype</code>：默认UDP，想换TCP用<code>socket.SOCK_STREAM</code><br>使用的话就和其他的 Handler 一致，简单得记一下：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging
+<span class="hljs-keyword">from</span> logging.handlers <span class="hljs-keyword">import</span> SysLogHandler
 
-_LOG_SERVER = (&#39;192.168.123.222&#39;, 514)
+_LOG_SERVER = (<span class="hljs-string">'192.168.123.222'</span>, <span class="hljs-number">514</span>)
 
-def remote_logger(name):
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remote_logger</span><span class="hljs-params">(name)</span>:</span>
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     handler1 = SysLogHandler(
         address=_LOG_SERVER, facility=SysLogHandler.LOG_LOCAL7)
-    # python logging 默认所有的日志都是输出到 stderr 中的,可以在supervisor的stderr_logfile指定文件中查看相关日志
-    # 或者 stdout_handler = logging.StreamHandler(sys.stdout)
+    <span class="hljs-comment"># python logging 默认所有的日志都是输出到 stderr 中的,可以在supervisor的stderr_logfile指定文件中查看相关日志</span>
+    <span class="hljs-comment"># 或者 stdout_handler = logging.StreamHandler(sys.stdout)</span>
     handler2 = StreamHandler()
-    formatter1 = logging.Formatter(&#39;%(name)s - %(levelname)s -  %(message)s&#39;)
+    formatter1 = logging.Formatter(<span class="hljs-string">'%(name)s - %(levelname)s -  %(message)s'</span>)
     formatter2 = logging.Formatter(
-        &#39;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#39;)
+        <span class="hljs-string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)
     handler1.setFormatter(formatter1)
     handler2.setFormatter(formatter2)
     logger.addHandler(handler1)
     logger.addHandler(handler2)
-    return logger
+    <span class="hljs-keyword">return</span> logger
 
-logger = remote_logger(&#39;test&#39;)
-logger.info(&#39;xxx&#39;)
-</code></pre>
+logger = remote_logger(<span class="hljs-string">'test'</span>)
+logger.info(<span class="hljs-string">'xxx'</span>)</code></pre></div></p>
 <h2 id="4-记录Python使用TCP的一些坑"><a href="#4-记录Python使用TCP的一些坑" class="headerlink" title="4. 记录Python使用TCP的一些坑"></a>4. 记录Python使用TCP的一些坑</h2><p>鉴于上面所说的，官方推荐使用TCP，而在上面的例子中我们只要改下<code>socktype</code>的参数就行，但随后发现日志总是没法显示，要么就是好多行在一起，找了好多资料才发现其中原因，具体看<a href="https://stackoverflow.com/questions/40041697/pythons-sysloghandler-and-tcp" target="_blank" rel="noopener">Python’s SyslogHandler and TCP</a>和<a href="https://stackoverflow.com/questions/52950147/sysloghandler-messages-grouped-on-one-line-on-remote-server" target="_blank" rel="noopener">SysLogHandler messages grouped on one line on remote server</a>，概括来说就是<strong>TCP格式标准不支持</strong>，要自己动手额外打些补丁，比较简便的方法是<a href="https://community.graylog.org/t/graylog-2-not-displaying-tcp-syslog-messages/961/2" target="_blank" rel="noopener">使用syslog_rfc5424_formatter库</a></p>
-<pre><code class="python">import logging
-import logging.handlers
-import socket
-from syslog_rfc5424_formatter import RFC5424Formatter
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging
+<span class="hljs-keyword">import</span> logging.handlers
+<span class="hljs-keyword">import</span> socket
+<span class="hljs-keyword">from</span> syslog_rfc5424_formatter <span class="hljs-keyword">import</span> RFC5424Formatter
 
-my_logger = logging.getLogger(&#39;MyLogger&#39;)
+my_logger = logging.getLogger(<span class="hljs-string">'MyLogger'</span>)
 my_logger.setLevel(logging.DEBUG)
 
-handler = logging.handlers.SysLogHandler(address = (&#39;0.0.0.0&#39;,8514),socktype=socket.SOCK_STREAM)
-# some old syslog daemons expect a NUL terminator, but graylog will not work if a NUL terminator is appended.
-handler.append_nul = False
+handler = logging.handlers.SysLogHandler(address = (<span class="hljs-string">'0.0.0.0'</span>,<span class="hljs-number">8514</span>),socktype=socket.SOCK_STREAM)
+<span class="hljs-comment"># some old syslog daemons expect a NUL terminator, but graylog will not work if a NUL terminator is appended.</span>
+handler.append_nul = <span class="hljs-literal">False</span>
 handler.setFormatter(RFC5424Formatter())
 my_logger.addHandler(handler)
 
-my_logger.debug(&#39;wolfgang was here\n&#39;)
-</code></pre>
+my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></pre></div>
 <blockquote>
 <p>当然我们可以用一些方法曲线救国，我们用UDP写入到本地然后在用rsylog自带的TCP传输写入到远程，这个方法还可以，尽量保证数据准确性</p>
 </blockquote>
 <h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>在学习日志集中化过程中，也发现了<a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/index.html" target="_blank" rel="noopener">ELK</a>，相信以后如果接触大型项目也会要学习到的，而几个小机器，用rsyslog绰绰有余～</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
@@ -322,9 +330,9 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
                     
                       <a class="hover-with-bg" href="/tags/rsyslog/">rsyslog</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -333,6 +341,12 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
                   <div class="post-prev col-6">
                     
                     
+                      <a href="/2020/05/13/arduinoFanByTemp/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Arduino温控PC风扇以及信息显示思路总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </div>
                   <div class="post-next col-6">
                     
@@ -340,7 +354,7 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
                       <a href="/2020/03/31/linux-signal-with-python/">
                         <span class="hidden-mobile">Linux的信号以及Python处理</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -348,31 +362,25 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -388,8 +396,8 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -422,9 +430,10 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -436,9 +445,7 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -447,34 +454,12 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -484,16 +469,13 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -503,8 +485,6 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -537,36 +517,12 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -612,24 +568,28 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -684,6 +644,10 @@ my_logger.debug(&#39;wolfgang was here\n&#39;)
       ;
     </script>
   
+
+
+
+
 
 
 

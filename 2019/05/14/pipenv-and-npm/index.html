@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>由npm而温故到的pipenv - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期二, 五月 14日 2019, 10:18 上午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-05-14 10:18">
+                    2019年5月14日 上午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     1k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      3 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    4
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的<code>source url</code>换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用<code>pip freeze</code> 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是<a href="https://zhuanlan.zhihu.com/p/22332669" target="_blank" rel="noopener">Kenneth Reitz</a>（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。</p>
 <h2 id="1-Pipenv燥起来"><a href="#1-Pipenv燥起来" class="headerlink" title="1. Pipenv燥起来"></a>1. Pipenv燥起来</h2><p>pipenv 参考了其他语言的包管理工具（bundler, composer, npm, cargo, yarn, etc.），旨在将最好的包管理工具带入 python 世界。pipevn 可以解决哪些问题：</p>
 <ul>
@@ -201,30 +213,29 @@
 </ul>
 <h2 id="2-顺便说说npm"><a href="#2-顺便说说npm" class="headerlink" title="2. 顺便说说npm"></a>2. 顺便说说npm</h2><p><a href="https://www.cnblogs.com/tzyy/p/5193811.html" target="_blank" rel="noopener">package.json的字段详解</a>在这里，同样的按上面的说法，lock文件应该也要放入版本控制，但有一篇文章写道<a href="https://www.codementor.io/johnkennedy/get-rid-of-that-npm-package-lock-json-e0bj7ai42" target="_blank" rel="noopener">package-lock.json文件是地狱</a>。哈哈哈23333</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
                       <a class="hover-with-bg" href="/tags/npm/">npm</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -234,7 +245,7 @@
                     
                     
                       <a href="/2019/05/17/nodejs3-jstips/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -246,7 +257,7 @@
                       <a href="/2019/05/08/nodejs-2/">
                         <span class="hidden-mobile">用 Python 眼光看Nodejs（二），安装及npm配置</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -254,31 +265,25 @@
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -294,8 +299,8 @@
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -328,9 +333,10 @@
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -342,9 +348,7 @@
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -353,34 +357,12 @@
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -390,16 +372,13 @@
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -409,8 +388,6 @@
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -443,36 +420,12 @@
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -518,24 +471,28 @@
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -590,6 +547,10 @@
       ;
     </script>
   
+
+
+
+
 
 
 

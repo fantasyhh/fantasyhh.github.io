@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>树莓派使用MCP3008模数转换器(ADC) - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 一月 20日 2020, 3:25 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-01-20 15:25">
+                    2020年1月20日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     630 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      2 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    2
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！<br>我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。</p>
 <h2 id="1-方法总结"><a href="#1-方法总结" class="headerlink" title="1. 方法总结"></a>1. 方法总结</h2><ul>
 <li><p><a href="https://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/" target="_blank" rel="noopener">Analogue Sensors On The Raspberry Pi Using An MCP3008</a></p>
@@ -185,35 +197,32 @@
 <li>当你使用MCP3008芯片时，务必使用第三种方法，<code>gpiozero MCP3008</code>函数，依旧是熟悉的味道，简单好用，三行代码就解决；当使用ADS1x15系列时，需要用第二种方法中的库<a href="https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters" target="_blank" rel="noopener">在这里往下翻翻</a></li>
 <li>第二种方法中的<code>adafruit-circuitpython-mcp3xxx</code>库有个注意点，虽然MCP是10位精度的，也就是转换的最大值本应该是1023，但用这个方法的时候默认返回16位精度的值，为了与ADS1x15系列的借口保持统一，所以结果要么右移6位，要么就当成是16位精度也行。</li>
 </ul>
-<p>另外的,在<code>gpiozero</code>中，有下列方法实例化模数转换器：</p>
-<pre><code class="python">from gpiozero import MCP3008
+<p>另外的,在<code>gpiozero</code>中，有下列方法实例化模数转换器：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> gpiozero <span class="hljs-keyword">import</span> MCP3008
 
-MCP3008(channel=0)
-MCP3008(channel=0, device=0)
-MCP3008(channel=0, port=0, device=0)
-MCP3008(channel=0, select_pin=8)
-MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
-</code></pre>
+MCP3008(channel=<span class="hljs-number">0</span>)
+MCP3008(channel=<span class="hljs-number">0</span>, device=<span class="hljs-number">0</span>)
+MCP3008(channel=<span class="hljs-number">0</span>, port=<span class="hljs-number">0</span>, device=<span class="hljs-number">0</span>)
+MCP3008(channel=<span class="hljs-number">0</span>, select_pin=<span class="hljs-number">8</span>)
+MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-number">11</span>, mosi_pin=<span class="hljs-number">10</span>, miso_pin=<span class="hljs-number">9</span>, select_pin=<span class="hljs-number">8</span>)</code></pre></div></p>
 <p>上面<code>device=0（默认） 或者device=1</code>，其实默认意味着MCP3008的<strong>cs</strong>引脚接的是<strong>GPIO08</strong>（也就是SPI0_CE0_N），所以<code>device=1</code>意味着接的<strong>GPIO07</strong></p>
 <p>我一开始以为<strong>cs</strong>引脚只能接这两个，后来发现，所有通用<strong>IO</strong>引脚都能接，只要加个<code>select_pin</code>参数，简简单单，好用的。</p>
 <p><strong>Arduino是自带模数转换功能，实在着急，先用个Arduino救救急，不展开～</strong></p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/RaspberryPi/">RaspberryPi</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
@@ -221,9 +230,9 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
                     
                       <a class="hover-with-bg" href="/tags/SPI/">SPI</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -233,7 +242,7 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
                     
                     
                       <a href="/2020/02/10/Raspberrypi-PWM/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">树莓派几种不同的PWM及其应用</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -245,7 +254,7 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
                       <a href="/2020/01/12/python-yield-from/">
                         <span class="hidden-mobile">Python3 yield from 用法详解</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -253,31 +262,25 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -293,8 +296,8 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -327,9 +330,10 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -341,9 +345,7 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -352,34 +354,12 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -389,16 +369,13 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -408,8 +385,6 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -442,36 +417,12 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -517,24 +468,28 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -589,6 +544,10 @@ MCP3008(channel=0, clock_pin=11, mosi_pin=10, miso_pin=9, select_pin=8)
       ;
     </script>
   
+
+
+
+
 
 
 

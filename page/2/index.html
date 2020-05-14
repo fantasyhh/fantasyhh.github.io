@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -133,7 +140,7 @@
   <main>
     
       <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board"
+        <div class="py-5" id="board"
           >
           
           <div class="container">
@@ -146,41 +153,40 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/12/10/python-mqtt/">
-        <p class="h4 index-header">MQTT知识指南以及在Python的应用</p>
+      <a class="index-header" href="/2019/12/31/thread-and-process/">操作系统中线程与进程概念解惑</a>
+
+      <a href="/2019/12/31/thread-and-process/" class="index-excerpt">
+        
+        
+          
+        
+        <div>这篇文章总结本来记录于两年前，是在写Python多线程时对一些概念的疑惑的解答，当初查阅了很多资料，对于操作系统层面的线程进程概念很模糊。而今，随着Python版本的更新，本身异步的新特性逐渐完善，在学习异步的时候难免与常用的多进程多线程进行比较来说明异步的优越性，把以前的文章拿出来，并且在现在自己的理解上查阅一些资料进行适当修改，达到温故而知新的效果。
+看了一天的相关概念,很多涉及到操作系统与底</div>
       </a>
 
-      <a href="/2019/12/10/python-mqtt/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-12-31
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">谈到物联网就会谈到MQTT协议，之前一段时间我虽然在书上看到过，也是粗略一看也没深究，主要自己只是维度不够，项目中也没有用到，就不了了之了。最近老板找了个架构师准备用心好好搞一搞公司那个平台，提出新的架构，用到了MQTT协议，用心研究了一番，发现以前写了好多的功能都是MQTT自带的，花了好多时间重复造轮子。最近看了好多相关的东西，虽然蛮多深层次的东西都没有摸到，但也有些了解，故搜集了一些资料有序的记录下来，大部分内容来自Steve以及Maulin Tolia的博客，十分感谢。
-1. MQTT基础图文并茂的MQTT基础学习，后来又发现了个湾湾的MQTT教学，同为两岸同胞，感觉切实际更好一点
-其他</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-10&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Linux/">Linux</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/MQTT/">MQTT</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/MQTT/">MQTT</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/Thread/">Thread</a>
+            
+          </div>
         
       </div>
     </div>
@@ -190,39 +196,41 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/12/09/django-admin-action/">
-        <p class="h4 index-header">Django admin后台常用设置汇总</p>
+      <a class="index-header" href="/2019/12/10/python-mqtt/">MQTT知识指南以及在Python的应用</a>
+
+      <a href="/2019/12/10/python-mqtt/" class="index-excerpt">
+        
+        
+          
+        
+        <div>谈到物联网就会谈到MQTT协议，之前一段时间我虽然在书上看到过，也是粗略一看也没深究，主要自己只是维度不够，项目中也没有用到，就不了了之了。最近老板找了个架构师准备用心好好搞一搞公司那个平台，提出新的架构，用到了MQTT协议，用心研究了一番，发现以前写了好多的功能都是MQTT自带的，花了好多时间重复造轮子。最近看了好多相关的东西，虽然蛮多深层次的东西都没有摸到，但也有些了解，故搜集了一些资料有序的</div>
       </a>
 
-      <a href="/2019/12/09/django-admin-action/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-12-10
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">一开始学Django的时候基本都有接触django admin管理员后台，但是之后的开发基本很少用，写API测试的时候要修好后台数据基本都是命令行或者数据库直接修改，完全没有接触到admin。但是最近方便公司订饭，写了个订饭系统，前后端分离，本想让前端根据登录员工判断是否是管理员角色，然后在页面上增加管理员操作元素，有点麻烦，。之后，我直接傻了，拍了下自己头，为啥不用django自带的管理员后台呢，好用方便快捷。
-1. 信手拈来Django admin 一些有用的设置如何修改django的app在admin中显示的名称
-2. 柳暗花明在搜寻资料的过程中，反现了一本好书 django-admin</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-09&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MQTT/">MQTT</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django/">Django</a>&nbsp;
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/MQTT/">MQTT</a>
+            
+          </div>
         
       </div>
     </div>
@@ -232,40 +240,81 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/10/17/python-m-option/">
-        <p class="h4 index-header">Python -m 参数以及生僻运行命令汇总</p>
-      </a>
+      <a class="index-header" href="/2019/12/09/django-admin-action/">Django admin后台常用设置汇总</a>
 
-      <a href="/2019/10/17/python-m-option/">
+      <a href="/2019/12/09/django-admin-action/" class="index-excerpt">
         
         
           
         
-        <div class="index-excerpt">
-          <div class="index-text mb-1">最近在翻阅剖析Python源码的时候讲到了内部Python变量的实现，以及当运行Python命令时，隐藏在内部的一些过程，于是python3 --help之后对某些运行参数产生了一些疑问，还涉及到了包与模块的内容，略微生僻，特此整理记录下～
+        <div>一开始学Django的时候基本都有接触django admin管理员后台，但是之后的开发基本很少用，写API测试的时候要修好后台数据基本都是命令行或者数据库直接修改，完全没有接触到admin。但是最近方便公司订饭，写了个订饭系统，前后端分离，本想让前端根据登录员工判断是否是管理员角色，然后在页面上增加管理员操作元素，有点麻烦，。之后，我直接傻了，拍了下自己头，为啥不用django自带的管理员后台呢</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-12-09
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Django/">Django</a>
+            
+              <a href="/tags/Python/">Python</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/10/17/python-m-option/">Python -m 参数以及生僻运行命令汇总</a>
+
+      <a href="/2019/10/17/python-m-option/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近在翻阅剖析Python源码的时候讲到了内部Python变量的实现，以及当运行Python命令时，隐藏在内部的一些过程，于是python3 --help之后对某些运行参数产生了一些疑问，还涉及到了包与模块的内容，略微生僻，特此整理记录下～
 1. 大杂烩
-旨在由用户直接执行的包含Python代码的纯文本文件通常称为脚本(script)，这是一个非正式术语，表示顶级程序文件。 另一方面，包含设计用于从另一个Python文件导入和使用的Python代码的纯文本文件称为模块(modules)。
-
-1.1 使用importlib导入模块import importlib
-importlib.import</div>
-        </div>
+旨在由用户直接执行的包含Python代码的纯文本文件通常称为脚本(script)，这是一个非正式术语，表示顶级程序文件。 另一方面，包含设计用于</div>
       </a>
 
-      <div class="index-btm">
+      <div class="index-btm post-metas">
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-17&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-10-17
+          </div>
         
         
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+          </div>
         
       </div>
     </div>
@@ -275,38 +324,39 @@ importlib.import</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/10/11/extern-and-linker/">
-        <p class="h4 index-header">C语言中extern和头文件以及静态动态库概念梳理</p>
+      <a class="index-header" href="/2019/10/11/extern-and-linker/">C语言中extern和头文件以及静态动态库概念梳理</a>
+
+      <a href="/2019/10/11/extern-and-linker/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近因为Arduino使用的较多，开始学起来了C语言，看了还多天，无非就是基本的数据类型，运算符，控制语句，简单得很，后来发现这仅仅是语法层面，C语言是除了汇编最为底层的语言了，要了解这门语言，就要从了解支撑起C的底层原理开始了解，编译原理，操作系统，计算机硬件。而这次遇到的C语言的库文件，就好比Python中的标准库与第三方库，怎么共享，中间又是个什么过程，一团黑。因为涉及内容太多太多，我还是偏</div>
       </a>
 
-      <a href="/2019/10/11/extern-and-linker/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-10-11
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">最近因为Arduino使用的较多，开始学起来了C语言，看了还多天，无非就是基本的数据类型，运算符，控制语句，简单得很，后来发现这仅仅是语法层面，C语言是除了汇编最为底层的语言了，要了解这门语言，就要从了解支撑起C的底层原理开始了解，编译原理，操作系统，计算机硬件。而这次遇到的C语言的库文件，就好比Python中的标准库与第三方库，怎么共享，中间又是个什么过程，一团黑。因为涉及内容太多太多，我还是偏向于找一些好的资料然后分主题整理下来，自己再串起来，解惑也。
-1. 先说说声明与定义stackoverflow上有个很全面的回答，What is the difference between a de</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-11&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/C/">C</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/C/">C</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/C/">C</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/C/">C</a>
+            
+          </div>
         
       </div>
     </div>
@@ -316,40 +366,41 @@ importlib.import</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">
-        <p class="h4 index-header">浅谈Flask目录结构以及与Vue.js整合注意事项</p>
+      <a class="index-header" href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">浅谈Flask目录结构以及与Vue.js整合注意事项</a>
+
+      <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/" class="index-excerpt">
+        
+        
+          
+        
+        <div>没用Flask之前，我对Flask的只有一个概念，那就是Micro，官网对其的解释是这样的：Micro并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的Micro意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此F</div>
       </a>
 
-      <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-09-25
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">没用Flask之前，我对Flask的只有一个概念，那就是Micro，官网对其的解释是这样的：Micro并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的Micro意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此Flask可以满足你的所有需求，而无所不包。
-1. 前言由于工作性质，要求写的小web应用都要涉及一些底层，不如串口通信，或者GPIO调用。而串口这种东西不像数据库连接一样，开几个都可以，也不能开了之后</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-25&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Flask/">Flask</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Flask/">Flask</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Vue/">Vue</a>&nbsp;
-          
-            <a href="/tags/Flask/">Flask</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Vue/">Vue</a>
+            
+              <a href="/tags/Flask/">Flask</a>
+            
+          </div>
         
       </div>
     </div>
@@ -359,41 +410,43 @@ importlib.import</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/09/20/MCP23017-raspberrypi-expander/">
-        <p class="h4 index-header">用Python在树莓派中使用MCP23017 I/O扩展模块</p>
-      </a>
+      <a class="index-header" href="/2019/09/20/MCP23017-raspberrypi-expander/">用Python在树莓派中使用MCP23017 I/O扩展模块</a>
 
-      <a href="/2019/09/20/MCP23017-raspberrypi-expander/">
+      <a href="/2019/09/20/MCP23017-raspberrypi-expander/" class="index-excerpt">
         
         
           
         
-        <div class="index-excerpt">
-          <div class="index-text mb-1">摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景:
+        <div>摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景:
 For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more?
-The easiest way of getting more inputs and outputs is to use an “i/o port expander”. This is a device that</div>
-        </div>
+The ea</div>
       </a>
 
-      <div class="index-btm">
+      <div class="index-btm post-metas">
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-20&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/RaspberryPi/">RaspberryPi</a>&nbsp;
-          &nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-09-20
+          </div>
         
         
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/I2C/">I2C</a>&nbsp;
-          
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/RaspberryPi/">RaspberryPi</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/I2C/">I2C</a>
+            
+          </div>
         
       </div>
     </div>
@@ -403,36 +456,38 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/08/01/Arduino-Serial/">
-        <p class="h4 index-header">Arduino Serial使用以及各种读写函数区别</p>
+      <a class="index-header" href="/2019/08/01/Arduino-Serial/">Arduino Serial使用以及各种读写函数区别</a>
+
+      <a href="/2019/08/01/Arduino-Serial/" class="index-excerpt">
+        
+        
+          
+        
+        <div>之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….
+1. 前言常见的串口调试是将Arduino与PC相连，然</div>
       </a>
 
-      <a href="/2019/08/01/Arduino-Serial/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-08-01
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….
-1. 前言常见的串口调试是将Arduino与PC相连，然后利用PC上的串口助手与其通信调试，但是有一个注意点是，调试Arduino串口时，用串口助手调试与跟程序语言(比如Python，Arduino语言)调试的传输的数据有区别，比如串口助手输入框中输入97</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-08-01&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Arduino/">Arduino</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Arduino/">Arduino</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Serial/">Serial</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Serial/">Serial</a>
+            
+          </div>
         
       </div>
     </div>
@@ -442,40 +497,38 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/07/25/python-about-keyboard/">
-        <p class="h4 index-header">Python中关于键盘行为的方法总结</p>
+      <a class="index-header" href="/2019/07/25/python-about-keyboard/">Python中关于键盘行为的方法总结</a>
+
+      <a href="/2019/07/25/python-about-keyboard/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理
+1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者</div>
       </a>
 
-      <a href="/2019/07/25/python-about-keyboard/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-07-25
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理
-1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者。
-2. pynput库这个库允许你控制和监视输入设备。 目前，支持鼠标和键盘输入和监视
-2.1 控制键盘示例from pynput.keyboard import Key, Controller
-
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-25&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+          </div>
         
       </div>
     </div>
@@ -485,82 +538,40 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/07/10/docker-common-commands/">
-        <p class="h4 index-header">Docker常用命令整理</p>
+      <a class="index-header" href="/2019/07/10/docker-common-commands/">Docker常用命令整理</a>
+
+      <a href="/2019/07/10/docker-common-commands/" class="index-excerpt">
+        
+        
+          
+        
+        <div>因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。
+由于国内网络环境的缘故，要使用国内源安装，</div>
       </a>
 
-      <a href="/2019/07/10/docker-common-commands/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-07-10
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。
-由于国内网络环境的缘故，要使用国内源安装，安装过程看这里的教程
-1. 操作容器
-启动容器以后台方式运行(更通用的方式）docker run --name container_name -v /path/to/hostdir:/mnt -d -</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-10&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Docker/">Docker</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Docker/">Docker</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/Docker/">Docker</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/07/10/postgresql-tutorial/">
-        <p class="h4 index-header">PostgreSQL 常用命令记录</p>
-      </a>
-
-      <a href="/2019/07/10/postgresql-tutorial/">
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">从之前看的Two Scoops Press Two Scoops of Django 1.11书籍或者是官网的教程，又或者最近在github查找django-docker人家的代码时看到的，都是用的PostgreSQL作为Django的数据库，平常都是用的Mysql，是不是验证了”国外大多用PostgresSQL，国内大多用Mysql“这句话，我对这个数据库比较陌生，但是既然官网都主推了，相对Mysql也有额外特色功能,SQL语句大多是通用的，不如把其他的基础使用语法记录一下，也算入门了。
-1. 好的开始
-创建一个新的PostgreSQL角色并输入密码，可选选项查看createuser文档cr</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-10&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/PostgreSQL/">PostgreSQL</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/SQL/">SQL</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/Docker/">Docker</a>
+            
+          </div>
         
       </div>
     </div>
@@ -568,9 +579,9 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
 
 
 
-  <nav aria-label="index posts navigation">
-    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-angle-double-right"></i></a>
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
   
@@ -591,8 +602,8 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -625,9 +636,10 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -639,9 +651,7 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -653,8 +663,6 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -687,36 +695,12 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -762,24 +746,14 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
+
 
 
 
@@ -834,6 +808,10 @@ The easiest way of getting more inputs and outputs is to use an “i/o port expa
       ;
     </script>
   
+
+
+
+
 
 
 

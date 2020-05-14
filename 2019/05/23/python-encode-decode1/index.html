@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>通过串口发送16进制数据引发的Python3编码血案 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 五月 23日 2019, 1:46 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-05-23 13:46">
+                    2019年5月23日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
-                    1.1k 字
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    1k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      4 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    5
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,36 +178,34 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..</p>
 <h2 id="1-按部就班"><a href="#1-按部就班" class="headerlink" title="1. 按部就班"></a>1. 按部就班</h2><p>设备手册里写的读距离命令是这样的： 68,04,01,01,06 ，发送后结果数据以数据输出格式输出。<br>数据一个十个字节，输出格式为=&gt;数据帧字头（1Byte）+数据长度（6Byte）+地址（1Byte）+数据（6Byte）+校验和（1Byte）。</p>
 <blockquote>
 <p> <strong>可先用python3 -m  serial.tools.list_ports 查看可用串口</strong></p>
 </blockquote>
-<pre><code class="python">import serial
+<div class="hljs"><pre><code class="hljs python">import serial
 import time
-ser = serial.Serial(port=&#39;/dev/ttyUSB3&#39;,baudrate=9600)
+ser = serial.Serial(port='/dev/ttyUSB3',baudrate=9600)
 # 由于发送的是十六进制数据，应该这么写
 ser.write([0x68,0x04,0x01,0x01,0x06]）
 #然后过1秒钟（超声波传播不会很快）
 time.sleep(1)
-value = ser.read_all()[-10=&gt;]
-</code></pre>
-<h2 id="2-发送十六进制数据的方式"><a href="#2-发送十六进制数据的方式" class="headerlink" title="2.发送十六进制数据的方式"></a>2.发送十六进制数据的方式</h2><p>像上面一样，发送一组16进制数据就这么简单。我刚开始的时候找了很多方式，各种python2的老方法，不起作用的方法充斥着网上，鱼龙混杂。后来，我发现，串口明明传输的是字节，这是个列表，怎么就可行了呢？来一波代码查看。</p>
-<pre><code class="python">def write(self, value)=&gt;
-    &quot;&quot;&quot;Output the given byte string over the serial port.&quot;&quot;&quot;
+value = ser.read_all()[-10=&gt;]</code></pre></div>
+<h2 id="2-发送十六进制数据的方式"><a href="#2-发送十六进制数据的方式" class="headerlink" title="2.发送十六进制数据的方式"></a>2.发送十六进制数据的方式</h2><p>像上面一样，发送一组16进制数据就这么简单。我刚开始的时候找了很多方式，各种python2的老方法，不起作用的方法充斥着网上，鱼龙混杂。后来，我发现，串口明明传输的是字节，这是个列表，怎么就可行了呢？来一波代码查看。<br><div class="hljs"><pre><code class="hljs python">def write(self, value)=&gt;
+    """Output the given byte string over the serial port."""
     if not self.is_open=&gt;
         raise portNotOpenError
     d = to_bytes(value)
 
 # 然后我们继续查看to_bytes函数
-# all Python versions prior 3.x convert ``str([17])`` to &#39;[17]&#39; instead of &#39;\x11&#39;
-# so a simple ``bytes(sequence)`` doesn&#39;t work for all versions
+# all Python versions prior 3.x convert ``str([17])`` to '[17]' instead of '\x11'
+# so a simple ``bytes(sequence)`` doesn't work for all versions
 def to_bytes(seq)=&gt;
-    &quot;&quot;&quot;convert a sequence to a bytes type&quot;&quot;&quot;
+    """convert a sequence to a bytes type"""
     if isinstance(seq, bytes)=&gt;
         return seq
     elif isinstance(seq, bytearray)=&gt;
@@ -203,49 +213,37 @@ def to_bytes(seq)=&gt;
     elif isinstance(seq, memoryview)=&gt;
         return seq.tobytes()
     elif isinstance(seq, unicode)=&gt;
-        raise TypeError(&#39;unicode strings are not supported, please encode to bytes=&gt; {!r}&#39;.format(seq))
+        raise TypeError('unicode strings are not supported, please encode to bytes=&gt; &#123;!r&#125;'.format(seq))
     else=&gt;
         # handle list of integers and bytes (one or more items) for Python 2 and 3
-        return bytes(bytearray(seq))
-</code></pre>
-<p>我们可以看到如果单纯传入列表参数，将会<code>return bytes(bytearray(seq))</code>，那我们来看看：</p>
-<pre><code class="python">bytes(bytearray([0x68,0x04,0x01,0x01,0x06]))    # b&#39;h\x04\x01\x01\x06&#39;
-</code></pre>
+        return bytes(bytearray(seq))</code></pre></div></p>
+<p>我们可以看到如果单纯传入列表参数，将会<code>return bytes(bytearray(seq))</code>，那我们来看看：<br><div class="hljs"><pre><code class="hljs python">bytes(bytearray([<span class="hljs-number">0x68</span>,<span class="hljs-number">0x04</span>,<span class="hljs-number">0x01</span>,<span class="hljs-number">0x01</span>,<span class="hljs-number">0x06</span>]))    <span class="hljs-comment"># b'h\x04\x01\x01\x06'</span></code></pre></div></p>
 <blockquote>
 <p><strong>bytearray和bytes不一样的地方在于，bytearray是可变的,它们的关系就相当于list与tuple</strong></p>
 </blockquote>
-<p><strong>源码里的写法应该是兼容了Python2与Python3</strong> ，在Python3将列表转换为字节，我们也可以这么写来达到转换的效果：</p>
-<pre><code class="python">bytes([0x68,0x04,0x01,0x01,0x06]     #b&#39;h\x04\x01\x01\x06
-</code></pre>
-<p>或者通过单纯的十六进制字符串（即没有0x前缀）来传递数据：</p>
-<pre><code class="python"># 空格可不需要
-bytes.fromhex(&#39;68 04 01 01 06&#39;)      #b&#39;h\x04\x01\x01\x06
-</code></pre>
-<p>伴随着这个<strong>fromhex</strong>方法的是<strong>hex</strong>方法：</p>
-<pre><code class="python">d = bytes.fromhex(&#39;68 04 01 01 06&#39;)
-d.hex()                                # &#39;6804010106&#39;
-</code></pre>
-<h2 id="3-那接收到了什么？"><a href="#3-那接收到了什么？" class="headerlink" title="3. 那接收到了什么？"></a>3. 那接收到了什么？</h2><pre><code class="python">value = ser.read_all()[-10]
-#value的值为 b&#39;h\t\x01\x01\xc2\x00,\x00JC&#39;
-</code></pre>
+<p><strong>源码里的写法应该是兼容了Python2与Python3</strong> ，在Python3将列表转换为字节，我们也可以这么写来达到转换的效果：<br><div class="hljs"><pre><code class="hljs python">bytes([<span class="hljs-number">0x68</span>,<span class="hljs-number">0x04</span>,<span class="hljs-number">0x01</span>,<span class="hljs-number">0x01</span>,<span class="hljs-number">0x06</span>]     <span class="hljs-comment">#b'h\x04\x01\x01\x06</span></code></pre></div></p>
+<p>或者通过单纯的十六进制字符串（即没有0x前缀）来传递数据：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 空格可不需要</span>
+bytes.fromhex(<span class="hljs-string">'68 04 01 01 06'</span>)      <span class="hljs-comment">#b'h\x04\x01\x01\x06</span></code></pre></div></p>
+<p>伴随着这个<strong>fromhex</strong>方法的是<strong>hex</strong>方法：<br><div class="hljs"><pre><code class="hljs python">d = bytes.fromhex(<span class="hljs-string">'68 04 01 01 06'</span>)
+d.hex()                                <span class="hljs-comment"># '6804010106'</span></code></pre></div></p>
+<h2 id="3-那接收到了什么？"><a href="#3-那接收到了什么？" class="headerlink" title="3. 那接收到了什么？"></a>3. 那接收到了什么？</h2><div class="hljs"><pre><code class="hljs python">value = ser.read_all()[<span class="hljs-number">-10</span>]
+<span class="hljs-comment">#value的值为 b'h\t\x01\x01\xc2\x00,\x00JC'</span></code></pre></div>
 <p>乍一看有点懵逼，我要的是超声波测量到的障碍物距离，你给我一串这茬看不懂的干啥？</p>
 <blockquote>
 <p><strong>bytes或bytearray的对象的各个元素是介于0~255（含）之间的整数</strong></p>
 </blockquote>
-<p>我们尝试下这样获取：</p>
-<pre><code class="python">value = b&#39;h\t\x01\x01\xc2\x00,\x00JC&#39;
+<p>我们尝试下这样获取：<br><div class="hljs"><pre><code class="hljs python">value = b'h\t\x01\x01\xc2\x00,\x00JC'
 # len(value) is 10
-value[0] =&gt; 104         # ord(&#39;h&#39;)=104
-value[1] =&gt; 9           # ord(&#39;\t&#39;)=9
-value[2] =&gt; 1           # ord(&#39;\x01&#39;)=1
+value[0] =&gt; 104		 # ord('h')=104
+value[1] =&gt; 9           # ord('\t')=9
+value[2] =&gt; 1           # ord('\x01')=1
 value[3] =&gt; 1
-value[4] =&gt; 194         # ord(&#39;\xc2&#39;)=194
+value[4] =&gt; 194         # ord('\xc2')=194
 value[5] =&gt; 0
-value[6] =&gt; 44          # ord(&#39;,&#39;)=44
+value[6] =&gt; 44          # ord(',')=44
 value[7] =&gt; 0
-value[8] =&gt; 74          # ord(&#39;J&#39;)=74
-value[9] =&gt; 67          # ord(&#39;C&#39;)=67
-</code></pre>
+value[8] =&gt; 74          # ord('J')=74
+value[9] =&gt; 67          # ord('C')=67</code></pre></div></p>
 <p><strong>由此我们可以知道，字节就是代表的一串二进制，这是计算机懂的语言，然后我们将二进制转换为数字，通过拿到的值计算就好</strong></p>
 <h2 id="4-思考几个问题？"><a href="#4-思考几个问题？" class="headerlink" title="4. 思考几个问题？"></a>4. 思考几个问题？</h2><ul>
 <li><strong>既然字节是二进制，为什么要用十六进制表示呢？</strong></li>
@@ -255,22 +253,21 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
 </ul>
 <p><strong>那么就可以接着看下面的编码详解,不见不散。</strong></p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
@@ -278,9 +275,9 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
                     
                       <a class="hover-with-bg" href="/tags/Serial/">Serial</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -290,7 +287,7 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
                     
                     
                       <a href="/2019/05/25/python-encode-decode2/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">血案后对python3.7最新字节字符编码解码知识整理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -302,7 +299,7 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
                       <a href="/2019/05/17/nodejs3-jstips/">
                         <span class="hidden-mobile">用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -310,31 +307,25 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -350,8 +341,8 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -384,9 +375,10 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -398,9 +390,7 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -409,34 +399,12 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -446,16 +414,13 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -465,8 +430,6 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -499,36 +462,12 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -574,24 +513,28 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -646,6 +589,10 @@ value[9] =&gt; 67          # ord(&#39;C&#39;)=67
       ;
     </script>
   
+
+
+
+
 
 
 

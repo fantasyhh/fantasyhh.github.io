@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Python并发之异步I/O(async,await） - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 二月 13日 2020, 6:05 晚上
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-02-13 18:05">
+                    2020年2月13日 晚上
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     1.4k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      5 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    6
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,65 +178,62 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！</p>
 <h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>Python有很长一段的异步编程历史,特别是<code>twisted</code>，<code>gevent</code>和一些无堆栈的Python项目。<br>异步编程因为一些好的原因在这些年来越来越受关注。尽管相对于传统的线性风格更难一点，但是却是值得的：因为异步编程有更高的效率。<br>举个例子：在Http请求方面，Python异步协程可以提交请求然后去做队列中其他等待的任务，让它慢慢请求，而不是传统的一直等它请求到完成为止，这样的话会浪费更多的时间与资源。总之异步编程能让你的代码在处于等待资源状态时处理其他任务。<br>在Python3.4中，<code>asyncio</code>产生了。而在Python3.5中，有加入了对<code>async def</code> 和<code>await</code>新的语法支持。</p>
 <h2 id="2-四个核心概念"><a href="#2-四个核心概念" class="headerlink" title="2. 四个核心概念"></a>2. 四个核心概念</h2><h3 id="2-1-Eventloop"><a href="#2-1-Eventloop" class="headerlink" title="2.1 Eventloop"></a>2.1 Eventloop</h3><p>Eventloop 可以说是 asyncio 应用的核心，是中央总控。Eventloop 实例提供了注册、取消和执行任务和回调的方法。<br>把一些异步函数 (就是任务，Task，一会就会说到) 注册到这个事件循环上，事件循环会循环执行这些函数 (但同时只能执行一个)，当执行到某个函数时，如果它正在等待 I/O 返回，事件循环会暂停它的执行去执行其他的函数；当某个函数完成 I/O 后会恢复，下次循环到它的时候继续执行。因此，这些异步函数可以协同 (Cooperative) 运行：这就是事件循环的目标。</p>
-<h3 id="2-2-Coroutine"><a href="#2-2-Coroutine" class="headerlink" title="2.2 Coroutine"></a>2.2 Coroutine</h3><p>协程 (Coroutine) 本质上是一个函数，特点是在代码块中可以将执行权交给其他协程：</p>
-<pre><code class="python">import asyncio
+<h3 id="2-2-Coroutine"><a href="#2-2-Coroutine" class="headerlink" title="2.2 Coroutine"></a>2.2 Coroutine</h3><p>协程 (Coroutine) 本质上是一个函数，特点是在代码块中可以将执行权交给其他协程：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> asyncio
 
-# 在Python 3.4中, 创建一个协程我们用asyncio.coroutine装饰器，但现在基本弃用
-async def a():
-    print(&#39;Suspending a&#39;)
-    await asyncio.sleep(0)
-    print(&#39;Resuming a&#39;)
+<span class="hljs-comment"># 在Python 3.4中, 创建一个协程我们用asyncio.coroutine装饰器，但现在基本弃用</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">a</span><span class="hljs-params">()</span>:</span>
+    print(<span class="hljs-string">'Suspending a'</span>)
+    <span class="hljs-keyword">await</span> asyncio.sleep(<span class="hljs-number">0</span>)
+    print(<span class="hljs-string">'Resuming a'</span>)
+    
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">b</span><span class="hljs-params">()</span>:</span>
+    print(<span class="hljs-string">'In b'</span>)
 
-async def b():
-    print(&#39;In b&#39;)
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">await</span> asyncio.gather(a(), b())
 
-async def main():
-    await asyncio.gather(a(), b())
+<span class="hljs-comment">#asyncio.run 是 Python 3.7 新加的接口，要不然你得这么写:</span>
+<span class="hljs-comment">#loop = asyncio.get_event_loop()</span>
+<span class="hljs-comment">#loop.run_until_complete(main())</span>
+<span class="hljs-comment">#loop.close()</span>
 
-#asyncio.run 是 Python 3.7 新加的接口，要不然你得这么写:
-#loop = asyncio.get_event_loop()
-#loop.run_until_complete(main())
-#loop.close()
-
-if __name__ == &#39;__main__&#39;:
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
     asyncio.run(main())
 
 &gt;&gt;Suspending a
 &gt;&gt;In b
-&gt;&gt;Resuming a
-</code></pre>
+&gt;&gt;Resuming a</code></pre></div></p>
 <blockquote>
 <p>asyncio.gather 用来并发运行任务，在这里表示协同的执行 a 和 b两个协程<br>在协程 a 中，有一句 await asyncio.sleep (0)，await 表示调用协程，sleep 0 并不会真的 sleep（因为时间为 0），但是却可以把控制权交出去了。</p>
 </blockquote>
 <h3 id="2-3-Future"><a href="#2-3-Future" class="headerlink" title="2.3 Future"></a>2.3 Future</h3><p>接着说 Future，它代表了一个「未来」对象，异步操作结束后会把最终结果设置到这个 Future 对象上。Future 是对协程的封装，不过日常开发基本是不需要直接用这个底层 Future 类的</p>
 <h3 id="2-4-Task"><a href="#2-4-Task" class="headerlink" title="2.4  Task"></a>2.4  Task</h3><p>Eventloop 除了支持协程，还支持注册 Future 和 Task2 种类型的对象，那为什么要存在 Future 和 Task 这 2 种类型呢？<br>Future 是协程的封装，Future 对象提供了很多任务方法 (如完成后的回调、取消、设置任务结果等等)，但是开发者并不需要直接操作 Future 这种底层对象，而是用 Future 的子类 Task 协同的调度协程以实现并发。</p>
 <p>Task 非常容易创建和使用:</p>
-<pre><code class="python"># 或者用task = loop.create_task(a())
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 或者用task = loop.create_task(a())</span>
 In : task = asyncio.ensure_future(a())
 
 In : task
-Out: &lt;Task pending coro=&lt;a() running at /Users/dongwm/mp/2019-05-22/coro1.py:4&gt;&gt;
+Out: &lt;Task pending coro=&lt;a() running at /Users/dongwm/mp/<span class="hljs-number">2019</span><span class="hljs-number">-05</span><span class="hljs-number">-22</span>/coro1.py:<span class="hljs-number">4</span>&gt;&gt;
 
 In : task.done()
-Out: False
+Out: <span class="hljs-literal">False</span>
 
-In : await task
+In : <span class="hljs-keyword">await</span> task
 Suspending a
 Resuming a
 
 In : task
-Out: &lt;Task finished coro=&lt;a() done, defined at /Users/dongwm/mp/2019-05-22/coro1.py:4&gt; result=None&gt;
+Out: &lt;Task finished coro=&lt;a() done, defined at /Users/dongwm/mp/<span class="hljs-number">2019</span><span class="hljs-number">-05</span><span class="hljs-number">-22</span>/coro1.py:<span class="hljs-number">4</span>&gt; result=<span class="hljs-literal">None</span>&gt;
 
 In : task.done()
-Out: True
-</code></pre>
+Out: <span class="hljs-literal">True</span></code></pre></div>
 <p><strong>在这边的时候我卡了很长时间：future与Task的区别是什么？？？？</strong></p>
 <p>future在多线程说过，future表示终将发生的事情，而确定某件事会发生的唯一方式是执行的时间已经排定。（你不排定它，它就是个协程），那怎么排定？</p>
 <p>BaseEventLoop.create_task(…) 或者 asyncio.ensure_future方法接收一个协程，排定它的运行时间，然后返回一个asyncio.Task 实例——也是 asyncio.Future 类的实例，因为 Task 是Future 的子类，用于包装协程。这与调用 Executor.submit(…) 方法创建Future实例是一个道理</p>
@@ -233,30 +242,29 @@ Out: True
 <h2 id="3-如何准确使用asyncio"><a href="#3-如何准确使用asyncio" class="headerlink" title="3. 如何准确使用asyncio"></a>3. 如何准确使用asyncio</h2><p>自从Python3.5加入了<code>async def</code> 和<code>await</code>新的语法，在往后Python大版本更新中一直对该部分的语法有更新修改，从前期的乱而杂，到最新的Python3.8语法渐渐稳定下来，优雅了很多，文档也条理了很多，其实要使用真正的语法还是要多看看<a href="https://docs.python.org/3/library/asyncio-task.html#coroutines" target="_blank" rel="noopener">官网例子</a>。</p>
 <p>初阶选手使用时，一般的<code>High-level APIs</code>完全可以满足需求，当理解了高阶API时，在去查看源代码，查看<code>Low-level APIs</code>，深层次的理解！<a href="https://www.dongwm.com/post/understand-asyncio-3/" target="_blank" rel="noopener">这里有个较新的教程，分三个部分，很好！</a>，推荐阅读！</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
                       <a class="hover-with-bg" href="/tags/asyncio/">asyncio</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -266,7 +274,7 @@ Out: True
                     
                     
                       <a href="/2020/02/28/invoke-fabric/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Invoke与Fabric注意事项详解教程</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -278,7 +286,7 @@ Out: True
                       <a href="/2020/02/10/Raspberrypi-PWM/">
                         <span class="hidden-mobile">树莓派几种不同的PWM及其应用</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -286,31 +294,25 @@ Out: True
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -326,8 +328,8 @@ Out: True
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -360,9 +362,10 @@ Out: True
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -374,9 +377,7 @@ Out: True
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -385,34 +386,12 @@ Out: True
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -422,16 +401,13 @@ Out: True
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -441,8 +417,6 @@ Out: True
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -475,36 +449,12 @@ Out: True
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -550,24 +500,28 @@ Out: True
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -622,6 +576,10 @@ Out: True
       ;
     </script>
   
+
+
+
+
 
 
 

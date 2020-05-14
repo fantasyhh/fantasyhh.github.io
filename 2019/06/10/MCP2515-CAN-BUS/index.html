@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>利用MCP2515芯片在树莓派上使用CAN BUS协议 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 六月 10日 2019, 1:45 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-06-10 13:45">
+                    2019年6月10日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     941 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      3 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    4
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～</p>
 <p>我之前的完成过程基本依靠Google，贴上我参考的国外教程：</p>
 <ol>
@@ -178,41 +190,35 @@
 <li><a href="https://harrisonsand.com/can-on-the-raspberry-pi/" target="_blank" rel="noopener">https://harrisonsand.com/can-on-the-raspberry-pi/</a></li>
 </ol>
 <h2 id="1-硬件相关问题"><a href="#1-硬件相关问题" class="headerlink" title="1. 硬件相关问题"></a>1. 硬件相关问题</h2><p>关于MCP2515 SPI转CAN的芯片，可能有多个“款式”的存在（有些教程里的跟我的芯片不一样），但是必要的针脚的插法都是一致的。</p>
-<pre><code>RPi Pin    RPi Label     CAN Module
+<div class="hljs"><pre><code class="hljs undefined">RPi Pin    RPi Label     CAN Module
 02---------5V------------VCC
 06---------GND-----------GND
 19---------GPIO10--------MOSI (SI)
 21---------GPIO9---------MISO (SO)
 22---------GPIO25--------INT
 23---------GPIO11--------SCK
-24---------GPIO8---------CS
-</code></pre><blockquote>
+24---------GPIO8---------CS</code></pre></div>
+<blockquote>
 <p>其他没什么的说的，在肯定自己接线没错误之后，我们需要怀疑芯片是不是坏的，我试的时候前面两个都是坏的，导致挂不上去</p>
 </blockquote>
 <h2 id="2-配置树莓派"><a href="#2-配置树莓派" class="headerlink" title="2. 配置树莓派"></a>2. 配置树莓派</h2><p><strong>编辑/boot/config.txt并添加以下行，将振荡器参数设置为模块上存在的振荡器参数。大多数模块使用16MHz振荡器作为时钟，但也有使用8MHz（即oscillator=8000000）。你可以通过查看芯片来确定频率。</strong></p>
-<pre><code>dtparam=spi=on
+<div class="hljs"><pre><code class="hljs undefined">dtparam=spi=on
 dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
-dtoverlay=spi-bcm2835-overlay
-</code></pre><p>通过<strong><code>uname -a</code></strong>查看树莓派内核，如果内核为4.4.x往上（树莓派4B基本都是这个版本往上），则需要将最后一行配置修改：</p>
-<pre><code class="bash">dtparam=spi=on
+dtoverlay=spi-bcm2835-overlay</code></pre></div>
+<p>通过<strong><code>uname -a</code></strong>查看树莓派内核，如果内核为4.4.x往上（树莓派4B基本都是这个版本往上），则需要将最后一行配置修改：<br><div class="hljs"><pre><code class="hljs bash">dtparam=spi=on
 dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
-dtoverlay=spi1-1cs
-</code></pre>
-<h2 id="3-挂载CAN设备"><a href="#3-挂载CAN设备" class="headerlink" title="3. 挂载CAN设备"></a>3. 挂载CAN设备</h2><pre><code class="bash">sudo apt-get update
+dtoverlay=spi1-1cs</code></pre></div></p>
+<h2 id="3-挂载CAN设备"><a href="#3-挂载CAN设备" class="headerlink" title="3. 挂载CAN设备"></a>3. 挂载CAN设备</h2><div class="hljs"><pre><code class="hljs bash">sudo apt-get update
 sudo apt-get install can-utils
-sudo reboot
-</code></pre>
-<p>等机器起来之后，我们可以先查看连接是否准确，有没有这个MCP2515设备，有了我们才能继续挂载。</p>
-<pre><code class="bash">pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0
+sudo reboot</code></pre></div>
+<p>等机器起来之后，我们可以先查看连接是否准确，有没有这个MCP2515设备，有了我们才能继续挂载。<br><div class="hljs"><pre><code class="hljs bash">pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0
 driver  modalias  net  of_node  subsystem  uevent
 pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0/net
-can0
-</code></pre>
+can0</code></pre></div></p>
 <blockquote>
 <p>如果连接不准确基本上看不到上面的net文件夹，也就没有can0这个设备了</p>
 </blockquote>
-<p>之后，设置你想要的波特率挂载，我这里用的是125000(即你想要驱动的电机的波特率)，<strong><code>sudo ip link set can0 up type can bitrate 125000</code></strong>，挂载成功后，就能在<strong><code>ifconfig</code></strong>中看到：</p>
-<pre><code>pi@piv2:~ $ sudo ifconfig
+<p>之后，设置你想要的波特率挂载，我这里用的是125000(即你想要驱动的电机的波特率)，<strong><code>sudo ip link set can0 up type can bitrate 125000</code></strong>，挂载成功后，就能在<strong><code>ifconfig</code></strong>中看到：<br><div class="hljs"><pre><code class="hljs undefined">pi@piv2:~ $ sudo ifconfig
 can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
           UP RUNNING NOARP  MTU:16  Metric:1
           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
@@ -224,36 +230,34 @@ etho      xxxx
           ....
 wlan0     xxxx
           ....
-          ....
-</code></pre><blockquote>
+          ....</code></pre></div></p>
+<blockquote>
 <p>每当机器重启之后，这个挂载就会失效，需重新挂载。可以直接做成服务或者放在rc.local中，开机自动启动就行</p>
 </blockquote>
-<h2 id="4-发送CAN数据"><a href="#4-发送CAN数据" class="headerlink" title="4. 发送CAN数据"></a>4. 发送CAN数据</h2><p><strong><code>Usage: cansend &lt;device&gt; &lt;can_frame&gt;</code></strong></p>
-<pre><code>cansend can0 127#DEADBEEF
-</code></pre><p>具体的can_frame格式也不用担心，当你格式数据输的不准确时，命令会自动提示所需的格式。<br>同时可以再开个终端查看收到的数据：</p>
-<pre><code>candump can0
-</code></pre><blockquote>
+<h2 id="4-发送CAN数据"><a href="#4-发送CAN数据" class="headerlink" title="4. 发送CAN数据"></a>4. 发送CAN数据</h2><p><strong><code>Usage: cansend &lt;device&gt; &lt;can_frame&gt;</code></strong><br><div class="hljs"><pre><code class="hljs undefined">cansend can0 127#DEADBEEF</code></pre></div></p>
+<p>具体的can_frame格式也不用担心，当你格式数据输的不准确时，命令会自动提示所需的格式。<br>同时可以再开个终端查看收到的数据：</p>
+<div class="hljs"><pre><code class="hljs undefined">candump can0</code></pre></div>
+<blockquote>
 <p>只有当线路完全接好形成回路时，才能用上面这个命令自发自收数据，当收到数据时，代表通信成功</p>
 </blockquote>
 <h2 id="5-使用Python第三方库向CAN发送数据"><a href="#5-使用Python第三方库向CAN发送数据" class="headerlink" title="5. 使用Python第三方库向CAN发送数据"></a>5. 使用Python第三方库向CAN发送数据</h2><p>当有需求要将功能写入Python脚本中时，可以使用<strong><code>python-can</code></strong>模块，具体的用法这里不多讲，看<a href="https://python-can.readthedocs.io/en/master/" target="_blank" rel="noopener">官方手册即可</a>。</p>
 <h2 id="6-尾声"><a href="#6-尾声" class="headerlink" title="6.尾声"></a>6.尾声</h2><p><strong>对CAN BUS知之甚少，只能依葫芦画瓢，一步一步慢慢走验证结果，当觉得自己的操作都正确却没有得到正确结果时，怀疑一下硬件本身是否有问题！</strong></p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/RaspberryPi/">RaspberryPi</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Shell/">Shell</a>
                     
@@ -261,9 +265,9 @@ wlan0     xxxx
                     
                       <a class="hover-with-bg" href="/tags/CAN-BUS/">CAN BUS</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -273,7 +277,7 @@ wlan0     xxxx
                     
                     
                       <a href="/2019/06/11/python3-subprocess/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Python3.5+ subprocess用法概括以及使用场景分析</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -285,7 +289,7 @@ wlan0     xxxx
                       <a href="/2019/06/05/drf-post-image/">
                         <span class="hidden-mobile">由DRF上传图片温习到的HTTP知识</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -293,31 +297,25 @@ wlan0     xxxx
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -333,8 +331,8 @@ wlan0     xxxx
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -367,9 +365,10 @@ wlan0     xxxx
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -381,9 +380,7 @@ wlan0     xxxx
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -392,34 +389,12 @@ wlan0     xxxx
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -429,16 +404,13 @@ wlan0     xxxx
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -448,8 +420,6 @@ wlan0     xxxx
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -482,36 +452,12 @@ wlan0     xxxx
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -557,24 +503,28 @@ wlan0     xxxx
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -629,6 +579,10 @@ wlan0     xxxx
       ;
     </script>
   
+
+
+
+
 
 
 

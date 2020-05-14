@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -133,7 +140,7 @@
   <main>
     
       <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board"
+        <div class="py-5" id="board"
           >
           
           <div class="container">
@@ -146,40 +153,43 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/23/python-encode-decode1/">
-        <p class="h4 index-header">通过串口发送16进制数据引发的Python3编码血案</p>
+      <a class="index-header" href="/2019/05/25/python-encode-decode2/">血案后对python3.7最新字节字符编码解码知识整理</a>
+
+      <a href="/2019/05/25/python-encode-decode2/" class="index-excerpt">
+        
+        
+          
+        
+        <div>之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。
+1. 先从概念理解开始
+某大佬云：人类使用文本，计算机使用字节序列
+
+我们先可以看一下</div>
       </a>
 
-      <a href="/2019/05/23/python-encode-decode1/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-05-25
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..
-1. 按部就班设备手册里写的读距离命令是这样的： 68,04,01,01,06 ，发送后结果数据以数据输出格式输出。数据一个十个字节，输出格式为=&gt;数据帧字头（1Byte）+数据长度（6Byte）+地址（1Byte）+数据（</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-23&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/Serial/">Serial</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Bytes/">Bytes</a>
+            
+          </div>
         
       </div>
     </div>
@@ -189,36 +199,42 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/17/nodejs3-jstips/">
-        <p class="h4 index-header">用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）</p>
+      <a class="index-header" href="/2019/05/23/python-encode-decode1/">通过串口发送16进制数据引发的Python3编码血案</a>
+
+      <a href="/2019/05/23/python-encode-decode1/" class="index-excerpt">
+        
+        
+          
+        
+        <div>由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..
+1. 按部就班设备手册里写的读</div>
       </a>
 
-      <a href="/2019/05/17/nodejs3-jstips/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-05-23
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能更容易接受，达到慢慢积累的效果。这对于自己写代码也有一定帮助，看的语法少，那就稳稳当当码代码，不搞花里胡哨的写法。
-ES6、ES7、ES8特性一锅炖，这里是Js近几年来的新特性，其实新特性对于初学者还</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-17&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Nodejs/">Nodejs</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Nodejs/">Nodejs</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/Serial/">Serial</a>
+            
+          </div>
         
       </div>
     </div>
@@ -228,38 +244,37 @@ ES6、ES7、ES8特性一锅炖，这里是Js近几年来的新特性，其实新
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/14/pipenv-and-npm/">
-        <p class="h4 index-header">由npm而温故到的pipenv</p>
+      <a class="index-header" href="/2019/05/17/nodejs3-jstips/">用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）</a>
+
+      <a href="/2019/05/17/nodejs3-jstips/" class="index-excerpt">
+        
+        
+          
+        
+        <div>说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能</div>
       </a>
 
-      <a href="/2019/05/14/pipenv-and-npm/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-05-17
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的source url换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用pip freeze 生成个requirement文件，多好。后来才发现自己的想法有多傻缺，既然是Kenneth Reitz（链接为题外话，程序员都是潜力股）大神造的轮子，怎能没有我们平常想不到的。
-1. Pipenv燥起来pipenv 参考了其他语言的包管理工具（bundl</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-14&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Nodejs/">Nodejs</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/npm/">npm</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Nodejs/">Nodejs</a>
+            
+          </div>
         
       </div>
     </div>
@@ -269,39 +284,81 @@ ES6、ES7、ES8特性一锅炖，这里是Js近几年来的新特性，其实新
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/08/nodejs-2/">
-        <p class="h4 index-header">用 Python 眼光看Nodejs（二），安装及npm配置</p>
-      </a>
+      <a class="index-header" href="/2019/05/14/pipenv-and-npm/">由npm而温故到的pipenv</a>
 
-      <a href="/2019/05/08/nodejs-2/">
+      <a href="/2019/05/14/pipenv-and-npm/" class="index-excerpt">
         
         
           
         
-        <div class="index-excerpt">
-          <div class="index-text mb-1">上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整与基础，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳
+        <div>最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的source url换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用pip freeze 生成个requirement文件，多好。后来才发现自己</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-05-14
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/npm/">npm</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/05/08/nodejs-2/">用 Python 眼光看Nodejs（二），安装及npm配置</a>
+
+      <a href="/2019/05/08/nodejs-2/" class="index-excerpt">
+        
+        
+          
+        
+        <div>上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整与基础，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳
 1. Nodejs安装# Using Ubuntu
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs
-# updat</div>
-        </div>
+cu</div>
       </a>
 
-      <div class="index-btm">
+      <div class="index-btm post-metas">
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-08&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Nodejs/">Nodejs</a>&nbsp;
-          &nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-05-08
+          </div>
         
         
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Nodejs/">Nodejs</a>&nbsp;
-          
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Nodejs/">Nodejs</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Nodejs/">Nodejs</a>
+            
+          </div>
         
       </div>
     </div>
@@ -311,38 +368,38 @@ sudo apt-get install -y nodejs
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/05/07/nodejs-1/">
-        <p class="h4 index-header">用 Python 眼光看Nodejs（一）,杂谈</p>
+      <a class="index-header" href="/2019/05/07/nodejs-1/">用 Python 眼光看Nodejs（一）,杂谈</a>
+
+      <a href="/2019/05/07/nodejs-1/" class="index-excerpt">
+        
+        
+          
+        
+        <div>说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。
+1. Nodejs为何与Python放在一起看待后端Nodejs基</div>
       </a>
 
-      <a href="/2019/05/07/nodejs-1/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-05-07
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。
-1. Nodejs为何与Python放在一起看待后端Nodejs基于服务端的javascript,前端js是基于浏览器端的 javascript。它们的语法不一样但是组成不一样。JavaScript：
-
-ECMAScript（语言基础，如：语法、数据类型结构以及一些</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-07&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Nodejs/">Nodejs</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Nodejs/">Nodejs</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Nodejs/">Nodejs</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Nodejs/">Nodejs</a>
+            
+          </div>
         
       </div>
     </div>
@@ -352,39 +409,38 @@ ECMAScript（语言基础，如：语法、数据类型结构以及一些</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/25/sed-usage/">
-        <p class="h4 index-header">关于sed我常用的几个方法以及遇到坑的整理</p>
+      <a class="index-header" href="/2019/04/25/sed-usage/">关于sed我常用的几个方法以及遇到坑的整理</a>
+
+      <a href="/2019/04/25/sed-usage/" class="index-excerpt">
+        
+        
+          
+        
+        <div>shell、grep、sed 和 awk 是 Unix 的基础。如果你不能非常轻松的使用它们，你将会被自己束缚住，因为它们构成了通过命令行和脚本与 Unix 系统交互的基础。自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。
+注：以下用法如果用到 -i 参数 ，直接修改读取的文件内</div>
       </a>
 
-      <a href="/2019/04/25/sed-usage/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-04-25
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">shell、grep、sed 和 awk 是 Unix 的基础。如果你不能非常轻松的使用它们，你将会被自己束缚住，因为它们构成了通过命令行和脚本与 Unix 系统交互的基础。自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。
-注：以下用法如果用到 -i 参数 ，直接修改读取的文件内容，而不是输出到终端（危险动作）
-1. 显示1.1 以行为单位的显示sed -n &#39;5,7p&#39; demo.txt
-
-1.2 搜寻关键词显示sed -n &#39;/baird/p&#3</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-25&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Linux/">Linux</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Linux/">Linux</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Shell/">Shell</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Shell/">Shell</a>
+            
+          </div>
         
       </div>
     </div>
@@ -394,40 +450,40 @@ ECMAScript（语言基础，如：语法、数据类型结构以及一些</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/04/24/auto-django/">
-        <p class="h4 index-header">Shell脚本自动生成django项目结构并添加常用插件</p>
+      <a class="index-header" href="/2019/04/24/auto-django/">Shell脚本自动生成django项目结构并添加常用插件</a>
+
+      <a href="/2019/04/24/auto-django/" class="index-excerpt">
+        
+        
+          
+        
+        <div>时常需要新建一个django项目来做快速的Demo演示，自己也记不住一些基本配置与库的导入，常常去之前写的项目中拷贝，Pycharm切来切去有点麻烦，萌生出了简单写个shell脚本自动化生成django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，美滋滋！
+生成一个新的django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测</div>
       </a>
 
-      <a href="/2019/04/24/auto-django/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-04-24
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">时常需要新建一个django项目来做快速的Demo演示，自己也记不住一些基本配置与库的导入，常常去之前写的项目中拷贝，Pycharm切来切去有点麻烦，萌生出了简单写个shell脚本自动化生成django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，美滋滋！
-生成一个新的django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，一劳永逸
-Linux:只支持linux 测试环境为Ubuntu,只支持linux 测试环境为Ubuntu，我这边用的是python虚拟环境，也可不需要
-Set virtualenv$ mkdi</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-24&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django/">Django</a>&nbsp;
-          
-            <a href="/tags/Shell/">Shell</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Django/">Django</a>
+            
+              <a href="/tags/Shell/">Shell</a>
+            
+          </div>
         
       </div>
     </div>
@@ -435,9 +491,9 @@ Set virtualenv$ mkdi</div>
 
 
 
-  <nav aria-label="index posts navigation">
-    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/3/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/3/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
     </span>
   </nav>
   
@@ -458,8 +514,8 @@ Set virtualenv$ mkdi</div>
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -492,9 +548,10 @@ Set virtualenv$ mkdi</div>
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -506,9 +563,7 @@ Set virtualenv$ mkdi</div>
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -520,8 +575,6 @@ Set virtualenv$ mkdi</div>
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -554,36 +607,12 @@ Set virtualenv$ mkdi</div>
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -629,24 +658,14 @@ Set virtualenv$ mkdi</div>
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
+
 
 
 
@@ -701,6 +720,10 @@ Set virtualenv$ mkdi</div>
       ;
     </script>
   
+
+
+
+
 
 
 

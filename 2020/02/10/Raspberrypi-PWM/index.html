@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>树莓派几种不同的PWM及其应用 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 二月 10日 2020, 12:34 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-02-10 12:34">
+                    2020年2月10日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
-                    920 字
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    916 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      3 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    4
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。</p>
 <h2 id="1-树莓派上PWM的分类"><a href="#1-树莓派上PWM的分类" class="headerlink" title="1. 树莓派上PWM的分类"></a>1. 树莓派上PWM的分类</h2><h3 id="1-1-Fully-hardware-PWM-全硬件PWM"><a href="#1-1-Fully-hardware-PWM-全硬件PWM" class="headerlink" title="1.1 Fully hardware PWM (全硬件PWM)"></a>1.1 Fully hardware PWM (全硬件PWM)</h3><blockquote>
 <p>这种类型的PWM由树莓派的PWM外设产生。脉冲的时序由PWM外设控制。它是最准确的，而且可以说是最灵活的。<br>它可以在GPIO 12/13/18/19上生成。但是，只有两个通道，因此一次只能生成两个不同的PWM流。GPIO 12/18在一个通道上，GPIO 13/19在另一个通道上。<br>适用于无抖动的伺服，无干扰的LED亮度控制，电机速度控制。</p>
@@ -181,43 +193,38 @@
 <p>这种类型的PWM由软件生成。<br>脉冲的时序由（Linux）调度程序控制。与完全硬件PWM或DMA定时PWM相比，它的定时精度明显降低。它比DMA定时PWM灵活得多，并且与完全硬件PWM一样灵活，例如，频率数量是无限的，开和关之间的步数是无限的。<br>此类PWM可以在扩展头上的任何GPIO上生成。所有GPIO可能具有不同的设置。时序精度将根据用于PWM的GPIO数量而变化。<br>不太适合伺服器，可以控制LED的亮度，但会出现毛刺，适合于电机速度控制。</p>
 </blockquote>
 <p>脉冲稳定性当然是：全硬件PWM &gt;&gt; DMA定时PWM &gt;&gt; 软件定时PWM</p>
-<h2 id="2-树莓派上PWM的实现方式"><a href="#2-树莓派上PWM的实现方式" class="headerlink" title="2. 树莓派上PWM的实现方式"></a>2. 树莓派上PWM的实现方式</h2><h3 id="2-1-传统的实现方式"><a href="#2-1-传统的实现方式" class="headerlink" title="2.1 传统的实现方式"></a>2.1 传统的实现方式</h3><p>手动sleep来实现pwm功能，步进马达连接与传统实现可以看<a href="https://www.raspberrypi.org/forums/viewtopic.php?t=186016" target="_blank" rel="noopener">这里</a></p>
-<pre><code class="python">while True:
-    print (&quot;Move Backward&quot;)
-    for i in range (5*200):
-        GPIO.output(LinearActuatorDir, 0)
-        GPIO.output(LinearActuatorStepPin, 1)
-        time.sleep(LowSpeed)
-        GPIO.output(LinearActuatorStepPin, 0)
-        time.sleep(LowSpeed)
-        print (&quot;Moving&quot;)
-    ...
-</code></pre>
-<h3 id="2-2-神级武器gpiozero"><a href="#2-2-神级武器gpiozero" class="headerlink" title="2.2 神级武器gpiozero"></a>2.2 神级武器gpiozero</h3><p>这里我们可以用gpiozero中的<a href="https://gpiozero.readthedocs.io/en/stable/api_output.html#pwmoutputdevice" target="_blank" rel="noopener">PWMOutputDevice类</a></p>
-<pre><code class="python"># 初始化完即运行，initial_value为占空比，frequency为频率
-p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pin_factory=None)
-</code></pre>
+<h2 id="2-树莓派上PWM的实现方式"><a href="#2-树莓派上PWM的实现方式" class="headerlink" title="2. 树莓派上PWM的实现方式"></a>2. 树莓派上PWM的实现方式</h2><h3 id="2-1-传统的实现方式"><a href="#2-1-传统的实现方式" class="headerlink" title="2.1 传统的实现方式"></a>2.1 传统的实现方式</h3><p>手动sleep来实现pwm功能，步进马达连接与传统实现可以看<a href="https://www.raspberrypi.org/forums/viewtopic.php?t=186016" target="_blank" rel="noopener">这里</a><br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+	<span class="hljs-keyword">print</span> (<span class="hljs-string">"Move Backward"</span>)
+	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range (<span class="hljs-number">5</span>*<span class="hljs-number">200</span>):
+		GPIO.output(LinearActuatorDir, <span class="hljs-number">0</span>)
+		GPIO.output(LinearActuatorStepPin, <span class="hljs-number">1</span>)
+		time.sleep(LowSpeed)
+		GPIO.output(LinearActuatorStepPin, <span class="hljs-number">0</span>)
+		time.sleep(LowSpeed)
+		<span class="hljs-keyword">print</span> (<span class="hljs-string">"Moving"</span>)
+    ...</code></pre></div></p>
+<h3 id="2-2-神级武器gpiozero"><a href="#2-2-神级武器gpiozero" class="headerlink" title="2.2 神级武器gpiozero"></a>2.2 神级武器gpiozero</h3><p>这里我们可以用gpiozero中的<a href="https://gpiozero.readthedocs.io/en/stable/api_output.html#pwmoutputdevice" target="_blank" rel="noopener">PWMOutputDevice类</a><br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 初始化完即运行，initial_value为占空比，frequency为频率</span>
+p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, initial_value=<span class="hljs-number">0</span>, frequency=<span class="hljs-number">100</span>, pin_factory=<span class="hljs-literal">None</span>)</code></pre></div></p>
 <blockquote>
 <p>注意，这里有一个点，<code>pin_factory=None</code>一般情况下默认使用的是<code>RPi.GPIO</code>，而<code>RPi.GPIO</code>默认的PWM是Software Timed PWM，所以可能稳定性不太好，所以我们可以使用<code>factory = PiGPIOFactory(host=&#39;127.0.0.1&#39;)</code>， <code>PiGPIO</code>支持DMA timed PWM，这个比较好</p>
 </blockquote>
 <h3 id="2-3-庞大的pigpio-（不推荐新手）"><a href="#2-3-庞大的pigpio-（不推荐新手）" class="headerlink" title="2.3 庞大的pigpio （不推荐新手）"></a>2.3 庞大的pigpio （不推荐新手）</h3><p>piggio python库中的set_PWM_dutycycle函数和hardware_PWM函数分别对应DMA，以及Fully hardware，这里不做过多阐述，自己也不是很懂 =。= ，有点尴尬，感觉相对于gpiozero稍微有点麻烦，可以看<a href="https://raspberrypi.stackexchange.com/questions/40243/pigpio-set-pwm-dutycycle-vs-hardware-pwm" target="_blank" rel="noopener">两者区别</a>和<a href="http://abyz.me.uk/rpi/pigpio/python.html" target="_blank" rel="noopener">pigpio文档</a></p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/RaspberryPi/">RaspberryPi</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
@@ -225,9 +232,9 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
                     
                       <a class="hover-with-bg" href="/tags/PWM/">PWM</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -237,7 +244,7 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
                     
                     
                       <a href="/2020/02/13/python-asyncio/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Python并发之异步I/O(async,await）</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -249,7 +256,7 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
                       <a href="/2020/01/20/ADC-MCP3008/">
                         <span class="hidden-mobile">树莓派使用MCP3008模数转换器(ADC)</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -257,31 +264,25 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -297,8 +298,8 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -331,9 +332,10 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -345,9 +347,7 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -356,34 +356,12 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -393,16 +371,13 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -412,8 +387,6 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -446,36 +419,12 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -521,24 +470,28 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -593,6 +546,10 @@ p = PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pi
       ;
     </script>
   
+
+
+
+
 
 
 

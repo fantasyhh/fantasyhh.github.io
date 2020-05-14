@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>用Python在树莓派中使用MCP23017 I/O扩展模块 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期五, 九月 20日 2019, 5:11 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-09-20 17:11">
+                    2019年9月20日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     1.3k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      5 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    6
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p><strong>摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景:</strong></p>
 <p>For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more?</p>
 <p>The easiest way of getting more inputs and outputs is to use an “i/o port expander”. This is a device that allows you to control a number of ports using data you send to the device.</p>
@@ -185,7 +197,7 @@
 </li>
 </ul>
 <p>将会打印出已连接设备的 I2C 器件地址信息：</p>
-<pre><code>pi@raspberrypi:~ $ i2cdetect  -y 1
+<div class="hljs"><pre><code>pi@raspberrypi:~ $ i2cdetect  -y 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -195,7 +207,7 @@
 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 70: -- -- -- -- -- -- -- --  
-</code></pre><blockquote>
+</code></pre></div><blockquote>
 <p>注意,这里不同厂家的拓展模块有可能是其他地址,比如0x20,原因在于我这个模块的A0,A1,A2在厂家出厂时就在内部接了3.3V,所以是0x27,这也是为什么能同时接八个该拓展模块的原因,A0,A1,A2,有接GND与3V3的选择,共有<code>2*2*2=8</code>不同的组合,具体可以看下面的表格</p>
 </blockquote>
 <p><img src="/images/MCP23017/address_pin.jpg" srcset="/img/loading.gif" alt="MCP23017地址"></p>
@@ -219,30 +231,29 @@
 </ul>
 <h2 id="4-在Python脚本中使用拓展模块"><a href="#4-在Python脚本中使用拓展模块" class="headerlink" title="4. 在Python脚本中使用拓展模块"></a>4. 在Python脚本中使用拓展模块</h2><p>习惯了在树莓派中用<code>gpiozero</code>简单丝滑流畅地操控IO,不用关乎太多底层,实在爽的很. 而在这里,我们是I2C bus协议,我们一般是用到<code>smbus</code>库,但是还是有些底层(特别是拓展模块上各个引脚代表的寄存器地址好像有点难以理解)的有些费力,所以找阿找,找到了一个新库,依旧保持优雅!</p>
 <h3 id="4-1-什么是CircuitPython"><a href="#4-1-什么是CircuitPython" class="headerlink" title="4.1 什么是CircuitPython?"></a>4.1 什么是CircuitPython?</h3><p><code>CircuitPython</code>基于<code>Python</code>,在<code>Python</code>上添加了硬件支持.<code>CircuitPython</code>旨在在微控制器板上运行。微控制器板是一块带有微控制器芯片的电路板，它本质上是一个多功能的一体机。你持有的电路板是微控制器板！ <code>CircuitPython</code>可以在小型Linux板上运行,这里正好可以用我们的树莓派试试手.先安装库<code>sudo pip3 install adafruit-circuitpython-mcp230xx</code>，然后是代码演示。</p>
-<h3 id="4-2-代码演示"><a href="#4-2-代码演示" class="headerlink" title="4.2 代码演示"></a>4.2 代码演示</h3><pre><code class="python">import time
-import board
-import busio
-from digitalio import Direction, Pull
-from adafruit_mcp230xx.mcp23017 import MCP23017
+<h3 id="4-2-代码演示"><a href="#4-2-代码演示" class="headerlink" title="4.2 代码演示"></a>4.2 代码演示</h3><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">import</span> board
+<span class="hljs-keyword">import</span> busio
+<span class="hljs-keyword">from</span> digitalio <span class="hljs-keyword">import</span> Direction, Pull
+<span class="hljs-keyword">from</span> adafruit_mcp230xx.mcp23017 <span class="hljs-keyword">import</span> MCP23017
 
-# Initialize the I2C bus:
+<span class="hljs-comment"># Initialize the I2C bus:</span>
 i2c = busio.I2C(board.SCL, board.SDA)
 
-# Initialize the MCP23017 chip on the bonnet
-mcp = MCP23017(i2c,0x27)
+<span class="hljs-comment"># Initialize the MCP23017 chip on the bonnet</span>
+mcp = MCP23017(i2c,<span class="hljs-number">0x27</span>)
 
-#0 to 15 for the GPIOA0...GPIOA7, GPIOB0...GPIOB7 pins (i.e. pin 12 is GPIOB4).
-a0 = mcp.get_pin(0)
+<span class="hljs-comment">#0 to 15 for the GPIOA0...GPIOA7, GPIOB0...GPIOB7 pins (i.e. pin 12 is GPIOB4).</span>
+a0 = mcp.get_pin(<span class="hljs-number">0</span>)
 
-# defalut input mode , switch to output pinmode
+<span class="hljs-comment"># defalut input mode , switch to output pinmode</span>
 a0.switch_to_output()
 
-while True:
-    a0.value = True
-    time.sleep(2)
-    a0.value = False
-    time.sleep(2)
-</code></pre>
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+    a0.value = <span class="hljs-literal">True</span>
+    time.sleep(<span class="hljs-number">2</span>)
+    a0.value = <span class="hljs-literal">False</span>
+    time.sleep(<span class="hljs-number">2</span>)</code></pre></div>
 <p>具体的代码解释都在注释上写这个了,很简单,不展开.想要查看更多的例子或者源代码可以看<a href="https://github.com/adafruit/Adafruit_CircuitPython_MCP230xx/blob/master/examples/mcp230xx_simpletest.py" target="_blank" rel="noopener"><strong>官方库手册</strong></a></p>
 <h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p><strong>当树莓派GPIO口要连接较多设备,数量紧张时,可以用MCP23017拓展模块了来增加,最多可以加128个….<code>adafruit_mcp230xx.mcp23017</code>库也可以很Python地写出控制代码,但是一些监听事件要自己实现,不像<code>gpiozero</code>都有现成的轮子.当然我们可以转换下思路,把一些简单的output设备接在拓展模块上用来简单控制就行,把一些实现复杂的input设备接在树莓派自带的GPIO上,就可以用<code>gpiozero</code>库的高级内容了.</strong></p>
 <p><br></p>
@@ -251,22 +262,21 @@ while True:
 <p><a href="https://raspi.tv/2013/using-the-mcp23017-port-expander-with-wiringpi2-to-give-you-16-new-gpio-ports-part-3" target="_blank" rel="noopener">Using the MCP23017 port expander with WiringPi2 to give you 16 new GPIO ports – part 3</a></p>
 <p><a href="https://circuitpython.readthedocs.io/en/2.x/shared-bindings/index.html" target="_blank" rel="noopener">Adafruit CircuitPython</a></p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/RaspberryPi/">RaspberryPi</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
@@ -274,9 +284,9 @@ while True:
                     
                       <a class="hover-with-bg" href="/tags/I2C/">I2C</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -286,7 +296,7 @@ while True:
                     
                     
                       <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">浅谈Flask目录结构以及与Vue.js整合注意事项</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -298,7 +308,7 @@ while True:
                       <a href="/2019/08/01/Arduino-Serial/">
                         <span class="hidden-mobile">Arduino Serial使用以及各种读写函数区别</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -306,31 +316,25 @@ while True:
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -346,8 +350,8 @@ while True:
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -380,9 +384,10 @@ while True:
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -394,9 +399,7 @@ while True:
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -405,34 +408,12 @@ while True:
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -442,16 +423,13 @@ while True:
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -461,8 +439,6 @@ while True:
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -495,36 +471,12 @@ while True:
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -570,24 +522,28 @@ while True:
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -642,6 +598,10 @@ while True:
       ;
     </script>
   
+
+
+
+
 
 
 

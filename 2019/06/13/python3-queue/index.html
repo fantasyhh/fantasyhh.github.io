@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Python3 队列用法整理 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 六月 13日 2019, 3:11 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-06-13 15:11">
+                    2019年6月13日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     1.5k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      6 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    7
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,100 +178,95 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>先进先出队列(或简称队列)是一种基于先进先出(FIFO)策略的集合类型.</p>
 <p>队列的最简单的例子是我们平时不时会参与的列。排队等待电影，在杂货店的收营台等待，在自助餐厅排队等待（这样我们可以弹出托盘栈）。行为良好的线或队列是有限制的，因为它只有一条路，只有一条出路。不能插队，也不能离开。你只有等待了一定的时间才能到前面。下图展示了一个简单的 Python 对象队列。<br>    <img src="/images/queue.png" srcset="/img/loading.gif" alt="队列"></p>
 <h2 id="1-队列"><a href="#1-队列" class="headerlink" title="1. 队列"></a>1. 队列</h2><blockquote>
 <p>队列是有序数据集合，队列的特点，删除数据项是在头部，称为前端(front)，增加数据在尾部，称为后端(rear)</p>
 </blockquote>
-<pre><code class="python">
-# 导入队列
-from queue import Queue
+<div class="hljs"><pre><code class="hljs python">
+<span class="hljs-comment"># 导入队列</span>
+<span class="hljs-keyword">from</span> queue <span class="hljs-keyword">import</span> Queue
 
-# 最多接收3个数据
-q = Queue(3)
+<span class="hljs-comment"># 最多接收3个数据</span>
+q = Queue(<span class="hljs-number">3</span>)
 
-# put 向队列中添加数据
-q.put(1)
-q.put(2)
-q.put(3)
+<span class="hljs-comment"># put 向队列中添加数据</span>
+q.put(<span class="hljs-number">1</span>)
+q.put(<span class="hljs-number">2</span>)
+q.put(<span class="hljs-number">3</span>)
 
-# 获取当前队列长度
+<span class="hljs-comment"># 获取当前队列长度</span>
 print(q.qsize())
 
-# 取出最前面的一个数据 1 , 还剩两个
+<span class="hljs-comment"># 取出最前面的一个数据 1 , 还剩两个</span>
 print(q.get())
 
-# 再加入数据
-q.put(4)
+<span class="hljs-comment"># 再加入数据</span>
+q.put(<span class="hljs-number">4</span>)
 
-#超过三个了.如果没有timeout参数会处于阻塞状态,卡在那边.若设置2秒,2秒后会raise 一个 FULL的报错
-q.put(5, timeout=2))
+<span class="hljs-comment">#超过三个了.如果没有timeout参数会处于阻塞状态,卡在那边.若设置2秒,2秒后会raise 一个 FULL的报错</span>
+q.put(<span class="hljs-number">5</span>, timeout=<span class="hljs-number">2</span>))
 
-# 当然,也可以直接给个 block=False,强制设置为不阻塞(默认为会阻塞的)，一旦超出队列长度，立即抛出异常
-q.put(6, block=False)
+<span class="hljs-comment"># 当然,也可以直接给个 block=False,强制设置为不阻塞(默认为会阻塞的)，一旦超出队列长度，立即抛出异常</span>
+q.put(<span class="hljs-number">6</span>, block=<span class="hljs-literal">False</span>)
 
-# 同样的,当取值(get)的次数大于队列的长度的时候就会产生阻塞，设置超时时间意为最多等待x秒，队列中再没有数据，就抛出异常.
-# 也可以使用block参数,跟上面一样
-</code></pre>
-<p>其他常用方法:</p>
-<pre><code class="python">#empty: 检查队列是否为空，为空返回True，不为空返回False
-#full : 判断队列是否已经满了
-#join &amp; task_done : 阻塞与任务完成
-#举例
-from queue import Queue
-q = Queue(2)
-q.put(&#39;a&#39;)
-q.put(&#39;b&#39;)
-# 程序会一直卡在下面这一行，只要队列中还有值，程序就不会退出
+<span class="hljs-comment"># 同样的,当取值(get)的次数大于队列的长度的时候就会产生阻塞，设置超时时间意为最多等待x秒，队列中再没有数据，就抛出异常.</span>
+<span class="hljs-comment"># 也可以使用block参数,跟上面一样</span></code></pre></div>
+<p>其他常用方法:<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment">#empty: 检查队列是否为空，为空返回True，不为空返回False</span>
+<span class="hljs-comment">#full : 判断队列是否已经满了</span>
+<span class="hljs-comment">#join &amp; task_done : 阻塞与任务完成</span>
+<span class="hljs-comment">#举例</span>
+<span class="hljs-keyword">from</span> queue <span class="hljs-keyword">import</span> Queue
+q = Queue(<span class="hljs-number">2</span>)
+q.put(<span class="hljs-string">'a'</span>)
+q.put(<span class="hljs-string">'b'</span>)
+<span class="hljs-comment"># 程序会一直卡在下面这一行，只要队列中还有值，程序就不会退出</span>
 q.join()
-#-------------------------------------------------------------
-q = Queue(2)
-q.put(&#39;a&#39;)
-q.put(&#39;b&#39;)
+<span class="hljs-comment">#-------------------------------------------------------------</span>
+q = Queue(<span class="hljs-number">2</span>)
+q.put(<span class="hljs-string">'a'</span>)
+q.put(<span class="hljs-string">'b'</span>)
 
-q.get()    
+q.get()	
 q.get()
-# 插入两个元素之后再取出两个元素，执行后发现，程序还是卡在下面的那个join代码
+<span class="hljs-comment"># 插入两个元素之后再取出两个元素，执行后发现，程序还是卡在下面的那个join代码</span>
 q.join()
-#-------------------------------------------------------------
-q = Queue(2)
-q.put(&#39;a&#39;)
-q.put(&#39;b&#39;)
+<span class="hljs-comment">#-------------------------------------------------------------</span>
+q = Queue(<span class="hljs-number">2</span>)
+q.put(<span class="hljs-string">'a'</span>)
+q.put(<span class="hljs-string">'b'</span>)
 
 q.get()
-# get取完队列中的一个值后，使用task_done方法告诉队列，我已经取出了一个值并处理完毕,下同
+<span class="hljs-comment"># get取完队列中的一个值后，使用task_done方法告诉队列，我已经取出了一个值并处理完毕,下同</span>
 q.task_done()
 q.get()
-#在每次get取值之后，还需要在跟队列声明一下，我已经取出了数据并处理完毕，这样执行到join代码的时候才不会被卡住
+<span class="hljs-comment">#在每次get取值之后，还需要在跟队列声明一下，我已经取出了数据并处理完毕，这样执行到join代码的时候才不会被卡住</span>
 q.task_done()
-q.join()
-</code></pre>
+q.join()</code></pre></div></p>
 <h2 id="2-双向队列"><a href="#2-双向队列" class="headerlink" title="2. 双向队列"></a>2. 双向队列</h2><p>接上面，删除列表的第一个元素（抑或是在第一个元素之前添加一个元素）之类的操作是很耗时的，因为这些操作会牵扯到移动列表里的所有元素。</p>
-<p>collections.deque 类（双向队列）是一个线程安全、可以快速从两端添加或者删除元素的数据类型。而且如果想要有一种数据类型来存放“最近用到的几个元素”，deque 也是一个很好的选择。这是因为在新建一个双向队列的时候，你可以指定这个队列的大小，如果这个队列满员了，还可以从反向端删除过期的元素，然后在尾端添加新的元素.<br>使用示例如下:</p>
-<pre><code class="python">&gt;&gt;&gt; from collections import deque
-&gt;&gt;&gt; dq = deque(range(10), maxlen=10) ➊
-&gt;&gt;&gt; dq
-deque([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
-&gt;&gt;&gt; dq.rotate(3) ➋
-&gt;&gt;&gt; dq
-deque([7, 8, 9, 0, 1, 2, 3, 4, 5, 6], maxlen=10)
-&gt;&gt;&gt; dq.rotate(-4)
-&gt;&gt;&gt; dq
-deque([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], maxlen=10)
-&gt;&gt;&gt; dq.appendleft(-1) ➌
-&gt;&gt;&gt; dq
-deque([-1, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
-&gt;&gt;&gt; dq.extend([11, 22, 33]) ➍
-&gt;&gt;&gt; dq
-deque([3, 4, 5, 6, 7, 8, 9, 11, 22, 33], maxlen=10)
-&gt;&gt;&gt; dq.extendleft([10, 20, 30, 40]) ➎
-&gt;&gt;&gt; dq
-deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
-</code></pre>
+<p>collections.deque 类（双向队列）是一个线程安全、可以快速从两端添加或者删除元素的数据类型。而且如果想要有一种数据类型来存放“最近用到的几个元素”，deque 也是一个很好的选择。这是因为在新建一个双向队列的时候，你可以指定这个队列的大小，如果这个队列满员了，还可以从反向端删除过期的元素，然后在尾端添加新的元素.<br>使用示例如下:<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> deque
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq = deque(range(<span class="hljs-number">10</span>), maxlen=<span class="hljs-number">10</span>) ➊
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq
+deque([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>], maxlen=<span class="hljs-number">10</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq.rotate(<span class="hljs-number">3</span>) ➋
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq
+deque([<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>], maxlen=<span class="hljs-number">10</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq.rotate(<span class="hljs-number">-4</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq
+deque([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">0</span>], maxlen=<span class="hljs-number">10</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq.appendleft(<span class="hljs-number">-1</span>) ➌
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq
+deque([<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>], maxlen=<span class="hljs-number">10</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq.extend([<span class="hljs-number">11</span>, <span class="hljs-number">22</span>, <span class="hljs-number">33</span>]) ➍
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq
+deque([<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>, <span class="hljs-number">22</span>, <span class="hljs-number">33</span>], maxlen=<span class="hljs-number">10</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq.extendleft([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>]) ➎
+<span class="hljs-meta">&gt;&gt;&gt; </span>dq
+deque([<span class="hljs-number">40</span>, <span class="hljs-number">30</span>, <span class="hljs-number">20</span>, <span class="hljs-number">10</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>], maxlen=<span class="hljs-number">10</span>)</code></pre></div></p>
 <p>❶ maxlen 是一个可选参数，代表这个队列可以容纳的元素的数量，而且一旦设定，这个属性就不能修改了。<br>❷ 队列的旋转操作接受一个参数 n，当 n &gt; 0 时，队列的最右边的 n 个元素会被移动到队列的左边。当 n &lt; 0 时，最左边的 n 个元素会被移动到右边。<br>❸ 当试图对一个已满（len(d) == d.maxlen）的队列做尾部添加操作的时候，它头部的元素会被删除掉。注意在下一行里，元素 0 被删除了。<br>❹ 在尾部添加 3 个元素的操作会挤掉 -1、1 和 2。<br>❺ extendleft(iter) 方法会把迭代器里的元素逐个添加到双向队列的左边，因此迭代器里的元素会逆序出现在队列里。</p>
 <h2 id="3-其他队列"><a href="#3-其他队列" class="headerlink" title="3. 其他队列"></a>3. 其他队列</h2><p>Python提供的所有队列类型  </p>
 <ol>
@@ -274,30 +281,29 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 </blockquote>
 <p><strong>相关链接</strong><br><a href="https://facert.gitbooks.io/python-data-structure-cn/3.%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/3.10.%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%9F%E5%88%97/" target="_blank" rel="noopener">https://facert.gitbooks.io/python-data-structure-cn/3.%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/3.10.%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%9F%E5%88%97/</a><br><a href="https://docs.lvrui.io/2016/07/20/Python%E4%B8%AD%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E9%98%9F%E5%88%97queue%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" target="_blank" rel="noopener">https://docs.lvrui.io/2016/07/20/Python%E4%B8%AD%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E9%98%9F%E5%88%97queue%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</a></p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
                       <a class="hover-with-bg" href="/tags/Queue/">Queue</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -307,7 +313,7 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
                     
                     
                       <a href="/2019/06/24/revpi-install-img/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Revpi 重装系统以及本地化配置的注意项</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -319,7 +325,7 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
                       <a href="/2019/06/11/python3-subprocess/">
                         <span class="hidden-mobile">Python3.5+ subprocess用法概括以及使用场景分析</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -327,31 +333,25 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -367,8 +367,8 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -401,9 +401,10 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -415,9 +416,7 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -426,34 +425,12 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -463,16 +440,13 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -482,8 +456,6 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -516,36 +488,12 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -591,24 +539,28 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -663,6 +615,10 @@ deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
       ;
     </script>
   
+
+
+
+
 
 
 

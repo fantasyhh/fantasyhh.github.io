@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Django+Gunicorn+Nginx配置整理 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 七月 8日 2019, 9:22 上午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-07-08 09:22">
+                    2019年7月8日 上午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
-                    1.5k 字
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    1.4k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      6 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    7
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,64 +178,59 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅</p>
-<a id="more"></a>
-<p>之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅</p>
 <h2 id="1-Gunicorn使用及配置"><a href="#1-Gunicorn使用及配置" class="headerlink" title="1. Gunicorn使用及配置"></a>1. Gunicorn使用及配置</h2><blockquote>
 <p>我们可以通过执行<strong><code>./manage.py runserver</code></strong>命令来运行我们的django应用程序。但我们知道它被称为开发服务器是有原因的，因为自带的开发服务器不健壮，安全问题，线程问题等等。那么，我们如何真正运行我们的应用呢？</p>
 </blockquote>
 <p><strong>Gunicorn，一个简单，轻便，快速的Python WSGI HTTP Server for UNIX。</strong></p>
 <ul>
-<li>绑定一个具体的端口<pre><code class="python">gunicorn --bind 0.0.0.0:8030 myproject.wsgi
-</code></pre>
+<li><p>绑定一个具体的端口</p>
+<div class="hljs"><pre><code class="hljs python">gunicorn --bind <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>:<span class="hljs-number">8030</span> myproject.wsgi</code></pre></div>
 </li>
-<li>增加请求服务的worker数量<pre><code class="python">gunicorn --workers 3 myproject.wsgi
-</code></pre>
+<li><p>增加请求服务的worker数量</p>
+<div class="hljs"><pre><code class="hljs python">gunicorn --workers <span class="hljs-number">3</span> myproject.wsgi</code></pre></div>
 </li>
-<li>以守护进程模式来运行<pre><code class="python">gunicorn --daemon myproject.wsgi
-</code></pre>
+<li><p>以守护进程模式来运行</p>
+<div class="hljs"><pre><code class="hljs python">gunicorn --daemon myproject.wsgi</code></pre></div>
 </li>
-<li>或者把上面三个组合起来这是常用的<pre><code class="python">gunicorn -D -b 0.0.0.0:8030 -w 3 myproject.wsgi
-</code></pre>
+<li><p>或者把上面三个组合起来这是常用的</p>
+<div class="hljs"><pre><code class="hljs python">gunicorn -D -b <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>:<span class="hljs-number">8030</span> -w <span class="hljs-number">3</span> myproject.wsgi</code></pre></div>
 </li>
-<li>或者我更喜欢把配置写到配置文件里<pre><code class="python">gunicorn -c /path/to/config/gunicorn.conf.py  myproject.wsgi
-</code></pre>
+<li><p>或者我更喜欢把配置写到配置文件里</p>
+<div class="hljs"><pre><code class="hljs python">gunicorn -c /path/to/config/gunicorn.conf.py  myproject.wsgi</code></pre></div>
 </li>
 </ul>
-<p><strong>gunicorn.conf.py</strong> 配置文件模板如下，具体可以去看<a href="http://docs.gunicorn.org/en/stable/" target="_blank" rel="noopener">Gunicorn官方文档</a> ：</p>
-<pre><code class="python">    import logging
-    import logging.handlers
-    from logging.handlers import WatchedFileHandler
-    import os
-    import multiprocessing
+<p><strong>gunicorn.conf.py</strong> 配置文件模板如下，具体可以去看<a href="http://docs.gunicorn.org/en/stable/" target="_blank" rel="noopener">Gunicorn官方文档</a> ：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging
+<span class="hljs-keyword">import</span> logging.handlers
+<span class="hljs-keyword">from</span> logging.handlers <span class="hljs-keyword">import</span> WatchedFileHandler
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> multiprocessing
 
-    bind = &quot;unix:/tmp/gunicorn.sock&quot;   #绑定的ip与端口
-    backlog = 512                #监听队列数量，64-2048
-    #chdir = &#39;/home/test/server/bin&#39;  #gunicorn要切换到的目的工作目录
-    worker_class = &#39;sync&#39; #使用gevent模式，还可以使用sync 模式，默认的是sync模式
-    workers = 4 # multiprocessing.cpu_count()    #进程数
-    threads = 16 #multiprocessing.cpu_count()*4 #指定每个进程开启的线程数
-    loglevel = &#39;info&#39; #日志级别，这个日志级别指的是错误日志的级别，而访问日志的级别&gt;无法设置
-    #access_log_format = &#39;%(t)s %(p)s %(h)s &quot;%(r)s&quot; %(s)s %(L)s %(b)s %(f)s&quot; &quot;%(a)s&quot;&#39;
-    access_log_format = &#39;%(t)s %(p)s %(h)s &quot;%(r)s&quot; %(s)s&#39;
+bind = <span class="hljs-string">"unix:/tmp/gunicorn.sock"</span>   <span class="hljs-comment">#绑定的ip与端口</span>
+backlog = <span class="hljs-number">512</span>                <span class="hljs-comment">#监听队列数量，64-2048</span>
+<span class="hljs-comment">#chdir = '/home/test/server/bin'  #gunicorn要切换到的目的工作目录</span>
+worker_class = <span class="hljs-string">'sync'</span> <span class="hljs-comment">#使用gevent模式，还可以使用sync 模式，默认的是sync模式</span>
+workers = <span class="hljs-number">4</span> <span class="hljs-comment"># multiprocessing.cpu_count()    #进程数</span>
+threads = <span class="hljs-number">16</span> <span class="hljs-comment">#multiprocessing.cpu_count()*4 #指定每个进程开启的线程数</span>
+loglevel = <span class="hljs-string">'info'</span> <span class="hljs-comment">#日志级别，这个日志级别指的是错误日志的级别，而访问日志的级别&gt;无法设置</span>
+<span class="hljs-comment">#access_log_format = '%(t)s %(p)s %(h)s "%(r)s" %(s)s %(L)s %(b)s %(f)s" "%(a)s"'</span>
+access_log_format = <span class="hljs-string">'%(t)s %(p)s %(h)s "%(r)s" %(s)s'</span>
 
-    #accesslog = &quot;./gunicorn_access.log&quot;      #访问日志文件
-    #errorlog = &quot;./gunicorn_error.log&quot;        #错误日志文件
-    accesslog = &quot;-&quot;  #访问日志文件，&quot;-&quot; 表示标准输出
-    errorlog = &quot;-&quot;   #错误日志文件，&quot;-&quot; 表示标准输出
-</code></pre>
-<h2 id="2-一对好基友：Supervisor与Gunicorn"><a href="#2-一对好基友：Supervisor与Gunicorn" class="headerlink" title="2. 一对好基友：Supervisor与Gunicorn"></a>2. 一对好基友：Supervisor与Gunicorn</h2><p>我们可以用supervisor来管理Gunicorn服务，配置模板如下。</p>
-<pre><code class="python">[program:orderlunch]
+<span class="hljs-comment">#accesslog = "./gunicorn_access.log"      #访问日志文件</span>
+<span class="hljs-comment">#errorlog = "./gunicorn_error.log"        #错误日志文件</span>
+accesslog = <span class="hljs-string">"-"</span>  <span class="hljs-comment">#访问日志文件，"-" 表示标准输出</span>
+errorlog = <span class="hljs-string">"-"</span>   <span class="hljs-comment">#错误日志文件，"-" 表示标准输出</span></code></pre></div></p>
+<h2 id="2-一对好基友：Supervisor与Gunicorn"><a href="#2-一对好基友：Supervisor与Gunicorn" class="headerlink" title="2. 一对好基友：Supervisor与Gunicorn"></a>2. 一对好基友：Supervisor与Gunicorn</h2><p>我们可以用supervisor来管理Gunicorn服务，配置模板如下。<br><div class="hljs"><pre><code class="hljs python">[program:orderlunch]
 
 command= pipenv run gunicorn -c gunicorn.conf.py OrderLunch.wsgi
 directory=/home/pi/OrderLunchEnv/OrderLunch
 
 user=pi
-numprocs=1
+numprocs=<span class="hljs-number">1</span>
 
 stdout_logfile=/var/log/supervisor/orderlunch.log
 stderr_logfile=/var/log/supervisor/orderlunch_error.log
@@ -231,13 +238,9 @@ stderr_logfile=/var/log/supervisor/orderlunch_error.log
 autostart= true
 autorestart=true
 
-stopwaitsecs = 600
+stopwaitsecs = <span class="hljs-number">600</span>
 killasgroup=true
-priority=999
-
-
-
-</code></pre>
+priority=<span class="hljs-number">999</span></code></pre></div></p>
 <h2 id="3-Gunicorn如何处理静态文件？"><a href="#3-Gunicorn如何处理静态文件？" class="headerlink" title="3. Gunicorn如何处理静态文件？"></a>3. Gunicorn如何处理静态文件？</h2><blockquote>
 <p>在用Gunicorn跑Django的时候,比较郁闷的是静态文件的处理,即使在settings设置DEBUG=True,静态文件也不会正常显示.生产环境下一般不会裸跑Gunicorn,一般都会在前面放一个Nginx反代到Gunicorn,而静态文件直接交给Nginx处理.<br>但是如heroku,coding.net的演示平台这种PaaS就不能自己配置反向代理,怎么样设置wsgi才能正常处理静态文件呢.这里总结下处理这个问题的经验。</p>
 </blockquote>
@@ -247,54 +250,50 @@ priority=999
 <ul>
 <li><strong>1. 强制使用Django自带的静态文件处理器</strong></li>
 </ul>
-<pre><code class="python">from django.conf import settings
-from django.conf.urls.static import static
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django.conf <span class="hljs-keyword">import</span> settings
+<span class="hljs-keyword">from</span> django.conf.urls.static <span class="hljs-keyword">import</span> static
 
 urlpatterns = [
-    # ... the rest of your URLconf goes here ...
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT）
-</code></pre>
+    <span class="hljs-comment"># ... the rest of your URLconf goes here ...</span>
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT）</code></pre></div>
 <ul>
 <li><strong>2. 使用第三方库Whitenoise用来处理wsgi app静态文件</strong><br>这个方法比较好一点，用Whitenoise搭配Gunicorn,完全能在没有Nginx的情况下在生产环境中处理静态文件，配置非常简单，可以参考 <a href="http://whitenoise.evans.io/en/stable/" target="_blank" rel="noopener">Whitenoise官方文档</a> </li>
 </ul>
 <h2 id="4-Nginx与Gunicorn配置记录"><a href="#4-Nginx与Gunicorn配置记录" class="headerlink" title="4. Nginx与Gunicorn配置记录"></a>4. Nginx与Gunicorn配置记录</h2><p>网上的教程鱼龙混杂，配置各个都不太一样，但大差不差，有些能用有些不能用，踩了蛮多坑，把自己的第一次成公配置贴在这里，方便自己以后回来查看。</p>
-<pre><code class="shell">server {
+<div class="hljs"><pre><code class="hljs shell">server &#123;
     listen 80;
     server_name 0.0.0.0;
     access_log /var/log/nginx/orderlunch_access_log;
     error_log /var/log/nginx/orderlunch_error_log;
-    location  = /favicon.ico { access_log off ; log_not_found off ;  }
-    location / {
+    location  = /favicon.ico &#123; access_log off ; log_not_found off ;  &#125;
+    location / &#123;
       include proxy_params;
       proxy_pass http://unix:/tmp/gunicorn.sock;
-    }
-    location /static {
+    &#125;
+    location /static &#123;
       alias  /home/pi/OrderLunchEnv/OrderLunch/collected_static;
       #　这里注意alias与root的区别
-    }
-}
-
-</code></pre>
+    &#125;
+&#125;</code></pre></div>
 <p>这里gunicorn我用的是<code>.sock</code>，所以相应的nginx这边的proxy_pass也要用sock，当然也可以用，http+port的形式。<br>配置到能访问网址，不止是一个配置文件就能解决的，完整的过程看这边：<a href="http://rahmonov.me/posts/run-a-django-app-with-nginx-and-gunicorn/" target="_blank" rel="noopener">run-a-django-app-with-nginx-and-gunicorn</a>  以及<a href="https://www.cnblogs.com/nanrou/p/7026802.html" target="_blank" rel="noopener">初次部署django+gunicorn+nginx</a> ,用来看看一些概念和思路。</p>
 <h2 id="5-更好的解决方式：Docker"><a href="#5-更好的解决方式：Docker" class="headerlink" title="5. 更好的解决方式：Docker"></a>5. 更好的解决方式：Docker</h2><p>研究的过程中，接触到了Docker。我们可以用pipenv保持python开发环境的一致，干净，但是当涉及到一些系统级别的服务时，比如redis作为消息队列 ，nginx作为代理服务器时，我们怎么做到隔离呢，那就是用Docker。这真的是太方便了！有时候因为Ubuntu系统版本的问题，或者之前设置过了这会想删除之前项目部署重新设置，可能存在一系列让人烦躁的事情，而Docker直接搞一个Nginx容器用来做反向代理，用一个redis容易作为消息队列的存储，干净的容器，不用了将容器直接关闭或者清除，也不用操心各个容器间的内部网络，都实现好了。<br>输入关键字docker django能在gihtub找到很多别人写的。我找到一个自己认为较好的，fork之后然后进行了一些修改（比如生成docker 镜像时，新增了国内下载源等），项目地址在这<a href="https://github.com/fantasyhh/docker-django" target="_blank" rel="noopener">docker-django</a> ，可以先按照教程跑起来然后查看内部的实现原理，会发现docker真的乃一部署神器！</p>
 <h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>这一配置篇与上一章的概念篇，把我最近关于对wsgi以及部署方面的一些概念进行了总结，也算解了心中一大困惑，部署是常见的事，记录下来，有规矩，才有方圆～</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Django/">Django</a>
                     
@@ -302,9 +301,9 @@ urlpatterns = [
                     
                       <a class="hover-with-bg" href="/tags/Nginx/">Nginx</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -314,7 +313,7 @@ urlpatterns = [
                     
                     
                       <a href="/2019/07/10/postgresql-tutorial/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">PostgreSQL 常用命令记录</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -326,7 +325,7 @@ urlpatterns = [
                       <a href="/2019/06/27/python3-wsgi-concept/">
                         <span class="hidden-mobile">梳理Python WSGI与WSGI服务器等概念</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -334,31 +333,25 @@ urlpatterns = [
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -374,8 +367,8 @@ urlpatterns = [
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -408,9 +401,10 @@ urlpatterns = [
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -422,9 +416,7 @@ urlpatterns = [
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -433,34 +425,12 @@ urlpatterns = [
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -470,16 +440,13 @@ urlpatterns = [
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -489,8 +456,6 @@ urlpatterns = [
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -523,36 +488,12 @@ urlpatterns = [
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -598,24 +539,28 @@ urlpatterns = [
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -670,6 +615,10 @@ urlpatterns = [
       ;
     </script>
   
+
+
+
+
 
 
 

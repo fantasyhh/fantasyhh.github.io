@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Invoke与Fabric注意事项详解教程 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期五, 二月 28日 2020, 2:13 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-02-28 14:13">
+                    2020年2月28日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     3k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      11 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    14
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,22 +178,20 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护<br>刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！</p>
 <h2 id="1-Fabric前世今生"><a href="#1-Fabric前世今生" class="headerlink" title="1. Fabric前世今生"></a>1. Fabric前世今生</h2><p>我从一开始接触的就是Python3，之后因为远程打包部署接触到了Fabric，当时官网Fabric还不支持Python3，所以我用了民间的Fabric3，十分好用，对新手很友好。后来，发现Fabric支持Python3了，但是看了文档，看的稀里糊涂，看了别人的教程才成功连接到远程主机上，我就又撒手转向了民间的Fabric3。<br>所以我们先区分下 Fabric1，Fabric2，Fabric3，它们的python官网发布的地址：</p>
-<p>安装方式分别是：</p>
-<pre><code class="shell"># https://pypi.org/project/Fabric/
+<p>安装方式分别是：<br><div class="hljs"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> https://pypi.org/project/Fabric/</span>
 pip install Fabric
-
-# https://pypi.org/project/fabric2/
+<span class="hljs-meta">
+#</span><span class="bash"> https://pypi.org/project/fabric2/</span>
 pip install fabric2
-
-# https://pypi.org/project/Fabric3/
-pip install fabric3
-</code></pre>
+<span class="hljs-meta">
+#</span><span class="bash"> https://pypi.org/project/Fabric3/</span>
+pip install fabric3</code></pre></div></p>
 <p>Fabric1和Fabric2，在pypi中的页面，就是同一个东西：</p>
 <ul>
 <li>都是Fabric的最新版：Fabric 2.x，截至到20200227，安装出来的版本是：2.5</li>
@@ -207,38 +217,32 @@ pip install fabric3
 <blockquote>
 <p>A common problem task runners face is transmission of “global” data - values loaded from configuration files or other configuration vectors, given via CLI flags, generated in ‘setup’ tasks, etc.<br>Some libraries (such as Fabric 1.x) implement this via module-level attributes, which makes testing difficult and error prone, limits concurrency, and increases implementation complexity.<br>Invoke encapsulates state in explicit Context objects, handed to tasks when they execute . The context is the primary API endpoint, offering methods which honor the current state (such as Context.run) as well as access to that state itself.</p>
 </blockquote>
-<p>Context对象是在命令行解析过程中创建的（如果需要的话，可以手动创建），并用于与执行的任务共享解析器和配置状态，下面两种例子是一样的.<br>第一种通过命令行，过程中创建ｃ，即为context,会自动导入文件配置:</p>
-<pre><code class="python">from invoke import task
-@task
-def show(c):
-    print(config)
-    c.run(&quot;ls&quot;)
-
+<p>Context对象是在命令行解析过程中创建的（如果需要的话，可以手动创建），并用于与执行的任务共享解析器和配置状态，下面两种例子是一样的.<br>第一种通过命令行，过程中创建ｃ，即为context,会自动导入文件配置:<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> invoke <span class="hljs-keyword">import</span> task
+<span class="hljs-meta">@task</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">show</span><span class="hljs-params">(c)</span>:</span>
+	print(config)
+    c.run(<span class="hljs-string">"ls"</span>)
+	
 $ invoke ls
-...
-</code></pre>
-<p>第二种手动创建,如果有配置我们需要手动添加配置而没法用文件配置,比如:</p>
-<pre><code class="python">from invoke import Config,Context
-# 默认配置
+...</code></pre></div></p>
+<p>第二种手动创建,如果有配置我们需要手动添加配置而没法用文件配置,比如:<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> invoke <span class="hljs-keyword">import</span> Config,Context
+<span class="hljs-comment"># 默认配置</span>
 config = Config()
-# 添加一些配置
-config[&#39;sudo&#39;] = {&#39;password&#39;:&#39;mypassoword&#39;}
+<span class="hljs-comment"># 添加一些配置</span>
+config[<span class="hljs-string">'sudo'</span>] = &#123;<span class="hljs-string">'password'</span>:<span class="hljs-string">'mypassoword'</span>&#125;
 print(config)
-# 传入配置,如果没有额外配置可以省略不填
+<span class="hljs-comment"># 传入配置,如果没有额外配置可以省略不填</span>
 c = Context(config=config)
-c.run(&#39;ls&#39;)
-</code></pre>
-<h3 id="2-6-sudo运行以及自动响应"><a href="#2-6-sudo运行以及自动响应" class="headerlink" title="2.6 sudo运行以及自动响应"></a>2.6 sudo运行以及自动响应</h3><p>最后我们说运行sudo命令时如何免密码以及与一运行一些其他命令时的提示互动.<br>我们可以先配置好文件:</p>
-<pre><code class="json">{
-    &quot;tasks&quot;: {
-        &quot;auto_dash_names&quot;: false
-    },
-    &quot;sudo&quot;: {
-        &quot;password&quot;:&quot;mypassword&quot;
-        &quot;prompt&quot;: &quot;[sudo] password:&quot;,
-    }
-}
-</code></pre>
+c.run(<span class="hljs-string">'ls'</span>)</code></pre></div></p>
+<h3 id="2-6-sudo运行以及自动响应"><a href="#2-6-sudo运行以及自动响应" class="headerlink" title="2.6 sudo运行以及自动响应"></a>2.6 sudo运行以及自动响应</h3><p>最后我们说运行sudo命令时如何免密码以及与一运行一些其他命令时的提示互动.<br>我们可以先配置好文件:<br><div class="hljs"><pre><code class="hljs json">&#123;
+    <span class="hljs-attr">"tasks"</span>: &#123;
+        <span class="hljs-attr">"auto_dash_names"</span>: <span class="hljs-literal">false</span>
+    &#125;,
+    <span class="hljs-attr">"sudo"</span>: &#123;
+		<span class="hljs-attr">"password"</span>:<span class="hljs-string">"mypassword"</span>
+        <span class="hljs-string">"prompt"</span>: <span class="hljs-string">"[sudo] password:"</span>,
+    &#125;
+&#125;</code></pre></div></p>
 <p>然后在脚本里<code>c.sudo(&#39;rm test.txt&#39;)</code>就行.<br>或者我们简单点:直接在在函数里面加入<code>c.sudo(&#39;rm test.txt&#39;,user=&#39;baird&#39;,password=&#39;mypassword&#39;)</code><br>关于自动响应程序输出的,我们可以看<a href="http://docs.pyinvoke.org/en/stable/concepts/watchers.html" target="_blank" rel="noopener">Automatically responding to program output</a></p>
 <h2 id="3-Fabric使用"><a href="#3-Fabric使用" class="headerlink" title="3. Fabric使用"></a>3. Fabric使用</h2><p>Fabric与Invoke基本上属于继承创新的关系,很多都是相同操作,所以这一部分就不重复讲了.<br><strong>Fabric相对于Invoke来说增加了Paramiko库的功能</strong>,也就是说实现了低/中级别SSH功能-SSH和SFTP会话，密钥管理等.但作为用户我们很少会直接从Paramiko导入,而是Fabric把它融合进来了,我们在看教程前,先来看看SSH认证</p>
 <h3 id="3-1-认证"><a href="#3-1-认证" class="headerlink" title="3.1 认证"></a>3.1 认证</h3><p>即使在<strong>原始</strong> OpenSSH客户端中，对远程服务器的身份验证也涉及多个潜在的秘密和配置来源。Fabric不仅支持其中的大多数，而且还具有自己的功能,下面是认证方式以及对应的配置:</p>
@@ -250,26 +254,21 @@ c.run(&#39;ls&#39;)
 <li>密码,通过<code>connect_kwargs.password</code>配置或者<code>--prompt-for-login-password</code>手动提示输入</li>
 <li>GSSAPI,不太懂,pass<br>上面的认证方式基本就全了,当然,每种认证方式的配置选择有很多,不止一种,很灵活,具体看<a href="http://docs.fabfile.org/en/2.5/concepts/authentication.html" target="_blank" rel="noopener">Authentication</a>.<br><strong>其实我们不用管那么多啥认证方式,密码就完事了~,方便省略</strong></li>
 </ul>
-<h3 id="3-2-连接"><a href="#3-2-连接" class="headerlink" title="3.2 连接"></a>3.2 连接</h3><p>有了认证之后,就得到了一个连接(connection),用于SSH守护程序的连接，其中包含命令和文件传输的方法.这个connection其实跟context是一样的,一个远程一个本机,我们可以看下,在<code>fabfile.py</code>里代码如下:</p>
-<pre><code>from fabric import task
+<h3 id="3-2-连接"><a href="#3-2-连接" class="headerlink" title="3.2 连接"></a>3.2 连接</h3><p>有了认证之后,就得到了一个连接(connection),用于SSH守护程序的连接，其中包含命令和文件传输的方法.这个connection其实跟context是一样的,一个远程一个本机,我们可以看下,在<code>fabfile.py</code>里代码如下:<br><div class="hljs"><pre><code class="hljs undefined">from fabric import task
 
 @task
 def show(c):
-    c.run(&#39;ls&#39;)
-</code></pre><p>当我们用<code>fab -H host1 show</code>时是连接的host1再运行ls命令,而<code>fab show</code>是直接在本机运行ls命令,也就是Invoke的作用,当然我么需要一个配置文件,我用的是密码:</p>
-<pre><code class="json">{
-    &quot;user&quot;: &quot;pi&quot;,
-    &quot;connect_kwargs&quot;: {
-        &quot;password&quot;: &quot;mypassword&quot;
-    },
-}
-</code></pre>
-<p>以上是使用命令行调用,或者我们可以使用connection函数:</p>
-<pre><code class="python">from fabric import Connection
+    c.run(&apos;ls&apos;)</code></pre></div></p>
+<p>当我们用<code>fab -H host1 show</code>时是连接的host1再运行ls命令,而<code>fab show</code>是直接在本机运行ls命令,也就是Invoke的作用,当然我么需要一个配置文件,我用的是密码:<br><div class="hljs"><pre><code class="hljs json">&#123;
+    <span class="hljs-attr">"user"</span>: <span class="hljs-string">"pi"</span>,
+    <span class="hljs-attr">"connect_kwargs"</span>: &#123;
+        <span class="hljs-attr">"password"</span>: <span class="hljs-string">"mypassword"</span>
+    &#125;,
+&#125;</code></pre></div></p>
+<p>以上是使用命令行调用,或者我们可以使用connection函数:<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> fabric <span class="hljs-keyword">import</span> Connection
 
-c = Connection(&#39;pi@host1&#39;,connect_kwargs={&#39;password&#39;:&#39;mypassword&#39;})
-c.run(&#39;ls&#39;)
-</code></pre>
+c = Connection(<span class="hljs-string">'pi@host1'</span>,connect_kwargs=&#123;<span class="hljs-string">'password'</span>:<span class="hljs-string">'mypassword'</span>&#125;)
+c.run(<span class="hljs-string">'ls'</span>)</code></pre></div></p>
 <p>更多例子我们可以看<a href="http://docs.fabfile.org/en/2.5/getting-started.html" target="_blank" rel="noopener">官方教程</a>,其实我最早看这上面例子时,我有点彷徨,没密码怎么连上去跑命令的,后来发现密码都是认证配置,连接并不重要,重要的是给你展示用法。</p>
 <blockquote>
 <p>从上面这个例子我们可以看出，可以用各种灵活的配置以及实现方式来创建一个远程连接。我的项目中有涉及远程部署多台机器， 我开始的想法是一把梭，创建所有机器的connection，然后上传上去，即我不需要-H来指定哪些机器，我已全部手动实例化，这就意味着用Fabric的Connection类实例化再加Facric中的Invoke功能。这是一种选择。后来发现，我应该采用一种更通用的方法，函数里我就执行相应动作，然后用-H指定主机，但是这样的话，比如我想同时部署多台机器，或者一半的机器，我还得在-H之后一个个输地址，这很耗时间，但好处就是一台台调试的时候更方便。所以我们还需外的任务，来根据条件快速输出-H后面的值做一个辅助工具，比如说输入1～7，那就自动把1~7七台机器的ip提示出来买，也算是曲线救国</p>
@@ -277,22 +276,21 @@ c.run(&#39;ls&#39;)
 <h3 id="3-3-配置"><a href="#3-3-配置" class="headerlink" title="3.3 配置"></a>3.3 配置</h3><p><a href="http://docs.fabfile.org/en/2.5/concepts/configuration.html" target="_blank" rel="noopener">Fabric配置系统的核心</a>依赖于Invoke功能（与Fabric的其余大部分一样),只是配置文件名从<code>invoke</code>(不包括后缀)改为<code>fabfile</code>,然后是多了一些关于远程主机认证的配置,最常用的就是<code>connect_kwargs</code>,上面例子也出现过了,就不过多强调了</p>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>这篇文章总结下来,花了我蛮多时间的,也算是打开了2020的新篇章。以为过程中一切都很顺利，结果写着写着就卡住了，打了自己”自以为很懂”的脸，也算有了更多收获，接下来更多加油!</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Fabric/">Fabric</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
@@ -302,9 +300,9 @@ c.run(&#39;ls&#39;)
                     
                       <a class="hover-with-bg" href="/tags/Invoke/">Invoke</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -314,7 +312,7 @@ c.run(&#39;ls&#39;)
                     
                     
                       <a href="/2020/03/31/linux-signal-with-python/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Linux的信号以及Python处理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -326,7 +324,7 @@ c.run(&#39;ls&#39;)
                       <a href="/2020/02/13/python-asyncio/">
                         <span class="hidden-mobile">Python并发之异步I/O(async,await）</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -334,31 +332,25 @@ c.run(&#39;ls&#39;)
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -374,8 +366,8 @@ c.run(&#39;ls&#39;)
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -408,9 +400,10 @@ c.run(&#39;ls&#39;)
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -422,9 +415,7 @@ c.run(&#39;ls&#39;)
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -433,34 +424,12 @@ c.run(&#39;ls&#39;)
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -470,16 +439,13 @@ c.run(&#39;ls&#39;)
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -489,8 +455,6 @@ c.run(&#39;ls&#39;)
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -523,36 +487,12 @@ c.run(&#39;ls&#39;)
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -598,24 +538,28 @@ c.run(&#39;ls&#39;)
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -670,6 +614,10 @@ c.run(&#39;ls&#39;)
       ;
     </script>
   
+
+
+
+
 
 
 

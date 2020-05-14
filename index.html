@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -133,7 +140,7 @@
   <main>
     
       <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board"
+        <div class="py-5" id="board"
           >
           
           <div class="container">
@@ -145,47 +152,95 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto">
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/05/13/arduinoFanByTemp/" target="_self">
+          <img src="/images/fanbytemp/fan.jpeg" srcset="/img/loading.gif" alt="Arduino温控PC风扇以及信息显示思路总结">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/2020/05/13/arduinoFanByTemp/">Arduino温控PC风扇以及信息显示思路总结</a>
+
+      <a href="/2020/05/13/arduinoFanByTemp/" class="index-excerpt">
+        
+        
+          
+        
+        <div>温控风扇的一个总所周知的例子就是CPU上的散热风扇，风扇速度会随着CPU负载上升的同时增加，达到及时散热的目的，然而这次要捣鼓的东西也跟这个差不多但是是在放在大机柜里，四路温控风扇，并带有温度风扇速度显示，以及通过触摸显示屏设置上下温度阀值，我毫不犹豫选择了Arduino，这在油管上也有很多类似的项目，不过也杂而不全，翻来覆去，测试了各个部分然后确定了自己想要的方案。
+1. 温度传感器选择温度传感</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-05-13
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Arduino/">Arduino</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Arduino/">Arduino</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/04/02/python-rsyslog/" target="_self">
-          <img src="/images/suolue/rsyslog.png" srcset="/img/loading.gif" alt="Python rsyslog日志集中化" class="index-img img-fluid rounded index-thumbnails">
+          <img src="/images/suolue/rsyslog.png" srcset="/img/loading.gif" alt="Python rsyslog日志集中化">
         </a>
       </div>
     
     <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/04/02/python-rsyslog/">
-        <p class="h4 index-header">Python rsyslog日志集中化</p>
+      <a class="index-header" href="/2020/04/02/python-rsyslog/">Python rsyslog日志集中化</a>
+
+      <a href="/2020/04/02/python-rsyslog/" class="index-excerpt">
+        
+        
+          
+        
+        <div>下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。</div>
       </a>
 
-      <a href="/2020/04/02/python-rsyslog/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-04-02
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。
-1. 什么是rsyslog1.1 基本介绍开始之前想说说什么是 syslog，在 Linux中，有很多后台程序都是以后台进程的形式存在运行，例如 crontab／sshd／nginx 等，有些是系统</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-02&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/rsyslog/">rsyslog</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/rsyslog/">rsyslog</a>
+            
+          </div>
         
       </div>
     </div>
@@ -194,45 +249,46 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto">
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/03/31/linux-signal-with-python/" target="_self">
-          <img src="/images/suolue/signal.png" srcset="/img/loading.gif" alt="Linux的信号以及Python处理" class="index-img img-fluid rounded index-thumbnails">
+          <img src="/images/suolue/signal.png" srcset="/img/loading.gif" alt="Linux的信号以及Python处理">
         </a>
       </div>
     
     <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/03/31/linux-signal-with-python/">
-        <p class="h4 index-header">Linux的信号以及Python处理</p>
+      <a class="index-header" href="/2020/03/31/linux-signal-with-python/">Linux的信号以及Python处理</a>
+
+      <a href="/2020/03/31/linux-signal-with-python/" class="index-excerpt">
+        
+        
+          
+        
+        <div>初次接触信号这个概念实在gpiozero库文档中的这么一个专题，How do I keep my script running?,我最最开始是在button.when_pressed = hello用一个while True的无限循环保持脚本运行，后来发现有个个内置库的signal.pause()函数可以保持脚本运行，直到按下Ctrl+C程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来</div>
       </a>
 
-      <a href="/2020/03/31/linux-signal-with-python/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-03-31
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">初次接触信号这个概念实在gpiozero库文档中的这么一个专题，How do I keep my script running?,我最最开始是在button.when_pressed = hello用一个while True的无限循环保持脚本运行，后来发现有个个内置库的signal.pause()函数可以保持脚本运行，直到按下Ctrl+C程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来一次mqtt没加loop循环之后自动断开，我后来就在想我用pause还是loop_forever呢? 接下来我就慢慢揭开了信号的序幕，也算当补了下操作系统的一些知识。
-1. 信号基础Linux信号是一</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-31&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+          </div>
         
       </div>
     </div>
@@ -241,49 +297,50 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto">
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/02/28/invoke-fabric/" target="_self">
-          <img src="/images/suolue/fabric.png" srcset="/img/loading.gif" alt="Invoke与Fabric注意事项详解教程" class="index-img img-fluid rounded index-thumbnails">
+          <img src="/images/suolue/fabric.png" srcset="/img/loading.gif" alt="Invoke与Fabric注意事项详解教程">
         </a>
       </div>
     
     <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/02/28/invoke-fabric/">
-        <p class="h4 index-header">Invoke与Fabric注意事项详解教程</p>
+      <a class="index-header" href="/2020/02/28/invoke-fabric/">Invoke与Fabric注意事项详解教程</a>
+
+      <a href="/2020/02/28/invoke-fabric/" class="index-excerpt">
+        
+        
+          
+        
+        <div>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在</div>
       </a>
 
-      <a href="/2020/02/28/invoke-fabric/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-02-28
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在那实现好半天搞不定，sudo的问题也一直在，paramiko库也看得头晕，最终不了了之，直到发现了Fabric，才发现人家发明的轮子真的香！
-1. Fabric前世今生我从一开始接触的就是Python</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-28&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Fabric/">Fabric</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Fabric/">Fabric</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/Fabric/">Fabric</a>&nbsp;
-          
-            <a href="/tags/Invoke/">Invoke</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/Fabric/">Fabric</a>
+            
+              <a href="/tags/Invoke/">Invoke</a>
+            
+          </div>
         
       </div>
     </div>
@@ -292,45 +349,47 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto">
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/02/13/python-asyncio/" target="_self">
-          <img src="/images/suolue/asynico.jpg" srcset="/img/loading.gif" alt="Python并发之异步I/O(async,await）" class="index-img img-fluid rounded index-thumbnails">
+          <img src="/images/suolue/asynico.jpg" srcset="/img/loading.gif" alt="Python并发之异步I/O(async,await）">
         </a>
       </div>
     
     <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/02/13/python-asyncio/">
-        <p class="h4 index-header">Python并发之异步I/O(async,await）</p>
+      <a class="index-header" href="/2020/02/13/python-asyncio/">Python并发之异步I/O(async,await）</a>
+
+      <a href="/2020/02/13/python-asyncio/" class="index-excerpt">
+        
+        
+          
+        
+        <div>前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！
+1. 背景Python有很长一段的异步编程历史,特别是twisted，gevent和一些无堆栈的Python项目。异</div>
       </a>
 
-      <a href="/2020/02/13/python-asyncio/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-02-13
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！
-1. 背景Python有很长一段的异步编程历史,特别是twisted，gevent和一些无堆栈的Python项目。异步编程因为一些好的原因在这些年来越来越受关注。尽管相对于传统的线性风格更难一点，但是却是值得的：因为异步编程有更高的效率。举个例子：在Http请求方面，Python异步协程可以提交请求然后去做队列中其</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-13&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/asyncio/">asyncio</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/asyncio/">asyncio</a>
+            
+          </div>
         
       </div>
     </div>
@@ -339,48 +398,49 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto">
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/02/10/Raspberrypi-PWM/" target="_self">
-          <img src="/images/suolue/pwm.png" srcset="/img/loading.gif" alt="树莓派几种不同的PWM及其应用" class="index-img img-fluid rounded index-thumbnails">
+          <img src="/images/suolue/pwm.png" srcset="/img/loading.gif" alt="树莓派几种不同的PWM及其应用">
         </a>
       </div>
     
     <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/02/10/Raspberrypi-PWM/">
-        <p class="h4 index-header">树莓派几种不同的PWM及其应用</p>
+      <a class="index-header" href="/2020/02/10/Raspberrypi-PWM/">树莓派几种不同的PWM及其应用</a>
+
+      <a href="/2020/02/10/Raspberrypi-PWM/" class="index-excerpt">
+        
+        
+          
+        
+        <div>树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。
+1. 树莓</div>
       </a>
 
-      <a href="/2020/02/10/Raspberrypi-PWM/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-02-10
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。
-1. 树莓派上PWM的分类1.1 Fully hardware PWM (全硬件PWM)
-这种类型的PWM由树莓派的PWM外设产生。脉冲的时序由PWM外设控制。它是最准确的，而且可以说是最灵活的。它可以在GPI</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-10&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/RaspberryPi/">RaspberryPi</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/RaspberryPi/">RaspberryPi</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/PWM/">PWM</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/PWM/">PWM</a>
+            
+          </div>
         
       </div>
     </div>
@@ -389,52 +449,50 @@
   <div class="row mx-auto index-card">
     
     
-      <div class="col-12 col-md-4 m-auto">
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/01/20/ADC-MCP3008/" target="_self">
-          <img src="/images/suolue/mcp3008.png" srcset="/img/loading.gif" alt="树莓派使用MCP3008模数转换器(ADC)" class="index-img img-fluid rounded index-thumbnails">
+          <img src="/images/suolue/mcp3008.png" srcset="/img/loading.gif" alt="树莓派使用MCP3008模数转换器(ADC)">
         </a>
       </div>
     
     <div class="col-12 col-md-8 mx-auto index-info">
-      <a href="/2020/01/20/ADC-MCP3008/">
-        <p class="h4 index-header">树莓派使用MCP3008模数转换器(ADC)</p>
-      </a>
+      <a class="index-header" href="/2020/01/20/ADC-MCP3008/">树莓派使用MCP3008模数转换器(ADC)</a>
 
-      <a href="/2020/01/20/ADC-MCP3008/">
+      <a href="/2020/01/20/ADC-MCP3008/" class="index-excerpt">
         
         
           
         
-        <div class="index-excerpt">
-          <div class="index-text mb-1">树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。
+        <div>树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。
 1. 方法总结
-Analogue Sensors On The Raspberry Pi Using An MCP3008
-
-MCP3008 - 8-Channel 10-Bit ADC With SPI Interface
-
-gpiozero</div>
-        </div>
+Analogue Senso</div>
       </a>
 
-      <div class="index-btm">
+      <div class="index-btm post-metas">
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-20&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/RaspberryPi/">RaspberryPi</a>&nbsp;
-          &nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-01-20
+          </div>
         
         
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/SPI/">SPI</a>&nbsp;
-          
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/RaspberryPi/">RaspberryPi</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/SPI/">SPI</a>
+            
+          </div>
         
       </div>
     </div>
@@ -444,42 +502,40 @@ gpiozero</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/01/12/python-yield-from/">
-        <p class="h4 index-header">Python3 yield from 用法详解</p>
+      <a class="index-header" href="/2020/01/12/python-yield-from/">Python3 yield from 用法详解</a>
+
+      <a href="/2020/01/12/python-yield-from/" class="index-excerpt">
+        
+        
+          
+        
+        <div>yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。
+1. 替代内层for循环如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：&gt;&gt;</div>
       </a>
 
-      <a href="/2020/01/12/python-yield-from/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-01-12
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。
-1. 替代内层for循环如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：
-&gt;&gt;&gt; def chain(*iterables):
-...        for it in iterables:
-...            for i in it:
-...        </div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-12&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/yield-from/">yield from</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/yield-from/">yield from</a>
+            
+          </div>
         
       </div>
     </div>
@@ -489,50 +545,42 @@ gpiozero</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/01/06/python-yield-2/">
-        <p class="h4 index-header">Python yield使用详解（二）</p>
+      <a class="index-header" href="/2020/01/06/python-yield-2/">Python yield使用详解（二）</a>
+
+      <a href="/2020/01/06/python-yield-2/" class="index-excerpt">
+        
+        
+          
+        
+        <div>yield的第二部分主要是with模块的功能，即上下文管理器。我们可以用contextmanager装饰器加上yield语法代替传统的__enter__，__exit__魔法方法，让代码变得更Pythonic！
+1. 上下文管理器和with块1.1 with表达式常见的with用法格式，控制代码块的进入/退出：with open(filename) as f:
+    statement
+    </div>
       </a>
 
-      <a href="/2020/01/06/python-yield-2/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-01-06
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">yield的第二部分主要是with模块的功能，即上下文管理器。我们可以用contextmanager装饰器加上yield语法代替传统的__enter__，__exit__魔法方法，让代码变得更Pythonic！
-1. 上下文管理器和with块1.1 with表达式常见的with用法格式，控制代码块的进入/退出：
-with open(filename) as f:
-    statement
-    statement
- ...
-with lock:
-    statement
-    statement
- ...
-
-1.2 定制你自己的上下文管理器一个计时器的例子：
-import time
-f</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-06&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/yield/">yield</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/yield/">yield</a>
+            
+          </div>
         
       </div>
     </div>
@@ -542,88 +590,39 @@ f</div>
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2020/01/02/python-yield-1/">
-        <p class="h4 index-header">Python yield使用详解（一）</p>
+      <a class="index-header" href="/2020/01/02/python-yield-1/">Python yield使用详解（一）</a>
+
+      <a href="/2020/01/02/python-yield-1/" class="index-excerpt">
+        
+        
+          
+        
+        <div>刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就</div>
       </a>
 
-      <a href="/2020/01/02/python-yield-1/">
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-01-02
+          </div>
         
         
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就从篇文章往下看。
-1. 生成器yield语句可以作为生成器
-def countdown(n):
-    while n &gt; 0:
-        yield n
-        n -= 1
-
-</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-02&nbsp;&nbsp;
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
         
         
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python/">Python</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Python/">Python</a>&nbsp;
-          
-            <a href="/tags/yield/">yield</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a href="/2019/12/31/thread-and-process/">
-        <p class="h4 index-header">操作系统中线程与进程概念解惑</p>
-      </a>
-
-      <a href="/2019/12/31/thread-and-process/">
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">这篇文章总结本来记录于两年前，是在写Python多线程时对一些概念的疑惑的解答，当初查阅了很多资料，对于操作系统层面的线程进程概念很模糊。而今，随着Python版本的更新，本身异步的新特性逐渐完善，在学习异步的时候难免与常用的多进程多线程进行比较来说明异步的优越性，把以前的文章拿出来，并且在现在自己的理解上查阅一些资料进行适当修改，达到温故而知新的效果。
-看了一天的相关概念,很多涉及到操作系统与底层硬件层面,脑子有点晕,对自己所理解的东西清理一下并记录下来,有些不对的地方还请指出.
-1. 线程与进程进程： 
-
-我们都知道计算机的核心是CPU，它承担了所有的计算任务；而操作系统是计算机的管理者，</div>
-        </div>
-      </a>
-
-      <div class="index-btm">
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-31&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Linux/">Linux</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Linux/">Linux</a>&nbsp;
-          
-            <a href="/tags/Thread/">Thread</a>&nbsp;
-          
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/yield/">yield</a>
+            
+          </div>
         
       </div>
     </div>
@@ -631,9 +630,9 @@ def countdown(n):
 
 
 
-  <nav aria-label="index posts navigation">
-    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fas fa-angle-double-right"></i></a>
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
   
@@ -654,8 +653,8 @@ def countdown(n):
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -688,9 +687,10 @@ def countdown(n):
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -702,9 +702,7 @@ def countdown(n):
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -716,8 +714,6 @@ def countdown(n):
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -750,36 +746,12 @@ def countdown(n):
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -825,24 +797,14 @@ def countdown(n):
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
-      function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
-        $(this).wrap(element);
-      }
-    );
-  </script>
+
 
 
 
@@ -897,6 +859,10 @@ def countdown(n):
       ;
     </script>
   
+
+
+
+
 
 
 

@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>关于sed我常用的几个方法以及遇到坑的整理 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 四月 25日 2019, 3:19 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-04-25 15:19">
+                    2019年4月25日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
-                    1.2k 字
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    1.1k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      4 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    5
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,78 +178,60 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>shell、grep、sed 和 awk 是 Unix 的基础。如果你不能非常轻松的使用它们，你将会被自己束缚住，因为它们构成了通过命令行和脚本与 Unix 系统交互的基础。<br>自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。</p>
 <p><strong>注：以下用法如果用到 </strong>-i<strong> 参数 ，直接修改读取的文件内容，而不是输出到终端（危险动作）</strong></p>
-<h2 id="1-显示"><a href="#1-显示" class="headerlink" title="1. 显示"></a>1. 显示</h2><h3 id="1-1-以行为单位的显示"><a href="#1-1-以行为单位的显示" class="headerlink" title="1.1 以行为单位的显示"></a>1.1 以行为单位的显示</h3><pre><code class="bash">sed -n &#39;5,7p&#39; demo.txt
-</code></pre>
-<h3 id="1-2-搜寻关键词显示"><a href="#1-2-搜寻关键词显示" class="headerlink" title="1.2 搜寻关键词显示"></a>1.2 搜寻关键词显示</h3><pre><code class="bash">sed -n &#39;/baird/p&#39; demo.txt
-</code></pre>
+<h2 id="1-显示"><a href="#1-显示" class="headerlink" title="1. 显示"></a>1. 显示</h2><h3 id="1-1-以行为单位的显示"><a href="#1-1-以行为单位的显示" class="headerlink" title="1.1 以行为单位的显示"></a>1.1 以行为单位的显示</h3><div class="hljs"><pre><code class="hljs bash">sed -n <span class="hljs-string">'5,7p'</span> demo.txt</code></pre></div>
+<h3 id="1-2-搜寻关键词显示"><a href="#1-2-搜寻关键词显示" class="headerlink" title="1.2 搜寻关键词显示"></a>1.2 搜寻关键词显示</h3><div class="hljs"><pre><code class="hljs bash">sed -n <span class="hljs-string">'/baird/p'</span> demo.txt</code></pre></div>
 <p><strong>-n ：使用安静(silent)模式</strong><br><strong>p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行</strong><br>关于指定内容搜寻并显示也可尝试选择<strong>grep</strong>命令，更好明白一点，<a href="https://linux.cn/article-5453-1.html" target="_blank" rel="noopener">例子在这。</a></p>
 <h2 id="2-删除"><a href="#2-删除" class="headerlink" title="2. 删除"></a>2. 删除</h2><p>两种方式与上面显示同理，只需将<strong> p </strong>改成<strong> d </strong></p>
 <h2 id="3-新增"><a href="#3-新增" class="headerlink" title="3. 新增"></a>3. 新增</h2><p>增加有两种方式：<br><strong>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)<br>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)</strong></p>
-<h3 id="3-1-以行为单位的新增"><a href="#3-1-以行为单位的新增" class="headerlink" title="3.1 以行为单位的新增"></a>3.1 以行为单位的新增</h3><pre><code class="bash">sed &#39;2a  new_line&#39; demo.txt
-</code></pre>
+<h3 id="3-1-以行为单位的新增"><a href="#3-1-以行为单位的新增" class="headerlink" title="3.1 以行为单位的新增"></a>3.1 以行为单位的新增</h3><div class="hljs"><pre><code class="hljs bash">sed <span class="hljs-string">'2a  new_line'</span> demo.txt</code></pre></div>
 <p>2表示第二行，也可用2,5a表示二到五行</p>
-<h3 id="3-2-搜寻关键词新增"><a href="#3-2-搜寻关键词新增" class="headerlink" title="3.2 搜寻关键词新增"></a>3.2 搜寻关键词新增</h3><pre><code class="bash">sed &#39;/baird/i  new_line&#39; demo.txt 
-</code></pre>
-<h2 id="4-替换"><a href="#4-替换" class="headerlink" title="4. 替换"></a>4. 替换</h2><h4 id="4-1-以行为单位的替换"><a href="#4-1-以行为单位的替换" class="headerlink" title="4.1 以行为单位的替换"></a>4.1 以行为单位的替换</h4><p><strong>c ： 取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！倒是跟上面的新增差不多</strong></p>
-<pre><code class="bash">sed &#39;2,5c No 2-5 number&#39; demo.txt
-</code></pre>
-<h4 id="4-2-搜寻关键词替换"><a href="#4-2-搜寻关键词替换" class="headerlink" title="4.2 搜寻关键词替换"></a>4.2 搜寻关键词替换</h4><pre><code class="bash">sed &#39;s/要被取代的字串/新的字串/g
-</code></pre>
+<h3 id="3-2-搜寻关键词新增"><a href="#3-2-搜寻关键词新增" class="headerlink" title="3.2 搜寻关键词新增"></a>3.2 搜寻关键词新增</h3><div class="hljs"><pre><code class="hljs bash">sed <span class="hljs-string">'/baird/i  new_line'</span> demo.txt</code></pre></div>
+<h2 id="4-替换"><a href="#4-替换" class="headerlink" title="4. 替换"></a>4. 替换</h2><h4 id="4-1-以行为单位的替换"><a href="#4-1-以行为单位的替换" class="headerlink" title="4.1 以行为单位的替换"></a>4.1 以行为单位的替换</h4><p><strong>c ： 取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行！倒是跟上面的新增差不多</strong><br><div class="hljs"><pre><code class="hljs bash">sed <span class="hljs-string">'2,5c No 2-5 number'</span> demo.txt</code></pre></div></p>
+<h4 id="4-2-搜寻关键词替换"><a href="#4-2-搜寻关键词替换" class="headerlink" title="4.2 搜寻关键词替换"></a>4.2 搜寻关键词替换</h4><div class="hljs"><pre><code class="hljs bash">sed <span class="hljs-string">'s/要被取代的字串/新的字串/g</span></code></pre></div>
 <p><strong>s: 每行，也可以选择固定在哪几行 <code>1,20s/old/new/g</code><br>g: 一行上替换所有的匹配，不加表示只替换第一个，2表示替换第二个（场景很少）</strong></p>
 <h2 id="5-多点编辑"><a href="#5-多点编辑" class="headerlink" title="5. 多点编辑"></a>5. 多点编辑</h2><p>用的场景不多，sed写于shell脚本中，多写几行就是了</p>
 <p><code>-e是编辑命令，用于sed执行多个编辑任务的情况下。在下一行开始编辑前，所有的编辑动作都将应用到模式缓冲区中的行上。因为是逐行进行多重编辑（即每个命令都在模式空间的当前行上执行），所以编辑命令的顺序会影响结果</code></p>
-<pre><code class="bash">sed -e action1 -e action2 
-</code></pre>
+<div class="hljs"><pre><code class="hljs bash">sed -e action1 -e action2</code></pre></div>
 <h2 id="6-记录自己遇到的几个坑问题"><a href="#6-记录自己遇到的几个坑问题" class="headerlink" title="6. 记录自己遇到的几个坑问题"></a>6. 记录自己遇到的几个坑问题</h2><h3 id="6-1-单双引号"><a href="#6-1-单双引号" class="headerlink" title="6.1 单双引号"></a>6.1 单双引号</h3><p>自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。</p>
-<pre><code class="bash">sed -i &#39;/ALLOWED_HOSTS/c ALLOWED_HOSTS = \[&#39;\&#39;&#39;*&#39;\&#39;&#39;\]&#39; setting.py
-</code></pre>
+<div class="hljs"><pre><code class="hljs bash">sed -i <span class="hljs-string">'/ALLOWED_HOSTS/c ALLOWED_HOSTS = \['</span>\<span class="hljs-string">''</span>*<span class="hljs-string">'\'</span><span class="hljs-string">'\]'</span> setting.py</code></pre></div>
 <p>注意到跟在sed后面的命令是用单引号的，如果我增加的文本中有本身有单引号，比如<code>ALLOWED_HOSTS = [&#39;*&#39;]</code>，那么我们需要用<code>&#39;\&#39;&#39;</code>来表示单引号，当然还有一些其他方法比如啥十六进制<code>\x27</code>，记不太清了，但是这个一些太乱了。后来发现个更好的方法：<br><code>sed -i &quot;/ALLOWED_HOSTS/c ALLOWED_HOSTS = \[\&#39;*\&#39;\]&quot; settings.py</code><br>用双引号括起来，这样里面的单引号用转义符号表示<code>\&#39;</code>,简洁多了。</p>
-<p>双引号还有个好处，就是里面可以直接更shell中的变量$xx<br>比如之前我是这么写的：</p>
-<pre><code class="bash">sed -i &#39;/MIDDLEWARE/i LOCAL_APPS = \[&#39;\&#39;&#39;&#39;$app_name&#39;&#39;\&#39;&#39;\] \n&#39; $Filename
-</code></pre>
-<p>可以直接这么写：</p>
-<pre><code class="bash">sed -i &quot;/MIDDLEWARE/i LOCAL_APPS = \[\&#39;$app_name\&#39;\] \n&quot; $Filename
-</code></pre>
-<p>上面的例子是替换的内容中包含引号，我们用<code>\&#39;</code>来转义，<strong>但是如果查询的字符带有引号呢，是否同样要转义呢，答案是不需要！</strong><br>比如下面这个例子，我们想要在唯一的<code>&#39;User&#39;:&#39;xxxx&#39;</code>下一行添加一行<code>&#39;PASSWORD&#39;:&#39;xxxx&#39;</code>,前面不需要转义，而后面需要，这就是区别：</p>
-<pre><code class="bash">sed -i  &quot;/&#39;USER&#39;: &#39;$p_user&#39;/a  \        \&#39;PASSWORD\&#39;: \&#39;$p_password\&#39;,&quot;  $Filename
-</code></pre>
+<p>双引号还有个好处，就是里面可以直接更shell中的变量$xx<br>比如之前我是这么写的：<br><div class="hljs"><pre><code class="hljs bash">sed -i <span class="hljs-string">'/MIDDLEWARE/i LOCAL_APPS = \['</span>\<span class="hljs-string">''</span><span class="hljs-string">'$app_name'</span><span class="hljs-string">'\'</span><span class="hljs-string">'\] \n'</span> <span class="hljs-variable">$Filename</span></code></pre></div></p>
+<p>可以直接这么写：<br><div class="hljs"><pre><code class="hljs bash">sed -i <span class="hljs-string">"/MIDDLEWARE/i LOCAL_APPS = \[\'<span class="hljs-variable">$app_name</span>\'\] \n"</span> <span class="hljs-variable">$Filename</span></code></pre></div></p>
+<p>上面的例子是替换的内容中包含引号，我们用<code>\&#39;</code>来转义，<strong>但是如果查询的字符带有引号呢，是否同样要转义呢，答案是不需要！</strong><br>比如下面这个例子，我们想要在唯一的<code>&#39;User&#39;:&#39;xxxx&#39;</code>下一行添加一行<code>&#39;PASSWORD&#39;:&#39;xxxx&#39;</code>,前面不需要转义，而后面需要，这就是区别：<br><div class="hljs"><pre><code class="hljs bash">sed -i  <span class="hljs-string">"/'USER': '<span class="hljs-variable">$p_user</span>'/a  \        \'PASSWORD\': \'<span class="hljs-variable">$p_password</span>\',"</span>  <span class="hljs-variable">$Filename</span></code></pre></div></p>
 <p><strong>所以遇到修改单引号或者了要用变量时，尽量用双引号来操作<code>sed</code>
 </strong></p>
-<h3 id="6-2-新增一行时增加空格或者Tab"><a href="#6-2-新增一行时增加空格或者Tab" class="headerlink" title="6.2 新增一行时增加空格或者Tab"></a>6.2 新增一行时增加空格或者Tab</h3><pre><code class="bash">sed -i &quot;/common/i \    \&#39;corsheaders.middleware.CorsMiddleware\&#39;,&quot; $Filename
-</code></pre>
+<h3 id="6-2-新增一行时增加空格或者Tab"><a href="#6-2-新增一行时增加空格或者Tab" class="headerlink" title="6.2 新增一行时增加空格或者Tab"></a>6.2 新增一行时增加空格或者Tab</h3><div class="hljs"><pre><code class="hljs bash">sed -i <span class="hljs-string">"/common/i \    \'corsheaders.middleware.CorsMiddleware\',"</span> <span class="hljs-variable">$Filename</span></code></pre></div>
 <p>需要在i后面加一个<code>\</code>然后在加<code>\t</code>或者按几个空格</p>
-<h3 id="6-3-替换时如果变量里有"><a href="#6-3-替换时如果变量里有" class="headerlink" title="6.3 替换时如果变量里有/"></a>6.3 替换时如果变量里有/</h3><pre><code class="bash">sed -i &quot;s/youdir/$Shell_folder/g&quot;
-</code></pre>
+<h3 id="6-3-替换时如果变量里有"><a href="#6-3-替换时如果变量里有" class="headerlink" title="6.3 替换时如果变量里有/"></a>6.3 替换时如果变量里有/</h3><div class="hljs"><pre><code class="hljs bash">sed -i <span class="hljs-string">"s/youdir/<span class="hljs-variable">$Shell_folder</span>/g"</span></code></pre></div>
 <p>达不到自己想要的状态，当遇到情况时可以选择整行替代!</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Linux/">Linux</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Shell/">Shell</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -247,7 +241,7 @@
                     
                     
                       <a href="/2019/05/07/nodejs-1/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">用 Python 眼光看Nodejs（一）,杂谈</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -259,7 +253,7 @@
                       <a href="/2019/04/24/auto-django/">
                         <span class="hidden-mobile">Shell脚本自动生成django项目结构并添加常用插件</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -267,31 +261,25 @@
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -307,8 +295,8 @@
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -341,9 +329,10 @@
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -355,9 +344,7 @@
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -366,34 +353,12 @@
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -403,16 +368,13 @@
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -422,8 +384,6 @@
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -456,36 +416,12 @@
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -531,24 +467,28 @@
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -603,6 +543,10 @@
       ;
     </script>
   
+
+
+
+
 
 
 

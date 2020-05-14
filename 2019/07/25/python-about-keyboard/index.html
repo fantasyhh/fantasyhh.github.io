@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Python中关于键盘行为的方法总结 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 七月 25日 2019, 2:30 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-07-25 14:30">
+                    2019年7月25日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
-                    1k 字
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    972 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      4 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    5
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,137 +178,132 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者。</p>
 <h2 id="2-pynput库"><a href="#2-pynput库" class="headerlink" title="2. pynput库"></a>2. pynput库</h2><p>这个库允许你控制和监视输入设备。 目前，支持鼠标和键盘输入和监视</p>
-<h3 id="2-1-控制键盘示例"><a href="#2-1-控制键盘示例" class="headerlink" title="2.1 控制键盘示例"></a>2.1 控制键盘示例</h3><pre><code class="python">from pynput.keyboard import Key, Controller
+<h3 id="2-1-控制键盘示例"><a href="#2-1-控制键盘示例" class="headerlink" title="2.1 控制键盘示例"></a>2.1 控制键盘示例</h3><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput.keyboard <span class="hljs-keyword">import</span> Key, Controller
 
 keyboard = Controller()
 
-# Press and release space
+<span class="hljs-comment"># Press and release space</span>
 keyboard.press(Key.space)
 keyboard.release(Key.space)
 
-# Type a lower case A; this will work even if no key on the
-# physical keyboard is labelled &#39;A&#39;
-keyboard.press(&#39;a&#39;)
-keyboard.release(&#39;a&#39;)
+<span class="hljs-comment"># Type a lower case A; this will work even if no key on the</span>
+<span class="hljs-comment"># physical keyboard is labelled 'A'</span>
+keyboard.press(<span class="hljs-string">'a'</span>)
+keyboard.release(<span class="hljs-string">'a'</span>)
 
-# Type two upper case As
-keyboard.press(&#39;A&#39;)
-keyboard.release(&#39;A&#39;)
-with keyboard.pressed(Key.shift):
-    keyboard.press(&#39;a&#39;)
-    keyboard.release(&#39;a&#39;)
+<span class="hljs-comment"># Type two upper case As</span>
+keyboard.press(<span class="hljs-string">'A'</span>)
+keyboard.release(<span class="hljs-string">'A'</span>)
+<span class="hljs-keyword">with</span> keyboard.pressed(Key.shift):
+    keyboard.press(<span class="hljs-string">'a'</span>)
+    keyboard.release(<span class="hljs-string">'a'</span>)
 
-# Type &#39;Hello World&#39; using the shortcut type method
-keyboard.type(&#39;Hello World&#39;)
-</code></pre>
-<h3 id="2-2-监听鼠标示例"><a href="#2-2-监听鼠标示例" class="headerlink" title="2.2 监听鼠标示例"></a>2.2 监听鼠标示例</h3><pre><code class="python">from pynput import keyboard
+<span class="hljs-comment"># Type 'Hello World' using the shortcut type method</span>
+keyboard.type(<span class="hljs-string">'Hello World'</span>)</code></pre></div>
+<h3 id="2-2-监听鼠标示例"><a href="#2-2-监听鼠标示例" class="headerlink" title="2.2 监听鼠标示例"></a>2.2 监听鼠标示例</h3><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput <span class="hljs-keyword">import</span> keyboard
 
-def on_press(key):
-    try:
-        print(&#39;alphanumeric key {0} pressed&#39;.format(key.char))
-    except AttributeError:
-        print(&#39;special key {0} pressed&#39;.format(key))
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">on_press</span><span class="hljs-params">(key)</span>:</span>
+    <span class="hljs-keyword">try</span>:
+        print(<span class="hljs-string">'alphanumeric key &#123;0&#125; pressed'</span>.format(key.char))
+    <span class="hljs-keyword">except</span> AttributeError:
+        print(<span class="hljs-string">'special key &#123;0&#125; pressed'</span>.format(key))
 
-def on_release(key):
-    print(&#39;{0} released&#39;.format(key))
-    if key == keyboard.Key.esc:
-        # Stop listener
-        return False
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">on_release</span><span class="hljs-params">(key)</span>:</span>
+    print(<span class="hljs-string">'&#123;0&#125; released'</span>.format(key))
+    <span class="hljs-keyword">if</span> key == keyboard.Key.esc:
+        <span class="hljs-comment"># Stop listener</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
 
-# Collect events until released
-with keyboard.Listener(
+<span class="hljs-comment"># Collect events until released</span>
+<span class="hljs-keyword">with</span> keyboard.Listener(
         on_press=on_press,
-        on_release=on_release) as listener:
+        on_release=on_release) <span class="hljs-keyword">as</span> listener:
     listener.join()
 
-# ...or, in a non-blocking fashion:
+<span class="hljs-comment"># ...or, in a non-blocking fashion:</span>
 listener = mouse.Listener(
     on_press=on_press,
     on_release=on_release)
-listener.start()
-</code></pre>
+listener.start()</code></pre></div>
 <p><strong>我对这个库的第一印象是简洁好用，监听部分的callback函数很优雅，很是喜欢，也简单测试成功了，于是我噗呲噗呲地开始写，然后把代码扔到树莓派上准备run一下，结果悲剧了，报错<code>Xlib.error.DisplayNameError: Bad display name &quot;&quot;</code>，网上说通过ssh使用这个库的时候会报错，没法正常监听，具体可以看<a href="https://github.com/moses-palmer/pynput/issues/6" target="_blank" rel="noopener">这个issue</a>，虽然上面有着解决方法，但是我没有得到解决，只能忍痛弃之 （或者可以曲线救国，采用蓝牙键盘？没试过）</strong></p>
 <h2 id="3-keyboard库"><a href="#3-keyboard库" class="headerlink" title="3. keyboard库"></a>3. keyboard库</h2><p><a href="https://github.com/boppreh/keyboard" target="_blank" rel="noopener">keyboard库</a>在github上是有较多star的，内容非常多，功能十分强大，你能想到的基本都有….不过我看着头疼，当然，没有选择的另外一个原因是发现了另外一个小脚本来实现我所需要的键盘监听功能，这也是我待会要说的，如果要用其他关于键盘的行为操作，建议好好琢磨下这个库。</p>
 <h2 id="4-神奇小脚本"><a href="#4-神奇小脚本" class="headerlink" title="4. 神奇小脚本"></a>4. 神奇小脚本</h2><p>网上看着看着，突然发现了国外大佬的这篇文章<a href="https://www.jonwitts.co.uk/archives/896" target="_blank" rel="noopener">Detecting keyboard input in Python
-</a>，完美测试，感觉好极了！先贴代码：</p>
-<pre><code class="python">#!/usr/bin/python3
-
-# adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py
-
-import sys, termios, tty, os, time
-
-def getch():
+</a>，完美测试，感觉好极了！先贴代码：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
+ 
+<span class="hljs-comment"># adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py</span>
+ 
+<span class="hljs-keyword">import</span> sys, termios, tty, os, time
+ 
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getch</span><span class="hljs-params">()</span>:</span>
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
-    try:
+    <span class="hljs-keyword">try</span>:
         tty.setraw(sys.stdin.fileno())
-        ch = sys.stdin.read(1)
-
-    finally:
+        ch = sys.stdin.read(<span class="hljs-number">1</span>)
+ 
+    <span class="hljs-keyword">finally</span>:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
-
-button_delay = 0.2
-
-while True:
+    <span class="hljs-keyword">return</span> ch
+ 
+button_delay = <span class="hljs-number">0.2</span>
+ 
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
     char = getch()
-
-    if (char == &quot;p&quot;):
-        print(&quot;Stop!&quot;)
-        exit(0)
-
-    if (char == &quot;a&quot;):
-        print(&quot;Left pressed&quot;)
+ 
+    <span class="hljs-keyword">if</span> (char == <span class="hljs-string">"p"</span>):
+        print(<span class="hljs-string">"Stop!"</span>)
+        exit(<span class="hljs-number">0</span>)
+ 
+    <span class="hljs-keyword">if</span> (char == <span class="hljs-string">"a"</span>):
+        print(<span class="hljs-string">"Left pressed"</span>)
         time.sleep(button_delay)
-
-    elif (char == &quot;d&quot;):
-        print(&quot;Right pressed&quot;)
+ 
+    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"d"</span>):
+        print(<span class="hljs-string">"Right pressed"</span>)
         time.sleep(button_delay)
-
-    elif (char == &quot;w&quot;):
-        print(&quot;Up pressed&quot;)
+ 
+    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"w"</span>):
+        print(<span class="hljs-string">"Up pressed"</span>)
         time.sleep(button_delay)
-
-    elif (char == &quot;s&quot;):
-        print(&quot;Down pressed&quot;)
+ 
+    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"s"</span>):
+        print(<span class="hljs-string">"Down pressed"</span>)
         time.sleep(button_delay)
-
-    elif (char == &quot;1&quot;):
-        print(&quot;Number 1 pressed&quot;)
-        time.sleep(button_delay)
-</code></pre>
+ 
+    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"1"</span>):
+        print(<span class="hljs-string">"Number 1 pressed"</span>)
+        time.sleep(button_delay)</code></pre></div></p>
 <p><strong>说实话其实<code>getch</code>这个函数我没太看懂，我也不想花时间研究它了，轮子已经造好了，正如这篇文章的作者一样，他也进行了一些搜索并找到了一些示例代码，但是没有一个完全符合要求，直到github上发现了<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章，也是感叹极客的给力！</strong></p>
 <h2 id="5-碎碎念"><a href="#5-碎碎念" class="headerlink" title="5. 碎碎念"></a>5. 碎碎念</h2><p>回过头来整理时发现了更巧的事情，<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章也是用键盘来控制两个马达，控制前进后退（虽然马达类型不一样），真是太巧了，哈哈哈哈哈～</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -306,7 +313,7 @@ while True:
                     
                     
                       <a href="/2019/08/01/Arduino-Serial/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Arduino Serial使用以及各种读写函数区别</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -318,7 +325,7 @@ while True:
                       <a href="/2019/07/10/docker-common-commands/">
                         <span class="hidden-mobile">Docker常用命令整理</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -326,31 +333,25 @@ while True:
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -366,8 +367,8 @@ while True:
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -400,9 +401,10 @@ while True:
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -414,9 +416,7 @@ while True:
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -425,34 +425,12 @@ while True:
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -462,16 +440,13 @@ while True:
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -481,8 +456,6 @@ while True:
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -515,36 +488,12 @@ while True:
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -590,24 +539,28 @@ while True:
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -662,6 +615,10 @@ while True:
       ;
     </script>
   
+
+
+
+
 
 
 

@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Django Class-Based Views vs. Function-Based Views - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期二, 六月 4日 2019, 2:10 下午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-06-04 14:10">
+                    2019年6月4日 下午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     1.6k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      6 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    7
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,71 +178,57 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>从一开始学习Django时候的Hello world的函数视图，到自带的View视图，再到restframework的APIView以及viewset。回过头来看看，好像有种从稚嫩到成熟再到老奸巨猾的感觉，代码量越来越少了，第三方库封装的越来越多，但是真正包含在其中的实现和理解我们却愈发忽视。作为一个web框架，我们在使用时应该更多在于一个完整的流程的实现过程，所以，无论是CBV还是FBV本质都是一样的</p>
 <p>本文翻译国外作者Vitor Freitas博客，<a href="https://simpleisbetterthancomplex.com/article/2017/03/21/class-based-views-vs-function-based-views.html" target="_blank" rel="noopener">原文地址</a>在这里。如有侵权，立即删除。</p>
 <h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h2><p>在django很老的版本时候，只有<code>function-based views</code>，但问题是是基于函数的视图太过于简单，很难去拓展,自定义它们,没法达到视图重用的地步。<br>为了解决这个问题，<code>class-based views</code>诞生了。所以，现在的django有基于函数或者基于类这两种视图。<br>当我们将<code>class-based views</code>加入到路由配置的时候。通常使用<code>View.as_view()</code>类方法，它返回一个函数，跟<code>function-based views</code>类似。</p>
-<p>下面是源码中<code>as_view</code>方法的实现，相去看完整源码可以去看django完整源码：</p>
-<pre><code class="python">class View:
-    @classonlymethod
-    def as_view(cls, **initkwargs):
-        &quot;&quot;&quot;Main entry point for a request-response process.&quot;&quot;&quot;
-        for key in initkwargs:
-            # ...
+<p>下面是源码中<code>as_view</code>方法的实现，相去看完整源码可以去看django完整源码：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">View</span>:</span>
+<span class="hljs-meta">    @classonlymethod</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">as_view</span><span class="hljs-params">(cls, **initkwargs)</span>:</span>
+        <span class="hljs-string">"""Main entry point for a request-response process."""</span>
+        <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> initkwargs:
+            <span class="hljs-comment"># ...</span>
 
-        def view(request, *args, **kwargs):
+        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">view</span><span class="hljs-params">(request, *args, **kwargs)</span>:</span>
             self = cls(**initkwargs)
-            if hasattr(self, &#39;get&#39;) and not hasattr(self, &#39;head&#39;):
+            <span class="hljs-keyword">if</span> hasattr(self, <span class="hljs-string">'get'</span>) <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> hasattr(self, <span class="hljs-string">'head'</span>):
                 self.head = self.get
             self.request = request
             self.args = args
             self.kwargs = kwargs
-            return self.dispatch(request, *args, **kwargs)
+            <span class="hljs-keyword">return</span> self.dispatch(request, *args, **kwargs)
 
-        # ...
+        <span class="hljs-comment"># ...</span>
 
-        return view
-</code></pre>
-<p>所以如果你想明确调用一个<code>class-based views</code>，你需要：  </p>
-<pre><code class="python">return MyView.as_view()(request)
-</code></pre>
-<p>为了让代码更清楚一点，你也可以赋值给一个变量：</p>
-<pre><code class="python">view_function = MyView.as_view()
-return view_function(request)
-</code></pre>
+        <span class="hljs-keyword">return</span> view</code></pre></div></p>
+<p>所以如果你想明确调用一个<code>class-based views</code>，你需要：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">return</span> MyView.as_view()(request)</code></pre></div></p>
+<p>为了让代码更清楚一点，你也可以赋值给一个变量：<br><div class="hljs"><pre><code class="hljs python">view_function = MyView.as_view()
+<span class="hljs-keyword">return</span> view_function(request)</code></pre></div></p>
 <p><strong>通过<code>as_view()</code>返回的视图函数是每个<code>class-based view</code>的外面一部分。调用视图函数之后，它将传递请求（request）给<code>dispatch()</code>方法，<code>dispatch()</code>方法将会根据request type (GET, POST, PUT, etc)来执行正确的方法。</strong></p>
 <h2 id="2-Class-Based-View-例子"><a href="#2-Class-Based-View-例子" class="headerlink" title="2. Class-Based View 例子"></a>2. Class-Based View 例子</h2><p>如果你通过<code>django.views.View</code>基类拓展一个视图，<code>dispatch()</code>方法会按照逻辑自动处理HTTP方法。如果请求是一个POST，它将在视图里执行<code>post()</code>方法  </p>
-<p>views.py </p>
-<pre><code class="python">from django.views import View
+<p>views.py<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django.views <span class="hljs-keyword">import</span> View
 
-class ContactView(View):
-    def get(self, request):
-        # Code block for GET request
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ContactView</span><span class="hljs-params">(View)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get</span><span class="hljs-params">(self, request)</span>:</span>
+        <span class="hljs-comment"># Code block for GET request</span>
 
-    def post(self, request):
-        # Code block for POST request
-</code></pre>
-<p>urls.py</p>
-<pre><code class="python">urlpatterns = [
-    url(r&#39;contact/$&#39;, views.ContactView.as_view(), name=&#39;contact&#39;),
-]
-</code></pre>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">post</span><span class="hljs-params">(self, request)</span>:</span>
+        <span class="hljs-comment"># Code block for POST request</span></code></pre></div></p>
+<p>urls.py<br><div class="hljs"><pre><code class="hljs python">urlpatterns = [
+    url(<span class="hljs-string">r'contact/$'</span>, views.ContactView.as_view(), name=<span class="hljs-string">'contact'</span>),
+]</code></pre></div></p>
 <h2 id="3-Function-Based-View-例子"><a href="#3-Function-Based-View-例子" class="headerlink" title="3. Function-Based View 例子"></a>3. Function-Based View 例子</h2><p>在<code>Function-Based View</code>中，通过表达式处理请求逻辑。</p>
-<p>views.py</p>
-<pre><code class="python">def contact(request):
-    if request.method == &#39;POST&#39;:
-        # Code block for POST request
-    else:
-        # Code block for GET request (will also match PUT, HEAD, DELETE, etc)
-</code></pre>
-<p>urls.py</p>
-<pre><code class="python">urlpatterns = [
-    url(r&#39;contact/$&#39;, views.contact, name=&#39;contact&#39;),
-]
-</code></pre>
+<p>views.py<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">contact</span><span class="hljs-params">(request)</span>:</span>
+    <span class="hljs-keyword">if</span> request.method == <span class="hljs-string">'POST'</span>:
+        <span class="hljs-comment"># Code block for POST request</span>
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-comment"># Code block for GET request (will also match PUT, HEAD, DELETE, etc)</span></code></pre></div></p>
+<p>urls.py<br><div class="hljs"><pre><code class="hljs python">urlpatterns = [
+    url(<span class="hljs-string">r'contact/$'</span>, views.contact, name=<span class="hljs-string">'contact'</span>),
+]</code></pre></div></p>
 <p>这两张视图主要的区别就在这。但是通用类视图（<code>generic class-based views</code>）就有更多故事了。</p>
 <h2 id="4-Generic-Class-Based-Views"><a href="#4-Generic-Class-Based-Views" class="headerlink" title="4. Generic Class-Based Views"></a>4. Generic Class-Based Views</h2><p>通用类视图在web应用中被用来解决一些常用操作，比如：创建一个新模型对象，表格处理，数据list，分页，档案视图等。<br>通用类视图包括在django核心包中，可以从<code>django.views.generic</code>导入。它们能很好地加快开发过程。下面大体列一下可用的视图：</p>
 <p><strong>Simple Generic Views</strong>  </p>
@@ -297,30 +295,29 @@ class ContactView(View):
 <p> 对于这两种视图的使用没有对与错,完全取决于开发状况与需求。就像文章一开始所说的，类视图不能代替函数视图。两者各有千秋。如果你想实现一个list view，那么你只需要继承<code>ListView</code>然覆盖它们的属性就行了。当然，如果你想进行一个更复杂的操作，比如同时处理多个表单，那么函数视图将会更适合你。</p>
 <h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>这里是我本人（并非原作者）的一些想法。一开始学django的时候，只知道基于函数的视图，这对于初学者来说是友好的。后来写的东西复杂的时候，特别是HTTP 请求不止是一开始单一的GET时，我更偏向于继承<code>django.views.generic.View</code>，简单覆盖方法就可以处理请求了。而对于内置的通用类视图，以及一些混合类啥的，我有些难以理解，再加上平时的开发都是前后端分离，利用django自带的模版系统的机会越来越少，所以我基本不用通用类视图。但是当你构建restful api的时候，运用到DRF框架时，里面也有类似的通用类，这个不依赖模版，真的很好用，我会在以后的章节里讲解。</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Django/">Django</a>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -330,7 +327,7 @@ class ContactView(View):
                     
                     
                       <a href="/2019/06/05/drf-post-image/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">由DRF上传图片温习到的HTTP知识</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -342,7 +339,7 @@ class ContactView(View):
                       <a href="/2019/05/30/celery-supvisor-config/">
                         <span class="hidden-mobile">supvisor和celery以及django+vue的配置整理</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -350,31 +347,25 @@ class ContactView(View):
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -390,8 +381,8 @@ class ContactView(View):
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -424,9 +415,10 @@ class ContactView(View):
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -438,9 +430,7 @@ class ContactView(View):
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -449,34 +439,12 @@ class ContactView(View):
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -486,16 +454,13 @@ class ContactView(View):
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -505,8 +470,6 @@ class ContactView(View):
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -539,36 +502,12 @@ class ContactView(View):
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -614,24 +553,28 @@ class ContactView(View):
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -686,6 +629,10 @@ class ContactView(View):
       ;
     </script>
   
+
+
+
+
 
 
 

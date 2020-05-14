@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Arduino Serial使用以及各种读写函数区别 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 八月 1日 2019, 10:01 上午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-08-01 10:01">
+                    2019年8月1日 上午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     2.6k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      10 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    13
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>常见的串口调试是将Arduino与PC相连，然后利用PC上的串口助手与其通信调试，但是有一个注意点是，调试Arduino串口时，用串口助手调试与跟程序语言(比如Python，Arduino语言)调试的传输的数据有区别，比如串口助手输入框中输入<code>97</code>时你可能输入的是两个字符<code>9</code>与<code>7</code>，而在用Arduino语法（Serial.write(97)）写的时候就是代表ASCII的<code>a</code>，或者在Python中是<code>ser.write(b&#39;a&#39;)</code>也可写成<code>ser.write([97])</code>）,两者调试方法有明显的差别性。</p>
 <h2 id="2-两个重要的写函数（write，print）"><a href="#2-两个重要的写函数（write，print）" class="headerlink" title="2. 两个重要的写函数（write，print）"></a>2. 两个重要的写函数（write，print）</h2><h3 id="2-1-Serial-write"><a href="#2-1-Serial-write" class="headerlink" title="2.1 Serial.write()"></a>2.1 Serial.write()</h3><p>串口中通信的一定是byte（字节），也就是八位Bit（二进制位），可以为一个字节，也可为多个字节；如果想发送代表数字的字符，应该使用print()函数（这个后面说）；该函数返回有几个字节被发送了。</p>
@@ -193,30 +205,26 @@
 <p><strong>Prints data to the serial port as human-readable ASCII text.</strong></p>
 </blockquote>
 <p>println与print类似，只是多了换行符，这里只介绍print函数。<br>上面这行英文已经把它跟read()函数的关系分的很清楚了。这个命令可以有多种形式。每个数字都使用ASCII字符打印。浮点数类似地打印为ASCII数字，默认为两位小数。字节作为单个字符发送。字符和字符串按原样发送。例如：</p>
-<pre><code class="cpp">Serial.print(78) gives &quot;78&quot;
+<div class="hljs"><pre><code class="hljs cpp">Serial.print(<span class="hljs-number">78</span>) gives <span class="hljs-string">"78"</span>
 
-Serial.print(1.23456) gives &quot;1.23&quot;
+Serial.print(<span class="hljs-number">1.23456</span>) gives <span class="hljs-string">"1.23"</span>
 
-Serial.print(&#39;N&#39;) gives &quot;N&quot;
+Serial.print(<span class="hljs-string">'N'</span>) gives <span class="hljs-string">"N"</span>
 
-Serial.print(&quot;Hello world.&quot;) gives &quot;Hello world.&quot;
+Serial.print(<span class="hljs-string">"Hello world."</span>) gives <span class="hljs-string">"Hello world."</span></code></pre></div>
+<p>还有第二个可选参数<code>format</code>是具体的格式，允许二进制八进制十六进制等，例如：<br><div class="hljs"><pre><code class="hljs cpp">Serial.print(<span class="hljs-number">78</span>, BIN) gives <span class="hljs-string">"1001110"</span>
 
-</code></pre>
-<p>还有第二个可选参数<code>format</code>是具体的格式，允许二进制八进制十六进制等，例如：</p>
-<pre><code class="cpp">Serial.print(78, BIN) gives &quot;1001110&quot;
+Serial.print(<span class="hljs-number">78</span>, OCT) gives <span class="hljs-string">"116"</span>
 
-Serial.print(78, OCT) gives &quot;116&quot;
+Serial.print(<span class="hljs-number">78</span>, DEC) gives <span class="hljs-string">"78"</span>
 
-Serial.print(78, DEC) gives &quot;78&quot;
+Serial.print(<span class="hljs-number">78</span>, HEX) gives <span class="hljs-string">"4E"</span>
 
-Serial.print(78, HEX) gives &quot;4E&quot;
+Serial.print(<span class="hljs-number">1.23456</span>, <span class="hljs-number">0</span>) gives <span class="hljs-string">"1"</span>
 
-Serial.print(1.23456, 0) gives &quot;1&quot;
+Serial.print(<span class="hljs-number">1.23456</span>, <span class="hljs-number">2</span>) gives <span class="hljs-string">"1.23"</span>
 
-Serial.print(1.23456, 2) gives &quot;1.23&quot;
-
-Serial.print(1.23456, 4) gives &quot;1.2346&quot;
-</code></pre>
+Serial.print(<span class="hljs-number">1.23456</span>, <span class="hljs-number">4</span>) gives <span class="hljs-string">"1.2346"</span></code></pre></div></p>
 <h3 id="2-3-Serial-write与Serial-print函数的区别"><a href="#2-3-Serial-write与Serial-print函数的区别" class="headerlink" title="2.3 Serial.write与Serial.print函数的区别"></a>2.3 Serial.write与Serial.print函数的区别</h3><blockquote>
 <p>谢邀，我觉得print，printf是开发出来专门针对pc端显示的，write则是用来与串口设备通信的，当然在老手眼里怎么用都行     ——————from逼乎某大佬回答</p>
 </blockquote>
@@ -243,153 +251,147 @@ Serial.print(1.23456, 4) gives &quot;1.2346&quot;
 <p><strong>print主要用于”给人看”的地方. 电脑内部通讯, 如果程序内不需要用人眼再检查, 用 write 会比较好, 直接快捷.</strong></p>
 <h2 id="3-Serial-read-相关函数"><a href="#3-Serial-read-相关函数" class="headerlink" title="3. Serial.read 相关函数"></a>3. Serial.read 相关函数</h2><h3 id="3-1-Serial-read"><a href="#3-1-Serial-read" class="headerlink" title="3.1 Serial.read()"></a>3.1 Serial.read()</h3><p>读取即将来的串口数据，但是只读取第一个字节，且这个字节的数据类型为int，即ASCII码值。</p>
 <p>通常与<code>Serial.available()</code>一起用，例子如下：</p>
-<pre><code class="cpp">int incomingByte = 0; // for incoming serial data
+<div class="hljs"><pre><code class="hljs cpp"><span class="hljs-keyword">int</span> incomingByte = <span class="hljs-number">0</span>; <span class="hljs-comment">// for incoming serial data</span>
 
-void setup() {
-  Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
-}
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>&#123;
+  Serial.begin(<span class="hljs-number">9600</span>); <span class="hljs-comment">// opens serial port, sets data rate to 9600 bps</span>
+&#125;
 
-void loop() {
-  // send data only when you receive data:
-  if (Serial.available() &gt; 0) {
-    // read the incoming byte:
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">loop</span><span class="hljs-params">()</span> </span>&#123;
+  <span class="hljs-comment">// send data only when you receive data:</span>
+  <span class="hljs-keyword">if</span> (Serial.available() &gt; <span class="hljs-number">0</span>) &#123;
+    <span class="hljs-comment">// read the incoming byte:</span>
     incomingByte = Serial.read();
 
-    // say what you got:
-    Serial.print(&quot;I received: &quot;);
+    <span class="hljs-comment">// say what you got:</span>
+    Serial.print(<span class="hljs-string">"I received: "</span>);
     Serial.println(incomingByte, DEC);
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre></div>
 <p>串口发送数据与读到数据都为字节，所以该函数return回来int 型数据很正常，但是我们可以直接拿来跟字符比较或者用到某些话函数中，这得益于在C语言中单引号括起一个字符实际上代表一个整数，即ASCII码值</p>
 <p>，从Arduino内置的例子就能看到：</p>
-<pre><code class="cpp">void setup() {
-  // Open serial communications and wait for port to open:
-  Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
+<div class="hljs"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>&#123;
+  <span class="hljs-comment">// Open serial communications and wait for port to open:</span>
+  Serial.begin(<span class="hljs-number">9600</span>);
+  <span class="hljs-keyword">while</span> (!Serial) &#123;
+    ; <span class="hljs-comment">// wait for serial port to connect. Needed for native USB port only</span>
+  &#125;
 
-  // send an intro:
-  Serial.println(&quot;send any byte and I&#39;ll tell you everything I can about it&quot;);
+  <span class="hljs-comment">// send an intro:</span>
+  Serial.println(<span class="hljs-string">"send any byte and I'll tell you everything I can about it"</span>);
   Serial.println();
-}
+&#125;
 
-void loop() {
-  // get any incoming bytes:
-  if (Serial.available() &gt; 0) {
-    int thisChar = Serial.read();
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">loop</span><span class="hljs-params">()</span> </span>&#123;
+  <span class="hljs-comment">// get any incoming bytes:</span>
+  <span class="hljs-keyword">if</span> (Serial.available() &gt; <span class="hljs-number">0</span>) &#123;
+    <span class="hljs-keyword">int</span> thisChar = Serial.read();
 
-    // say what was sent:
-    Serial.print(&quot;You sent me: \&#39;&quot;);
+    <span class="hljs-comment">// say what was sent:</span>
+    Serial.print(<span class="hljs-string">"You sent me: \'"</span>);
     Serial.write(thisChar);
-    Serial.print(&quot;\&#39;  ASCII Value: &quot;);
+    Serial.print(<span class="hljs-string">"\'  ASCII Value: "</span>);
     Serial.println(thisChar);
 
-    // analyze what was sent:
-    if (isAlphaNumeric(thisChar)) {
-      Serial.println(&quot;it&#39;s alphanumeric&quot;);
-    }
-    if (isAlpha(thisChar)) {
-      Serial.println(&quot;it&#39;s alphabetic&quot;);
-    }
-    if (isAscii(thisChar)) {
-      Serial.println(&quot;it&#39;s ASCII&quot;);
-    }
-    if (isWhitespace(thisChar)) {
-      Serial.println(&quot;it&#39;s whitespace&quot;);
-    }
-    if (isControl(thisChar)) {
-      Serial.println(&quot;it&#39;s a control character&quot;);
-    }
-    if (isDigit(thisChar)) {
-      Serial.println(&quot;it&#39;s a numeric digit&quot;);
-    }
-    if (isGraph(thisChar)) {
-      Serial.println(&quot;it&#39;s a printable character that&#39;s not whitespace&quot;);
-    }
-    if (isLowerCase(thisChar)) {
-      Serial.println(&quot;it&#39;s lower case&quot;);
-    }
-    if (isPrintable(thisChar)) {
-      Serial.println(&quot;it&#39;s printable&quot;);
-    }
-    if (isPunct(thisChar)) {
-      Serial.println(&quot;it&#39;s punctuation&quot;);
-    }
-    if (isSpace(thisChar)) {
-      Serial.println(&quot;it&#39;s a space character&quot;);
-    }
-    if (isUpperCase(thisChar)) {
-      Serial.println(&quot;it&#39;s upper case&quot;);
-    }
-    if (isHexadecimalDigit(thisChar)) {
-      Serial.println(&quot;it&#39;s a valid hexadecimaldigit (i.e. 0 - 9, a - F, or A - F)&quot;);
-    }
+    <span class="hljs-comment">// analyze what was sent:</span>
+    <span class="hljs-keyword">if</span> (isAlphaNumeric(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's alphanumeric"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isAlpha(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's alphabetic"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isAscii(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's ASCII"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isWhitespace(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's whitespace"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isControl(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's a control character"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isDigit(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's a numeric digit"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isGraph(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's a printable character that's not whitespace"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isLowerCase(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's lower case"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isPrintable(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's printable"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isPunct(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's punctuation"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isSpace(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's a space character"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isUpperCase(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's upper case"</span>);
+    &#125;
+    <span class="hljs-keyword">if</span> (isHexadecimalDigit(thisChar)) &#123;
+      Serial.println(<span class="hljs-string">"it's a valid hexadecimaldigit (i.e. 0 - 9, a - F, or A - F)"</span>);
+    &#125;
 
-    // add some space and ask for another byte:
+    <span class="hljs-comment">// add some space and ask for another byte:</span>
     Serial.println();
-    Serial.println(&quot;Give me another byte:&quot;);
+    Serial.println(<span class="hljs-string">"Give me another byte:"</span>);
     Serial.println();
-  }
-}
-</code></pre>
+  &#125;
+&#125;</code></pre></div>
 <h3 id="3-2-Serial-readBytes-buffer-length"><a href="#3-2-Serial-readBytes-buffer-length" class="headerlink" title="3.2 Serial.readBytes(buffer, length)"></a>3.2 Serial.readBytes(buffer, length)</h3><p><code>Serial.readBytes</code>从串行端口读取字符到缓冲区,返回放入缓冲区的字节数，如果超时该函数将中断</p>
-<p>这个函数我看到的用法是放在字符数组中，然后再利用数组的特性进行一些操作，例子如下：</p>
-<pre><code class="C">char mystr[10]; //Initialized variable to store recieved data
+<p>这个函数我看到的用法是放在字符数组中，然后再利用数组的特性进行一些操作，例子如下：<br><div class="hljs"><pre><code class="hljs C"><span class="hljs-keyword">char</span> mystr[<span class="hljs-number">10</span>]; <span class="hljs-comment">//Initialized variable to store recieved data</span>
 
-void setup() {
-  // Begin the Serial at 9600 Baud
-  Serial.begin(9600);
-}
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>&#123;
+  <span class="hljs-comment">// Begin the Serial at 9600 Baud</span>
+  Serial.begin(<span class="hljs-number">9600</span>);
+&#125;
 
-void loop() {
-  Serial.readBytes(mystr,5); //Read the serial data and store in var
-  Serial.println(mystr); //Print data on Serial Monitor
-  for (byte i = 0; i &lt; 5; i = i + 1) {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">loop</span><span class="hljs-params">()</span> </span>&#123;
+  Serial.readBytes(mystr,<span class="hljs-number">5</span>); <span class="hljs-comment">//Read the serial data and store in var</span>
+  Serial.println(mystr); <span class="hljs-comment">//Print data on Serial Monitor</span>
+  <span class="hljs-keyword">for</span> (byte i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i = i + <span class="hljs-number">1</span>) &#123;
       Serial.println(mystr[i]);
-  delay(1000);
-}
-</code></pre>
+  delay(<span class="hljs-number">1000</span>);
+&#125;</code></pre></div></p>
 <h3 id="3-3-Serial-readString"><a href="#3-3-Serial-readString" class="headerlink" title="3.3 Serial.readString()"></a>3.3 Serial.readString()</h3><p><code>Serial.readString</code>将串行缓冲区中的字符读入String，如果超时该函数将中断</p>
-<pre><code class="C">String a;
+<div class="hljs"><pre><code class="hljs C">String a;
 
-void setup() {
-Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
-}
-void loop() {
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>&#123;
+Serial.begin(<span class="hljs-number">9600</span>); <span class="hljs-comment">// opens serial port, sets data rate to 9600 bps</span>
+&#125;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">loop</span><span class="hljs-params">()</span> </span>&#123;
 
-    while(Serial.available()) {
-        a= Serial.readString();// read the incoming data as string
+    <span class="hljs-keyword">while</span>(Serial.available()) &#123;
+        a= Serial.readString();<span class="hljs-comment">// read the incoming data as string</span>
         Serial.println(a);
-}
-}
-</code></pre>
+&#125;
+&#125;</code></pre></div>
 <p>当时这个函数与上面的搞不太清楚，所以试了下。其实这个函数是读取发送过来的字符串，存到一个String类型的变量里，用来打印，或者处理（<code>Serial.write()无法字节发送String类型的变量</code>）再发出去等等，可以看一下String类型的变量很多个方法比如<code>toCharArray()</code>，<code>toInt()</code>之类的</p>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>经历了两天的疑惑解惑过程，发现自己关于串口的基本功还是不够扎实，这个过程中需要自己不断反复地尝试与验证，剥开代码语言的皮囊，看到更下面真实的骨架，其实也挺开心的，故再花点时间整理在这里留作总结以及反思！</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Arduino/">Arduino</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Serial/">Serial</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -399,7 +401,7 @@ void loop() {
                     
                     
                       <a href="/2019/09/20/MCP23017-raspberrypi-expander/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">用Python在树莓派中使用MCP23017 I/O扩展模块</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -411,7 +413,7 @@ void loop() {
                       <a href="/2019/07/25/python-about-keyboard/">
                         <span class="hidden-mobile">Python中关于键盘行为的方法总结</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -419,31 +421,25 @@ void loop() {
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -459,8 +455,8 @@ void loop() {
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -493,9 +489,10 @@ void loop() {
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -507,9 +504,7 @@ void loop() {
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -518,34 +513,12 @@ void loop() {
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -555,16 +528,13 @@ void loop() {
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -574,8 +544,6 @@ void loop() {
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -608,36 +576,12 @@ void loop() {
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -683,24 +627,28 @@ void loop() {
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -755,6 +703,10 @@ void loop() {
       ;
     </script>
   
+
+
+
+
 
 
 

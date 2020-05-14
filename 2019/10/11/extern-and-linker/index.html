@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>C语言中extern和头文件以及静态动态库概念梳理 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期五, 十月 11日 2019, 10:06 上午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-10-11 10:06">
+                    2019年10月11日 上午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     3.2k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      11 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    13
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,10 +178,10 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p>最近因为Arduino使用的较多，开始学起来了C语言，看了还多天，无非就是基本的数据类型，运算符，控制语句，简单得很，后来发现这仅仅是语法层面，C语言是除了汇编最为底层的语言了，要了解这门语言，就要从了解支撑起C的底层原理开始了解，编译原理，操作系统，计算机硬件。而这次遇到的C语言的库文件，就好比Python中的标准库与第三方库，怎么共享，中间又是个什么过程，一团黑。因为涉及内容太多太多，我还是偏向于找一些好的资料然后分主题整理下来，自己再串起来，解惑也。</p>
 <h2 id="1-先说说声明与定义"><a href="#1-先说说声明与定义" class="headerlink" title="1. 先说说声明与定义"></a>1. 先说说声明与定义</h2><p>stackoverflow上有个很全面的回答，<a href="https://stackoverflow.com/questions/1410563/what-is-the-difference-between-a-definition-and-a-declaration" target="_blank" rel="noopener">What is the difference between a definition and a declaration?</a></p>
 <p>下面是我摘抄的一些简单概念：</p>
@@ -201,16 +213,13 @@
 <li>头文件能加强类型安全检查。如果某个接口被实现或被使用时，其方式与头文件中的声明不一致，编译器就会指出错误，这一简单的规则能大大减轻程序员调试、改错的负担。</li>
 </ul>
 <p>既然头文件是一种规定，那么写头文件时也有相当多的规则，<a href="https://reality0ne.com/how-to-struct-c-header-files/" target="_blank" rel="noopener">如何组织好 C 的头文件</a>很有必要。</p>
-<h2 id="4-编译系统"><a href="#4-编译系统" class="headerlink" title="4. 编译系统"></a>4. 编译系统</h2><p>对与一个简单的hello程序</p>
-<pre><code class="C">#include &lt;stdio.h&gt;
+<h2 id="4-编译系统"><a href="#4-编译系统" class="headerlink" title="4. 编译系统"></a>4. 编译系统</h2><p>对与一个简单的hello程序<br><div class="hljs"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
 
-int main()
-{
-    printf(&quot;hello, world\n&quot;);
-    return 0;
-}
-
-</code></pre>
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>&#123;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"hello, world\n"</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre></div></p>
 <p><strong>当我们调用gcc编译时，过程是这样的：</strong></p>
 <p><img src="/images/gcc_linker/gcc.jpg" srcset="/img/loading.gif" alt="compilation system"><br>关于对每个部分的具体相关命令，可以看下<a href="http://youguanxinqing.xyz/index.php/archives/85/" target="_blank" rel="noopener">这篇文章前半部分</a></p>
 <h2 id="5-链接"><a href="#5-链接" class="headerlink" title="5. 链接"></a>5. 链接</h2><p><strong>接下来我们着重讲讲链接以及相关的内容：</strong></p>
@@ -226,7 +235,7 @@ int main()
 <p>为什么会有静态库？ <strong>在静态库之前,我们可以选择这么做？</strong></p>
 <p>把所有<code>printf</code>标准函数放到<code>libc.o</code>中，然后<code>gcc main.c /usr/lib/libc.o</code> ，我们就可以用标准函数了。优点是我们将编译器的实现与标准函数实现分开了，但是缺点就是造成浪费，<code>libc.o</code>中我们有上百个函数，但我们平常的一个程序，我们可能仅仅用到<code>printf</code>等几个常用函数，全部导入进来，这样就造成空间浪费，还有就是对某个函数改变了，等重新编译整个源文件，开发维护复杂。</p>
 <p>再者，我们可以为每个标准函数创建独立的<code>.o</code>文件，然后用:<br><code>gcc main.c /usr/lib/printf.o /usr/lib/scanf.o</code><br>这也是可行的，但是一看就知道太麻烦耗时</p>
-<p>之后，静态库概念被提出来，以解决这些不同方法的缺点。相关的函数可以被编译为独立的目标模块，然后封装成一个单独的静态库文件。然后，应用程序可以通过在命令行上指定单独的文件名字来使用这些在库中定义的函数。比如，使用c标准库和数学库中函数的程序可以用形式如下的命令行來编译和链接：<br><code>gcc main. c /usr/lib/libm. a /usr/lib/libc. a</code><br>在链接时，链接器只复制被程序引用的目标模块，这就减少了磁盘跟内存大小。</p>
+<p>之后，静态库概念被提出来，以解决这些不同方法的缺点。相关的函数可以被编译为独立的目标模块，然后封装成一个单独的静态库文件。然后，应用程序可以通过在命令行上指定单独的文件名字来使用这些在库中定义的函数。比如，使用c标准库和数学库中函数的程序可以用形式如下的命令行來编译和链接：<br><code>gcc main.c /usr/lib/libm.a /usr/lib/libc.a</code><br>在链接时，链接器只复制被程序引用的目标模块，这就减少了磁盘跟内存大小。</p>
 <blockquote>
 <p>在Linux系统中，静态库以一种称为存档(archive)的特殊文件格式存放在磁盘中。存档文件是一组连接起来的可重定位目标文件的集合，有一个头部用来描述每个成员目标文件的大小和位置。存档文件名由后缀.a标识。</p>
 </blockquote>
@@ -247,7 +256,7 @@ int main()
 <p>这样就创建了一个可执行目标文件a.out,而此文件的形式使得它在运行时可以和libvector.so链接。基本的思路是当创建可执行文件时，静态执行一些链接，然后在程序加载时，动态完成链接过程。认识到这一点是很重要的：此时，没有任何libvector.so的代码和数据节貞的被复制到可执行文件a.out中。反之，链接器复制了一些重定位和符号表信息，它们使得运行时可以解析对libvector.so中代码利数据的引用</p>
 </blockquote>
 <p><strong>所以静态库与动态库的区别：</strong></p>
-<pre><code>静态库：
+<div class="hljs"><pre><code>静态库：
 1.链接时将程序放进进可执行程序
 2.会产生多分副本
 3.不依赖程序运行
@@ -255,33 +264,32 @@ int main()
 1.程序运行时，加载时才去动态库找函数
 2.多进程共享
 3.依赖程序运行
-</code></pre><p>还有个题外话，<a href="https://stackoverflow.com/questions/6906360/by-default-does-gcc-link-to-static-or-dynamic-standard-library" target="_blank" rel="noopener">gcc链接标准库时默认是动态的还是静态的？</a></p>
+</code></pre></div><p>还有个题外话，<a href="https://stackoverflow.com/questions/6906360/by-default-does-gcc-link-to-static-or-dynamic-standard-library" target="_blank" rel="noopener">gcc链接标准库时默认是动态的还是静态的？</a></p>
 <h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h2><p>花了两天，算是把相关的概念过程整理清楚了，有些资料第一次读没有读懂，回过头来再细读，豁然开朗！花了蛮多精力，不知道以后有没有机会用C做代码量多一点的项目，哈哈~</p>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/C/">C</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
                     
                       <a class="hover-with-bg" href="/tags/C/">C</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -291,7 +299,7 @@ int main()
                     
                     
                       <a href="/2019/10/17/python-m-option/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Python -m 参数以及生僻运行命令汇总</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -303,7 +311,7 @@ int main()
                       <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">
                         <span class="hidden-mobile">浅谈Flask目录结构以及与Vue.js整合注意事项</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -311,31 +319,25 @@ int main()
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -351,8 +353,8 @@ int main()
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -385,9 +387,10 @@ int main()
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -399,9 +402,7 @@ int main()
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -410,34 +411,12 @@ int main()
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -447,16 +426,13 @@ int main()
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -466,8 +442,6 @@ int main()
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -500,36 +474,12 @@ int main()
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -575,24 +525,28 @@ int main()
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -647,6 +601,10 @@ int main()
       ;
     </script>
   
+
+
+
+
 
 
 

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
+  <link rel="icon" type="image/png" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="hello">
+  <meta name="author" content="Jiahuan Shi">
+  <meta name="keywords" content>
+  <title>Arduino温控PC风扇以及信息显示思路总结 - 烛影小札</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-05-13 11:08">
+                    2020年5月13日 上午
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    2.4k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    13
+                     分钟
+                  </span>
+                
+
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <p>温控风扇的一个总所周知的例子就是CPU上的散热风扇，风扇速度会随着CPU负载上升的同时增加，达到及时散热的目的，然而这次要捣鼓的东西也跟这个差不多但是是在放在大机柜里，四路温控风扇，并带有温度风扇速度显示，以及通过触摸显示屏设置上下温度阀值，我毫不犹豫选择了Arduino，这在油管上也有很多类似的项目，不过也杂而不全，翻来覆去，测试了各个部分然后确定了自己想要的方案。</p>
+<h2 id="1-温度传感器选择"><a href="#1-温度传感器选择" class="headerlink" title="1. 温度传感器选择"></a>1. 温度传感器选择</h2><p><a href="https://arduino.nxez.com/2017/03/26/arduino-sensor-series-of-temperature-measurement.html" target="_blank" rel="noopener">温度传感器有很多</a>，我选择了其中的<strong>热敏电阻</strong>和<strong>LM35</strong>进行了测试以及对比，有如下几点想说的：</p>
+<ul>
+<li>最开始我用的100k的热敏电阻和51k的电阻在3.3V下分压计算得到的温度和LM35基本差不多，我很满意，区别只是热敏电阻相对LM35来说浮动小很多</li>
+<li>之后我热敏电阻在5V情况下分压计算温度发现跟之前有一两度的差距，我纠结了很久，反复查看分压得到的值，热敏电阻计算到的值跟之前就差了一点，但是代入公式温度有了一两度的差距，验证后的确如此，不纠结</li>
+<li>LM35在跑了几天后不知道是线路问题还是啥直飙40+摄氏度，感觉不太可靠</li>
+</ul>
+<p>再加上项目要求，我选择了稳定性较高的热敏电阻，<strong>但是想要得到很高的测量精度，需要做很多优化工作，难度较大</strong>，好在对精度要求不高，机柜温度，八九不离十就行。热敏电阻的具体操作可以参考<a href="https://blog.csdn.net/Al_shawn/article/details/51287759" target="_blank" rel="noopener">这里</a>，而LM35的在<a href="https://blog.hobbycomponents.com/?p=89" target="_blank" rel="noopener">这边</a>，附带一个要用到的Arduino函数知识点<a href="https://www.quora.com/What-is-analogReference-function-in-Arduino-Why-and-when-it-should-be-used" target="_blank" rel="noopener">What is analogReference() function in Arduino?</a></p>
+<h2 id="2-PC风扇速度控制"><a href="#2-PC风扇速度控制" class="headerlink" title="2. PC风扇速度控制"></a>2. PC风扇速度控制</h2><p>我一开始拿到个<strong>3 pin的PC风扇（12伏特）来测试</strong>，但还有<strong>2 pin</strong>和<strong>4 pin</strong>，前期找到了一些资料来了解它们</p>
+<ul>
+<li><a href="http://m.elecfans.com/article/1104020.html" target="_blank" rel="noopener">CPU风扇的工作原理</a></li>
+<li><a href="https://forums.tomshardware.com/threads/fan-speed-control-how-to-2-pin-vs-3-pin-vs-4-pin.2200004/" target="_blank" rel="noopener">Fan speed control how-to, 2-pin vs.3-pin vs. 4-pin</a></li>
+<li><a href="https://forum.arduino.cc/index.php?topic=174093.0" target="_blank" rel="noopener"> Control a 3-pin PC fan (Read 5239 times)</a></li>
+</ul>
+<p>具体操作我在油管上找到了篇绝佳的教程<a href="https://www.youtube.com/watch?v=Pw1kSS_FIKk&amp;t=355s" target="_blank" rel="noopener">Controlling fan speed with mosfet and Arduino
+</a>，我是完全照着这个来，完美，但是还是有几点要强调的：</p>
+<ul>
+<li>风扇速度可以通过PWM电压（无论几pin风扇）来控制也可以选择<strong>4 pin风扇</strong>的pwm线来控制，我选择了前者</li>
+<li>视频中MOS管两端插了个电阻，当时有疑惑，后来得到了<a href="https://blog.csdn.net/luojing194/article/details/69397252" target="_blank" rel="noopener">解决</a></li>
+</ul>
+<h2 id="3-风扇速度测量"><a href="#3-风扇速度测量" class="headerlink" title="3. 风扇速度测量"></a>3. 风扇速度测量</h2><p>我一开始简单地想在施加PWM电压控制风速的同时直接把占空比当做速度的百分比，这明显是合理的，且网上大多都是通过百分比来表示，相对于一串数字的RPM来说更加直观点<br>但是后来摸索来摸索去又进入了测量RPM的怪圈，因为我测试的是<strong>3 pin的风扇</strong>，有一根测速度的线在上面，这就很尴尬不测测不行了。<br>我同样在油管上找到了合适的教程<a href="https://www.youtube.com/watch?v=sWjd61ouRVY&amp;list=LLhi4-nyxWBvXJnWZgVlRZmA&amp;index=6&amp;t=0s" target="_blank" rel="noopener">How to measure Fan RPM with Arduino using hall effect sensor</a>以及一些<a href="https://zhuanlan.zhihu.com/p/27996069" target="_blank" rel="noopener">霍尔效应的原理</a><br>风扇的RPM速度是拿到了，但是在整合程序的时候出现了两个问题：</p>
+<ul>
+<li>测量风扇速度必须在程序中腾出一秒来感应霍尔效应，那么在这一秒内Arduino等于阻塞了，但是又不好搞多线程导致程序有延迟</li>
+<li>在使用ＰＷＭ控制风扇的时候测量出来的霍尔效应是垃圾数值，不能用作于风扇速度，具体看<a href="https://forum.arduino.cc/index.php?topic=620421.0" target="_blank" rel="noopener">这里</a>有这么段话<strong>:One thing you need to be aware of is that when you are controlling a three pin fan via a MOSFET then you need to crank the PWM signal to 100% for a few milliseconds while reading the speed or else you will get garbage readings.</strong></li>
+</ul>
+<p>所以兜兜转转又回到了用百分比描述风扇速度</p>
+<h2 id="4-显示屏选择"><a href="#4-显示屏选择" class="headerlink" title="4. 显示屏选择"></a>4. 显示屏选择</h2><p>Arduino显示屏我主要参考<a href="https://www.youtube.com/watch?v=E6quVf1_BIg&amp;list=LLhi4-nyxWBvXJnWZgVlRZmA&amp;index=4&amp;t=73s" target="_blank" rel="noopener">Top 5 Arduino Displays</a>，主流的显示屏都有讲到。但是我这边的要求是尺寸大一点带触摸功能最终我选择了<a href="https://item.taobao.com/item.htm?spm=a1z09.2.0.0.3e4a2e8dbwBdjH&amp;id=610082128912&amp;_u=evk2k025bb2" target="_blank" rel="noopener">4寸TFT彩屏 480X320超高清液晶屏LCD触摸屏</a><br>，连接以及代码操作可以参考<a href="https://www.youtube.com/watch?v=9Ms59ofSJIY&amp;list=LLhi4-nyxWBvXJnWZgVlRZmA&amp;index=2&amp;t=68" target="_blank" rel="noopener">Arduino TFT LCD Touch Screen Tutorial
+</a>和<a href="https://www.youtube.com/watch?v=PAPW97X6IRM&amp;list=LLhi4-nyxWBvXJnWZgVlRZmA&amp;index=3&amp;t=21s" target="_blank" rel="noopener">Arduino Tutorial: 3.5” Color TFT display ILI9481 on Arduino Uno and Mega from Banggood.com
+</a>。其实中间过程比较坎坷，挑了好几次试验了蛮久才最终定下来，源于我对这方面只是的匮乏，不太懂，这里也强调几个点：</p>
+<ul>
+<li>选择shield显示屏，直白点说也就是可以直插到Arduino板子上，这样就免了接线烦恼直接用</li>
+<li>选择<a href="https://github.com/prenticedavid/MCUFRIEND_kbv" target="_blank" rel="noopener">MCUFRIEND_kbv</a>，里面有大量演示的例子以及代码让你校验这块屏幕，一些压感参数，这是我到最后才发现的。其中的代码优雅性也对自己有很大启发</li>
+<li><code>MCUFRIEND_kbv/examples/TouchScreen_Calibr_native</code>是校验触摸屏，可以得到校准参数然后用到<code>examples/Touch_shield_new/</code>中，一路没问题那就没问题了，之后就开始自己的设计</li>
+<li>一些相关函数可以参考<a href="http://adafruit.github.io/Adafruit-GFX-Library/html/class_adafruit___g_f_x.html#ab6e88c585d3ab6b4f95199361f224fc6" target="_blank" rel="noopener">Adafruit GFX Library
+</a>，说到底<strong>MCUFRIEND_kbv</strong>是对<strong>Adafruit GFX</strong>的强大包装，自动识别驱动和尺寸，让小白一路畅通</li>
+</ul>
+<h2 id="5-图片和代码展示"><a href="#5-图片和代码展示" class="headerlink" title="5. 图片和代码展示"></a>5. 图片和代码展示</h2><p>代码当然不是最终版，很多还要修改调整的，但是核心的东西就不用变了，接线可以看上面的油管链接，电路图我是不会画的，=。=<br><img src="/images/fanbytemp/fan.jpeg" srcset="/img/loading.gif" alt><br><div class="hljs"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;math.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;Adafruit_GFX.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;MCUFRIEND_kbv.h&gt;</span></span>
+MCUFRIEND_kbv tft;       <span class="hljs-comment">// hard-wired for UNO shields anyway.</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;TouchScreen.h&gt;</span></span>
+
+<span class="hljs-comment">// Assign human-readable names to some common 16-bit color values:</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BLACK   0x0000</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BLUE    0x001F</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> RED     0xF800</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> GREEN   0x07E0</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> CYAN    0x07FF</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MAGENTA 0xF81F</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> YELLOW  0xFFE0</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> WHITE   0xFFFF</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> XP = <span class="hljs-number">8</span>, XM = A2, YP = A3, YM = <span class="hljs-number">9</span>; <span class="hljs-comment">//ID=0x7796</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> TS_LEFT = <span class="hljs-number">922</span>, TS_RT = <span class="hljs-number">122</span>, TS_TOP = <span class="hljs-number">53</span>, TS_BOT = <span class="hljs-number">933</span>;
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MINPRESSURE 200</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MAXPRESSURE 1000</span>
+
+<span class="hljs-comment">// 触摸屏实例化</span>
+TouchScreen ts = TouchScreen(XP, YP, XM, YM, <span class="hljs-number">300</span>);
+TSPoint tp;
+<span class="hljs-comment">// 触摸不同区域的不同标志</span>
+byte touch;
+
+<span class="hljs-comment">// 第一行的初始坐标以及行间距</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">uint16_t</span> line_x = <span class="hljs-number">8</span>, line_y = <span class="hljs-number">20</span>, line_distance = <span class="hljs-number">40</span>;
+<span class="hljs-comment">// + - 按钮的位置大下参数,一共四个按钮小方块,以左上角第一个作为起点,side_正方形按钮边长</span>
+<span class="hljs-comment">// distance分别为了左右上下两个方块的间隔,symbol为符号到正方向边上的距离,intital_y表达式中的常量3代表与第一行之间的偏移量</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">uint16_t</span> initial_x = <span class="hljs-number">300</span> , initial_y = line_y - <span class="hljs-number">3</span> , side = <span class="hljs-number">30</span>, x_distance = <span class="hljs-number">50</span>, y_distance = <span class="hljs-number">40</span> , symbol_x = <span class="hljs-number">7</span>, symbol_y = <span class="hljs-number">5</span>;
+
+<span class="hljs-keyword">int16_t</span> BOXSIZE;
+<span class="hljs-keyword">int16_t</span> PENRADIUS = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">uint16_t</span> ID, oldcolor, currentcolor;
+<span class="hljs-keyword">const</span> byte Orientation = <span class="hljs-number">1</span>;    <span class="hljs-comment">//PORTRAIT</span>
+
+<span class="hljs-comment">//MOSFET Gate 控制电源PWM</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Gate 53</span>
+
+<span class="hljs-comment">//MF52-100K 常温25摄氏度(298.15K)下阻值为100k欧</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">float</span> voltagepower = <span class="hljs-number">5.0</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">float</span> R = <span class="hljs-number">51</span>; <span class="hljs-comment">//采样电阻为51千欧</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> B = <span class="hljs-number">3950</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> T1 = <span class="hljs-number">273.15</span> + <span class="hljs-number">25</span>; <span class="hljs-comment">//常温</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> R1 = <span class="hljs-number">100</span>; <span class="hljs-comment">//常温对应的阻值，注意单位是千欧</span>
+<span class="hljs-keyword">const</span> byte analogid = <span class="hljs-number">8</span>; <span class="hljs-comment">//A8处读取电压值</span>
+
+<span class="hljs-comment">// 风扇速度调节的温度范围</span>
+byte MinTemp = <span class="hljs-number">25</span>;
+byte MaxTemp = <span class="hljs-number">32</span>;
+<span class="hljs-comment">// 风扇电压模拟值变量</span>
+byte analogvalue;
+
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">show_threshold</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+</span>&#123;
+  <span class="hljs-comment">// 显示设置值</span>
+  tft.setCursor(line_x, line_y);
+  tft.print(<span class="hljs-string">"MinTemp:"</span>); <span class="hljs-comment">// 第一行</span>
+  tft.print(MinTemp);
+  tft.println(<span class="hljs-string">" \367C"</span>);
+  tft.setCursor(line_x, line_y + line_distance * <span class="hljs-number">1</span>);  <span class="hljs-comment">// 第二行</span>
+  tft.print(<span class="hljs-string">"MaxTemp:"</span>);
+  tft.print(MaxTemp);
+  tft.println(<span class="hljs-string">" \367C"</span>);
+&#125;
+
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">showTempAndControlFan</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+</span>&#123;
+  <span class="hljs-comment">//获得A1处的电压值</span>
+  <span class="hljs-keyword">double</span> digitalValue = analogRead(analogid);
+  <span class="hljs-keyword">double</span> voltageValue = (digitalValue / <span class="hljs-number">1023</span>) * <span class="hljs-number">5</span>;
+  <span class="hljs-comment">//通过分压比获得热敏电阻的阻值</span>
+  <span class="hljs-keyword">double</span> Rt = ((voltagepower - voltageValue) * R) / voltageValue;
+  <span class="hljs-comment">//换算得到温度值</span>
+  <span class="hljs-keyword">double</span> temp = ((T1 * B) / (B + T1 * <span class="hljs-built_in">log</span>(Rt / R1))) - <span class="hljs-number">273.15</span>;
+  <span class="hljs-comment">// 显示温度</span>
+  tft.setCursor(line_x, line_y + line_distance * <span class="hljs-number">2</span>);  <span class="hljs-comment">// 第三行</span>
+  tft.print(<span class="hljs-string">"Current Temp: "</span>);
+  tft.print((<span class="hljs-keyword">int</span>)temp);
+  tft.print(<span class="hljs-string">" \367C"</span>);
+
+  <span class="hljs-comment">// 温度控制风扇</span>
+  <span class="hljs-keyword">if</span> (temp &gt;= MaxTemp) &#123;
+    analogvalue = <span class="hljs-number">255</span>;
+    <span class="hljs-comment">//digitalWrite(buzzer, HIGH);</span>
+  &#125;
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (temp &gt;= MinTemp) &#123;
+    <span class="hljs-comment">//根据温度MinTemp~MaxTemp调节风扇速度对应analog值100~255</span>
+    analogvalue = <span class="hljs-built_in">map</span>(temp, MinTemp, MaxTemp, <span class="hljs-number">120</span>, <span class="hljs-number">255</span>);
+    <span class="hljs-comment">//digitalWrite(buzzer, LOW);</span>
+  &#125;
+  <span class="hljs-keyword">else</span> &#123;
+    analogvalue = <span class="hljs-number">0</span>;
+    <span class="hljs-comment">//digitalWrite(buzzer, LOW);</span>
+  &#125;
+  analogWrite(Gate, analogvalue);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">show_fan</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+</span>&#123;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">4</span>; i++) &#123;
+    tft.setCursor(line_x, line_y + line_distance * (<span class="hljs-number">2</span>+<span class="hljs-number">1</span>*i));
+    tft.print(<span class="hljs-string">"Fan"</span>);
+    tft.print(i);
+    tft.print(<span class="hljs-string">" Speed:  "</span>);
+    <span class="hljs-keyword">if</span>  (analogvalue == <span class="hljs-number">255</span>) &#123;
+      tft.print(<span class="hljs-string">"100%"</span>);
+    &#125;
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (analogvalue == <span class="hljs-number">0</span>) &#123;
+      tft.print(<span class="hljs-string">"  0%"</span>);
+    &#125;
+    <span class="hljs-keyword">else</span> &#123;
+      tft.print(<span class="hljs-string">" "</span>);
+      tft.print(analogvalue * <span class="hljs-number">100</span> / <span class="hljs-number">255</span>);
+      tft.print(<span class="hljs-string">"%"</span>);
+    &#125;
+  &#125;
+&#125;
+
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>&#123;
+  Serial.begin(<span class="hljs-number">9600</span>);
+  Serial.println(<span class="hljs-string">"start..."</span>);
+
+  tft.reset();
+  ID = tft.readID();
+  tft.begin(ID);
+  tft.setRotation(Orientation);
+  tft.fillScreen(BLACK);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(<span class="hljs-number">2</span>);
+
+  <span class="hljs-comment">//https://forum.arduino.cc/index.php?topic=364055.0</span>
+  <span class="hljs-comment">// 设置加减符号边框</span>
+  tft.fillRect(initial_x, initial_y, side, side, MAGENTA);
+  tft.fillRect(initial_x + x_distance, initial_y, side, side, MAGENTA);
+  tft.fillRect(initial_x, initial_y + y_distance , side, side, MAGENTA);
+  tft.fillRect(initial_x + x_distance, initial_y + y_distance, side, side, MAGENTA);
+  <span class="hljs-comment">// 显示加减符号</span>
+  tft.setCursor(initial_x + symbol_x, initial_y + symbol_y);
+  tft.print(<span class="hljs-string">"+"</span>);
+  tft.setCursor(initial_x + symbol_x + x_distance, initial_y + symbol_y);
+  tft.print(<span class="hljs-string">"-"</span>);
+  tft.setCursor(initial_x + symbol_x, initial_y + symbol_y + y_distance);
+  tft.print(<span class="hljs-string">"+"</span>);
+  tft.setCursor(initial_x + symbol_x + x_distance, initial_y + symbol_y + y_distance);
+  tft.print(<span class="hljs-string">"-"</span>);
+  tft.setTextColor(WHITE, BLACK);
+  Serial.println(<span class="hljs-string">"Screen is "</span> + String(tft.width()) + <span class="hljs-string">"x"</span> + String(tft.height()));
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">loop</span><span class="hljs-params">()</span> </span>&#123;
+  show_threshold();
+  showTempAndControlFan();
+  show_fan();
+
+  <span class="hljs-keyword">uint16_t</span> xpos, ypos;  <span class="hljs-comment">//screen coordinates</span>
+  tp = ts.getPoint();   <span class="hljs-comment">//p.x, p.y are ADC values</span>
+
+  <span class="hljs-comment">// if sharing pins, you'll need to fix the directions of the touchscreen pins</span>
+  pinMode(XM, OUTPUT);
+  pinMode(YP, OUTPUT);
+  <span class="hljs-comment">// we have some minimum pressure we consider 'valid'</span>
+  <span class="hljs-comment">// pressure of 0 means no pressing!</span>
+
+  <span class="hljs-keyword">if</span> (tp.z &gt; MINPRESSURE &amp;&amp; tp.z &lt; MAXPRESSURE) &#123;
+    xpos = <span class="hljs-built_in">map</span>(tp.y, TS_TOP, TS_BOT, <span class="hljs-number">0</span>, tft.width());
+    ypos = <span class="hljs-built_in">map</span>(tp.x, TS_RT, TS_LEFT, <span class="hljs-number">0</span>, tft.height());
+    Serial.println(String(xpos) + <span class="hljs-string">","</span> + String(ypos));
+    <span class="hljs-keyword">if</span> (xpos &gt; initial_x  &amp;&amp; xpos &lt; initial_x + side) &#123;
+      <span class="hljs-keyword">if</span> (ypos &gt; initial_y &amp;&amp; ypos &lt; initial_y + side) &#123;
+        touch = <span class="hljs-number">1</span>;
+      &#125;
+    &#125;
+    <span class="hljs-keyword">if</span> (xpos &gt; initial_x + x_distance &amp;&amp; xpos &lt; initial_x + x_distance + side) &#123;
+      <span class="hljs-keyword">if</span> (ypos &gt; initial_y &amp;&amp; ypos &lt; initial_y + side) &#123;
+        touch = <span class="hljs-number">2</span>;
+      &#125;
+    &#125;
+    <span class="hljs-keyword">if</span> (xpos &gt; initial_x &amp;&amp; xpos &lt; initial_x + side) &#123;
+      <span class="hljs-keyword">if</span> (ypos &gt; initial_y + y_distance &amp;&amp; ypos &lt; initial_y + y_distance + side) &#123;
+        touch = <span class="hljs-number">3</span>;
+      &#125;
+    &#125;
+    <span class="hljs-keyword">if</span> (xpos &gt; initial_x + x_distance &amp;&amp; xpos &lt; initial_x + x_distance + side) &#123;
+      <span class="hljs-keyword">if</span> (ypos &gt; initial_y + y_distance &amp;&amp; ypos &lt; initial_y + y_distance + side) &#123;
+        touch = <span class="hljs-number">4</span>;
+      &#125;
+    &#125;
+  &#125;
+
+  <span class="hljs-keyword">if</span> (touch == <span class="hljs-number">1</span>) &#123;
+    MinTemp++;
+    touch = <span class="hljs-number">0</span>;
+    delay(<span class="hljs-number">200</span>);
+  &#125;
+
+  <span class="hljs-keyword">if</span> (touch == <span class="hljs-number">2</span>) &#123;
+    MinTemp--;
+    touch = <span class="hljs-number">0</span>;
+    delay(<span class="hljs-number">200</span>);
+  &#125;
+
+  <span class="hljs-keyword">if</span> (touch == <span class="hljs-number">3</span>) &#123;
+    MaxTemp++;
+    touch = <span class="hljs-number">0</span>;
+    delay(<span class="hljs-number">200</span>);
+  &#125;
+
+  <span class="hljs-keyword">if</span> (touch == <span class="hljs-number">4</span>) &#123;
+    MaxTemp--;
+    touch = <span class="hljs-number">0</span>;
+    delay(<span class="hljs-number">200</span>);
+  &#125;
+
+&#125;</code></pre></div></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Arduino/">Arduino</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Arduino/">Arduino</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/02/python-rsyslog/">
+                        <span class="hidden-mobile">Python rsyslog日志集中化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="/js/lazyload.js"></script>
+
+
+
+  
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Arduino温控PC风扇以及信息显示思路总结&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

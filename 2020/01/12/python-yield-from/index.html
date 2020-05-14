@@ -18,20 +18,21 @@
   <meta name="keywords" content>
   <title>Python3 yield from 用法详解 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
 
 <link rel="stylesheet" href="/css/main.css">
-
-
-  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
 
 <!-- 自定义样式保持在最底部 -->
 
@@ -43,7 +44,7 @@
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>烛影小札</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -56,49 +57,55 @@
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">归档</a>
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">分类</a>
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">标签</a>
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/about/">关于</a>
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
           </li>
         
           
           
           
-          
           <li class="nav-item">
-            <a class="nav-link" href="/links/">友链</a>
+            <a class="nav-link" href="/links/">
+              <i class="iconfont icon-link-fill"></i>
+              友链</a>
           </li>
         
         
@@ -115,7 +122,7 @@
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
-        <div class="mask rgba-black-light flex-center">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="container text-center white-text fadeInUp">
             <span class="h2" id="subtitle">
               
@@ -123,31 +130,36 @@
 
             
               
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期日, 一月 12日 2020, 10:46 上午
-                </p>
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-01-12 10:46">
+                    2020年1月12日 上午
+                  </time>
+                </div>
               
 
-              <p class="mt-1">
+              <div class="mt-1">
                 
                   
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
                     1.4k 字
                   </span>
                 
 
                 
                   
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      5 分钟
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    6
+                     分钟
                   </span>
                 
 
                 
-              </p>
+              </div>
             
           </div>
 
@@ -166,61 +178,55 @@
     <div class="d-none d-lg-block col-lg-2"></div>
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
+        <div class="py-5" id="board">
           <div class="post-content mx-auto" id="post">
             
-            <div class="markdown-body">
+            <article class="markdown-body">
               <p><code>yield from</code>是Python3.3以后全新的语言结构，它的作用比<code>yield</code>多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用<code>await</code>关键字，这个名称就好多了。当然，后面Python也改成了<code>await</code>，这个我们在结尾说，少废话，先看东西。</p>
-<h2 id="1-替代内层for循环"><a href="#1-替代内层for循环" class="headerlink" title="1. 替代内层for循环"></a>1. 替代内层for循环</h2><p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：</p>
-<pre><code class="python">&gt;&gt;&gt; def chain(*iterables):
-...        for it in iterables:
-...            for i in it:
-...                yield i
-&gt;&gt;&gt; s = &#39;ABC&#39;
-&gt;&gt;&gt; t = tuple(range(3))
-&gt;&gt;&gt; list(chain(s, t))
-[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, 0, 1, 2]
-</code></pre>
-<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。  </p>
-<pre><code class="python">Python3.3之后引入了新语法：
-&gt;&gt;&gt; def chain(*iterables):
-...     for i in iterables:
-...         yield from i
+<h2 id="1-替代内层for循环"><a href="#1-替代内层for循环" class="headerlink" title="1. 替代内层for循环"></a>1. 替代内层for循环</h2><p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">chain</span><span class="hljs-params">(*iterables)</span>:</span>
+...		<span class="hljs-keyword">for</span> it <span class="hljs-keyword">in</span> iterables:
+...			<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> it:
+...				<span class="hljs-keyword">yield</span> i
+<span class="hljs-meta">&gt;&gt;&gt; </span>s = <span class="hljs-string">'ABC'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = tuple(range(<span class="hljs-number">3</span>))
+<span class="hljs-meta">&gt;&gt;&gt; </span>list(chain(s, t))
+[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></div></p>
+<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。<br><div class="hljs"><pre><code class="hljs python">Python3<span class="hljs-number">.3</span>之后引入了新语法：
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">chain</span><span class="hljs-params">(*iterables)</span>:</span>
+<span class="hljs-meta">... </span>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> iterables:
+<span class="hljs-meta">... </span>		<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> i
 ...
-&gt;&gt;&gt; list(chain(s, t))
-[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, 0, 1, 2]
-</code></pre>
+<span class="hljs-meta">&gt;&gt;&gt; </span>list(chain(s, t))
+[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></div></p>
 <ul>
 <li><code>yield from</code> 完全代替了内层的 for 循环。</li>
 <li><code>yield from x</code> 表达式对 x 对象所做的第一件事是，调用 iter(x)，从中获取迭代器。因此，x 可以是任何可迭代的对象。</li>
 <li>在这个示例中使用 <code>yield from</code>代码读起来更顺畅，不过感觉更像是语法糖。 </li>
 </ul>
-<p>上面这个例子看上去比较简单（传统意义上说因为我们只是for循环一次就完事，因为只嵌套了一层），我们再来看几个<code>yield from</code>的例子。<br><strong>例子1：我们有一个嵌套型的序列，想将它扁平化处理为一列单独的值。</strong></p>
-<pre><code class="python">from collections import Iterable
+<p>上面这个例子看上去比较简单（传统意义上说因为我们只是for循环一次就完事，因为只嵌套了一层），我们再来看几个<code>yield from</code>的例子。<br><strong>例子1：我们有一个嵌套型的序列，想将它扁平化处理为一列单独的值。</strong><br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> Iterable
 
-def flatten(items, ignore_types=(str, bytes)):
-    for x in items:
-        if isinstance(x, Iterable) and not isinstance(x, ignore_types):
-            yield from flatten(x)
-        else:
-            yield x
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatten</span><span class="hljs-params">(items, ignore_types=<span class="hljs-params">(str, bytes)</span>)</span>:</span>
+	<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> items:
+		<span class="hljs-keyword">if</span> isinstance(x, Iterable) <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> isinstance(x, ignore_types):
+			<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> flatten(x)
+		<span class="hljs-keyword">else</span>:
+			<span class="hljs-keyword">yield</span> x
 
-items = [1, 2, [3, 4, [5, 6], 7], 8]
-for x in flatten(items):
-    print(x)
-# output：
- 1 2 3 4 5 6 7 8
+items = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>], <span class="hljs-number">7</span>], <span class="hljs-number">8</span>]
+<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> flatten(items):
+	print(x)
+<span class="hljs-comment"># output：</span>
+ <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span>
 -----------------------------------------------
-items = [&#39;Dave&#39;, &#39;Paula&#39;, [&#39;Thomas&#39;, &#39;Lewis&#39;]]
-for x in flatten(items):
-    print(x)
+items = [<span class="hljs-string">'Dave'</span>, <span class="hljs-string">'Paula'</span>, [<span class="hljs-string">'Thomas'</span>, <span class="hljs-string">'Lewis'</span>]]
+<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> flatten(items):
+	print(x)
 
-# output：
+<span class="hljs-comment"># output：</span>
 Dave
 Paula
 Thomas
-Lewis
-</code></pre>
+Lewis</code></pre></div></p>
 <ul>
 <li><code>collections.Iterable</code>是一个抽象基类，我们用<code>isinstance(x, Iterable)</code>检查某个元素是否是可迭代的.如果是的话,那么就用<code>yield from</code>将这个可迭代对象作为一种子例程进行递归。最终返回结果就是一个没有嵌套的单值序列了。</li>
 <li>代码中额外的参数<code>ignore types</code>和检测语句<code>isinstance(x, ignore types)</code>用来将字符<br>串和字节排除在可迭代对象外，防止将它们再展开成单个的字符。<ul>
@@ -228,39 +234,37 @@ Lewis
 </ul>
 </li>
 </ul>
-<p><strong>例子2：利用一个Node类来表示树结构</strong></p>
-<pre><code class="python">class Node:
-    def __init__(self, value):
-        self._value = value
-        self._children = []
+<p><strong>例子2：利用一个Node类来表示树结构</strong><br><div class="hljs"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span>:</span>
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, value)</span>:</span>
+		self._value = value
+		self._children = []
 
-    def __repr__(self):
-        return &#39;Node({!r})&#39;.format(self._value)
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__repr__</span><span class="hljs-params">(self)</span>:</span>
+		<span class="hljs-keyword">return</span> <span class="hljs-string">'Node(&#123;!r&#125;)'</span>.format(self._value)
 
-    def add_child(self, node):
-        self._children.append(node)
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add_child</span><span class="hljs-params">(self, node)</span>:</span>
+		self._children.append(node)
 
-    def __iter__(self):
-        return iter(self._children)
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__iter__</span><span class="hljs-params">(self)</span>:</span>
+		<span class="hljs-keyword">return</span> iter(self._children)
 
-    def depth_first(self):
-        yield self
-        for c in self:
-            yield from c.depth_first()
+	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">depth_first</span><span class="hljs-params">(self)</span>:</span>
+		<span class="hljs-keyword">yield</span> self
+		<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self:
+			<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> c.depth_first()
 
 
-if __name__ == &#39;__main__&#39;:
-    root = Node(0)
-    child1 = Node(1)
-    child2 = Node(2)
-    root.add_child(child1)
-    root.add_child(child2)
-    child1.add_child(Node(3))
-    child1.add_child(Node(4))
-    child2.add_child(Node(5))
-    for ch in root.depth_first():
-        print(ch)
-</code></pre>
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+	root = Node(<span class="hljs-number">0</span>)
+	child1 = Node(<span class="hljs-number">1</span>)
+	child2 = Node(<span class="hljs-number">2</span>)
+	root.add_child(child1)
+	root.add_child(child2)
+	child1.add_child(Node(<span class="hljs-number">3</span>))
+	child1.add_child(Node(<span class="hljs-number">4</span>))
+	child2.add_child(Node(<span class="hljs-number">5</span>))
+	<span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> root.depth_first():
+		print(ch)</code></pre></div></p>
 <ul>
 <li><code>__iter__</code>代表一个Pyton的迭代协议，返回一个迭代器对象,就能迭代了</li>
 <li><code>depth_frist</code>返回一个生成器，仔细体会其中的<code>yield</code>与 <code>yield from</code>用法</li>
@@ -276,30 +280,29 @@ if __name__ == &#39;__main__&#39;:
 </li>
 </ul>
 
-            </div>
+            </article>
             <hr>
             <div>
-              <p>
+              <div class="post-metas mb-3">
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
                     
                       <a class="hover-with-bg" href="/categories/Python/">Python</a>
-                      &nbsp;
                     
-                  </span>&nbsp;&nbsp;
+                  </div>
                 
                 
-                  <span>
-                <i class="iconfont icon-tag"></i>
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
                       <a class="hover-with-bg" href="/tags/yield-from/">yield from</a>
                     
-                  </span>
+                  </div>
                 
-              </p>
+              </div>
               
                 <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
               
@@ -309,7 +312,7 @@ if __name__ == &#39;__main__&#39;:
                     
                     
                       <a href="/2020/01/20/ADC-MCP3008/">
-                        <i class="fa fa-chevron-left"></i>
+                        <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">树莓派使用MCP3008模数转换器(ADC)</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
@@ -321,7 +324,7 @@ if __name__ == &#39;__main__&#39;:
                       <a href="/2020/01/06/python-yield-2/">
                         <span class="hidden-mobile">Python yield使用详解（二）</span>
                         <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
+                        <i class="iconfont icon-arrowright"></i>
                       </a>
                     
                   </div>
@@ -329,31 +332,25 @@ if __name__ == &#39;__main__&#39;:
               
             </div>
 
-              
-                <!-- Comments -->
-                <div class="comments" id="comments">
-                  
-                  
-    <section id="comments" class="comments">
-      <style>
-        .utterances{max-width: 100%;}
-      </style>
-        <script src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous" async>
-        </script>
-  </section>
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  </script>
 
 
-                </div>
-              
+              </div>
+            
           </div>
         </div>
       </div>
     </div>
     
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div id="tocbot"></div>
 </div>
 
@@ -369,8 +366,8 @@ if __name__ == &#39;__main__&#39;:
   </main>
 
   
-    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
-      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
     </a>
   
 
@@ -403,9 +400,10 @@ if __name__ == &#39;__main__&#39;:
   <footer class="mt-5">
   <div class="text-center py-3">
     <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
       <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
     </div>
     
 
@@ -417,9 +415,7 @@ if __name__ == &#39;__main__&#39;:
 
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
@@ -428,34 +424,12 @@ if __name__ == &#39;__main__&#39;:
 
 
   
-  <script src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js"></script>
+  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var toc = $('#toc');
       var boardCtn = $('#board-ctn');
       var boardTop = boardCtn.offset().top;
-      var tocLimMax = 2 * boardTop + boardCtn.height();
 
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
       tocbot.init({
         tocSelector: '#tocbot',
         contentSelector: '.post-content',
@@ -465,16 +439,13 @@ if __name__ == &#39;__main__&#39;:
         listClass: 'tocbot-list',
         isCollapsedClass: 'tocbot-is-collapsed',
         collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
         scrollSmooth: true,
         headingsOffset: -boardTop
       });
       if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
+        $('#toc').css('visibility', 'visible');
       }
-      var offset = boardCtn.css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
     });
   </script>
 
@@ -484,8 +455,6 @@ if __name__ == &#39;__main__&#39;:
 
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
-
-
 
 
 
@@ -518,36 +487,12 @@ if __name__ == &#39;__main__&#39;:
   
 
   
-    <!-- Tencent Analytics -->
-    <script defer>
-      var _mtac = {};
-      (function () {
-        var mta = document.createElement("script");
-        mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
-        mta.setAttribute("name", "MTAH5");
-        mta.setAttribute("sid", "");
-        
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(mta, s);
-      })();
-    </script>
-  
 
   
 
   
 
   
-
-
-
-  <script src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $('pre').addClass('prettyprint  ');
-      prettyPrint();
-    })
-  </script>
 
 
 
@@ -593,24 +538,28 @@ if __name__ == &#39;__main__&#39;:
     var path = "/local-search.xml";
     var inputArea = document.querySelector("#local-search-input");
     inputArea.onclick = function () {
-      getSearchFile(path);
+      searchFunc(path, 'local-search-input', 'local-search-result');
       this.onclick = null
     }
   </script>
 
 
 
-  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
+
   <script>
-    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
       function () {
-        var element = document.createElement("a");
-        $(element).attr("data-fancybox", "images");
-        $(element).attr("href", $(this).attr("src"));
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
         $(this).wrap(element);
       }
     );
   </script>
+
+
 
 
 
@@ -665,6 +614,10 @@ if __name__ == &#39;__main__&#39;:
       ;
     </script>
   
+
+
+
+
 
 
 
