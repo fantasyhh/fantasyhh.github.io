@@ -257,8 +257,8 @@ byte touch;
 <span class="hljs-keyword">uint16_t</span> ID, oldcolor, currentcolor;
 <span class="hljs-keyword">const</span> byte Orientation = <span class="hljs-number">1</span>;    <span class="hljs-comment">//PORTRAIT</span>
 
-<span class="hljs-comment">//MOSFET Gate 控制电源PWM</span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Gate 53</span>
+<span class="hljs-comment">//MOSFET Gate 控制电源PWM,选择PWM pin 44~46 for mega </span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Gate 44</span>
 
 <span class="hljs-comment">//MF52-100K 常温25摄氏度(298.15K)下阻值为100k欧</span>
 <span class="hljs-keyword">const</span> <span class="hljs-keyword">float</span> voltagepower = <span class="hljs-number">5.0</span>;
@@ -310,8 +310,8 @@ byte analogvalue;
     <span class="hljs-comment">//digitalWrite(buzzer, HIGH);</span>
   &#125;
   <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (temp &gt;= MinTemp) &#123;
-    <span class="hljs-comment">//根据温度MinTemp~MaxTemp调节风扇速度对应analog值100~255</span>
-    analogvalue = <span class="hljs-built_in">map</span>(temp, MinTemp, MaxTemp, <span class="hljs-number">120</span>, <span class="hljs-number">255</span>);
+    <span class="hljs-comment">//根据温度MinTemp~MaxTemp调节风扇速度对应analog值128~255</span>
+    analogvalue = <span class="hljs-built_in">map</span>(temp, MinTemp, MaxTemp, <span class="hljs-number">128</span>, <span class="hljs-number">255</span>);
     <span class="hljs-comment">//digitalWrite(buzzer, LOW);</span>
   &#125;
   <span class="hljs-keyword">else</span> &#123;
@@ -324,7 +324,7 @@ byte analogvalue;
 <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">show_fan</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
 </span>&#123;
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">4</span>; i++) &#123;
-    tft.setCursor(line_x, line_y + line_distance * (<span class="hljs-number">2</span>+<span class="hljs-number">1</span>*i));
+    tft.setCursor(line_x, line_y + line_distance * (<span class="hljs-number">2</span> + <span class="hljs-number">1</span> * i));
     tft.print(<span class="hljs-string">"Fan"</span>);
     tft.print(i);
     tft.print(<span class="hljs-string">" Speed:  "</span>);
