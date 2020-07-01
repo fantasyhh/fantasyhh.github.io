@@ -19,24 +19,29 @@
   <title>利用MCP2515芯片在树莓派上使用CAN BUS协议 - 烛影小札</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+  
+
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
 
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
-
-
 
 <link rel="stylesheet" href="/css/main.css">
 
 <!-- 自定义样式保持在最底部 -->
 
 
+  <script src="/js/utils.js"></script>
 </head>
 
 
@@ -57,56 +62,85 @@
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <i class="iconfont icon-home-fill"></i>
-              首页</a>
-          </li>
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                Go笔记
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/2020/07/01/goTools/">
+                    
+                    Go笔记1:工具的使用
+                  </a>
+                
+              </div>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">
-              <i class="iconfont icon-archive-fill"></i>
-              归档</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">
-              <i class="iconfont icon-category-fill"></i>
-              分类</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">
-              <i class="iconfont icon-tags-fill"></i>
-              标签</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">
-              <i class="iconfont icon-user-fill"></i>
-              关于</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/links/">
-              <i class="iconfont icon-link-fill"></i>
-              友链</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
         
         
           <li class="nav-item" id="search-btn">
@@ -130,36 +164,38 @@
 
             
               
-                <div class="mt-3 post-meta">
-                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2019-06-10 13:45">
-                    2019年6月10日 下午
-                  </time>
-                </div>
-              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2019-06-10 13:45">
+      2019年6月10日 下午
+    </time>
+  </div>
 
-              <div class="mt-1">
-                
-                  
-                  <span class="post-meta mr-2">
-                    <i class="iconfont icon-chart"></i>
-                    941 字
-                  </span>
-                
 
-                
-                  
-                  <span class="post-meta mr-2">
-                      <i class="iconfont icon-clock-fill"></i>
-                    
-                    
-                    4
-                     分钟
-                  </span>
-                
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      941 字
+    </span>
+  
 
-                
-              </div>
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      4
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
             
           </div>
 
@@ -190,21 +226,21 @@
 <li><a href="https://harrisonsand.com/can-on-the-raspberry-pi/" target="_blank" rel="noopener">https://harrisonsand.com/can-on-the-raspberry-pi/</a></li>
 </ol>
 <h2 id="1-硬件相关问题"><a href="#1-硬件相关问题" class="headerlink" title="1. 硬件相关问题"></a>1. 硬件相关问题</h2><p>关于MCP2515 SPI转CAN的芯片，可能有多个“款式”的存在（有些教程里的跟我的芯片不一样），但是必要的针脚的插法都是一致的。</p>
-<div class="hljs"><pre><code class="hljs undefined">RPi Pin    RPi Label     CAN Module
-02---------5V------------VCC
-06---------GND-----------GND
-19---------GPIO10--------MOSI (SI)
-21---------GPIO9---------MISO (SO)
-22---------GPIO25--------INT
-23---------GPIO11--------SCK
-24---------GPIO8---------CS</code></pre></div>
+<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-comment">RPi</span> <span class="hljs-comment">Pin</span>    <span class="hljs-comment">RPi</span> <span class="hljs-comment">Label</span>     <span class="hljs-comment">CAN</span> <span class="hljs-comment">Module</span>
+<span class="hljs-comment">02</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">5V</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">VCC</span>
+<span class="hljs-comment">06</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GND</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GND</span>
+<span class="hljs-comment">19</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO10</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">MOSI</span> <span class="hljs-comment">(SI)</span>
+<span class="hljs-comment">21</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO9</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">MISO</span> <span class="hljs-comment">(SO)</span>
+<span class="hljs-comment">22</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO25</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">INT</span>
+<span class="hljs-comment">23</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO11</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">SCK</span>
+<span class="hljs-comment">24</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO8</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">CS</span></code></pre></div>
 <blockquote>
 <p>其他没什么的说的，在肯定自己接线没错误之后，我们需要怀疑芯片是不是坏的，我试的时候前面两个都是坏的，导致挂不上去</p>
 </blockquote>
 <h2 id="2-配置树莓派"><a href="#2-配置树莓派" class="headerlink" title="2. 配置树莓派"></a>2. 配置树莓派</h2><p><strong>编辑/boot/config.txt并添加以下行，将振荡器参数设置为模块上存在的振荡器参数。大多数模块使用16MHz振荡器作为时钟，但也有使用8MHz（即oscillator=8000000）。你可以通过查看芯片来确定频率。</strong></p>
-<div class="hljs"><pre><code class="hljs undefined">dtparam=spi=on
-dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
-dtoverlay=spi-bcm2835-overlay</code></pre></div>
+<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-attr">dtparam</span>=spi=<span class="hljs-literal">on</span>
+<span class="hljs-attr">dtoverlay</span>=mcp2515-can0,oscillator=<span class="hljs-number">8000000</span>,interrupt=<span class="hljs-number">25</span>
+<span class="hljs-attr">dtoverlay</span>=spi-bcm2835-overlay</code></pre></div>
 <p>通过<strong><code>uname -a</code></strong>查看树莓派内核，如果内核为4.4.x往上（树莓派4B基本都是这个版本往上），则需要将最后一行配置修改：<br><div class="hljs"><pre><code class="hljs bash">dtparam=spi=on
 dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
 dtoverlay=spi1-1cs</code></pre></div></p>
@@ -218,13 +254,13 @@ can0</code></pre></div></p>
 <blockquote>
 <p>如果连接不准确基本上看不到上面的net文件夹，也就没有can0这个设备了</p>
 </blockquote>
-<p>之后，设置你想要的波特率挂载，我这里用的是125000(即你想要驱动的电机的波特率)，<strong><code>sudo ip link set can0 up type can bitrate 125000</code></strong>，挂载成功后，就能在<strong><code>ifconfig</code></strong>中看到：<br><div class="hljs"><pre><code class="hljs undefined">pi@piv2:~ $ sudo ifconfig
-can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
-          UP RUNNING NOARP  MTU:16  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:10
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+<p>之后，设置你想要的波特率挂载，我这里用的是125000(即你想要驱动的电机的波特率)，<strong><code>sudo ip link set can0 up type can bitrate 125000</code></strong>，挂载成功后，就能在<strong><code>ifconfig</code></strong>中看到：<br><div class="hljs"><pre><code class="hljs undefined">pi<span class="hljs-meta">@piv</span><span class="hljs-number">2:</span>~ $ sudo ifconfig
+can0      Link <span class="hljs-string">encap:</span>UNSPEC  HWaddr <span class="hljs-number">00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span>
+          UP RUNNING NOARP  <span class="hljs-string">MTU:</span><span class="hljs-number">16</span>  <span class="hljs-string">Metric:</span><span class="hljs-number">1</span>
+          RX <span class="hljs-string">packets:</span><span class="hljs-number">0</span> <span class="hljs-string">errors:</span><span class="hljs-number">0</span> <span class="hljs-string">dropped:</span><span class="hljs-number">0</span> <span class="hljs-string">overruns:</span><span class="hljs-number">0</span> <span class="hljs-string">frame:</span><span class="hljs-number">0</span>
+          TX <span class="hljs-string">packets:</span><span class="hljs-number">0</span> <span class="hljs-string">errors:</span><span class="hljs-number">0</span> <span class="hljs-string">dropped:</span><span class="hljs-number">0</span> <span class="hljs-string">overruns:</span><span class="hljs-number">0</span> <span class="hljs-string">carrier:</span><span class="hljs-number">0</span>
+<span class="hljs-symbol">          collisions:</span><span class="hljs-number">0</span> <span class="hljs-string">txqueuelen:</span><span class="hljs-number">10</span>
+          RX <span class="hljs-string">bytes:</span><span class="hljs-number">0</span> (<span class="hljs-number">0.0</span> B)  TX <span class="hljs-string">bytes:</span><span class="hljs-number">0</span> (<span class="hljs-number">0.0</span> B)
 etho      xxxx
           ....
           ....
@@ -234,9 +270,9 @@ wlan0     xxxx
 <blockquote>
 <p>每当机器重启之后，这个挂载就会失效，需重新挂载。可以直接做成服务或者放在rc.local中，开机自动启动就行</p>
 </blockquote>
-<h2 id="4-发送CAN数据"><a href="#4-发送CAN数据" class="headerlink" title="4. 发送CAN数据"></a>4. 发送CAN数据</h2><p><strong><code>Usage: cansend &lt;device&gt; &lt;can_frame&gt;</code></strong><br><div class="hljs"><pre><code class="hljs undefined">cansend can0 127#DEADBEEF</code></pre></div></p>
+<h2 id="4-发送CAN数据"><a href="#4-发送CAN数据" class="headerlink" title="4. 发送CAN数据"></a>4. 发送CAN数据</h2><p><strong><code>Usage: cansend &lt;device&gt; &lt;can_frame&gt;</code></strong><br><div class="hljs"><pre><code class="hljs undefined"><span class="hljs-attribute">cansend</span> can0 <span class="hljs-number">127</span><span class="hljs-comment">#DEADBEEF</span></code></pre></div></p>
 <p>具体的can_frame格式也不用担心，当你格式数据输的不准确时，命令会自动提示所需的格式。<br>同时可以再开个终端查看收到的数据：</p>
-<div class="hljs"><pre><code class="hljs undefined">candump can0</code></pre></div>
+<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-attribute">candump</span> can0</code></pre></div>
 <blockquote>
 <p>只有当线路完全接好形成回路时，才能用上面这个命令自发自收数据，当收到数据时，代表通信成功</p>
 </blockquote>
@@ -302,7 +338,22 @@ wlan0     xxxx
               <div class="comments" id="comments">
                 
                 
-  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  <script type="text/javascript">
+    function loadUtterances() {
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.defer = false
+      s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
+      s.setAttribute('issue-term', 'title');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', 'github-light');
+      s.setAttribute('crossorigin', 'anonymous');
+      var e = document.getElementsByTagName('script')[0];
+      e.parentNode.insertBefore(s, e);
+    }
+    createObserver(loadUtterances, 'comments')
   </script>
 
 
@@ -381,14 +432,27 @@ wlan0     xxxx
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="/js/debouncer.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
-
+<!-- Plugins -->
 
 
   
+    <script src="/js/lazyload.js"></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
   <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
@@ -397,7 +461,7 @@ wlan0     xxxx
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: '.post-content',
+        contentSelector: 'article.markdown-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -413,51 +477,6 @@ wlan0     xxxx
       }
     });
   </script>
-
-
-
-
-
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
-
-
-
-
-
-
-<!-- Plugins -->
-
-
-  
-
-  
-    <!-- Google Analytics -->
-    <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-      ga('create', 'UA-143610066-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-  
-
-  
-
-  
-
-  
-
-  
 
 
 
@@ -586,6 +605,39 @@ wlan0     xxxx
 
 
 
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
 
 
 

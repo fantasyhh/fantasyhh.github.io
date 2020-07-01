@@ -19,24 +19,20 @@
   <title>烛影小札</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
-
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
 
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
-
-
 
 <link rel="stylesheet" href="/css/main.css">
 
 <!-- 自定义样式保持在最底部 -->
 
 
+  <script src="/js/utils.js"></script>
 </head>
 
 
@@ -57,56 +53,85 @@
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <i class="iconfont icon-home-fill"></i>
-              首页</a>
-          </li>
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                Go笔记
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/2020/07/01/goTools/">
+                    
+                    Go笔记1:工具的使用
+                  </a>
+                
+              </div>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">
-              <i class="iconfont icon-archive-fill"></i>
-              归档</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">
-              <i class="iconfont icon-category-fill"></i>
-              分类</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">
-              <i class="iconfont icon-tags-fill"></i>
-              标签</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">
-              <i class="iconfont icon-user-fill"></i>
-              关于</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/links/">
-              <i class="iconfont icon-link-fill"></i>
-              友链</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
         
         
           <li class="nav-item" id="search-btn">
@@ -148,6 +173,48 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/01/02/python-yield-1/">Python yield使用详解（一）</a>
+
+      <a href="/2020/01/02/python-yield-1/" class="index-excerpt">
+        
+        
+          
+        
+        <div>刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-01-02
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/yield/">yield</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
 
   <div class="row mx-auto index-card">
     
@@ -534,49 +601,6 @@ The ea</div>
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/07/10/docker-common-commands/">Docker常用命令整理</a>
-
-      <a href="/2019/07/10/docker-common-commands/" class="index-excerpt">
-        
-        
-          
-        
-        <div>因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。
-由于国内网络环境的缘故，要使用国内源安装，</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-07-10
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Docker/">Docker</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Linux/">Linux</a>
-            
-              <a href="/tags/Docker/">Docker</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="navigation">
@@ -652,12 +676,15 @@ The ea</div>
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="/js/debouncer.js"></script>
 <script src="/js/main.js"></script>
 
+<!-- Plugins -->
 
-  <script src="/js/lazyload.js"></script>
 
-
+  
+    <script src="/js/lazyload.js"></script>
+  
 
 
 
@@ -669,38 +696,6 @@ The ea</div>
 
 
 
-<!-- Plugins -->
-
-
-  
-
-  
-    <!-- Google Analytics -->
-    <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-      ga('create', 'UA-143610066-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-  
-
-  
-
-  
-
-  
-
-  
 
 
 
@@ -723,21 +718,6 @@ The ea</div>
   </script>
 
 
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
 
 
 
@@ -815,6 +795,39 @@ The ea</div>
 
 
 
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
 
 
 

@@ -19,24 +19,20 @@
   <title>分类 - 烛影小札</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
-
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
 
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
-
-
 
 <link rel="stylesheet" href="/css/main.css">
 
 <!-- 自定义样式保持在最底部 -->
 
 
+  <script src="/js/utils.js"></script>
 </head>
 
 
@@ -57,56 +53,85 @@
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <i class="iconfont icon-home-fill"></i>
-              首页</a>
-          </li>
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                Go笔记
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/2020/07/01/goTools/">
+                    
+                    Go笔记1:工具的使用
+                  </a>
+                
+              </div>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">
-              <i class="iconfont icon-archive-fill"></i>
-              归档</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">
-              <i class="iconfont icon-category-fill"></i>
-              分类</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">
-              <i class="iconfont icon-tags-fill"></i>
-              标签</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">
-              <i class="iconfont icon-user-fill"></i>
-              关于</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/links/">
-              <i class="iconfont icon-link-fill"></i>
-              友链</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
         
         
           <li class="nav-item" id="search-btn">
@@ -148,7 +173,515 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
-<ul class="category-tree-list"><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Arduino/">Arduino</a><span class="category-tree-list-count">2</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/C/">C</a><span class="category-tree-list-count">1</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Docker/">Docker</a><span class="category-tree-list-count">1</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Fabric/">Fabric</a><span class="category-tree-list-count">1</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Flask/">Flask</a><span class="category-tree-list-count">1</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Linux/">Linux</a><span class="category-tree-list-count">2</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/MQTT/">MQTT</a><span class="category-tree-list-count">1</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Nodejs/">Nodejs</a><span class="category-tree-list-count">3</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/PostgreSQL/">PostgreSQL</a><span class="category-tree-list-count">1</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Python/">Python</a><span class="category-tree-list-count">20</span></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/RaspberryPi/">RaspberryPi</a><span class="category-tree-list-count">5</span></li></ul>
+
+
+
+
+
+
+<div class="category-list">
+  
+  
+  
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqp10004hgjxf7r49suk" role="tab" data-toggle="collapse" href="#collapse-ckc31cqp10004hgjxf7r49suk" aria-expanded="false">
+        Python
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Python/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>20</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqp10004hgjxf7r49suk" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqp10004hgjxf7r49suk">
+    
+    
+    
+      
+      
+        <a href="/2020/04/02/python-rsyslog/" class="list-group-item list-group-item-action">
+          <span class="category-post">Python rsyslog日志集中化</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2020/03/31/linux-signal-with-python/" class="list-group-item list-group-item-action">
+          <span class="category-post">Linux的信号以及Python处理</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2020/02/13/python-asyncio/" class="list-group-item list-group-item-action">
+          <span class="category-post">Python并发之异步I/O(async,await）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2020/01/12/python-yield-from/" class="list-group-item list-group-item-action">
+          <span class="category-post">Python3 yield from 用法详解</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2020/01/06/python-yield-2/" class="list-group-item list-group-item-action">
+          <span class="category-post">Python yield使用详解（二）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2020/01/02/python-yield-1/" class="list-group-item list-group-item-action">
+          <span class="category-post">Python yield使用详解（一）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/12/09/django-admin-action/" class="list-group-item list-group-item-action">
+          <span class="category-post">Django admin后台常用设置汇总</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/10/17/python-m-option/" class="list-group-item list-group-item-action">
+          <span class="category-post">Python -m 参数以及生僻运行命令汇总</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/07/25/python-about-keyboard/" class="list-group-item list-group-item-action">
+          <span class="category-post">Python中关于键盘行为的方法总结</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/07/08/django-gunicorn-nginx-config/" class="list-group-item list-group-item-action">
+          <span class="category-post">Django+Gunicorn+Nginx配置整理</span>
+        </a>
+      
+    
+      
+      
+        <a href="/categories/Python/" class="list-group-item list-group-item-action">
+          <span class="category-post">More...</span>
+        </a>
+        
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqq90012hgjx4je5rn4b" role="tab" data-toggle="collapse" href="#collapse-ckc31cqq90012hgjx4je5rn4b" aria-expanded="false">
+        RaspberryPi
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/RaspberryPi/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>5</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqq90012hgjx4je5rn4b" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqq90012hgjx4je5rn4b">
+    
+    
+    
+      
+      
+        <a href="/2020/02/10/Raspberrypi-PWM/" class="list-group-item list-group-item-action">
+          <span class="category-post">树莓派几种不同的PWM及其应用</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2020/01/20/ADC-MCP3008/" class="list-group-item list-group-item-action">
+          <span class="category-post">树莓派使用MCP3008模数转换器(ADC)</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/09/20/MCP23017-raspberrypi-expander/" class="list-group-item list-group-item-action">
+          <span class="category-post">用Python在树莓派中使用MCP23017 I/O扩展模块</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/06/24/revpi-install-img/" class="list-group-item list-group-item-action">
+          <span class="category-post">Revpi 重装系统以及本地化配置的注意项</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/06/10/MCP2515-CAN-BUS/" class="list-group-item list-group-item-action">
+          <span class="category-post">利用MCP2515芯片在树莓派上使用CAN BUS协议</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqps000fhgjxggxca8hs" role="tab" data-toggle="collapse" href="#collapse-ckc31cqps000fhgjxggxca8hs" aria-expanded="false">
+        Nodejs
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Nodejs/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>3</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqps000fhgjxggxca8hs" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqps000fhgjxggxca8hs">
+    
+    
+    
+      
+      
+        <a href="/2019/05/17/nodejs3-jstips/" class="list-group-item list-group-item-action">
+          <span class="category-post">用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/05/08/nodejs-2/" class="list-group-item list-group-item-action">
+          <span class="category-post">用 Python 眼光看Nodejs（二），安装及npm配置</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/05/07/nodejs-1/" class="list-group-item list-group-item-action">
+          <span class="category-post">用 Python 眼光看Nodejs（一）,杂谈</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqpn000ahgjxda85vulz" role="tab" data-toggle="collapse" href="#collapse-ckc31cqpn000ahgjxda85vulz" aria-expanded="false">
+        Linux
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Linux/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>2</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqpn000ahgjxda85vulz" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqpn000ahgjxda85vulz">
+    
+    
+    
+      
+      
+        <a href="/2019/12/31/thread-and-process/" class="list-group-item list-group-item-action">
+          <span class="category-post">操作系统中线程与进程概念解惑</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/04/25/sed-usage/" class="list-group-item list-group-item-action">
+          <span class="category-post">关于sed我常用的几个方法以及遇到坑的整理</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqqx001zhgjxspypjb3d" role="tab" data-toggle="collapse" href="#collapse-ckc31cqqx001zhgjxspypjb3d" aria-expanded="false">
+        Arduino
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Arduino/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>2</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqqx001zhgjxspypjb3d" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqqx001zhgjxspypjb3d">
+    
+    
+    
+      
+      
+        <a href="/2020/05/13/arduinoFanByTemp/" class="list-group-item list-group-item-action">
+          <span class="category-post">Arduino温控PC风扇以及信息显示思路总结</span>
+        </a>
+      
+    
+      
+      
+        <a href="/2019/08/01/Arduino-Serial/" class="list-group-item list-group-item-action">
+          <span class="category-post">Arduino Serial使用以及各种读写函数区别</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqqm001jhgjxi5gp6ib3" role="tab" data-toggle="collapse" href="#collapse-ckc31cqqm001jhgjxi5gp6ib3" aria-expanded="false">
+        Docker
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Docker/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>1</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqqm001jhgjxi5gp6ib3" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqqm001jhgjxi5gp6ib3">
+    
+    
+    
+      
+      
+        <a href="/2019/07/10/docker-common-commands/" class="list-group-item list-group-item-action">
+          <span class="category-post">Docker常用命令整理</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqqt001thgjx1jqrese3" role="tab" data-toggle="collapse" href="#collapse-ckc31cqqt001thgjx1jqrese3" aria-expanded="false">
+        PostgreSQL
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/PostgreSQL/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>1</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqqt001thgjx1jqrese3" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqqt001thgjx1jqrese3">
+    
+    
+    
+      
+      
+        <a href="/2019/07/10/postgresql-tutorial/" class="list-group-item list-group-item-action">
+          <span class="category-post">PostgreSQL 常用命令记录</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqr10026hgjx39l9ygas" role="tab" data-toggle="collapse" href="#collapse-ckc31cqr10026hgjx39l9ygas" aria-expanded="false">
+        Flask
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Flask/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>1</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqr10026hgjx39l9ygas" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqr10026hgjx39l9ygas">
+    
+    
+    
+      
+      
+        <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/" class="list-group-item list-group-item-action">
+          <span class="category-post">浅谈Flask目录结构以及与Vue.js整合注意事项</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqr7002ghgjxlcdkebzg" role="tab" data-toggle="collapse" href="#collapse-ckc31cqr7002ghgjxlcdkebzg" aria-expanded="false">
+        C
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/C/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>1</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqr7002ghgjxlcdkebzg" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqr7002ghgjxlcdkebzg">
+    
+    
+    
+      
+      
+        <a href="/2019/10/11/extern-and-linker/" class="list-group-item list-group-item-action">
+          <span class="category-post">C语言中extern和头文件以及静态动态库概念梳理</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqrd002phgjxuzehlj3w" role="tab" data-toggle="collapse" href="#collapse-ckc31cqrd002phgjxuzehlj3w" aria-expanded="false">
+        MQTT
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/MQTT/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>1</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqrd002phgjxuzehlj3w" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqrd002phgjxuzehlj3w">
+    
+    
+    
+      
+      
+        <a href="/2019/12/10/python-mqtt/" class="list-group-item list-group-item-action">
+          <span class="category-post">MQTT知识指南以及在Python的应用</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqro0037hgjxm7fb7wcf" role="tab" data-toggle="collapse" href="#collapse-ckc31cqro0037hgjxm7fb7wcf" aria-expanded="false">
+        Fabric
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Fabric/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>1</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqro0037hgjxm7fb7wcf" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqro0037hgjxm7fb7wcf">
+    
+    
+    
+      
+      
+        <a href="/2020/02/28/invoke-fabric/" class="list-group-item list-group-item-action">
+          <span class="category-post">Invoke与Fabric注意事项详解教程</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    <div class="category row">
+      <a class="category-item collapsed list-group-item category-item-action col-10 col-md-11" id="heading-ckc31cqry003lhgjxlh4vusn0" role="tab" data-toggle="collapse" href="#collapse-ckc31cqry003lhgjxlh4vusn0" aria-expanded="false">
+        Go
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      <a href="/categories/Go/" class="category-count col-2 col-md-1">
+        <i class="iconfont icon-articles"></i>
+        <span>1</span>
+      </a>
+      <div class="category-collapse">
+        
+          
+  <div id="collapse-ckc31cqry003lhgjxlh4vusn0" class="collapse in" role="tabpanel" aria-labelledby="heading-ckc31cqry003lhgjxlh4vusn0">
+    
+    
+    
+      
+      
+        <a href="/2020/07/01/goTools/" class="list-group-item list-group-item-action">
+          <span class="category-post">Golang代码工具使用</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
 
               </div>
             </div>
@@ -209,12 +742,15 @@
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="/js/debouncer.js"></script>
 <script src="/js/main.js"></script>
 
+<!-- Plugins -->
 
-  <script src="/js/lazyload.js"></script>
 
-
+  
+    <script src="/js/lazyload.js"></script>
+  
 
 
 
@@ -226,38 +762,6 @@
 
 
 
-<!-- Plugins -->
-
-
-  
-
-  
-    <!-- Google Analytics -->
-    <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-      ga('create', 'UA-143610066-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-  
-
-  
-
-  
-
-  
-
-  
 
 
 
@@ -280,21 +784,6 @@
   </script>
 
 
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
-      
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
-  </script>
 
 
 
@@ -372,6 +861,39 @@
 
 
 
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
 
 
 

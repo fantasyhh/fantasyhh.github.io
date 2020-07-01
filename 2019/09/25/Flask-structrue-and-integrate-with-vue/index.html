@@ -19,24 +19,29 @@
   <title>浅谈Flask目录结构以及与Vue.js整合注意事项 - 烛影小札</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+  
+
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
 
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
-
-
 
 <link rel="stylesheet" href="/css/main.css">
 
 <!-- 自定义样式保持在最底部 -->
 
 
+  <script src="/js/utils.js"></script>
 </head>
 
 
@@ -57,56 +62,85 @@
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <i class="iconfont icon-home-fill"></i>
-              首页</a>
-          </li>
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                Go笔记
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/2020/07/01/goTools/">
+                    
+                    Go笔记1:工具的使用
+                  </a>
+                
+              </div>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/archives/">
-              <i class="iconfont icon-archive-fill"></i>
-              归档</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/categories/">
-              <i class="iconfont icon-category-fill"></i>
-              分类</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/tags/">
-              <i class="iconfont icon-tags-fill"></i>
-              标签</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/about/">
-              <i class="iconfont icon-user-fill"></i>
-              关于</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
         
           
           
           
-          <li class="nav-item">
-            <a class="nav-link" href="/links/">
-              <i class="iconfont icon-link-fill"></i>
-              友链</a>
-          </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
         
         
           <li class="nav-item" id="search-btn">
@@ -130,36 +164,38 @@
 
             
               
-                <div class="mt-3 post-meta">
-                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2019-09-25 16:42">
-                    2019年9月25日 下午
-                  </time>
-                </div>
-              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2019-09-25 16:42">
+      2019年9月25日 下午
+    </time>
+  </div>
 
-              <div class="mt-1">
-                
-                  
-                  <span class="post-meta mr-2">
-                    <i class="iconfont icon-chart"></i>
-                    1.3k 字
-                  </span>
-                
 
-                
-                  
-                  <span class="post-meta mr-2">
-                      <i class="iconfont icon-clock-fill"></i>
-                    
-                    
-                    6
-                     分钟
-                  </span>
-                
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
 
-                
-              </div>
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      6
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
             
           </div>
 
@@ -193,49 +229,49 @@ app = Flask(__name__)
 <p>单个Python文件就好办了，然后打开串口，在路由中引用串口实例加入一些操作，就是个能用的小型Web应用了。</p>
 <h2 id="2-目录结构安排一下"><a href="#2-目录结构安排一下" class="headerlink" title="2. 目录结构安排一下"></a>2. 目录结构安排一下</h2><p>即使一个项目再小也要有个规则安排，总不能真的单文件走天下。<br><a href="https://www.v2ex.com/t/467423" target="_blank" rel="noopener">V2EX上有篇文章</a>探讨了Flask的目录结构，我看了上面的每个链接，果然<strong><code>Flask 其实很灵活，怎样都行，怎么舒服怎么来</code></strong>这句话很对。</p>
 <p>我从一些教程或者github中综合了下，整理下我会采用的结构目录，旨在简单明了。</p>
-<h4 id="单模块目录结构"><a href="#单模块目录结构" class="headerlink" title="单模块目录结构"></a>单模块目录结构</h4><p>当项目代码量少于几百行的时候我们可以采用单模块的目录结构，也就是把所有的代码都写在<code>app.py</code>里，然后把一些配置（比如我上面例子中的串口位置，波特率啥的）写到<code>config.py</code>里，比如这样：<br><div class="hljs"><pre><code class="hljs undefined">app.py
-config.py
-requirements.txt
+<h4 id="单模块目录结构"><a href="#单模块目录结构" class="headerlink" title="单模块目录结构"></a>单模块目录结构</h4><p>当项目代码量少于几百行的时候我们可以采用单模块的目录结构，也就是把所有的代码都写在<code>app.py</code>里，然后把一些配置（比如我上面例子中的串口位置，波特率啥的）写到<code>config.py</code>里，比如这样：<br><div class="hljs"><pre><code class="hljs undefined">app<span class="hljs-selector-class">.py</span>
+config<span class="hljs-selector-class">.py</span>
+requirements<span class="hljs-selector-class">.txt</span>
 static/
 templates/</code></pre></div></p>
 <h4 id="包目录结构"><a href="#包目录结构" class="headerlink" title="包目录结构"></a>包目录结构</h4><p>对于包目录结构我们可以按照<a href="https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/" target="_blank" rel="noopener">官网推荐</a>的来：<br><div class="hljs"><pre><code class="hljs undefined">/home/user/Projects/flask-tutorial
 ├── flaskr/
-│   ├── __init__.py
-│   ├── db.py
-│   ├── schema.sql
-│   ├── auth.py
-│   ├── blog.py
+│   ├── __init__<span class="hljs-selector-class">.py</span>
+│   ├── db<span class="hljs-selector-class">.py</span>
+│   ├── schema<span class="hljs-selector-class">.sql</span>
+│   ├── auth<span class="hljs-selector-class">.py</span>
+│   ├── blog<span class="hljs-selector-class">.py</span>
 │   ├── templates/
-│   │   ├── base.html
+│   │   ├── base<span class="hljs-selector-class">.html</span>
 │   │   ├── auth/
-│   │   │   ├── login.html
-│   │   │   └── register.html
+│   │   │   ├── login<span class="hljs-selector-class">.html</span>
+│   │   │   └── register<span class="hljs-selector-class">.html</span>
 │   │   └── blog/
-│   │       ├── create.html
-│   │       ├── index.html
-│   │       └── update.html
+│   │       ├── create<span class="hljs-selector-class">.html</span>
+│   │       ├── index<span class="hljs-selector-class">.html</span>
+│   │       └── update<span class="hljs-selector-class">.html</span>
 │   └── static/
-│       └── style.css
+│       └── style<span class="hljs-selector-class">.css</span>
 ├── tests/
-│   ├── conftest.py
-│   ├── data.sql
-│   ├── test_factory.py
-│   ├── test_db.py
-│   ├── test_auth.py
-│   └── test_blog.py
+│   ├── conftest<span class="hljs-selector-class">.py</span>
+│   ├── data<span class="hljs-selector-class">.sql</span>
+│   ├── test_factory<span class="hljs-selector-class">.py</span>
+│   ├── test_db<span class="hljs-selector-class">.py</span>
+│   ├── test_auth<span class="hljs-selector-class">.py</span>
+│   └── test_blog<span class="hljs-selector-class">.py</span>
 ├── venv/
-├── setup.py
-└── MANIFEST.in</code></pre></div></p>
-<p>看似文件很多，但是基本的骨架还是像下面这样：<br><div class="hljs"><pre><code class="hljs undefined">config.py
-requirements.txt
-run.py
+├── setup<span class="hljs-selector-class">.py</span>
+└── MANIFEST.<span class="hljs-keyword">in</span></code></pre></div></p>
+<p>看似文件很多，但是基本的骨架还是像下面这样：<br><div class="hljs"><pre><code class="hljs undefined">config<span class="hljs-selector-class">.py</span>
+requirements<span class="hljs-selector-class">.txt</span>
+run<span class="hljs-selector-class">.py</span>
 instance/
-    config.py
+    config<span class="hljs-selector-class">.py</span>
 yourapp/
-    __init__.py
-    views.py
-    models.py
-    forms.py
+    __init__<span class="hljs-selector-class">.py</span>
+    views<span class="hljs-selector-class">.py</span>
+    models<span class="hljs-selector-class">.py</span>
+    forms<span class="hljs-selector-class">.py</span>
     static/
     templates/</code></pre></div></p>
 <p>然后我们可以在这上面进行很多衍生，加入蓝图等东西。</p>
@@ -331,7 +367,22 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
               <div class="comments" id="comments">
                 
                 
-  <script defer src="https://utteranc.es/client.js" repo="fantasyhh/fantasyhh.github.io" issue-term="title" theme="github-light" crossorigin="anonymous">
+  <script type="text/javascript">
+    function loadUtterances() {
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.defer = false
+      s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
+      s.setAttribute('issue-term', 'title');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', 'github-light');
+      s.setAttribute('crossorigin', 'anonymous');
+      var e = document.getElementsByTagName('script')[0];
+      e.parentNode.insertBefore(s, e);
+    }
+    createObserver(loadUtterances, 'comments')
   </script>
 
 
@@ -410,14 +461,27 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
 <!-- SCRIPTS -->
 <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="/js/debouncer.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
-
+<!-- Plugins -->
 
 
   
+    <script src="/js/lazyload.js"></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="/js/clipboard-use.js"></script>
+
+
+
+
+
+
+
   <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
   <script>
     $(document).ready(function () {
@@ -426,7 +490,7 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: '.post-content',
+        contentSelector: 'article.markdown-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -442,51 +506,6 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
       }
     });
   </script>
-
-
-
-
-
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
-
-
-
-
-
-
-<!-- Plugins -->
-
-
-  
-
-  
-    <!-- Google Analytics -->
-    <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-      ga('create', 'UA-143610066-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-  
-
-  
-
-  
-
-  
-
-  
 
 
 
@@ -615,6 +634,39 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
 
 
 
+
+
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143610066-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
 
 
 
