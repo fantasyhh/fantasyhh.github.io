@@ -78,6 +78,14 @@
                     Go笔记1:工具的使用
                   </a>
                 
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/2020/07/07/goInitialize/">
+                    
+                    Go笔记2:数据零值以及一些陷阱
+                  </a>
+                
               </div>
             </li>
           
@@ -177,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      756 字
+      912 字
     </span>
   
 
@@ -187,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3
+      4
        分钟
     </span>
   
@@ -253,6 +261,11 @@
 <p>Golint differs from gofmt. Gofmt reformats Go source code, whereas golint prints out style mistakes.<br> Golint differs from govet. Govet is concerned with correctness, whereas golint is concerned with coding style. Golint is in use at Google, and it seeks to match the accepted style of the open source Go project</p>
 </blockquote>
 <h2 id="3-工具的选择"><a href="#3-工具的选择" class="headerlink" title="3. 工具的选择"></a>3. 工具的选择</h2><p>因为我用的Goland，IDE自带了<code>vet</code>，<code>fmt</code>，<code>import</code>，我已经养成了习惯，每完成更新一个就会手动format一下，当然也可以放置在<strong>File Watcher </strong>中自动格式化。之后每次的<strong>commit</strong>都lint一下，然后用<code>golangci-lint</code>查一下一些错误，比如<code>if isExist == True</code>检查改为<code>if isExist</code>，为初学者矫正很多写代码的错误习惯。</p>
+<p>但是在<code>golint</code>官方有这么一段话：</p>
+<blockquote>
+<p>The suggestions made by golint are exactly that: suggestions. Golint is not perfect, and has both false positives and false negatives. Do not treat its output as a gold standard. We will not be adding pragmas or other knobs to suppress specific warnings, so do not expect or require code to be completely “lint-free”. In short, this tool is not, and will never be, trustworthy enough for its suggestions to be enforced automatically, for example as part of a build process. Golint makes suggestions for many of the mechanically checkable items listed in Effective Go and the CodeReviewComments wiki page.</p>
+</blockquote>
+<p>请不要将<code>golint</code>的输出建议视为黄金标准！ 不用搞得像个强迫症患者（我稍微有点，哈哈）一样，一定要完全<strong>“lint-free”</strong>！</p>
 
             </article>
             <hr>
@@ -282,6 +295,12 @@
                 <div class="post-prevnext row">
                   <div class="post-prev col-6">
                     
+                    
+                      <a href="/2020/07/07/goInitialize/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Golang数据初始化，零值以及一些陷阱</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </div>
                   <div class="post-next col-6">
