@@ -253,11 +253,11 @@ pip install fabric3</code></pre></div></p>
 <blockquote>
 <p>Project-level configuration file living next to your top level tasks.py. For example, if your run of Invoke loads /home/user/myproject/tasks.py (see our docs on the load process), this might be /home/user/myproject/invoke.yaml.</p>
 </blockquote>
-<p>项目级别的配置文件只有在你识别到tasks文件时才会调用同文件夹里的配置，其他方式你会没法识别到，比如你想单独用python3拍这个invoke脚本（把invoke当成subprocess那样）！下面会讲到相关例子。<br>其实，invoke本身没有啥配置修改，所以我也建议在执行<code>invoke ... task1 ...</code>时通过一些命令行参数来传递配置，省了配置文件的存在。</p>
+<p>项目级别的配置文件只有在你识别到tasks文件时才会调用同文件夹里的配置，其他方式你会没法识别到，比如你想单独用python3运行这个invoke脚本（把invoke当成subprocess那样）！下面会讲到相关例子。<br>其实，invoke本身没有啥配置修改，所以我也建议在执行<code>invoke ... task1 ...</code>时通过一些命令行参数来传递配置，省了配置文件的存在。</p>
 <h3 id="2-3-导入集合"><a href="#2-3-导入集合" class="headerlink" title="2.3 导入集合"></a>2.3 导入集合</h3><p>Invoke执行模型的核心涉及一个或多个Collection对象，就是集合的意思。<br>默认调用<code>invoke</code>命令我们会查找同目录中的<code>tasks.py</code>或者<code>tasks</code>包，tasks就算是一个集合，具体我们可以看<a href="http://docs.pyinvoke.org/en/latest/concepts/loading.html" target="_blank" rel="noopener">Loading collections</a>，所以有接下来一个例子我上面说的火坑。<br>假如我tasks名字被占用了…我想换个任务名字来让Invoke搜索到，比如叫mytasks，常见的设置方法有两种，一种是设置<code>tasks.collection_name</code> 配置选项，或使用 <code>--collection</code>。集合名应该是Python模块名称，而不是文件名（所以mytasks，不是mytasks.py或 mytasks/。）<br>用<code>--collection</code>没问题，问题在于设置<code>tasks.collection_name</code> 配置选项，我一开始是用的<strong>项目级别</strong>配置，则报错<code>Can&#39;t find any collection named &#39;tasks&#39;!</code>，我明明设置文件里设置了，为什么还是在查找<code>tasks.py</code>,哪里有问题！问题在于上一节引用的英文里，<strong>项目级别</strong>配置是在同目录的<code>tasks.py</code>文件被找到后才会引入该配置，问题是一开始我都没有<code>tasks.py</code>我怎么引入配置文件，更别说里面的<code>tasks.collection_name</code> 配置选项了</p>
 <h3 id="2-4-集合的命名空间"><a href="#2-4-集合的命名空间" class="headerlink" title="2.4 集合的命名空间"></a>2.4 集合的命名空间</h3><p>当任务很多，存在不同类别层级的时候我们就需要<a href="http://docs.pyinvoke.org/en/stable/concepts/namespaces.html" target="_blank" rel="noopener">构建命名空间</a>（看<code>Importing modules as collections</code>部分就行），单纯的<code>tasks.py</code>满足不了我们了，使用<code>tasks</code>包，包里有多个python文件代表个各种任务，然后在<code>tasks/__init__.py</code>中做<code>导入模块作为集合</code>操作就行，不展开。</p>
 <h3 id="2-5-上下文Context"><a href="#2-5-上下文Context" class="headerlink" title="2.5 上下文Context"></a>2.5 上下文Context</h3><p>上下文Context这个参数出现了,很神奇，就好像Flask中的Context一样神奇。</p>
-<p>what exactly is this ‘context’ arg anyway?</p>
+<p>what exactly is this <code>context</code> arg anyway?</p>
 <blockquote>
 <p>A common problem task runners face is transmission of “global” data - values loaded from configuration files or other configuration vectors, given via CLI flags, generated in ‘setup’ tasks, etc.<br>Some libraries (such as Fabric 1.x) implement this via module-level attributes, which makes testing difficult and error prone, limits concurrency, and increases implementation complexity.<br>Invoke encapsulates state in explicit Context objects, handed to tasks when they execute . The context is the primary API endpoint, offering methods which honor the current state (such as Context.run) as well as access to that state itself.</p>
 </blockquote>
@@ -267,7 +267,7 @@ pip install fabric3</code></pre></div></p>
 	print(config)
     c.run(<span class="hljs-string">"ls"</span>)
 	
-$ invoke ls
+$ invoke show
 ...</code></pre></div></p>
 <p>第二种手动创建,如果有配置我们需要手动添加配置而没法用文件配置,比如:<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> invoke <span class="hljs-keyword">import</span> Config,Context
 <span class="hljs-comment"># 默认配置</span>

@@ -258,31 +258,30 @@
 <p>FACILITY指定产生特定系统日志消息的子系统。例如，邮件子系统处理所有与邮件相关的系统日志消息。 FACILITY可以用以下关键字之一（或数字代码）表示：<code>kern (0), user (1), mail (2), daemon (3), auth (4), syslog (5), lpr (6), news (7), cron (8), authpriv (9), ftp (10), and local0 through local7 (16 - 23)</code></p>
 <p>PRIORITY指定系统日志消息的优先级。可以通过以下关键字之一（或数字）来表示优先级：<code>debug (7), info (6), notice (5), warning (4), err (3), crit (2), alert (1), and emerg (0)</code></p>
 <p> To select all kernel syslog messages with any priority, add the following text into the configuration file:</p>
-<p>选择任何优先级的所有内核syslog消息：</p>
-<div class="hljs"><pre><code>kern.*
-</code></pre></div><p>要选择优先级crit更高的所有邮件系统日志消息，请使用以下形式：</p>
-<div class="hljs"><pre><code>mail.crit
-</code></pre></div><p>要选择除具有info或debug优先级的消息外的所有cron syslog消息，请以以下形式设置配置：</p>
-<div class="hljs"><pre><code>cron.!info,!debug
-</code></pre></div><p>此外，还支持比较符过滤，比如：</p>
-<div class="hljs"><pre><code>:msg, contains, &quot;error&quot;
-:hostname, isequal, &quot;host1&quot;
-:msg, !regex, &quot;fatal .* error&quot;
-</code></pre></div><p>以及表达式过滤器：</p>
-<div class="hljs"><pre><code>if EXPRESSION then ACTION else ACTION
-</code></pre></div><h3 id="2-2-Actions（动作）"><a href="#2-2-Actions（动作）" class="headerlink" title="2.2  Actions（动作）"></a>2.2  Actions（动作）</h3><h4 id="2-2-1-将syslog消息存入文件"><a href="#2-2-1-将syslog消息存入文件" class="headerlink" title="2.2.1 将syslog消息存入文件"></a>2.2.1 将syslog消息存入文件</h4><p>大多数操作指定将系统日志消息保存到哪个日志文件。这是通过在已定义的选择器之后指定文件(    FILTER PATH)路径来完成的：</p>
-<div class="hljs"><pre><code>cron.* /var/log/cron.log
-</code></pre></div><p>默认情况下，每次生成系统日志消息时都会同步日志文件。使用破折号（-）作为指定的文件路径的前缀以省略同步：</p>
-<div class="hljs"><pre><code>FILTER -PATH
-</code></pre></div><p>指定的文件路径可以是静态或动态的。如上例所示，静态文件由固定文件路径表示。动态文件路径可能会根据收到的消息而有所不同。动态文件路径由模板和问号（?）前缀表示，<br><code>FILTER ?DynamicFile</code></p>
-<div class="hljs"><pre><code>template(name=&quot;DynFile&quot; type=&quot;string&quot; string=&quot;/var/log/line/%fromhost%.log&quot;)
-local7.* ?DynFile
-</code></pre></div><p>动态模板是很大的一块内容，具体的不展开我用到的不多，就上面这个例子。详情可以看<a href="https://dulishu.top/linux-rsyslog-template/" target="_blank" rel="noopener">rsyslog template</a>以及<a href="https://www.rsyslog.com/doc/master/configuration/properties.html" target="_blank" rel="noopener">需要用到的属性</a></p>
+<p>选择任何优先级的所有内核syslog消息：<br><div class="hljs"><pre><code class="hljs undefined">kern.*`</code></pre></div></p>
+<p>要选择优先级crit更高的所有邮件系统日志消息，请使用以下形式：</p>
+<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-selector-tag">mail</span><span class="hljs-selector-class">.crit</span></code></pre></div>
+<p>要选择除具有info或debug优先级的消息外的所有cron syslog消息，请以以下形式设置配置：</p>
+<div class="hljs"><pre><code class="hljs undefined">cron.!info,!debug</code></pre></div>
+<p>此外，还支持比较符过滤，比如：</p>
+<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-symbol">:msg</span>, contains, <span class="hljs-string">"error"</span>
+<span class="hljs-symbol">:hostname</span>, isequal, <span class="hljs-string">"host1"</span>
+<span class="hljs-symbol">:msg</span>, !regex, <span class="hljs-string">"fatal .* error"</span></code></pre></div>
+<p>以及表达式过滤器：</p>
+<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-keyword">if</span> EXPRESSION <span class="hljs-keyword">then</span> <span class="hljs-keyword">ACTION</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">ACTION</span></code></pre></div>
+<h3 id="2-2-Actions（动作）"><a href="#2-2-Actions（动作）" class="headerlink" title="2.2  Actions（动作）"></a>2.2  Actions（动作）</h3><h4 id="2-2-1-将syslog消息存入文件"><a href="#2-2-1-将syslog消息存入文件" class="headerlink" title="2.2.1 将syslog消息存入文件"></a>2.2.1 将syslog消息存入文件</h4><p>大多数操作指定将系统日志消息保存到哪个日志文件。这是通过在已定义的选择器之后指定文件(    FILTER PATH)路径来完成的：</p>
+<div class="hljs"><pre><code class="hljs undefined">cron.* /<span class="hljs-built_in">var</span>/<span class="hljs-keyword">log</span>/cron.<span class="hljs-keyword">log</span></code></pre></div>
+<p>默认情况下，每次生成系统日志消息时都会同步日志文件。使用破折号（-）作为指定的文件路径的前缀以省略同步：</p>
+<div class="hljs"><pre><code class="hljs undefined">FILTER -<span class="hljs-built_in">PATH</span></code></pre></div>
+<p>指定的文件路径可以是静态或动态的。如上例所示，静态文件由固定文件路径表示。动态文件路径可能会根据收到的消息而有所不同。动态文件路径由模板和问号（?）前缀表示，<code>FILTER ?DynamicFile</code></p>
+<div class="hljs"><pre><code class="hljs undefined">template(<span class="hljs-attribute">name</span>=<span class="hljs-string">"DynFile"</span> <span class="hljs-attribute">type</span>=<span class="hljs-string">"string"</span> <span class="hljs-attribute">string</span>=<span class="hljs-string">"/var/log/line/%fromhost%.log"</span>)
+local7.* ?DynFile</code></pre></div>
+<p>动态模板是很大的一块内容，具体的不展开我用到的不多，就上面这个例子。详情可以看<a href="https://dulishu.top/linux-rsyslog-template/" target="_blank" rel="noopener">rsyslog template</a>以及<a href="https://www.rsyslog.com/doc/master/configuration/properties.html" target="_blank" rel="noopener">需要用到的属性</a></p>
 <h4 id="2-2-2-通过网络发送syslog消息"><a href="#2-2-2-通过网络发送syslog消息" class="headerlink" title="2.2.2 通过网络发送syslog消息"></a>2.2.2 通过网络发送syslog消息</h4><p>rsyslog允许您通过网络发送和接收syslog消息。此功能使您可以在一台计算机上管理多个主机的系统日志消息。要将系统日志消息转发到远程计算机，请使用以下语法，<code>@[(zNUMBER)]HOST:[PORT]</code>，<code>@</code>代表udp，<code>@@</code>代表TCP</p>
-<div class="hljs"><pre><code>*.* @192.168.0.1
-*.* @@example.com:6514
-*.* @(z9)[2001:db8::1]
-</code></pre></div><p>Storing syslog messages in a database</p>
+<div class="hljs"><pre><code class="hljs undefined">*.* <span class="hljs-variable">@192</span>.<span class="hljs-number">168.0</span>.<span class="hljs-number">1</span>
+*.* <span class="hljs-variable">@@example</span>.<span class="hljs-symbol">com:</span><span class="hljs-number">6514</span>
+*.* @(z9)[<span class="hljs-number">2001</span><span class="hljs-symbol">:db8</span>::<span class="hljs-number">1</span>]
+Storing syslog messages <span class="hljs-keyword">in</span> a database</code></pre></div>
 <h4 id="2-2-3-其他传输方式"><a href="#2-2-3-其他传输方式" class="headerlink" title="2.2.3 其他传输方式"></a>2.2.3 其他传输方式</h4><ul>
 <li>Output channels</li>
 <li>Sending syslog messages to specific users</li>
@@ -291,23 +290,23 @@ local7.* ?DynFile
 <li>Discarding syslog messages  （丢弃日志<code>local5.* stop</code>）</li>
 </ul>
 <h4 id="2-2-4-指定多个动作"><a href="#2-2-4-指定多个动作" class="headerlink" title="2.2.4 指定多个动作"></a>2.2.4 指定多个动作</h4><p>可以为每个选择器指定多个操作。要为一个选择器指定多个动作，请将每个动作写在单独的行上，并在其前面加上一个＆字符</p>
-<div class="hljs"><pre><code>FILTER ACTION
-&amp; ACTION
-&amp; ACTION
+<div class="hljs"><pre><code class="hljs undefined">FILTER <span class="hljs-keyword">ACTION</span>
+&amp; <span class="hljs-keyword">ACTION</span>
+&amp; <span class="hljs-keyword">ACTION</span>
 
 kern.=crit user1
-&amp; ^test-program;temp
-&amp; @192.168.0.1
-</code></pre></div><h3 id="2-3-Log-Rotation-（日志轮替）"><a href="#2-3-Log-Rotation-（日志轮替）" class="headerlink" title="2.3 Log Rotation （日志轮替）"></a>2.3 Log Rotation （日志轮替）</h3><p>我们可以在<code>/etc/logrotate.conf</code>配置文件中进行<strong>日志轮替</strong>的配置</p>
-<div class="hljs"><pre><code># rotate log files weekly
-weekly
-# keep 4 weeks worth of backlogs
-rotate 4
-# uncomment this if you want your log files compressed
-compress
-</code></pre></div><h2 id="3-使用Python发送日志到rsyslog"><a href="#3-使用Python发送日志到rsyslog" class="headerlink" title="3. 使用Python发送日志到rsyslog"></a>3. 使用Python发送日志到rsyslog</h2><p>我们查阅一下 Python 文档中的 logging 模块的文档，可以发现又一个 handler 叫做：SysLogHandler，看一下参数，并不比 syslog 的原始函数简单，但是，我们可以忽略所有这些参数，而简单得控制日志输出：</p>
-<div class="hljs"><pre><code>class logging.handlers.SysLogHandler(address=(&apos;localhost&apos;, SYSLOG_UDP_PORT), facility=LOG_USER, socktype=socket.SOCK_DGRAM)
-</code></pre></div><p><code>address</code>: 前面说了 rsyslog 是一个套接字，这里可以制定套接字的地址，注意：这个可以是不在同一台机器,默认为(‘localhost’, 514)<br><code>facility</code>：这个参数的作用是告诉 rsyslog 日志的类型，从而可以让他根据不同的类型执行不同的操作，默认为LOG_USER,下面的例子我们使用<strong>自定义的日志设备local7</strong><br><code>socktype</code>：默认UDP，想换TCP用<code>socket.SOCK_STREAM</code><br>使用的话就和其他的 Handler 一致，简单得记一下：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging
+&amp; ^test-<span class="hljs-function"><span class="hljs-keyword">program</span></span>;temp
+&amp; @<span class="hljs-number">192.168.</span><span class="hljs-number">0.1</span></code></pre></div>
+<h3 id="2-3-Log-Rotation-（日志轮替）"><a href="#2-3-Log-Rotation-（日志轮替）" class="headerlink" title="2.3 Log Rotation （日志轮替）"></a>2.3 Log Rotation （日志轮替）</h3><p>我们可以在<code>/etc/logrotate.conf</code>配置文件中进行<strong>日志轮替</strong>的配置</p>
+<div class="hljs"><pre><code class="hljs undefined"># <span class="hljs-keyword">rotate</span> <span class="hljs-keyword">log</span> files <span class="hljs-built_in">weekly</span>
+<span class="hljs-built_in">weekly</span>
+# <span class="hljs-keyword">keep</span> 4 weeks worth of backlogs
+<span class="hljs-keyword">rotate</span> 4
+# uncomment this <span class="hljs-keyword">if</span> you want your <span class="hljs-keyword">log</span> files compressed
+<span class="hljs-keyword">compress</span></code></pre></div>
+<h2 id="3-使用Python发送日志到rsyslog"><a href="#3-使用Python发送日志到rsyslog" class="headerlink" title="3. 使用Python发送日志到rsyslog"></a>3. 使用Python发送日志到rsyslog</h2><p>我们查阅一下 Python 文档中的 logging 模块的文档，可以发现又一个 handler 叫做：SysLogHandler，看一下参数，并不比 syslog 的原始函数简单，但是，我们可以忽略所有这些参数，而简单得控制日志输出：</p>
+<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">logging</span>.<span class="hljs-title">handlers</span>.<span class="hljs-title">SysLogHandler</span><span class="hljs-params">(address=<span class="hljs-params">(<span class="hljs-string">'localhost'</span>, SYSLOG_UDP_PORT)</span>, facility=LOG_USER, socktype=socket.SOCK_DGRAM)</span></span></code></pre></div>
+<p><code>address</code>: 前面说了 rsyslog 是一个套接字，这里可以制定套接字的地址，注意：这个可以是不在同一台机器,默认为(‘localhost’, 514)<br><code>facility</code>：这个参数的作用是告诉 rsyslog 日志的类型，从而可以让他根据不同的类型执行不同的操作，默认为LOG_USER,下面的例子我们使用<strong>自定义的日志设备local7</strong><br><code>socktype</code>：默认UDP，想换TCP用<code>socket.SOCK_STREAM</code><br>使用的话就和其他的 Handler 一致，简单得记一下：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging
 <span class="hljs-keyword">from</span> logging.handlers <span class="hljs-keyword">import</span> SysLogHandler
 
 _LOG_SERVER = (<span class="hljs-string">'192.168.123.222'</span>, <span class="hljs-number">514</span>)
