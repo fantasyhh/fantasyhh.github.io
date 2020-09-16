@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -23,9 +23,9 @@
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -33,6 +33,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -143,7 +144,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -151,12 +157,12 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
@@ -185,22 +191,77 @@
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/07/25/python-about-keyboard/">Python中关于键盘行为的方法总结</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/08/01/Arduino-Serial/">Arduino Serial使用以及各种读写函数区别</a>
+      </h1>
 
-      <a href="/2019/07/25/python-about-keyboard/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/08/01/Arduino-Serial/">
           
-        
-        <div>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理
-1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者</div>
-      </a>
+          
+            
+          
+          之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….
+1. 前言常见的串口调试是将Arduino与PC相连，然
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-07-25
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-08-01 10:01" pubdate>
+              2019-08-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Arduino/">Arduino</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Serial/">Serial</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/07/25/python-about-keyboard/">Python中关于键盘行为的方法总结</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2019/07/25/python-about-keyboard/">
+          
+          
+            
+          
+          最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理
+1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-07-25 14:30" pubdate>
+              2019-07-25
+            </time>
           </div>
         
         
@@ -220,28 +281,35 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/07/10/docker-common-commands/">Docker常用命令整理</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/07/10/docker-common-commands/">Docker常用命令整理</a>
+      </h1>
 
-      <a href="/2019/07/10/docker-common-commands/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/07/10/docker-common-commands/">
           
-        
-        <div>因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。
-由于国内网络环境的缘故，要使用国内源安装，</div>
-      </a>
+          
+            
+          
+          因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。
+由于国内网络环境的缘故，要使用国内源安装，
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-07-10
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-07-10 10:05" pubdate>
+              2019-07-10
+            </time>
           </div>
         
         
@@ -263,27 +331,34 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/07/10/postgresql-tutorial/">PostgreSQL 常用命令记录</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/07/10/postgresql-tutorial/">PostgreSQL 常用命令记录</a>
+      </h1>
 
-      <a href="/2019/07/10/postgresql-tutorial/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/07/10/postgresql-tutorial/">
           
-        
-        <div>从之前看的Two Scoops Press Two Scoops of Django 1.11书籍或者是官网的教程，又或者最近在github查找django-docker人家的代码时看到的，都是用的PostgreSQL作为Django的数据库，平常都是用的Mysql，是不是验证了”国外大多用PostgresSQL，国内大多用Mysql“这句话，我对这个数据库比较陌生，但是既然官网都主推了，相对My</div>
-      </a>
+          
+            
+          
+          从之前看的Two Scoops Press Two Scoops of Django 1.11书籍或者是官网的教程，又或者最近在github查找django-docker人家的代码时看到的，都是用的PostgreSQL作为Django的数据库，平常都是用的Mysql，是不是验证了”国外大多用PostgresSQL，国内大多用Mysql“这句话，我对这个数据库比较陌生，但是既然官网都主推了，相对My
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-07-10
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-07-10 10:05" pubdate>
+              2019-07-10
+            </time>
           </div>
         
         
@@ -305,29 +380,36 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/07/08/django-gunicorn-nginx-config/">Django+Gunicorn+Nginx配置整理</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/07/08/django-gunicorn-nginx-config/">Django+Gunicorn+Nginx配置整理</a>
+      </h1>
 
-      <a href="/2019/07/08/django-gunicorn-nginx-config/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/07/08/django-gunicorn-nginx-config/">
           
-        
-        <div>之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅
+          
+            
+          
+          之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅
 1. Gunicorn使用及配置
-我们可以通过执行./manage.py runserver命令来运行我们的django应用程序。但我们知道它被称为开发服务器是有原因的，因为自带的开发服务器不健壮，安全问题，线程问题等等。那么，我们如何真正运行我</div>
-      </a>
+我们可以通过执行./manage.py runserver命令来运行我们的django应用程序。但我们知道它被称为开发服务器是有原因的，因为自带的开发服务器不健壮，安全问题，线程问题等等。那么，我们如何真正运行我
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-07-08
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-07-08 09:22" pubdate>
+              2019-07-08
+            </time>
           </div>
         
         
@@ -351,28 +433,35 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/06/27/python3-wsgi-concept/">梳理Python WSGI与WSGI服务器等概念</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/06/27/python3-wsgi-concept/">梳理Python WSGI与WSGI服务器等概念</a>
+      </h1>
 
-      <a href="/2019/06/27/python3-wsgi-concept/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/06/27/python3-wsgi-concept/">
           
-        
-        <div>经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。
-1. 首先弄清下面几个概念W</div>
-      </a>
+          
+            
+          
+          经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。
+1. 首先弄清下面几个概念W
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-06-27
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-06-27 08:53" pubdate>
+              2019-06-27
+            </time>
           </div>
         
         
@@ -396,27 +485,34 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/06/24/revpi-install-img/">Revpi 重装系统以及本地化配置的注意项</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/06/24/revpi-install-img/">Revpi 重装系统以及本地化配置的注意项</a>
+      </h1>
 
-      <a href="/2019/06/24/revpi-install-img/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/06/24/revpi-install-img/">
           
-        
-        <div>Revolution Pi是一个迷你工业PC，我一般叫它工业树莓派，产自德国。它的基础模块叫作 RevPi core，装有 Raspberry Pi 计算模块。该计算模块包含两个 IC：一个 Broadcom BCM2835 SoC 带 500 Mbyte RAM 和一个 4 Gbyte eMMC 闪存。该模块通过主板插座提供 1.8 V、3.3 V 和 5 V。采用单排200针宽插座，所有 IO</div>
-      </a>
+          
+            
+          
+          Revolution Pi是一个迷你工业PC，我一般叫它工业树莓派，产自德国。它的基础模块叫作 RevPi core，装有 Raspberry Pi 计算模块。该计算模块包含两个 IC：一个 Broadcom BCM2835 SoC 带 500 Mbyte RAM 和一个 4 Gbyte eMMC 闪存。该模块通过主板插座提供 1.8 V、3.3 V 和 5 V。采用单排200针宽插座，所有 IO
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-06-24
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-06-24 10:55" pubdate>
+              2019-06-24
+            </time>
           </div>
         
         
@@ -438,30 +534,37 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/06/13/python3-queue/">Python3 队列用法整理</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/06/13/python3-queue/">Python3 队列用法整理</a>
+      </h1>
 
-      <a href="/2019/06/13/python3-queue/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/06/13/python3-queue/">
           
-        
-        <div>先进先出队列(或简称队列)是一种基于先进先出(FIFO)策略的集合类型.
+          
+            
+          
+          先进先出队列(或简称队列)是一种基于先进先出(FIFO)策略的集合类型.
 队列的最简单的例子是我们平时不时会参与的列。排队等待电影，在杂货店的收营台等待，在自助餐厅排队等待（这样我们可以弹出托盘栈）。行为良好的线或队列是有限制的，因为它只有一条路，只有一条出路。不能插队，也不能离开。你只有等待了一定的时间才能到前面。下图展示了一个简单的 Python 对象队列。    
 1. 队列
-队列是有序数据</div>
-      </a>
+队列是有序数据
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-06-13
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-06-13 15:11" pubdate>
+              2019-06-13
+            </time>
           </div>
         
         
@@ -483,27 +586,34 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/06/11/python3-subprocess/">Python3.5+ subprocess用法概括以及使用场景分析</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/06/11/python3-subprocess/">Python3.5+ subprocess用法概括以及使用场景分析</a>
+      </h1>
 
-      <a href="/2019/06/11/python3-subprocess/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/06/11/python3-subprocess/">
           
-        
-        <div>Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用os.syste</div>
-      </a>
+          
+            
+          
+          Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用os.syste
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-06-11
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-06-11 13:52" pubdate>
+              2019-06-11
+            </time>
           </div>
         
         
@@ -525,30 +635,37 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
     
     
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/06/10/MCP2515-CAN-BUS/">利用MCP2515芯片在树莓派上使用CAN BUS协议</a>
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2019/06/10/MCP2515-CAN-BUS/">利用MCP2515芯片在树莓派上使用CAN BUS协议</a>
+      </h1>
 
-      <a href="/2019/06/10/MCP2515-CAN-BUS/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2019/06/10/MCP2515-CAN-BUS/">
           
-        
-        <div>在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～
+          
+            
+          
+          在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～
 我之前的完成过程基本依靠Google，贴上我参考的国外教程：
 
-[quick-guide] CAN bus on raspberry pi with MCP251</div>
-      </a>
+[quick-guide] CAN bus on raspberry pi with MCP251
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-06-10
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-06-10 13:45" pubdate>
+              2019-06-10
+            </time>
           </div>
         
         
@@ -572,58 +689,14 @@
           </div>
         
       </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2019/06/05/drf-post-image/">由DRF上传图片温习到的HTTP知识</a>
-
-      <a href="/2019/06/05/drf-post-image/" class="index-excerpt">
-        
-        
-          
-        
-        <div>在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。
-1. 熟悉而又陌生的HTTP
-某大佬</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-06-05
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Python/">Python</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Django/">Django</a>
-            
-              <a href="/tags/DRF/">DRF</a>
-            
-          </div>
-        
-      </div>
-    </div>
+    </article>
   </div>
 
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
   
@@ -702,6 +775,10 @@
 
   
     <script src="/js/lazyload.js"></script>
+  
+
+
+
   
 
 
@@ -822,21 +899,12 @@
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

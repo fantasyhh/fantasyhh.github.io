@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2019-06-11 13:52">
-      2019年6月11日 下午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-06-11 13:52" pubdate>
+        2019年6月11日 下午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,21 +236,23 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Python3.5+ subprocess用法概括以及使用场景分析</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用<strong><code>os.system</code></strong>，但是后来被subprocess模块替代，也是这篇文章所要讲的。</p>
 <h2 id="1-侃侃run-用法"><a href="#1-侃侃run-用法" class="headerlink" title="1. 侃侃run()用法"></a>1. 侃侃run()用法</h2><blockquote>
 <p>我只用<strong><code>subprocess.run()</code></strong>，其他的都是垃圾？！</p>
 </blockquote>
 <p>Python中关于多进程协程异步等一些较新用法，官方一直在更新完善其用法，然后趋于稳定。<strong>subprocess</strong>模块旨在替换几个较旧的模块和功能，比如<strong><code>os.system</code></strong>，<strong><code>os.spawn*</code></strong>。而对于<strong>Python3.5 +</strong> <strong><code>subprocess.run()</code></strong>用来代替之前的call等几个老方法，万剑归一。</p>
 <h3 id="1-1-示例1：运行命令并获取返回代码"><a href="#1-1-示例1：运行命令并获取返回代码" class="headerlink" title="1.1 示例1：运行命令并获取返回代码"></a>1.1 示例1：运行命令并获取返回代码</h3><p><strong>run()的行为与call()的行为大致相同，Python3.5+之后应该放弃使用call()，但是call()方法还是保留着，可以使用</strong></p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
+<pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
 
 cp = subprocess.run([<span class="hljs-string">"ls"</span>,<span class="hljs-string">"-lha"</span>])
 cp
-<span class="hljs-comment"># CompletedProcess(args=['ls', '-lha'], returncode=0)</span></code></pre></div>
-<h3 id="1-2-示例2：运行命令，如果底层进程报错，强制抛出异常"><a href="#1-2-示例2：运行命令，如果底层进程报错，强制抛出异常" class="headerlink" title="1.2 示例2：运行命令，如果底层进程报错，强制抛出异常"></a>1.2 示例2：运行命令，如果底层进程报错，强制抛出异常</h3><p>加入<code>check=True</code>即可<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
+<span class="hljs-comment"># CompletedProcess(args=['ls', '-lha'], returncode=0)</span></code></pre>
+<h3 id="1-2-示例2：运行命令，如果底层进程报错，强制抛出异常"><a href="#1-2-示例2：运行命令，如果底层进程报错，强制抛出异常" class="headerlink" title="1.2 示例2：运行命令，如果底层进程报错，强制抛出异常"></a>1.2 示例2：运行命令，如果底层进程报错，强制抛出异常</h3><p>加入<code>check=True</code>即可<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
 
 subprocess.run([<span class="hljs-string">"ls"</span>,<span class="hljs-string">"foo bar"</span>], check=<span class="hljs-literal">True</span>)
 <span class="hljs-comment"># -------------------------------------------------------------------</span>
@@ -249,17 +264,17 @@ subprocess.run([<span class="hljs-string">"ls"</span>,<span class="hljs-string">
 <span class="hljs-comment"># --&gt; 418                                      output=stdout, stderr=stderr)</span>
 <span class="hljs-comment">#     419     return CompletedProcess(process.args, retcode, stdout, stderr)</span>
 <span class="hljs-comment">#     420 </span>
-<span class="hljs-comment"># CalledProcessError: Command '['ls', 'foo bar']' returned non-zero exit status 2.</span></code></pre></div></p>
-<h3 id="1-3-示例3：流畅使用shell"><a href="#1-3-示例3：流畅使用shell" class="headerlink" title="1.3 示例3：流畅使用shell"></a>1.3 示例3：流畅使用shell</h3><p>如果想要正常使用shell命令，只要加入<code>shell=True</code><br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
+<span class="hljs-comment"># CalledProcessError: Command '['ls', 'foo bar']' returned non-zero exit status 2.</span></code></pre></p>
+<h3 id="1-3-示例3：流畅使用shell"><a href="#1-3-示例3：流畅使用shell" class="headerlink" title="1.3 示例3：流畅使用shell"></a>1.3 示例3：流畅使用shell</h3><p>如果想要正常使用shell命令，只要加入<code>shell=True</code><br><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
 
 cp = subprocess.run(<span class="hljs-string">"ls -lha"</span>,shell=<span class="hljs-literal">True</span>)
 cp
-<span class="hljs-comment"># CompletedProcess(args='ls -lha', returncode=0)</span></code></pre></div></p>
+<span class="hljs-comment"># CompletedProcess(args='ls -lha', returncode=0)</span></code></pre></p>
 <blockquote>
 <p>如果使用用户输入作为参数来构建命令字符串，加上shell = True的话可能有潜在的安全威胁（代码注入）</p>
 </blockquote>
 <h3 id="1-4-示例4：以字符串形式存储输出和错误消息"><a href="#1-4-示例4：以字符串形式存储输出和错误消息" class="headerlink" title="1.4 示例4：以字符串形式存储输出和错误消息"></a>1.4 示例4：以字符串形式存储输出和错误消息</h3><p>如果底层进程返回非零退出代码，则不会出现异常;可以通过CompletedProcess对象中的stderr属性访问错误消息。</p>
-<p>不报错的例子：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
+<p>不报错的例子：<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
 
 cp = subprocess.run([<span class="hljs-string">"ls"</span>,<span class="hljs-string">"-lha"</span>], universal_newlines=<span class="hljs-literal">True</span>, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -272,8 +287,8 @@ cp.stdout
 cp.stderr
 <span class="hljs-comment"># '' (empty string)</span>
 cp.returncode
-<span class="hljs-comment"># 0</span></code></pre></div></p>
-<p>报错的例子：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
+<span class="hljs-comment"># 0</span></code></pre></p>
+<p>报错的例子：<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
 
 cp = subprocess.run([<span class="hljs-string">"ls"</span>,<span class="hljs-string">"foo bar"</span>], universal_newlines=<span class="hljs-literal">True</span>, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -282,14 +297,14 @@ cp.output
 cp.stderr
 <span class="hljs-comment"># ls: cannot access 'foo bar': No such file or directory</span>
 cp.returncode
-<span class="hljs-comment"># 2</span></code></pre></div></p>
-<p>命令不存在的例子：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
+<span class="hljs-comment"># 2</span></code></pre></p>
+<p>命令不存在的例子：<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> subprocess
 
 <span class="hljs-keyword">try</span>:
     cp = subprocess.run([<span class="hljs-string">"xxxx"</span>,<span class="hljs-string">"foo bar"</span>], universal_newlines=<span class="hljs-literal">True</span>, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 <span class="hljs-keyword">except</span> FileNotFoundError <span class="hljs-keyword">as</span> e:
     print(e)
-    <span class="hljs-comment"># [Errno 2] No such file or directory: 'xxxx'</span></code></pre></div></p>
+    <span class="hljs-comment"># [Errno 2] No such file or directory: 'xxxx'</span></code></pre></p>
 <h2 id="2-更底层的Popen用法"><a href="#2-更底层的Popen用法" class="headerlink" title="2. 更底层的Popen用法"></a>2. 更底层的Popen用法</h2><p>关于调用子进程，官方的推荐方法是用可以处理所有用例的run(函数。对于更高级的用例，可以直接使用底层的Popen接口。但这个方法在我看来用不太到（个人拙见），上面的run能满足99%的场景，理由我会在下面的使用场景中说出。</p>
 <p><strong>这里推荐几篇好的文章,它们都在讲解subprocess的时候讲了popen方法：</strong><br><a href="http://queirozf.com/entries/python-3-subprocess-examples#run-example-run-command-and-get-return-code" target="_blank" rel="noopener">1. Python 3 Subprocess Examples</a><br><a href="https://pymotw.com/3/subprocess/" target="_blank" rel="noopener">2. subprocess — Spawning Additional Processes</a><br><a href="https://janakiev.com/til/python-shell-commands/" target="_blank" rel="noopener">3. How to Execute Shell Commands with Python</a></p>
 <h2 id="3-使用场景分析与选择"><a href="#3-使用场景分析与选择" class="headerlink" title="3. 使用场景分析与选择"></a>3. 使用场景分析与选择</h2><p>我表达下我个人拙见。<br>Python能做很多事，大多数脚本都能胜任。但是对于Linux本身的操作，像是重启服务命令，一般系统特有命令，或者是Linux强大的三剑客（sed，awk，grep）在处理文本时有很大的优势，这些Python脚本都不好去代替。</p>
@@ -299,7 +314,7 @@ cp.returncode
 </ol>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>如何在Python中运行外部命令，最有效的方法是使用子进程模块及其提供的所有功能。最值得注意的是，应该考虑使用subprocess.run。<br>还有其他有用的库支持Python中的shell命令，拓展了一些其他功能，比如与tty终端交互，获取系统CPU信息等，如plumbum，sh，psutils和pexpect，这里不做拓展。</p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -327,7 +342,7 @@ cp.returncode
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2019/06/13/python3-queue/">
@@ -336,8 +351,8 @@ cp.returncode
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2019/06/10/MCP2515-CAN-BUS/">
@@ -346,38 +361,46 @@ cp.returncode
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -462,6 +485,10 @@ cp.returncode
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -479,7 +506,7 @@ cp.returncode
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -632,21 +659,12 @@ cp.returncode
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

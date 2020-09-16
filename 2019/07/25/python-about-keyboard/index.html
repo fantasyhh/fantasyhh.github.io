@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2019-07-25 14:30">
-      2019年7月25日 下午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-07-25 14:30" pubdate>
+        2019年7月25日 下午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,13 +236,15 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Python中关于键盘行为的方法总结</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者。</p>
 <h2 id="2-pynput库"><a href="#2-pynput库" class="headerlink" title="2. pynput库"></a>2. pynput库</h2><p>这个库允许你控制和监视输入设备。 目前，支持鼠标和键盘输入和监视</p>
-<h3 id="2-1-控制键盘示例"><a href="#2-1-控制键盘示例" class="headerlink" title="2.1 控制键盘示例"></a>2.1 控制键盘示例</h3><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput.keyboard <span class="hljs-keyword">import</span> Key, Controller
+<h3 id="2-1-控制键盘示例"><a href="#2-1-控制键盘示例" class="headerlink" title="2.1 控制键盘示例"></a>2.1 控制键盘示例</h3><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput.keyboard <span class="hljs-keyword">import</span> Key, Controller
 
 keyboard = Controller()
 
@@ -250,8 +265,8 @@ keyboard.release(<span class="hljs-string">'A'</span>)
     keyboard.release(<span class="hljs-string">'a'</span>)
 
 <span class="hljs-comment"># Type 'Hello World' using the shortcut type method</span>
-keyboard.type(<span class="hljs-string">'Hello World'</span>)</code></pre></div>
-<h3 id="2-2-监听鼠标示例"><a href="#2-2-监听鼠标示例" class="headerlink" title="2.2 监听鼠标示例"></a>2.2 监听鼠标示例</h3><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput <span class="hljs-keyword">import</span> keyboard
+keyboard.type(<span class="hljs-string">'Hello World'</span>)</code></pre>
+<h3 id="2-2-监听鼠标示例"><a href="#2-2-监听鼠标示例" class="headerlink" title="2.2 监听鼠标示例"></a>2.2 监听鼠标示例</h3><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput <span class="hljs-keyword">import</span> keyboard
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">on_press</span><span class="hljs-params">(key)</span>:</span>
     <span class="hljs-keyword">try</span>:
@@ -275,11 +290,11 @@ keyboard.type(<span class="hljs-string">'Hello World'</span>)</code></pre></div>
 listener = mouse.Listener(
     on_press=on_press,
     on_release=on_release)
-listener.start()</code></pre></div>
+listener.start()</code></pre>
 <p><strong>我对这个库的第一印象是简洁好用，监听部分的callback函数很优雅，很是喜欢，也简单测试成功了，于是我噗呲噗呲地开始写，然后把代码扔到树莓派上准备run一下，结果悲剧了，报错<code>Xlib.error.DisplayNameError: Bad display name &quot;&quot;</code>，网上说通过ssh使用这个库的时候会报错，没法正常监听，具体可以看<a href="https://github.com/moses-palmer/pynput/issues/6" target="_blank" rel="noopener">这个issue</a>，虽然上面有着解决方法，但是我没有得到解决，只能忍痛弃之 （或者可以曲线救国，采用蓝牙键盘？没试过）</strong></p>
 <h2 id="3-keyboard库"><a href="#3-keyboard库" class="headerlink" title="3. keyboard库"></a>3. keyboard库</h2><p><a href="https://github.com/boppreh/keyboard" target="_blank" rel="noopener">keyboard库</a>在github上是有较多star的，内容非常多，功能十分强大，你能想到的基本都有….不过我看着头疼，当然，没有选择的另外一个原因是发现了另外一个小脚本来实现我所需要的键盘监听功能，这也是我待会要说的，如果要用其他关于键盘的行为操作，建议好好琢磨下这个库。</p>
 <h2 id="4-神奇小脚本"><a href="#4-神奇小脚本" class="headerlink" title="4. 神奇小脚本"></a>4. 神奇小脚本</h2><p>网上看着看着，突然发现了国外大佬的这篇文章<a href="https://www.jonwitts.co.uk/archives/896" target="_blank" rel="noopener">Detecting keyboard input in Python
-</a>，完美测试，感觉好极了！先贴代码：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
+</a>，完美测试，感觉好极了！先贴代码：<br><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
  
 <span class="hljs-comment"># adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py</span>
  
@@ -323,11 +338,11 @@ button_delay = <span class="hljs-number">0.2</span>
  
     <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"1"</span>):
         print(<span class="hljs-string">"Number 1 pressed"</span>)
-        time.sleep(button_delay)</code></pre></div></p>
+        time.sleep(button_delay)</code></pre></p>
 <p><strong>说实话其实<code>getch</code>这个函数我没太看懂，我也不想花时间研究它了，轮子已经造好了，正如这篇文章的作者一样，他也进行了一些搜索并找到了一些示例代码，但是没有一个完全符合要求，直到github上发现了<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章，也是感叹极客的给力！</strong></p>
 <h2 id="5-碎碎念"><a href="#5-碎碎念" class="headerlink" title="5. 碎碎念"></a>5. 碎碎念</h2><p>回过头来整理时发现了更巧的事情，<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章也是用键盘来控制两个马达，控制前进后退（虽然马达类型不一样），真是太巧了，哈哈哈哈哈～</p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -353,7 +368,7 @@ button_delay = <span class="hljs-number">0.2</span>
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2019/08/01/Arduino-Serial/">
@@ -362,8 +377,8 @@ button_delay = <span class="hljs-number">0.2</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2019/07/10/docker-common-commands/">
@@ -372,38 +387,46 @@ button_delay = <span class="hljs-number">0.2</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -488,6 +511,10 @@ button_delay = <span class="hljs-number">0.2</span>
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -505,7 +532,7 @@ button_delay = <span class="hljs-number">0.2</span>
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -658,21 +685,12 @@ button_delay = <span class="hljs-number">0.2</span>
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2019-06-10 13:45">
-      2019年6月10日 下午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-06-10 13:45" pubdate>
+        2019年6月10日 下午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,9 +236,11 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">利用MCP2515芯片在树莓派上使用CAN BUS协议</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～</p>
 <p>我之前的完成过程基本依靠Google，贴上我参考的国外教程：</p>
 <ol>
@@ -234,35 +249,35 @@
 <li><a href="https://harrisonsand.com/can-on-the-raspberry-pi/" target="_blank" rel="noopener">https://harrisonsand.com/can-on-the-raspberry-pi/</a></li>
 </ol>
 <h2 id="1-硬件相关问题"><a href="#1-硬件相关问题" class="headerlink" title="1. 硬件相关问题"></a>1. 硬件相关问题</h2><p>关于MCP2515 SPI转CAN的芯片，可能有多个“款式”的存在（有些教程里的跟我的芯片不一样），但是必要的针脚的插法都是一致的。</p>
-<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-comment">RPi</span> <span class="hljs-comment">Pin</span>    <span class="hljs-comment">RPi</span> <span class="hljs-comment">Label</span>     <span class="hljs-comment">CAN</span> <span class="hljs-comment">Module</span>
+<pre><code class="hljs undefined"><span class="hljs-comment">RPi</span> <span class="hljs-comment">Pin</span>    <span class="hljs-comment">RPi</span> <span class="hljs-comment">Label</span>     <span class="hljs-comment">CAN</span> <span class="hljs-comment">Module</span>
 <span class="hljs-comment">02</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">5V</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">VCC</span>
 <span class="hljs-comment">06</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GND</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GND</span>
 <span class="hljs-comment">19</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO10</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">MOSI</span> <span class="hljs-comment">(SI)</span>
 <span class="hljs-comment">21</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO9</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">MISO</span> <span class="hljs-comment">(SO)</span>
 <span class="hljs-comment">22</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO25</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">INT</span>
 <span class="hljs-comment">23</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO11</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">SCK</span>
-<span class="hljs-comment">24</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO8</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">CS</span></code></pre></div>
+<span class="hljs-comment">24</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">GPIO8</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">CS</span></code></pre>
 <blockquote>
 <p>其他没什么的说的，在肯定自己接线没错误之后，我们需要怀疑芯片是不是坏的，我试的时候前面两个都是坏的，导致挂不上去</p>
 </blockquote>
 <h2 id="2-配置树莓派"><a href="#2-配置树莓派" class="headerlink" title="2. 配置树莓派"></a>2. 配置树莓派</h2><p><strong>编辑/boot/config.txt并添加以下行，将振荡器参数设置为模块上存在的振荡器参数。大多数模块使用16MHz振荡器作为时钟，但也有使用8MHz（即oscillator=8000000）。你可以通过查看芯片来确定频率。</strong></p>
-<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-attr">dtparam</span>=spi=<span class="hljs-literal">on</span>
+<pre><code class="hljs undefined"><span class="hljs-attr">dtparam</span>=spi=<span class="hljs-literal">on</span>
 <span class="hljs-attr">dtoverlay</span>=mcp2515-can0,oscillator=<span class="hljs-number">8000000</span>,interrupt=<span class="hljs-number">25</span>
-<span class="hljs-attr">dtoverlay</span>=spi-bcm2835-overlay</code></pre></div>
-<p>通过<strong><code>uname -a</code></strong>查看树莓派内核，如果内核为4.4.x往上（树莓派4B基本都是这个版本往上），则需要将最后一行配置修改：<br><div class="hljs"><pre><code class="hljs bash">dtparam=spi=on
+<span class="hljs-attr">dtoverlay</span>=spi-bcm2835-overlay</code></pre>
+<p>通过<strong><code>uname -a</code></strong>查看树莓派内核，如果内核为4.4.x往上（树莓派4B基本都是这个版本往上），则需要将最后一行配置修改：<br><pre><code class="hljs bash">dtparam=spi=on
 dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
-dtoverlay=spi1-1cs</code></pre></div></p>
-<h2 id="3-挂载CAN设备"><a href="#3-挂载CAN设备" class="headerlink" title="3. 挂载CAN设备"></a>3. 挂载CAN设备</h2><div class="hljs"><pre><code class="hljs bash">sudo apt-get update
+dtoverlay=spi1-1cs</code></pre></p>
+<h2 id="3-挂载CAN设备"><a href="#3-挂载CAN设备" class="headerlink" title="3. 挂载CAN设备"></a>3. 挂载CAN设备</h2><pre><code class="hljs bash">sudo apt-get update
 sudo apt-get install can-utils
-sudo reboot</code></pre></div>
-<p>等机器起来之后，我们可以先查看连接是否准确，有没有这个MCP2515设备，有了我们才能继续挂载。<br><div class="hljs"><pre><code class="hljs bash">pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0
+sudo reboot</code></pre>
+<p>等机器起来之后，我们可以先查看连接是否准确，有没有这个MCP2515设备，有了我们才能继续挂载。<br><pre><code class="hljs bash">pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0
 driver  modalias  net  of_node  subsystem  uevent
 pi@piv2:~ $ ls /sys/bus/spi/devices/spi0.0/net
-can0</code></pre></div></p>
+can0</code></pre></p>
 <blockquote>
 <p>如果连接不准确基本上看不到上面的net文件夹，也就没有can0这个设备了</p>
 </blockquote>
-<p>之后，设置你想要的波特率挂载，我这里用的是125000(即你想要驱动的电机的波特率)，<strong><code>sudo ip link set can0 up type can bitrate 125000</code></strong>，挂载成功后，就能在<strong><code>ifconfig</code></strong>中看到：<br><div class="hljs"><pre><code class="hljs undefined">pi<span class="hljs-meta">@piv</span><span class="hljs-number">2:</span>~ $ sudo ifconfig
+<p>之后，设置你想要的波特率挂载，我这里用的是125000(即你想要驱动的电机的波特率)，<strong><code>sudo ip link set can0 up type can bitrate 125000</code></strong>，挂载成功后，就能在<strong><code>ifconfig</code></strong>中看到：<br><pre><code class="hljs undefined">pi<span class="hljs-meta">@piv</span><span class="hljs-number">2:</span>~ $ sudo ifconfig
 can0      Link <span class="hljs-string">encap:</span>UNSPEC  HWaddr <span class="hljs-number">00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span><span class="hljs-number">-00</span>
           UP RUNNING NOARP  <span class="hljs-string">MTU:</span><span class="hljs-number">16</span>  <span class="hljs-string">Metric:</span><span class="hljs-number">1</span>
           RX <span class="hljs-string">packets:</span><span class="hljs-number">0</span> <span class="hljs-string">errors:</span><span class="hljs-number">0</span> <span class="hljs-string">dropped:</span><span class="hljs-number">0</span> <span class="hljs-string">overruns:</span><span class="hljs-number">0</span> <span class="hljs-string">frame:</span><span class="hljs-number">0</span>
@@ -274,20 +289,20 @@ etho      xxxx
           ....
 wlan0     xxxx
           ....
-          ....</code></pre></div></p>
+          ....</code></pre></p>
 <blockquote>
 <p>每当机器重启之后，这个挂载就会失效，需重新挂载。可以直接做成服务或者放在rc.local中，开机自动启动就行</p>
 </blockquote>
-<h2 id="4-发送CAN数据"><a href="#4-发送CAN数据" class="headerlink" title="4. 发送CAN数据"></a>4. 发送CAN数据</h2><p><strong><code>Usage: cansend &lt;device&gt; &lt;can_frame&gt;</code></strong><br><div class="hljs"><pre><code class="hljs undefined"><span class="hljs-attribute">cansend</span> can0 <span class="hljs-number">127</span><span class="hljs-comment">#DEADBEEF</span></code></pre></div></p>
+<h2 id="4-发送CAN数据"><a href="#4-发送CAN数据" class="headerlink" title="4. 发送CAN数据"></a>4. 发送CAN数据</h2><p><strong><code>Usage: cansend &lt;device&gt; &lt;can_frame&gt;</code></strong><br><pre><code class="hljs undefined"><span class="hljs-attribute">cansend</span> can0 <span class="hljs-number">127</span><span class="hljs-comment">#DEADBEEF</span></code></pre></p>
 <p>具体的can_frame格式也不用担心，当你格式数据输的不准确时，命令会自动提示所需的格式。<br>同时可以再开个终端查看收到的数据：</p>
-<div class="hljs"><pre><code class="hljs undefined"><span class="hljs-attribute">candump</span> can0</code></pre></div>
+<pre><code class="hljs undefined"><span class="hljs-attribute">candump</span> can0</code></pre>
 <blockquote>
 <p>只有当线路完全接好形成回路时，才能用上面这个命令自发自收数据，当收到数据时，代表通信成功</p>
 </blockquote>
 <h2 id="5-使用Python第三方库向CAN发送数据"><a href="#5-使用Python第三方库向CAN发送数据" class="headerlink" title="5. 使用Python第三方库向CAN发送数据"></a>5. 使用Python第三方库向CAN发送数据</h2><p>当有需求要将功能写入Python脚本中时，可以使用<strong><code>python-can</code></strong>模块，具体的用法这里不多讲，看<a href="https://python-can.readthedocs.io/en/master/" target="_blank" rel="noopener">官方手册即可</a>。</p>
 <h2 id="6-尾声"><a href="#6-尾声" class="headerlink" title="6.尾声"></a>6.尾声</h2><p><strong>对CAN BUS知之甚少，只能依葫芦画瓢，一步一步慢慢走验证结果，当觉得自己的操作都正确却没有得到正确结果时，怀疑一下硬件本身是否有问题！</strong></p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -317,7 +332,7 @@ wlan0     xxxx
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2019/06/11/python3-subprocess/">
@@ -326,8 +341,8 @@ wlan0     xxxx
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2019/06/05/drf-post-image/">
@@ -336,38 +351,46 @@ wlan0     xxxx
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -452,6 +475,10 @@ wlan0     xxxx
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -469,7 +496,7 @@ wlan0     xxxx
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -622,21 +649,12 @@ wlan0     xxxx
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

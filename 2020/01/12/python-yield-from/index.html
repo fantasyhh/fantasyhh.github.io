@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-01-12 10:46">
-      2020年1月12日 上午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-01-12 10:46" pubdate>
+        2020年1月12日 上午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,31 +236,33 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Python3 yield from 用法详解</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p><code>yield from</code>是Python3.3以后全新的语言结构，它的作用比<code>yield</code>多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用<code>await</code>关键字，这个名称就好多了。当然，后面Python也改成了<code>await</code>，这个我们在结尾说，少废话，先看东西。</p>
-<h2 id="1-替代内层for循环"><a href="#1-替代内层for循环" class="headerlink" title="1. 替代内层for循环"></a>1. 替代内层for循环</h2><p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">chain</span><span class="hljs-params">(*iterables)</span>:</span>
+<h2 id="1-替代内层for循环"><a href="#1-替代内层for循环" class="headerlink" title="1. 替代内层for循环"></a>1. 替代内层for循环</h2><p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：<br><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">chain</span><span class="hljs-params">(*iterables)</span>:</span>
 ...		<span class="hljs-keyword">for</span> it <span class="hljs-keyword">in</span> iterables:
 ...			<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> it:
 ...				<span class="hljs-keyword">yield</span> i
 <span class="hljs-meta">&gt;&gt;&gt; </span>s = <span class="hljs-string">'ABC'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = tuple(range(<span class="hljs-number">3</span>))
 <span class="hljs-meta">&gt;&gt;&gt; </span>list(chain(s, t))
-[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></div></p>
-<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。<br><div class="hljs"><pre><code class="hljs python">Python3<span class="hljs-number">.3</span>之后引入了新语法：
+[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></p>
+<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。<br><pre><code class="hljs python">Python3<span class="hljs-number">.3</span>之后引入了新语法：
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">chain</span><span class="hljs-params">(*iterables)</span>:</span>
 <span class="hljs-meta">... </span>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> iterables:
 <span class="hljs-meta">... </span>		<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> i
 ...
 <span class="hljs-meta">&gt;&gt;&gt; </span>list(chain(s, t))
-[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></div></p>
+[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></p>
 <ul>
 <li><code>yield from</code> 完全代替了内层的 for 循环。</li>
 <li><code>yield from x</code> 表达式对 x 对象所做的第一件事是，调用 iter(x)，从中获取迭代器。因此，x 可以是任何可迭代的对象。</li>
 <li>在这个示例中使用 <code>yield from</code>代码读起来更顺畅，不过感觉更像是语法糖。 </li>
 </ul>
-<p>上面这个例子看上去比较简单（传统意义上说因为我们只是for循环一次就完事，因为只嵌套了一层），我们再来看几个<code>yield from</code>的例子。<br><strong>例子1：我们有一个嵌套型的序列，想将它扁平化处理为一列单独的值。</strong><br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> Iterable
+<p>上面这个例子看上去比较简单（传统意义上说因为我们只是for循环一次就完事，因为只嵌套了一层），我们再来看几个<code>yield from</code>的例子。<br><strong>例子1：我们有一个嵌套型的序列，想将它扁平化处理为一列单独的值。</strong><br><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> Iterable
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatten</span><span class="hljs-params">(items, ignore_types=<span class="hljs-params">(str, bytes)</span>)</span>:</span>
 	<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> items:
@@ -270,7 +285,7 @@ items = [<span class="hljs-string">'Dave'</span>, <span class="hljs-string">'Pau
 Dave
 Paula
 Thomas
-Lewis</code></pre></div></p>
+Lewis</code></pre></p>
 <ul>
 <li><code>collections.Iterable</code>是一个抽象基类，我们用<code>isinstance(x, Iterable)</code>检查某个元素是否是可迭代的.如果是的话,那么就用<code>yield from</code>将这个可迭代对象作为一种子例程进行递归。最终返回结果就是一个没有嵌套的单值序列了。</li>
 <li>代码中额外的参数<code>ignore types</code>和检测语句<code>isinstance(x, ignore types)</code>用来将字符<br>串和字节排除在可迭代对象外，防止将它们再展开成单个的字符。<ul>
@@ -278,7 +293,7 @@ Lewis</code></pre></div></p>
 </ul>
 </li>
 </ul>
-<p><strong>例子2：利用一个Node类来表示树结构</strong><br><div class="hljs"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span>:</span>
+<p><strong>例子2：利用一个Node类来表示树结构</strong><br><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span>:</span>
 	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, value)</span>:</span>
 		self._value = value
 		self._children = []
@@ -308,7 +323,7 @@ Lewis</code></pre></div></p>
 	child1.add_child(Node(<span class="hljs-number">4</span>))
 	child2.add_child(Node(<span class="hljs-number">5</span>))
 	<span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> root.depth_first():
-		print(ch)</code></pre></div></p>
+		print(ch)</code></pre></p>
 <ul>
 <li><code>__iter__</code>代表一个Pyton的迭代协议，返回一个迭代器对象,就能迭代了</li>
 <li><code>depth_frist</code>返回一个生成器，仔细体会其中的<code>yield</code>与 <code>yield from</code>用法</li>
@@ -324,7 +339,7 @@ Lewis</code></pre></div></p>
 </li>
 </ul>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -352,7 +367,7 @@ Lewis</code></pre></div></p>
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2020/01/20/ADC-MCP3008/">
@@ -361,8 +376,8 @@ Lewis</code></pre></div></p>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2020/01/06/python-yield-2/">
@@ -371,38 +386,46 @@ Lewis</code></pre></div></p>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -487,6 +510,10 @@ Lewis</code></pre></div></p>
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -504,7 +531,7 @@ Lewis</code></pre></div></p>
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -657,21 +684,12 @@ Lewis</code></pre></div></p>
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

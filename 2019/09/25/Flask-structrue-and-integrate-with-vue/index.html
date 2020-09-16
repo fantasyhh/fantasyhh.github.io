@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2019-09-25 16:42">
-      2019年9月25日 下午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-09-25 16:42" pubdate>
+        2019年9月25日 下午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,26 +236,28 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">浅谈Flask目录结构以及与Vue.js整合注意事项</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>没用Flask之前，我对Flask的只有一个概念，那就是<strong><code>Micro</code></strong>，官网对其的解释是这样的：<strong><code>Micro</code></strong>并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的<strong><code>Micro</code></strong>意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此Flask可以满足你的所有需求，而无所不包。</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>由于工作性质，要求写的小web应用都要涉及一些底层，不如串口通信，或者GPIO调用。而串口这种东西不像数据库连接一样，开几个都可以，也不能开了之后关然后再开（效率比数据库连接差多了）。所以最好写个全局的，开了一次就不用关了，代码量也不多，哪个简单用哪个，我就想到了用Flask。例如一个最小的应用就可以这么简单的写：</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask
+<pre><code class="hljs python"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask
 app = Flask(__name__)
 
 <span class="hljs-meta">@app.route('/')</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hello_world</span><span class="hljs-params">()</span>:</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-string">'Hello, World!'</span></code></pre></div>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">'Hello, World!'</span></code></pre>
 <p>单个Python文件就好办了，然后打开串口，在路由中引用串口实例加入一些操作，就是个能用的小型Web应用了。</p>
 <h2 id="2-目录结构安排一下"><a href="#2-目录结构安排一下" class="headerlink" title="2. 目录结构安排一下"></a>2. 目录结构安排一下</h2><p>即使一个项目再小也要有个规则安排，总不能真的单文件走天下。<br><a href="https://www.v2ex.com/t/467423" target="_blank" rel="noopener">V2EX上有篇文章</a>探讨了Flask的目录结构，我看了上面的每个链接，果然<strong><code>Flask 其实很灵活，怎样都行，怎么舒服怎么来</code></strong>这句话很对。</p>
 <p>我从一些教程或者github中综合了下，整理下我会采用的结构目录，旨在简单明了。</p>
-<h4 id="单模块目录结构"><a href="#单模块目录结构" class="headerlink" title="单模块目录结构"></a>单模块目录结构</h4><p>当项目代码量少于几百行的时候我们可以采用单模块的目录结构，也就是把所有的代码都写在<code>app.py</code>里，然后把一些配置（比如我上面例子中的串口位置，波特率啥的）写到<code>config.py</code>里，比如这样：<br><div class="hljs"><pre><code class="hljs undefined">app<span class="hljs-selector-class">.py</span>
+<h4 id="单模块目录结构"><a href="#单模块目录结构" class="headerlink" title="单模块目录结构"></a>单模块目录结构</h4><p>当项目代码量少于几百行的时候我们可以采用单模块的目录结构，也就是把所有的代码都写在<code>app.py</code>里，然后把一些配置（比如我上面例子中的串口位置，波特率啥的）写到<code>config.py</code>里，比如这样：<br><pre><code class="hljs undefined">app<span class="hljs-selector-class">.py</span>
 config<span class="hljs-selector-class">.py</span>
 requirements<span class="hljs-selector-class">.txt</span>
 static/
-templates/</code></pre></div></p>
-<h4 id="包目录结构"><a href="#包目录结构" class="headerlink" title="包目录结构"></a>包目录结构</h4><p>对于包目录结构我们可以按照<a href="https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/" target="_blank" rel="noopener">官网推荐</a>的来：<br><div class="hljs"><pre><code class="hljs undefined">/home/user/Projects/flask-tutorial
+templates/</code></pre></p>
+<h4 id="包目录结构"><a href="#包目录结构" class="headerlink" title="包目录结构"></a>包目录结构</h4><p>对于包目录结构我们可以按照<a href="https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/" target="_blank" rel="noopener">官网推荐</a>的来：<br><pre><code class="hljs undefined">/home/user/Projects/flask-tutorial
 ├── flaskr/
 │   ├── __init__<span class="hljs-selector-class">.py</span>
 │   ├── db<span class="hljs-selector-class">.py</span>
@@ -269,8 +284,8 @@ templates/</code></pre></div></p>
 │   └── test_blog<span class="hljs-selector-class">.py</span>
 ├── venv/
 ├── setup<span class="hljs-selector-class">.py</span>
-└── MANIFEST.<span class="hljs-keyword">in</span></code></pre></div></p>
-<p>看似文件很多，但是基本的骨架还是像下面这样：<br><div class="hljs"><pre><code class="hljs undefined">config<span class="hljs-selector-class">.py</span>
+└── MANIFEST.<span class="hljs-keyword">in</span></code></pre></p>
+<p>看似文件很多，但是基本的骨架还是像下面这样：<br><pre><code class="hljs undefined">config<span class="hljs-selector-class">.py</span>
 requirements<span class="hljs-selector-class">.txt</span>
 run<span class="hljs-selector-class">.py</span>
 instance/
@@ -281,10 +296,10 @@ yourapp/
     models<span class="hljs-selector-class">.py</span>
     forms<span class="hljs-selector-class">.py</span>
     static/
-    templates/</code></pre></div></p>
+    templates/</code></pre></p>
 <p>然后我们可以在这上面进行很多衍生，加入蓝图等东西。</p>
 <h4 id="更完整的目录结构"><a href="#更完整的目录结构" class="headerlink" title="更完整的目录结构"></a>更完整的目录结构</h4><p>更完善的目录结构我们可以加入<code>docker</code>，<code>makefile</code>等，我们可以参考有名的<a href="https://github.com/cookiecutter/cookiecutter/blob/master/README.md" target="_blank" rel="noopener">cookiecutter项目模板</a>，很全面，考虑很周到，但是在自己的开发过程中用不太到，仅供参考。</p>
-<h2 id="3-Flask与Vue-js整合问题"><a href="#3-Flask与Vue-js整合问题" class="headerlink" title="3. Flask与Vue.js整合问题"></a>3. Flask与Vue.js整合问题</h2><p>采用前后端分离开发的时候，需要整合前端vue的包，我们可以在实例化app的时候这么做：<br><div class="hljs"><pre><code class="hljs python">
+<h2 id="3-Flask与Vue-js整合问题"><a href="#3-Flask与Vue-js整合问题" class="headerlink" title="3. Flask与Vue.js整合问题"></a>3. Flask与Vue.js整合问题</h2><p>采用前后端分离开发的时候，需要整合前端vue的包，我们可以在实例化app的时候这么做：<br><pre><code class="hljs python">
 <span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, render_template, jsonify
 
 <span class="hljs-comment"># Set up automatic serving of static Vue &amp; frontend files and template folder for index.html.</span>
@@ -301,14 +316,14 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
 <span class="hljs-meta">@app.route('/', defaults=&#123;'path': ''&#125;)</span>
 <span class="hljs-meta">@app.route('/&lt;path:path&gt;')</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">index</span><span class="hljs-params">(path)</span>:</span>
-    <span class="hljs-keyword">return</span> render_template(<span class="hljs-string">'index.html'</span>)</code></pre></div></p>
+    <span class="hljs-keyword">return</span> render_template(<span class="hljs-string">'index.html'</span>)</code></pre></p>
 <p>Vue这边也要设置，平时前后端分离开发，都是用axios到我开发的机器上拿数据，还会遇到跨域问题，但是整合的时候Vue这边打包前填什么服务器ip呢，我要是部署到别的机器ip肯定会变，ip肯定会变，总不能一个ip打一个不同的包。所以说我们需要在vue.config.js中这么配置：</p>
-<div class="hljs"><pre><code class="hljs js"><span class="hljs-built_in">module</span>.exports = &#123;
+<pre><code class="hljs js"><span class="hljs-built_in">module</span>.exports = &#123;
     <span class="hljs-attr">assetsDir</span>: <span class="hljs-string">'static'</span>, <span class="hljs-comment">// For simple configuration of static files in Flask (the "static_folder='client/dist/static'" part in app.py)</span>
     devServer: &#123;
         <span class="hljs-attr">proxy</span>: <span class="hljs-string">'http://localhost:5000'</span> <span class="hljs-comment">// So that the client dev server can access your Flask routes</span>
     &#125;
-&#125;;</code></pre></div>
+&#125;;</code></pre>
 <p>这样就OK了，打一个包后续都能用了</p>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>对于Flask目录结构真的是仁者见仁，智者见智，怎么舒服怎么来，但是对于刚开始用的人来说不要一开始就用人家的大结构目录，容易看的懵逼，项目都是从一开始的几个文件然后内容的增多到很多个包，中间有慢慢衍生的过程，想一开始就把代码套在大骨架上实属勉强。<br>Vue配置文件中<code>proxy</code>我只是知道个大概的作用，只是在网上找到了这个解决方案，如果不加，直接在<code>axios</code>中裸用<code>&#39;http://localhost:5000&#39;</code>，那么访问 到的地址就是打开浏览器访问页面时的那台机器的localhost资源，原因可能在于webpack4本身不知道<code>&#39;http://localhost:5000&#39;</code>这个地址，需要代理下！<br><br><br><br><br>参考资料：<br><a href="https://medium.com/unbabel/integrating-webpack-4-with-a-backend-framework-4a0e630d2a03" target="_blank" rel="noopener">Integrating Webpack 4 with a backend framework</a></p>
 <p><a href="https://stackabuse.com/single-page-apps-with-vue-js-and-flask-deployment/" target="_blank" rel="noopener">Single Page Apps with Vue.js and Flask: Deployment</a></p>
@@ -316,7 +331,7 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
 <p><a href="https://olav.it/2018/08/29/simple-spa-setup-with-vue-cli-3-and-flask/" target="_blank" rel="noopener">Simple SPA setup with Vue CLI 3 and Flask</a></p>
 <p><a href="https://olav.it/2018/08/29/simple-spa-setup-with-vue-cli-3-and-flask/" target="_blank" rel="noopener">flask-vuejs-template</a></p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -346,7 +361,7 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2019/10/11/extern-and-linker/">
@@ -355,8 +370,8 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2019/09/20/MCP23017-raspberrypi-expander/">
@@ -365,38 +380,46 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -481,6 +504,10 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -498,7 +525,7 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -651,21 +678,12 @@ app = Flask(__name__, static_folder=<span class="hljs-string">'./dist/static'</s
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

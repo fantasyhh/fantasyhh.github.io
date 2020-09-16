@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2019-06-05 14:30">
-      2019年6月5日 下午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-06-05 14:30" pubdate>
+        2019年6月5日 下午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,9 +236,11 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">由DRF上传图片温习到的HTTP知识</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。</p>
 <h2 id="1-熟悉而又陌生的HTTP"><a href="#1-熟悉而又陌生的HTTP" class="headerlink" title="1. 熟悉而又陌生的HTTP"></a>1. 熟悉而又陌生的HTTP</h2><blockquote>
 <p>某大佬云：学习Web开发不好好学习HTTP报文，将会“打拳不练功，到老一场空”，你花在犯迷糊上的时间比你沉下心来学习HTTP的时间肯定会多很多。</p>
@@ -244,10 +259,10 @@
 <p><img src="/images/TCP_IP.gif" srcset="/img/loading.gif" alt="HTTP协议栈中各层数据流"></p>
 <p>为什么要贴出来，重要程度就不说了。</p>
 <h2 id="2-让我从DRF瞬移到了HTTP的问题"><a href="#2-让我从DRF瞬移到了HTTP的问题" class="headerlink" title="2. 让我从DRF瞬移到了HTTP的问题"></a>2. 让我从DRF瞬移到了HTTP的问题</h2><p>假设有这样一个Models，</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BeautifulGirl</span><span class="hljs-params">(models.Model)</span>:</span>
+<pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BeautifulGirl</span><span class="hljs-params">(models.Model)</span>:</span>
     name = models.CharField(max_length=<span class="hljs-number">32</span>, null=<span class="hljs-literal">True</span>, unique=<span class="hljs-literal">True</span>)
-    img = models.ImageField(null=<span class="hljs-literal">True</span>, blank=<span class="hljs-literal">True</span>, upload_to=<span class="hljs-string">'beauty/'</span>)</code></pre></div>
-<p>我View视图先按照传统写的，<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 上传美女图片</span>
+    img = models.ImageField(null=<span class="hljs-literal">True</span>, blank=<span class="hljs-literal">True</span>, upload_to=<span class="hljs-string">'beauty/'</span>)</code></pre>
+<p>我View视图先按照传统写的，<br><pre><code class="hljs python"><span class="hljs-comment"># 上传美女图片</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UploadBeauty2</span><span class="hljs-params">(APIView)</span>:</span>
     <span class="hljs-comment"># parser_classes = (MultiPartParser,)</span>
 
@@ -262,7 +277,7 @@
         girl.name = beauty_name
         girl.img.save(img_name, image, save=<span class="hljs-literal">False</span>)
         girl.save()
-        <span class="hljs-keyword">return</span> Response(&#123;<span class="hljs-string">'msg'</span>: <span class="hljs-string">'upload ok'</span>&#125;, status=<span class="hljs-number">200</span>)</code></pre></div></p>
+        <span class="hljs-keyword">return</span> Response(&#123;<span class="hljs-string">'msg'</span>: <span class="hljs-string">'upload ok'</span>&#125;, status=<span class="hljs-number">200</span>)</code></pre></p>
 <p>刚开始没有<strong><code>parser_classes = (MultiPartParser,)</code></strong>这一行，而且我的DRF parser 只设置成了<strong><code>&#39;rest_framework.parsers.JSONParser&#39;,</code></strong>，好了找到问题，那我看看哪个合适，<strong><code>FileUploadParser</code></strong>看上去合适的，设置一下，报错<strong><code>Missing filename. Request should include a Content-Disposition header ....</code></strong><br>后来看到了<a href="https://stackoverflow.com/questions/46806335/fileuploadparser-doesnt-get-the-file-name" target="_blank" rel="noopener">解决方法</a>，OK了，但是我对这个<strong><code>MultiPartParser</code></strong>很懵逼，<strong><code>FileUploadParser</code></strong>不就是上传图片，为何不可行。</p>
 <blockquote>
 <p>其实遇到这个问题也是我设置的问题，DRF默认解析包好了这个MultiPartParser，但我觉得平常只用json，所以只设置成了JSONParser，尴尬，用默认设置即可</p>
@@ -290,12 +305,12 @@
 <li><p>你将需要设置MEDIA_URL并MEDIA_ROOT在项目的settings.py。</p>
 </li>
 </ul>
-<div class="hljs"><pre><code class="hljs python">MEDIA_URL = <span class="hljs-string">'/media/'</span>
-MEDIA_ROOT = os.path.join(BASE_DIR, <span class="hljs-string">'media'</span>)</code></pre></div>
+<pre><code class="hljs python">MEDIA_URL = <span class="hljs-string">'/media/'</span>
+MEDIA_ROOT = os.path.join(BASE_DIR, <span class="hljs-string">'media'</span>)</code></pre>
 <ul>
 <li>在开发服务器中，你可以使用<code>django.contrib.staticfiles.views.serve()</code> 视图为用户上载的文件（媒体）提供服务。</li>
 </ul>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django.conf <span class="hljs-keyword">import</span> settings
+<pre><code class="hljs python"><span class="hljs-keyword">from</span> django.conf <span class="hljs-keyword">import</span> settings
 <span class="hljs-keyword">from</span> django.conf.urls.static <span class="hljs-keyword">import</span> static
 
 urlpatterns = [
@@ -303,7 +318,7 @@ urlpatterns = [
 ]
 
 <span class="hljs-keyword">if</span> settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</code></pre></div>
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</code></pre>
 <ul>
 <li>要访问MEDIA_URL模板，你必须添加<code>django.template.context_processors.media</code>到您的 <strong>context_processeors</strong>内部TEMPLATES配置。</li>
 </ul>
@@ -316,13 +331,13 @@ urlpatterns = [
 <p>FileUploadParser适用于可以将文件作为原始数据请求上载的本机客户端。对于基于Web的上载或具有分段上传支持的本机客户端，应该使用MultiPartParser</p>
 </blockquote>
 <p><strong>好了，建议是不应该使用 =。= </strong></p>
-<p>其实更好Crete数据的方法还是用DRF的通用视图，贼方便<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UploadBeauty</span><span class="hljs-params">(ListCreateAPIView)</span>:</span>
+<p>其实更好Crete数据的方法还是用DRF的通用视图，贼方便<br><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UploadBeauty</span><span class="hljs-params">(ListCreateAPIView)</span>:</span>
     queryset = BeautifulGirl.objects.all()
     serializer_class = BeautifulGirlSerializers
-    parser_classes = (MultiPartParser,FormParser)</code></pre></div></p>
+    parser_classes = (MultiPartParser,FormParser)</code></pre></p>
 <h2 id="6-回过头看看"><a href="#6-回过头看看" class="headerlink" title="6. 回过头看看"></a>6. 回过头看看</h2><p>既然作为一个稳定的web框架，更多的是让开发者方便快速，不用过多地在意包括http以及更多协议中本身繁杂晦涩的概念与操作，封装地很完美，但是很多东西，比如设置文件里仅仅一行字段就能代表很多东西，预留了默认设置，让初学者更加方便快捷，上手即用，没有门槛。但其中很多通用的基础知识在代码运行流程内部体现，需要掌握并且动手不断地尝试，必要时读源码来了解原由。</p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -350,7 +365,7 @@ urlpatterns = [
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2019/06/10/MCP2515-CAN-BUS/">
@@ -359,8 +374,8 @@ urlpatterns = [
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2019/06/04/django-CBV-VS-FBV/">
@@ -369,38 +384,46 @@ urlpatterns = [
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -485,6 +508,10 @@ urlpatterns = [
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -502,7 +529,7 @@ urlpatterns = [
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -655,21 +682,12 @@ urlpatterns = [
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

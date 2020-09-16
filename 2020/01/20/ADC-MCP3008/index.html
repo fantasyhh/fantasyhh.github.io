@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-01-20 15:25">
-      2020年1月20日 下午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-01-20 15:25" pubdate>
+        2020年1月20日 下午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,9 +236,11 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">树莓派使用MCP3008模数转换器(ADC)</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！<br>我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。</p>
 <h2 id="1-方法总结"><a href="#1-方法总结" class="headerlink" title="1. 方法总结"></a>1. 方法总结</h2><ul>
 <li><p><a href="https://www.raspberrypi-spy.co.uk/2013/10/analogue-sensors-on-the-raspberry-pi-using-an-mcp3008/" target="_blank" rel="noopener">Analogue Sensors On The Raspberry Pi Using An MCP3008</a></p>
@@ -241,18 +256,18 @@
 <li>当你使用MCP3008芯片时，务必使用第三种方法，<code>gpiozero MCP3008</code>函数，依旧是熟悉的味道，简单好用，三行代码就解决；当使用ADS1x15系列时，需要用第二种方法中的库<a href="https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters" target="_blank" rel="noopener">在这里往下翻翻</a></li>
 <li>第二种方法中的<code>adafruit-circuitpython-mcp3xxx</code>库有个注意点，虽然MCP是10位精度的，也就是转换的最大值本应该是1023，但用这个方法的时候默认返回16位精度的值，为了与ADS1x15系列的借口保持统一，所以结果要么右移6位，要么就当成是16位精度也行。</li>
 </ul>
-<p>另外的,在<code>gpiozero</code>中，有下列方法实例化模数转换器：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> gpiozero <span class="hljs-keyword">import</span> MCP3008
+<p>另外的,在<code>gpiozero</code>中，有下列方法实例化模数转换器：<br><pre><code class="hljs python"><span class="hljs-keyword">from</span> gpiozero <span class="hljs-keyword">import</span> MCP3008
 
 MCP3008(channel=<span class="hljs-number">0</span>)
 MCP3008(channel=<span class="hljs-number">0</span>, device=<span class="hljs-number">0</span>)
 MCP3008(channel=<span class="hljs-number">0</span>, port=<span class="hljs-number">0</span>, device=<span class="hljs-number">0</span>)
 MCP3008(channel=<span class="hljs-number">0</span>, select_pin=<span class="hljs-number">8</span>)
-MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-number">11</span>, mosi_pin=<span class="hljs-number">10</span>, miso_pin=<span class="hljs-number">9</span>, select_pin=<span class="hljs-number">8</span>)</code></pre></div></p>
+MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-number">11</span>, mosi_pin=<span class="hljs-number">10</span>, miso_pin=<span class="hljs-number">9</span>, select_pin=<span class="hljs-number">8</span>)</code></pre></p>
 <p>上面<code>device=0（默认） 或者device=1</code>，其实默认意味着MCP3008的<strong>cs</strong>引脚接的是<strong>GPIO08</strong>（也就是SPI0_CE0_N），所以<code>device=1</code>意味着接的<strong>GPIO07</strong></p>
 <p>我一开始以为<strong>cs</strong>引脚只能接这两个，后来发现，所有通用<strong>IO</strong>引脚都能接，只要加个<code>select_pin</code>参数，简简单单，好用的。</p>
 <p><strong>Arduino是自带模数转换功能，实在着急，先用个Arduino救救急，不展开～</strong></p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -282,7 +297,7 @@ MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2020/02/10/Raspberrypi-PWM/">
@@ -291,8 +306,8 @@ MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2020/01/12/python-yield-from/">
@@ -301,38 +316,46 @@ MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -417,6 +440,10 @@ MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -434,7 +461,7 @@ MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -587,21 +614,12 @@ MCP3008(channel=<span class="hljs-number">0</span>, clock_pin=<span class="hljs-
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

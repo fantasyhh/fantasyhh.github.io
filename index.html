@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -23,9 +23,9 @@
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -33,6 +33,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -143,7 +144,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -151,12 +157,12 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
@@ -186,31 +192,93 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/09/16/esp32-micropython/" target="_self">
+          <img src="/images/suolue/micropython.jpg" srcset="/img/loading.gif" alt="在esp32上使用micropython的一些心得">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/09/16/esp32-micropython/">在esp32上使用micropython的一些心得</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/09/16/esp32-micropython/">
+          
+          
+            
+          
+          其实老早之前买了物联网Python开发实战这本书的时候就注意到了Pyboard（基于stm32），还买了个板子实践了下，但是感觉micropython这个东西有点冷门，像个半成品一样（狭隘了），就把板子丢一边，继续用Arduino个树莓派了。最近在寻找单片机的时候，发现了esp32以及micropython，发现好像有点厉害，某宝店铺什么的的热度都不错，就买回来些许测试一波，发现很好用，顺便记录一
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-09-16 09:49" pubdate>
+              2020-09-16
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/micropython/">micropython</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/esp32/">esp32</a>
+            
+              <a href="/tags/micropython/">micropython</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/07/07/goInitialize/" target="_self">
           <img src="/images/suolue/zeroValue.jpeg" srcset="/img/loading.gif" alt="Golang数据初始化，零值以及一些陷阱">
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/07/07/goInitialize/">Golang数据初始化，零值以及一些陷阱</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/07/07/goInitialize/">Golang数据初始化，零值以及一些陷阱</a>
+      </h1>
 
-      <a href="/2020/07/07/goInitialize/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/07/07/goInitialize/">
           
-        
-        <div>
+          
+            
+          
+          
 基础不牢，地动山摇
 
 不像Python这种动态语言，遇见对象就是一言不合的赋给变一个变量，然后查看；而Go语言是静态类型语言，因此变量是有明确类型的，编译器也会检查变量类型的正确性。
 1. 变量的初始化1.1 声明声明变量的一般形式是使用 var 关键字：var name type，其中，var 是声明变量的关键字，name 是变量名，type 是变量的类型。也可以进行批量声明：var (
-  </div>
-      </a>
+  
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-07-07
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-07-07 14:12" pubdate>
+              2020-07-07
+            </time>
           </div>
         
         
@@ -230,7 +298,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -242,25 +310,32 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/07/01/goTools/">Golang代码工具使用</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/07/01/goTools/">Golang代码工具使用</a>
+      </h1>
 
-      <a href="/2020/07/01/goTools/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/07/01/goTools/">
           
-        
-        <div>
+          
+            
+          
+          
 工欲善其事必先利其器
 
 在学习golang的过程中，经常遇到教程让代码遵循gofmt，golint，govet等，而我虽然有Goland的加持，但对其中的区别也是稀里糊涂，在这里做一个简单的总结，主要参考的官方的CodeTools专栏。感谢Google！
-1. 什么是 Linting?Linting是自动检查源代码中是否存在编程错误和样式错误。这可以通过使用lint 工具（也称为linter）来</div>
-      </a>
+1. 什么是 Linting?Linting是自动检查源代码中是否存在编程错误和样式错误。这可以通过使用lint 工具（也称为linter）来
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-07-01
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-07-01 10:24" pubdate>
+              2020-07-01
+            </time>
           </div>
         
         
@@ -280,7 +355,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -292,22 +367,29 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/05/13/arduinoFanByTemp/">Arduino温控PC风扇以及信息显示思路总结</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/05/13/arduinoFanByTemp/">Arduino温控PC风扇以及信息显示思路总结</a>
+      </h1>
 
-      <a href="/2020/05/13/arduinoFanByTemp/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/05/13/arduinoFanByTemp/">
           
-        
-        <div>温控风扇的一个总所周知的例子就是CPU上的散热风扇，风扇速度会随着CPU负载上升的同时增加，达到及时散热的目的，然而这次要捣鼓的东西也跟这个差不多但是是在放在大机柜里，四路温控风扇，并带有温度风扇速度显示，以及通过触摸显示屏设置上下温度阀值，我毫不犹豫选择了Arduino，这在油管上也有很多类似的项目，不过也杂而不全，翻来覆去，测试了各个部分然后确定了自己想要的方案。
-1. 温度传感器选择温度传感</div>
-      </a>
+          
+            
+          
+          温控风扇的一个总所周知的例子就是CPU上的散热风扇，风扇速度会随着CPU负载上升的同时增加，达到及时散热的目的，然而这次要捣鼓的东西也跟这个差不多但是是在放在大机柜里，四路温控风扇，并带有温度风扇速度显示，以及通过触摸显示屏设置上下温度阀值，我毫不犹豫选择了Arduino，这在油管上也有很多类似的项目，不过也杂而不全，翻来覆去，测试了各个部分然后确定了自己想要的方案。
+1. 温度传感器选择温度传感
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-05-13
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-05-13 11:08" pubdate>
+              2020-05-13
+            </time>
           </div>
         
         
@@ -327,7 +409,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -339,21 +421,28 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/04/02/python-rsyslog/">Python rsyslog日志集中化</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/04/02/python-rsyslog/">Python rsyslog日志集中化</a>
+      </h1>
 
-      <a href="/2020/04/02/python-rsyslog/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/04/02/python-rsyslog/">
           
-        
-        <div>下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。</div>
-      </a>
+          
+            
+          
+          下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-04-02
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-04-02 16:00" pubdate>
+              2020-04-02
+            </time>
           </div>
         
         
@@ -377,7 +466,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -389,21 +478,28 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/03/31/linux-signal-with-python/">Linux的信号以及Python处理</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/03/31/linux-signal-with-python/">Linux的信号以及Python处理</a>
+      </h1>
 
-      <a href="/2020/03/31/linux-signal-with-python/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/03/31/linux-signal-with-python/">
           
-        
-        <div>初次接触信号这个概念实在gpiozero库文档中的这么一个专题，How do I keep my script running?,我最最开始是在button.when_pressed = hello用一个while True的无限循环保持脚本运行，后来发现有个个内置库的signal.pause()函数可以保持脚本运行，直到按下Ctrl+C程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来</div>
-      </a>
+          
+            
+          
+          初次接触信号这个概念实在gpiozero库文档中的这么一个专题，How do I keep my script running?,我最最开始是在button.when_pressed = hello用一个while True的无限循环保持脚本运行，后来发现有个个内置库的signal.pause()函数可以保持脚本运行，直到按下Ctrl+C程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-03-31
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-03-31 13:49" pubdate>
+              2020-03-31
+            </time>
           </div>
         
         
@@ -425,7 +521,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -437,21 +533,28 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/02/28/invoke-fabric/">Invoke与Fabric注意事项详解教程</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/02/28/invoke-fabric/">Invoke与Fabric注意事项详解教程</a>
+      </h1>
 
-      <a href="/2020/02/28/invoke-fabric/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/02/28/invoke-fabric/">
           
-        
-        <div>说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在</div>
-      </a>
+          
+            
+          
+          说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-02-28
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-02-28 14:13" pubdate>
+              2020-02-28
+            </time>
           </div>
         
         
@@ -477,7 +580,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -489,22 +592,29 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/02/13/python-asyncio/">Python并发之异步I/O(async,await）</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/02/13/python-asyncio/">Python并发之异步I/O(async,await）</a>
+      </h1>
 
-      <a href="/2020/02/13/python-asyncio/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/02/13/python-asyncio/">
           
-        
-        <div>前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！
-1. 背景Python有很长一段的异步编程历史,特别是twisted，gevent和一些无堆栈的Python项目。异</div>
-      </a>
+          
+            
+          
+          前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！
+1. 背景Python有很长一段的异步编程历史,特别是twisted，gevent和一些无堆栈的Python项目。异
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-02-13
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-02-13 18:05" pubdate>
+              2020-02-13
+            </time>
           </div>
         
         
@@ -526,7 +636,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -538,22 +648,29 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/02/10/Raspberrypi-PWM/">树莓派几种不同的PWM及其应用</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/02/10/Raspberrypi-PWM/">树莓派几种不同的PWM及其应用</a>
+      </h1>
 
-      <a href="/2020/02/10/Raspberrypi-PWM/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/02/10/Raspberrypi-PWM/">
           
-        
-        <div>树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。
-1. 树莓</div>
-      </a>
+          
+            
+          
+          树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。
+1. 树莓
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-02-10
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-02-10 12:34" pubdate>
+              2020-02-10
+            </time>
           </div>
         
         
@@ -577,7 +694,7 @@
           </div>
         
       </div>
-    </div>
+    </article>
   </div>
 
   <div class="row mx-auto index-card">
@@ -589,23 +706,30 @@
         </a>
       </div>
     
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/2020/01/20/ADC-MCP3008/">树莓派使用MCP3008模数转换器(ADC)</a>
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2020/01/20/ADC-MCP3008/">树莓派使用MCP3008模数转换器(ADC)</a>
+      </h1>
 
-      <a href="/2020/01/20/ADC-MCP3008/" class="index-excerpt">
-        
-        
+      <p class="index-excerpt">
+        <a href="/2020/01/20/ADC-MCP3008/">
           
-        
-        <div>树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。
+          
+            
+          
+          树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。
 1. 方法总结
-Analogue Senso</div>
-      </a>
+Analogue Senso
+        </a>
+      </p>
 
       <div class="index-btm post-metas">
         
           <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-01-20
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-01-20 15:25" pubdate>
+              2020-01-20
+            </time>
           </div>
         
         
@@ -629,57 +753,14 @@ Analogue Senso</div>
           </div>
         
       </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2020/01/12/python-yield-from/">Python3 yield from 用法详解</a>
-
-      <a href="/2020/01/12/python-yield-from/" class="index-excerpt">
-        
-        
-          
-        
-        <div>yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。
-1. 替代内层for循环如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：&gt;&gt;</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-01-12
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Python/">Python</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Python/">Python</a>
-            
-              <a href="/tags/yield-from/">yield from</a>
-            
-          </div>
-        
-      </div>
-    </div>
+    </article>
   </div>
 
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
   
@@ -758,6 +839,10 @@ Analogue Senso</div>
 
   
     <script src="/js/lazyload.js"></script>
+  
+
+
+
   
 
 
@@ -878,21 +963,12 @@ Analogue Senso</div>
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

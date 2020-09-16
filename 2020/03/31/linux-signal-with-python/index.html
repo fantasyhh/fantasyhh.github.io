@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-03-31 13:49">
-      2020年3月31日 下午
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-31 13:49" pubdate>
+        2020年3月31日 下午
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,9 +236,11 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux的信号以及Python处理</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>初次接触信号这个概念实在gpiozero库文档中的这么一个专题，<code>How do I keep my script running?</code>,我最最开始是在<code>button.when_pressed = hello</code>用一个<code>while True</code>的无限循环保持脚本运行，后来发现有个个内置库的<code>signal.pause()</code>函数可以保持脚本运行，直到按下<strong>Ctrl+C</strong>程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来一次mqtt没加loop循环之后自动断开，我后来就在想我用<code>pause</code>还是<code>loop_forever</code>呢? 接下来我就慢慢揭开了信号的序幕，也算当补了下操作系统的一些知识。</p>
 <h2 id="1-信号基础"><a href="#1-信号基础" class="headerlink" title="1. 信号基础"></a>1. 信号基础</h2><p>Linux信号是一种较高层的软件形式的异常，它允许进程和内核中断其他进程。<br>一个信号就是一条小消息，它通知进程系统中发生了一个某种类型的事件，Linux系统上支持30种不同类型的信号，每种信号类型都对应某种系统事件，红笔标注为常见信号：<br><img src="/images/signal/signals.jpeg" srcset="/img/loading.gif" alt="Linux信号"></p>
 <blockquote>
@@ -245,7 +260,7 @@
 </ul>
 <p>进程会采取哪种操作，要根据该进程的程序设计。特别是获取信号的情况，程序往往会设置一些比较长而复杂的操作(通常将这些操作放到一个函数中)。</p>
 <h3 id="3-1-Python-signal函数信号处理"><a href="#3-1-Python-signal函数信号处理" class="headerlink" title="3.1 Python signal函数信号处理"></a>3.1 Python signal函数信号处理</h3><p><strong>signal包定义了各个信号名及其对应的整数，核心是使用signal.signal()函数来预设(register)信号处理函数</strong>，<code>singnal.signal(signalnum, handler)</code>中signalnum为某个信号，handler为该信号的处理函数。我们在信号基础里提到，进程可以无视信号，可以采取默认操作，还可以自定义操作。当handler为<code>signal.SIG_IGN</code>时，信号被无视(ignore)。当handler为<code>singal.SIG_DFL</code>，进程采取默认操作(default)。当handler为一个函数名时，进程采取函数中定义的操作。</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> signal
+<pre><code class="hljs python"><span class="hljs-keyword">import</span> signal
 <span class="hljs-comment"># Define signal handler function</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">myHandler</span><span class="hljs-params">(signum, frame)</span>:</span>
     print(<span class="hljs-string">'I received: '</span>, signum)
@@ -253,7 +268,7 @@
 <span class="hljs-comment"># register signal.SIGTSTP's handler </span>
 signal.signal(signal.SIGTSTP, myHandler)
 signal.pause()
-print(<span class="hljs-string">'End of Signal Demo'</span>)</code></pre></div>
+print(<span class="hljs-string">'End of Signal Demo'</span>)</code></pre>
 <blockquote>
 <p>信号处理程序和主程序以及其他信号处理程序并发地进行，如果处理程序和主程序并发的访问同样的全局数据结构，那么结果可能就是不可预知的，而且经常是致命的！</p>
 </blockquote>
@@ -262,7 +277,7 @@ print(<span class="hljs-string">'End of Signal Demo'</span>)</code></pre></div>
 <p>以便让进程运行。当程序运行到<code>signal.pause()</code>的时候，进程暂停并等待信号。此时，通过按下<strong>CTRL+Z</strong>向该进程发送SIGTSTP信号。我们可以看到，进程执行了<code>myHandle()</code>函数, 随后返回主程序，继续执行。(当然，也可以用<code>$ps</code>查询process ID, 再使用<code>$kill</code>来发出信号。)</p>
 <p>(进程并不一定要使用<code>signal.pause()</code>暂停以等待信号，它也可以在进行工作中接受信号，比如将上面的<code>signal.pause()</code>改为一个需要长时间工作的循环。)</p>
 <p>我们可以根据自己的需要更改<code>myHandler()</code>中的操作，以针对不同的信号实现个性化的处理。</p>
-<h3 id="3-2-Python-alarm函数自发自收信号"><a href="#3-2-Python-alarm函数自发自收信号" class="headerlink" title="3.2 Python alarm函数自发自收信号"></a>3.2 Python alarm函数自发自收信号</h3><p>再来看个官网的例子，它使用<code>alarm()</code>函数来限制等待打开文件所花费的时间；这很有用，因为如果该文件作用于可能无法打开的串行设备，这通常会导致<code>os.open()</code>然后无限期挂起。解决的办法是在打开文件之前设置5秒警报。如果操作花费的时间太长，则会发送警报信号，并且处理程序将引发异常。<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> signal, os
+<h3 id="3-2-Python-alarm函数自发自收信号"><a href="#3-2-Python-alarm函数自发自收信号" class="headerlink" title="3.2 Python alarm函数自发自收信号"></a>3.2 Python alarm函数自发自收信号</h3><p>再来看个官网的例子，它使用<code>alarm()</code>函数来限制等待打开文件所花费的时间；这很有用，因为如果该文件作用于可能无法打开的串行设备，这通常会导致<code>os.open()</code>然后无限期挂起。解决的办法是在打开文件之前设置5秒警报。如果操作花费的时间太长，则会发送警报信号，并且处理程序将引发异常。<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> signal, os
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">handler</span><span class="hljs-params">(signum, frame)</span>:</span>
     print(<span class="hljs-string">'Signal handler called with signal'</span>, signum)
@@ -275,11 +290,11 @@ signal.alarm(<span class="hljs-number">5</span>)
 <span class="hljs-comment"># This open() may hang indefinitely</span>
 fd = os.open(<span class="hljs-string">'/dev/ttyS0'</span>, os.O_RDWR)
 
-signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comment"># Disable the alarm</span></code></pre></div></p>
+signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comment"># Disable the alarm</span></code></pre></p>
 <h2 id="4-说说在C语言中的实现"><a href="#4-说说在C语言中的实现" class="headerlink" title="4. 说说在C语言中的实现"></a>4. 说说在C语言中的实现</h2><p>在<strong>深入理解计算机系统</strong>书中，讲解Linux信号用了shell以及C来进行演示，这是必须的，理解这些底层机制用C实在是太契合了，但是回过头来看，Python实现这些功能时是完全照着C来的，无论是函数名参数名，只要底层原理相通，编程语言的函数实现也大体一致，如果想看更多关于C的演示，可以看<a href="https://jin-yang.github.io/post/kernel-signal-introduce.html" target="_blank" rel="noopener">Linux 信号机制</a>，很棒的教程！</p>
 <p>但是，Python3的文档中明确指出，handler并不是运行在底层的C handler中的，所以不要希望捕捉同步错误例如SIGFPE与SIGSEGV。<br>同时新增了几个功能，大概用于阻塞signal这种，不过我还不太会用：<br><code>signal.pthread_kill(thread_id, signum)</code><br><code>signal.pthread_sigmask(how, mask)</code></p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -307,7 +322,7 @@ signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comm
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2020/04/02/python-rsyslog/">
@@ -316,8 +331,8 @@ signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comm
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2020/02/28/invoke-fabric/">
@@ -326,38 +341,46 @@ signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comm
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -442,6 +465,10 @@ signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comm
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -459,7 +486,7 @@ signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comm
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -612,21 +639,12 @@ signal.alarm(<span class="hljs-number">0</span>)          <span class="hljs-comm
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   

@@ -1,7 +1,7 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
 
 
 
@@ -25,16 +25,20 @@
   <link rel="stylesheet" href="/lib/hint/hint.min.css">
 
   
-    <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/tomorrow-night-eighties.min.css">
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+    
   
 
   
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -42,6 +46,7 @@
 
 
   <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
 </head>
 
 
@@ -152,7 +157,12 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -160,25 +170,28 @@
   </div>
 </nav>
 
-    <div class="view intro-2" id="background" parallax=true
+    <div class="banner intro-2" id="background" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container text-center white-text fadeInUp">
+          <div class="container page-header text-center fade-in-up">
             <span class="h2" id="subtitle">
               
             </span>
 
             
-              
-  <div class="mt-3 post-meta">
-    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2019-06-27 08:53">
-      2019年6月27日 早上
-    </time>
-  </div>
-
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-06-27 08:53" pubdate>
+        2019年6月27日 早上
+      </time>
+    </span>
+  
+</div>
 
 <div class="mt-1">
   
@@ -223,9 +236,11 @@
     <div class="col-lg-8 nopadding-md">
       <div class="container nopadding-md" id="board-ctn">
         <div class="py-5" id="board">
-          <div class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto" id="post">
+            <!-- SEO header -->
+            <h1 style="display: none">梳理Python WSGI与WSGI服务器等概念</h1>
             
-            <article class="markdown-body">
+            <div class="markdown-body" id="post-body">
               <p>经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。</p>
 <h2 id="1-首先弄清下面几个概念"><a href="#1-首先弄清下面几个概念" class="headerlink" title="1. 首先弄清下面几个概念"></a>1. 首先弄清下面几个概念</h2><p><strong>WSGI</strong>：全称是Web Server Gateway Interface，WSGI不是服务器，python模块，框架，API或者任何软件，只是一种规范，描述web server如何与web application通信的规范。server和application的规范在PEP 3333中有具体描述。要实现WSGI协议，必须同时实现web server和web application，当前运行在WSGI协议之上的web框架有Bottle, Flask, Django。</p>
 <p><img src="/images/wsgi/wsgi.png" srcset="/img/loading.gif" alt=" " title="wsgi"></p>
@@ -261,8 +276,8 @@
 </blockquote>
 <p><img src="/images/wsgi/which_wsgi_server.png" srcset="/img/loading.gif" alt="which_server"> </p>
 <p>具体的解释我这里用这篇英文原文<a href="https://djangodeployment.com/2017/01/02/which-wsgi-server-should-i-use/" target="_blank" rel="noopener">Which WSGI server should I use?</a> 翻译一下来回答。</p>
-<p>如图所示（我们可以暂时忽略掉图中的Web Server，这是下一小节要说的），Web浏览器与Web服务器通信，Web服务器又与WSGI服务器通信。该WSGI服务器不会直接与你的Django项目通信，而是导入 Django项目。它是这么做的：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django_project.wsgi <span class="hljs-keyword">import</span> application
-application(args)</code></pre></div></p>
+<p>如图所示（我们可以暂时忽略掉图中的Web Server，这是下一小节要说的），Web浏览器与Web服务器通信，Web服务器又与WSGI服务器通信。该WSGI服务器不会直接与你的Django项目通信，而是导入 Django项目。它是这么做的：<br><pre><code class="hljs python"><span class="hljs-keyword">from</span> django_project.wsgi <span class="hljs-keyword">import</span> application
+application(args)</code></pre></p>
 <p>因此，从操作系统的角度来看，你的Django项目将成为WSGI服务器的一部分; 这是同一个过程。调用<strong><code>application()</code></strong>的方式由WSGI规范标准化。这个函数的接口是标准化的，这使得你可以在许多不同的WSGI服务器（如Gunicorn，uWSGI或mod_wsgi）之间进行选择，以及为什么每个服务器都可以与许多Python应用程序框架（如Django或Flask）进行交互。</p>
 <p>mod_wsgi仅适用于Apache，我更偏向于可与Apache或nginx一起使用的方法。这样的话，使更改Web服务器变得更容易。我也发现Gunicorn更容易设置和维护。</p>
 <p>我使用了uWSGI几年，并且被它的功能所震撼。其中许多都复制了Apache或nginx或堆栈其他部分中已存在的功能，因此很少需要它们。它的文档有点混乱。开发人员自己承认：“我们尽力提供良好的文档，但这是一项艰苦的工作。对不起。“我记得每周都会遇到问题并且每次花费数小时来解决问题。</p>
@@ -275,7 +290,7 @@ application(args)</code></pre></div></p>
 <p>当我们为Gunicorn运行我们的django应用程序而开心时，然而，最后，我们看到管理面板的样式已经消失了。原因是Gunicorn是一个应用程序服务器，只运行应用程序（在我们的例子中是django app）和django，正如我们所知，<strong>除了开发之外，它不提供静态文件</strong>。Nginx来救援！它将是Gunicorn的反向代理。到底是什么反向代理？好问题！我们都知道VPN是什么，对吧？我们使用它们访问某些因某种原因被阻止的网站。在这种情况下，我们通过VPN访问该网站：我们 - &gt; VPN - &gt;某些网站。这种代理称为正向代理。至于反向代理，可以将它们视为强制代理。例如，用户正在尝试访问我们在gunicorn中运行的django应用程序。它认为它正在直接访问该应用程序。然而，真正的过程是它首先访问Nginx服务器，该服务器决定下一步该做什么，如果用户正在访问静态文件，Nginx服务器将自行提供服务。否则，它会将其重定向到Gunicorn。简单来说，<strong>http请求将由Gunicorn处理，而静态处理则由Nginx处理。这就是我们需要Nginx的原因</strong>。<br>除此之外，<strong>Nginx还提高了性能，可靠性，安全性和规模</strong>。</p>
 <h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>这几天晚上睡觉前花了一点时间来对这些概念进行了一些整理，收获颇多。要想真正的成为一名Web开发，并不是简单的套用框架写写逻辑层，而是框架背后的原理与流程，这才是重中之重，了解了这些，所有的类似框架以后上手都能快半分。接下去，会对Gunicorn，Nginx的配置文件做个记录（这中间也踩了点坑），再往后就是Nginx与docker的理解与实践了，加油～</p>
 
-            </article>
+            </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
@@ -305,7 +320,7 @@ application(args)</code></pre></div></p>
               
               
                 <div class="post-prevnext row">
-                  <div class="post-prev col-6">
+                  <article class="post-prev col-6">
                     
                     
                       <a href="/2019/07/08/django-gunicorn-nginx-config/">
@@ -314,8 +329,8 @@ application(args)</code></pre></div></p>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
-                  </div>
-                  <div class="post-next col-6">
+                  </article>
+                  <article class="post-next col-6">
                     
                     
                       <a href="/2019/06/24/revpi-install-img/">
@@ -324,38 +339,46 @@ application(args)</code></pre></div></p>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
                     
-                  </div>
+                  </article>
                 </div>
               
             </div>
 
             
               <!-- Comments -->
-              <div class="comments" id="comments">
+              <article class="comments" id="comments">
                 
                 
   <script type="text/javascript">
     function loadUtterances() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
       var s = document.createElement('script');
       s.setAttribute('src', 'https://utteranc.es/client.js');
-      s.defer = false
       s.setAttribute('repo', 'fantasyhh/fantasyhh.github.io');
       s.setAttribute('issue-term', 'title');
       
       s.setAttribute('label', 'utterances');
       
-      s.setAttribute('theme', 'github-light');
+      s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
-      var e = document.getElementsByTagName('script')[0];
-      e.parentNode.insertBefore(s, e);
+      document.getElementById('comments').appendChild(s);
     }
-    createObserver(loadUtterances, 'comments')
+    waitElementVisible('comments', loadUtterances)
   </script>
 
 
-              </div>
+              </article>
             
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -440,6 +463,10 @@ application(args)</code></pre></div></p>
 
 
 
+  
+
+
+
   <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="/js/clipboard-use.js"></script>
 
@@ -457,7 +484,7 @@ application(args)</code></pre></div></p>
 
       tocbot.init({
         tocSelector: '#tocbot',
-        contentSelector: 'article.markdown-body',
+        contentSelector: '#post-body',
         headingSelector: 'h1,h2,h3,h4,h5,h6',
         linkClass: 'tocbot-link',
         activeLinkClass: 'tocbot-active-link',
@@ -610,21 +637,12 @@ application(args)</code></pre></div></p>
   
     <!-- Google Analytics -->
     <script defer>
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
   
 
   
