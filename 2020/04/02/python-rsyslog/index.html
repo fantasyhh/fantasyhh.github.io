@@ -198,7 +198,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.5k 字
+      2.6k 字
     </span>
   
 
@@ -364,7 +364,7 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
 <blockquote>
 <p>当然我们可以用一些方法曲线救国，我们用UDP写入到本地然后在用rsylog自带的TCP传输写入到远程，这个方法还可以，尽量保证数据准确性</p>
 </blockquote>
-<h2 id="5-在Docker中使用rsyslog"><a href="#5-在Docker中使用rsyslog" class="headerlink" title="5. 在Docker中使用rsyslog"></a>5. 在Docker中使用rsyslog</h2><p>当需要一个干干静静的日志服务器时，我们需要用一个docker来解决此事，仅14M的镜像大小，没有类似于<strong>mail</strong>，<strong>auth</strong>等其他杂的信息，<code>docker logs -f container_id</code>直接跟踪，多协议支持，安逸！<br>我参考的是dockerhub上的<code>rsyslog/syslog_appliance_alpine</code>，然后根据自己需求稍加修改自己做了个<code>shijiahuan
+<h2 id="5-在Docker中使用rsyslog"><a href="#5-在Docker中使用rsyslog" class="headerlink" title="5. 在Docker中使用rsyslog"></a>5. 在Docker中使用rsyslog</h2><p>当需要一个干干静静的日志服务器时，我们需要用一个docker来解决此事，仅14M的镜像大小，没有类似于<strong>mail</strong>，<strong>auth</strong>等其他杂的信息，<code>docker logs -f container_id</code>直接跟踪，多协议支持，安逸！<br>我参考的是dockerhub上的<code>rsyslog/syslog_appliance_alpine</code>，正常的话使用<code>docker run   --name testsyslog   -d -p 666:514/udp  rsyslog/syslog_appliance_alpine rsyslog</code>打开容器监听666端口上的system日志，然而我们自定义的话使用LOCAL7类型日志，简单改动下，自己做了个<code>shijiahuan
 /rsyslog</code>，详细说明都有，不展开。</p>
 <h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>在学习日志集中化过程中，也发现了<a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/index.html" target="_blank" rel="noopener">ELK</a>，相信以后如果接触大型项目也会要学习到的，而几个小机器，用rsyslog绰绰有余～</p>
 

@@ -246,7 +246,7 @@
 <p>下面是我摘抄的一些简单概念：</p>
 <p>定义（definition）：表示创建变量或分配存储单元<br>声明（declaration）：说明变量的性质，但并不分配存储单元<br><code>extern int i</code>; //是声明，不是定义，没有分配内存<br><code>int i</code>; //是定义<br>如果在声明的时候给变量赋值，那么就和去掉extern直接定义变量赋值是等价的</p>
 <p><code>extern int a = 10</code>;<br><code>int a = 10</code>;//上述两条语句等价<br>谨记：声明可以多次，定义只能一次</p>
-<h2 id="2-extern与static"><a href="#2-extern与static" class="headerlink" title="2. extern与static"></a>2. extern与static</h2><h3 id="2-1-extern"><a href="#2-1-extern" class="headerlink" title="2.1 extern"></a>2.1 extern</h3><p>当需要在外部文件导入函数或者变量时，我们可能很正常的找到了extern这个关键字，依然有篇经典的回答，<a href="https://stackoverflow.com/questions/1433204/how-do-i-use-extern-to-share-variables-between-source-files" target="_blank" rel="noopener">how do i use extern to share variables between source files</a></p>
+<h2 id="2-extern与static"><a href="#2-extern与static" class="headerlink" title="2. extern与static"></a>2. extern与static</h2><h3 id="2-1-extern"><a href="#2-1-extern" class="headerlink" title="2.1 extern"></a>2.1 extern</h3><p>当需要在外部文件导入函数或者变量时，我们可能很正常的找到了extern这个关键字，依然有篇经典的回答，<a href="https://www.cnblogs.com/lanhaicode/p/10633125.html" target="_blank" rel="noopener">extern的使用详解（多文件编程）——C语言</a></p>
 <p>对变量而言，如果你想在本源文件中使用另一个源文件的变量，就需要在使用前用extern声明该变量，或者在头文件中用extern声明该变量；</p>
 <blockquote>
 <p>不加extern也可以…源于某些不可描述的原因（可从上面那链接中找到原因）</p>
