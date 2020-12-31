@@ -16,7 +16,7 @@
   <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
   <meta name="keywords" content>
-  <title>在esp32上使用micropython的一些心得 - 烛影小札</title>
+  <title>Ubuntu20.04系统配置总结 - 烛影小札</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 
@@ -186,8 +186,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2020-09-16 09:49" pubdate>
-        2020年9月16日 上午
+      <time datetime="2020-12-31 22:00" pubdate>
+        2020年12月31日 晚上
       </time>
     </span>
   
@@ -198,7 +198,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      674 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      3
        分钟
     </span>
   
@@ -238,37 +238,78 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto" id="post">
             <!-- SEO header -->
-            <h1 style="display: none">在esp32上使用micropython的一些心得</h1>
+            <h1 style="display: none">Ubuntu20.04系统配置总结</h1>
             
             <div class="markdown-body" id="post-body">
-              <p>其实老早之前买了<strong>物联网Python开发实战</strong>这本书的时候就注意到了Pyboard（基于stm32），还买了个板子实践了下，但是感觉<code>micropython</code>这个东西有点冷门，像个半成品一样（狭隘了），就把板子丢一边，继续用Arduino个树莓派了。最近在寻找单片机的时候，发现了esp32以及<code>micropython</code>，发现好像有点厉害，某宝店铺什么的的热度都不错，就买回来些许测试一波，发现很好用，顺便记录一些关键点。</p>
-<h2 id="1-什么是Micropython"><a href="#1-什么是Micropython" class="headerlink" title="1. 什么是Micropython"></a>1. 什么是Micropython</h2><h3 id="1-1-语言优势"><a href="#1-1-语言优势" class="headerlink" title="1.1 语言优势"></a>1.1 语言优势</h3><p>MicroPython是以Python语言为基础能用于MCU的编程语言系统集合，它是运行在一系列微控制器硬件平台上的系统的名称，类似于Arduino。是近年来开源社区中很是热门的项目之一，它功能强大，使用简单，是创客、DIY爱好者、工程师相当好的工具，适用于小学到大学各个年龄段同学们完成对Python语言的入门，掌握基础电路知识和理解编程思想及原理，同时也适合熟练使用python或其他高级语言（JAVA,.NET,PHP等）但不懂或不熟悉硬件知识的程序猿完成嵌入式开发，同时也可以使用在专业开发中。相比另一个创客神器Arduino，MicroPython使用更加简单、方便，入门更快，性能也更好，更加适合初学者。</p>
-<p>相比于C语言上，切身的感受到，需要学习者花费更多的精力去理解引用，指针等等对于一个新手而言完全搞不清楚的概念。而且当我们使用C语言开发时，一个很小的功能就需要花费很多行代码去实现，吃尽了苦头且没有吃到过甜头</p>
-<h3 id="1-２-MicroPython-VS-传统硬件开发"><a href="#1-２-MicroPython-VS-传统硬件开发" class="headerlink" title="1.２ MicroPython VS 传统硬件开发"></a>1.２ MicroPython VS 传统硬件开发</h3><p>对于传统的硬件开发而言，大多使用C/C++这类编译型语言。<br>这种开发方式往往需要以下几个步骤：1.编写代码 2.编译代码 3.烧录到芯片 4.运行程序</p>
-<p>在这种模式下，当你发现自己的代码里有一行出了bug，即使是很微小的改动就能够修复，但你仍旧需要重新执行编译和烧录，才能够正确的运行。</p>
-<p>而对于MicroPython而言，只要我们给芯片刷入了MicroPython固件，（结合我们上节所解释的解释器的概念，这就相当于我们为自己雇佣了一个私人翻译官，随时在芯片里等待着为我们翻译解释代码给芯片去执行。）之后的一切就简单得多。我们可以以两种方式来进行开发：</p>
-<p><strong>进入交互式解释器 测试和运行代码</strong><br>我们可以进入交互式的解释器环境随时输入代码执行（进入这位翻译官的办公室，当面发号施 令），发现代码有误，可以立即更改。</p>
-<p><strong>将代码保存到文件系统，让解释器开机之后按特定规则去执行</strong>。<br>我们还可以将代码整理好，保存到MicroPython的文件系统中（没错这就相当于这位翻译官的文件夹，你可以让这位翻译官按照你规定的顺序去执行这些文件中的代码）。MicroPython默认开机后从boot.py开始执行，然后开始执行main.py。</p>
-<h2 id="2-板子选择以及固件烧录"><a href="#2-板子选择以及固件烧录" class="headerlink" title="2.板子选择以及固件烧录"></a>2.板子选择以及固件烧录</h2><h3 id="2-1-板子选择"><a href="#2-1-板子选择" class="headerlink" title="2.1 板子选择"></a>2.1 板子选择</h3><p>我选择了我国的乐鑫公司设计研发的NodeMCU-32S，高性能，低功耗，物美价廉，自带了WIFI和蓝牙模块</p>
-<h3 id="2-2-固件烧录"><a href="#2-2-固件烧录" class="headerlink" title="2.2 固件烧录"></a>2.2 固件烧录</h3><p>安装esptool<br><code>pip install esptool</code><br>擦除整个闪存<br><code>esptool.py --chip esp32 --port /dev/ttyUSB0 erase_flash</code><br>烧入固件，固件从地址0x1000开始：<br><code>esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 460800 write_flash -z 0x1000 esp32-20190125-v1.10.bin</code></p>
-<h2 id="3-Micropython工作流程"><a href="#3-Micropython工作流程" class="headerlink" title="3. Micropython工作流程"></a>3. Micropython工作流程</h2><p>来到了开发中的工作流程，这是比较适合自己的方法，值得着重记录。<br>Pycharm中的micropython插件本来是所有任务一把梭，但是有时候REPL会失效，上传文件倒是很好，所以REPL有其他选择</p>
-<p>因为我是在Ubuntu中开发，所以存在串口权限问题，在连上电脑时，必须<code>sudo usermod -a -G dialout $USER</code> 一劳永逸！</p>
-<h3 id="3-1-REPL"><a href="#3-1-REPL" class="headerlink" title="3.1 REPL"></a>3.1 REPL</h3><p>交互式的Python会话，爽爆了，测试语法，，硬件啥的简单的一笔，再也不用烧录测试了。<br><code>rshell</code>中的repl虽然好，但是当单片机中本来跑着一个循环任务，然后你repl进去会强制中中断或者没反应，也不知道啥情况，怪怪的，所以我直接使用<br>串口终端picocom：<code>picocom -b 115200 /dev/ttyUSB0</code>，如要退出，先按Ctrl + A进入转义模式，再按Ctrl + Q即可正常退出。<br>在特定情况下也可以用WebREPL，允许你通过WiFi使用MicroPython的REPL，通过浏览器连接，使用了WebSockt通信协议。但我没尝试过，=。=，具体看文章末的链接</p>
-<h3 id="3-2-代码部署"><a href="#3-2-代码部署" class="headerlink" title="3.2 代码部署"></a>3.2 代码部署</h3><p>Pycharm中的micropython插件自带的Flash上传文件很好用，但是有时候还想要看看单片机里面的文件系统，这里<code>rshell</code>就派上用场了，我们用<code>rshell -b 115200 -p /dev/ttyUSB0</code>进入串口文件系统，<code>ls  /pyboard</code>或者<code>ls /flash</code>查看单片机中的文件，当然也可以进行复制编辑等</p>
-<h2 id="4-资料补充"><a href="#4-资料补充" class="headerlink" title="4. 资料补充"></a>4. 资料补充</h2><p>一些<code>micropython</code>的用法就说了，很多地方可以看。推荐一些资料，看完这些，基本需求一般都能掌握了</p>
-<ul>
-<li><p><a href="https://realpython.com/micropython/#micropython-workflow" target="_blank" rel="noopener">MicroPython: An Intro to Programming Hardware in Python</a></p>
-</li>
-<li><p><a href="http://docs.micropython.org/en/latest/pyboard/quickref.html" target="_blank" rel="noopener">Micropython doc</a></p>
-</li>
-<li><p><a href="https://randomnerdtutorials.com/esp32-pinout-reference-gpios/" target="_blank" rel="noopener">ESP32 Pinout Reference: Which GPIO pins should you use?</a></p>
-</li>
-<li><p><a href="https://github.com/dhylands/rshell" target="_blank" rel="noopener">rshell doc</a></p>
-</li>
-<li><p><a href="http://www.1zlab.com/wiki/micropython-esp32/" target="_blank" rel="noopener">MicroPython-ESP32基础教程</a></p>
-</li>
-<li><p><a href="https://blog.jetbrains.com/pycharm/2018/01/micropython-plugin-for-pycharm/" target="_blank" rel="noopener"> MicroPython Plugin for PyCharm</a> </p>
-</li>
+              <p>用Ubuntu系统也已经好多年了，从14.04到16.04再到18.04，Ubuntu也从侧面见证了我从实习到第一份工作到十二月中旬离职的这五年经历。搬到新公司，直接上了Ubuntu20.04作为新的开始。N卡和Ubuntu驱动不兼容，直接把我搞毛了，搞了半天稀里糊涂把驱动问题解决之后，又装了搜来搜去装了大半天的软件，费时费劲，赶在新的一年开始之前进行一些配置记录，以后有新的软件安装也会更新下来。</p>
+<p>其实主要参考的还是<a href="https://zhuanlan.zhihu.com/p/139305626" target="_blank" rel="noopener">这篇文章</a>，其他不同的，着重记录下来。</p>
+<h2 id="1-electron-ssr"><a href="#1-electron-ssr" class="headerlink" title="1. electron-ssr"></a>1. electron-ssr</h2><p><a href="https://github.com/geeeeeeeeek/electronic-wechat" target="_blank" rel="noopener">electron-ssr</a>作为我常用的一个梯子，势必得在安装chrome之前搞完，但是这货基于python2，而Ubuntu20.04只有自带的Python3，所以需要<code>apt install python</code>来安装Python2来保证顺利运行。</p>
+<h2 id="2-zsh，alise以及terminnator配置"><a href="#2-zsh，alise以及terminnator配置" class="headerlink" title="2. zsh，alise以及terminnator配置"></a>2. zsh，alise以及terminnator配置</h2><p>安装什么的就不说了，就是记录下自己的配置。<br><code>~/.zshrc</code>部分配置<br><pre><code class="hljs undefined">plugins=(git
+	 z
+	 safe-paste
+	 zsh-autosuggestions
+	 colored-man-pages
+	 sudo
+	 history-substring-search
+	)
+
+
+<span class="hljs-keyword">alias</span> <span class="hljs-title">ipy</span>=<span class="hljs-string">"~/quick_ipython.sh"</span>
+<span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">git</span>=<span class="hljs-string">"git -c http.proxy='socks5://127.0.0.1:1080'"</span>
+<span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">docker</span>=<span class="hljs-string">"echo https://3xpu0n3u.mirror.aliyuncs.com ; echo https://blog.csdn.net/liu865033503/article/details/95936640"</span>
+
+<span class="hljs-keyword">alias</span> <span class="hljs-title">c</span>=<span class="hljs-comment">'clear'</span>
+<span class="hljs-keyword">alias</span> <span class="hljs-title">h</span>=<span class="hljs-comment">'history'</span>
+<span class="hljs-keyword">alias</span> <span class="hljs-title">ping</span>=<span class="hljs-comment">'ping -c 5'</span>
+<span class="hljs-keyword">alias</span> <span class="hljs-title">ports</span>=<span class="hljs-comment">'netstat -tulanp'</span>
+<span class="hljs-keyword">alias</span> <span class="hljs-title">untar</span>=<span class="hljs-comment">'tar -zxvf'</span>
+<span class="hljs-keyword">alias</span> <span class="hljs-title">venv</span>=<span class="hljs-comment">'source venv/bin/activate'</span>
+
+
+export VIRTUAL_ENV_DISABLE_PROMPT=</code></pre></p>
+<p><code>~/.config/terminator/config</code>配置<br><pre><code class="hljs undefined">[global_config]
+[keybindings]
+[profiles]
+  [[default]]
+    background_darkness = 0.92
+    background_type = transparent
+    cursor_color = <span class="hljs-string">"#3036ec"</span>
+    font = Ubuntu Mono 15
+    foreground_color = <span class="hljs-string">"#00ff00"</span>
+    show_titlebar = <span class="hljs-literal">False</span>
+    login_shell = <span class="hljs-literal">True</span>
+    custom_command = tmux
+    use_system_font = <span class="hljs-literal">False</span>
+[layouts]
+  [[default]]
+    [[[child1]]]
+     <span class="hljs-built_in"> type </span>= Terminal
+      parent = window0
+    [[[window0]]]
+     <span class="hljs-built_in"> type </span>= Window
+      parent = <span class="hljs-string">""</span>
+      size = 1060, 700
+[plugins]</code></pre></p>
+<h2 id="3-桌面美化"><a href="#3-桌面美化" class="headerlink" title="3. 桌面美化"></a>3. 桌面美化</h2><ol>
+<li>安装 tweek<br><code>sudo apt install gnome-tweak-tool</code></li>
+<li>让gnome 支持插件扩展<br><code>sudo apt install gnome-shell-extensions</code></li>
+<li>chrome 浏览器扩展支持，可以使用浏览器安装插件<br><code>sudo apt install chrome-gnome-shell</code></li>
+</ol>
+<blockquote>
+<p>这里注意下，桌面主题跟插件不一样的东西，主题包括一些应用图标桌面美化，而插件是桌面插件。比如有个<code>Dash to Dock</code>用来自定义 dock，我以为主题，其实是插件。插件直接可以用chrome插件安装，很方便</p>
+</blockquote>
+<p>我用的主题是<a href="https://github.com/vinceliuice/WhiteSur-gtk-theme" target="_blank" rel="noopener">WhiteSur-gtk-theme</a></p>
+<h2 id="4-一些常用软件的安装"><a href="#4-一些常用软件的安装" class="headerlink" title="4. 一些常用软件的安装"></a>4. 一些常用软件的安装</h2><ul>
+<li>搜狗输入法<a href="https://pinyin.sogou.com/linux/help.php" target="_blank" rel="noopener">安装指南</a></li>
+<li>pycharm CE：直接在软件商店安装</li>
+<li>wps：官网下载deb文件，然后安装</li>
+<li>chrome：不展开</li>
+<li>Markdown软件 haroopad：官网下载deb文件，然后安装</li>
+<li>vscode：官网下载deb文件，然后安装</li>
+<li>剪贴板Gpaste <code>sudo apt install gnome-shell-extensions-gpaste gpaste</code>。安装完成后，按下 Alt + F2 并输入 r 重新启动 Gnome Shell，然后按回车键</li>
+<li>MQTTX  <code>snap install mqttx</code></li>
+<li>SQlite Browser <code>sudo apt install sqlitebrowser</code></li>
+<li>docker <code>sudo apt install docker.io</code> <code>sudo systemctl enable --now docker</code> <code>sudo usermod -aG docker $USER</code>。给完用户权限之后，要logout一下才生效</li>
 </ul>
 
             </div>
@@ -279,7 +320,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/micropython/">micropython</a>
+                      <a class="hover-with-bg" href="/categories/Linux/">Linux</a>
                     
                   </div>
                 
@@ -287,9 +328,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/esp32/">esp32</a>
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
                     
-                      <a class="hover-with-bg" href="/tags/micropython/">micropython</a>
+                      <a class="hover-with-bg" href="/tags/Bash/">Bash</a>
                     
                   </div>
                 
@@ -302,18 +343,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2020/12/08/unixIO/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">谈谈系统级I/O</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/07/07/goInitialize/">
-                        <span class="hidden-mobile">Golang数据初始化，零值以及一些陷阱</span>
+                      <a href="/2020/12/08/unixIO/">
+                        <span class="hidden-mobile">谈谈系统级I/O</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -487,7 +522,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "在esp32上使用micropython的一些心得&nbsp;",
+        "Ubuntu20.04系统配置总结&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

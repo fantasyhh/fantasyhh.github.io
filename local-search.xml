@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Ubuntu20.04系统配置总结</title>
+    <link href="/2020/12/31/Ubuntu2004-Config/"/>
+    <url>/2020/12/31/Ubuntu2004-Config/</url>
+    
+    <content type="html"><![CDATA[<p>用Ubuntu系统也已经好多年了，从14.04到16.04再到18.04，Ubuntu也从侧面见证了我从实习到第一份工作到十二月中旬离职的这五年经历。搬到新公司，直接上了Ubuntu20.04作为新的开始。N卡和Ubuntu驱动不兼容，直接把我搞毛了，搞了半天稀里糊涂把驱动问题解决之后，又装了搜来搜去装了大半天的软件，费时费劲，赶在新的一年开始之前进行一些配置记录，以后有新的软件安装也会更新下来。</p><p>其实主要参考的还是<a href="https://zhuanlan.zhihu.com/p/139305626" target="_blank" rel="noopener">这篇文章</a>，其他不同的，着重记录下来。</p><h2 id="1-electron-ssr"><a href="#1-electron-ssr" class="headerlink" title="1. electron-ssr"></a>1. electron-ssr</h2><p><a href="https://github.com/geeeeeeeeek/electronic-wechat" target="_blank" rel="noopener">electron-ssr</a>作为我常用的一个梯子，势必得在安装chrome之前搞完，但是这货基于python2，而Ubuntu20.04只有自带的Python3，所以需要<code>apt install python</code>来安装Python2来保证顺利运行。</p><h2 id="2-zsh，alise以及terminnator配置"><a href="#2-zsh，alise以及terminnator配置" class="headerlink" title="2. zsh，alise以及terminnator配置"></a>2. zsh，alise以及terminnator配置</h2><p>安装什么的就不说了，就是记录下自己的配置。<br><code>~/.zshrc</code>部分配置<br><pre><code class="hljs undefined">plugins=(git z safe-paste zsh-autosuggestions colored-man-pages sudo history-substring-search)<span class="hljs-keyword">alias</span> <span class="hljs-title">ipy</span>=<span class="hljs-string">"~/quick_ipython.sh"</span><span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">git</span>=<span class="hljs-string">"git -c http.proxy='socks5://127.0.0.1:1080'"</span><span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">docker</span>=<span class="hljs-string">"echo https://3xpu0n3u.mirror.aliyuncs.com ; echo https://blog.csdn.net/liu865033503/article/details/95936640"</span><span class="hljs-keyword">alias</span> <span class="hljs-title">c</span>=<span class="hljs-comment">'clear'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">h</span>=<span class="hljs-comment">'history'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">ping</span>=<span class="hljs-comment">'ping -c 5'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">ports</span>=<span class="hljs-comment">'netstat -tulanp'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">untar</span>=<span class="hljs-comment">'tar -zxvf'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">venv</span>=<span class="hljs-comment">'source venv/bin/activate'</span>export VIRTUAL_ENV_DISABLE_PROMPT=</code></pre></p><p><code>~/.config/terminator/config</code>配置<br><pre><code class="hljs undefined">[global_config][keybindings][profiles]  [[default]]    background_darkness = 0.92    background_type = transparent    cursor_color = <span class="hljs-string">"#3036ec"</span>    font = Ubuntu Mono 15    foreground_color = <span class="hljs-string">"#00ff00"</span>    show_titlebar = <span class="hljs-literal">False</span>    login_shell = <span class="hljs-literal">True</span>    custom_command = tmux    use_system_font = <span class="hljs-literal">False</span>[layouts]  [[default]]    [[[child1]]]     <span class="hljs-built_in"> type </span>= Terminal      parent = window0    [[[window0]]]     <span class="hljs-built_in"> type </span>= Window      parent = <span class="hljs-string">""</span>      size = 1060, 700[plugins]</code></pre></p><h2 id="3-桌面美化"><a href="#3-桌面美化" class="headerlink" title="3. 桌面美化"></a>3. 桌面美化</h2><ol><li>安装 tweek<br><code>sudo apt install gnome-tweak-tool</code></li><li>让gnome 支持插件扩展<br><code>sudo apt install gnome-shell-extensions</code></li><li>chrome 浏览器扩展支持，可以使用浏览器安装插件<br><code>sudo apt install chrome-gnome-shell</code></li></ol><blockquote><p>这里注意下，桌面主题跟插件不一样的东西，主题包括一些应用图标桌面美化，而插件是桌面插件。比如有个<code>Dash to Dock</code>用来自定义 dock，我以为主题，其实是插件。插件直接可以用chrome插件安装，很方便</p></blockquote><p>我用的主题是<a href="https://github.com/vinceliuice/WhiteSur-gtk-theme" target="_blank" rel="noopener">WhiteSur-gtk-theme</a></p><h2 id="4-一些常用软件的安装"><a href="#4-一些常用软件的安装" class="headerlink" title="4. 一些常用软件的安装"></a>4. 一些常用软件的安装</h2><ul><li>搜狗输入法<a href="https://pinyin.sogou.com/linux/help.php" target="_blank" rel="noopener">安装指南</a></li><li>pycharm CE：直接在软件商店安装</li><li>wps：官网下载deb文件，然后安装</li><li>chrome：不展开</li><li>Markdown软件 haroopad：官网下载deb文件，然后安装</li><li>vscode：官网下载deb文件，然后安装</li><li>剪贴板Gpaste <code>sudo apt install gnome-shell-extensions-gpaste gpaste</code>。安装完成后，按下 Alt + F2 并输入 r 重新启动 Gnome Shell，然后按回车键</li><li>MQTTX  <code>snap install mqttx</code></li><li>SQlite Browser <code>sudo apt install sqlitebrowser</code></li><li>docker <code>sudo apt install docker.io</code> <code>sudo systemctl enable --now docker</code> <code>sudo usermod -aG docker $USER</code>。给完用户权限之后，要logout一下才生效</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+      <tag>Bash</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>谈谈系统级I/O</title>
     <link href="/2020/12/08/unixIO/"/>
     <url>/2020/12/08/unixIO/</url>
@@ -25,33 +52,6 @@
       <tag>C</tag>
       
       <tag>I/O</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Ubuntu20.04系统配置总结</title>
-    <link href="/2020/12/08/Ubuntu2004-Config/"/>
-    <url>/2020/12/08/Ubuntu2004-Config/</url>
-    
-    <content type="html"><![CDATA[<p>用Ubuntu系统也已经好多年了，从14.04到16.04再到18.04，Ubuntu也从侧面见证了我从实习到第一份工作到十二月中旬离职的这五年经历。搬到新公司，直接上了Ubuntu20.04作为新的开始。N卡和Ubuntu驱动不兼容，直接把我搞毛了，搞了半天稀里糊涂把驱动问题解决之后，又装了搜来搜去装了大半天的软件，费时费劲，赶在新的一年开始之前进行一些配置记录，以后有新的软件安装也会更新下来。</p><p>其实主要参考的还是<a href="https://zhuanlan.zhihu.com/p/139305626" target="_blank" rel="noopener">这篇文章</a>，其他不同的，着重记录下来。</p><h2 id="1-electron-ssr"><a href="#1-electron-ssr" class="headerlink" title="1. electron-ssr"></a>1. electron-ssr</h2><p><a href="https://github.com/geeeeeeeeek/electronic-wechat" target="_blank" rel="noopener">electron-ssr</a>作为我常用的一个梯子，势必得在安装chrome之前搞完，但是这货基于python2，而Ubuntu20.04只有自带的Python3，所以需要<code>apt install python</code>来安装Python2来保证顺利运行。</p><h2 id="2-zsh，alise以及terminnator配置"><a href="#2-zsh，alise以及terminnator配置" class="headerlink" title="2. zsh，alise以及terminnator配置"></a>2. zsh，alise以及terminnator配置</h2><p>安装什么的就不说了，就是记录下自己的配置。<br><code>~/.zshrc</code>部分配置<br><pre><code class="hljs undefined">plugins=(git z safe-paste zsh-autosuggestions colored-man-pages sudo history-substring-search)<span class="hljs-keyword">alias</span> <span class="hljs-title">ipy</span>=<span class="hljs-string">"~/quick_ipython.sh"</span><span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">git</span>=<span class="hljs-string">"git -c http.proxy='socks5://127.0.0.1:1080'"</span><span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">docker</span>=<span class="hljs-string">"echo https://3xpu0n3u.mirror.aliyuncs.com ; echo https://blog.csdn.net/liu865033503/article/details/95936640"</span><span class="hljs-keyword">alias</span> <span class="hljs-title">c</span>=<span class="hljs-comment">'clear'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">h</span>=<span class="hljs-comment">'history'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">ping</span>=<span class="hljs-comment">'ping -c 5'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">ports</span>=<span class="hljs-comment">'netstat -tulanp'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">untar</span>=<span class="hljs-comment">'tar -zxvf'</span><span class="hljs-keyword">alias</span> <span class="hljs-title">venv</span>=<span class="hljs-comment">'source venv/bin/activate'</span>export VIRTUAL_ENV_DISABLE_PROMPT=</code></pre></p><p><code>~/.config/terminator/config</code>配置<br><pre><code class="hljs undefined">[global_config][keybindings][profiles]  [[default]]    background_darkness = 0.92    background_type = transparent    cursor_color = <span class="hljs-string">"#3036ec"</span>    font = Ubuntu Mono 15    foreground_color = <span class="hljs-string">"#00ff00"</span>    show_titlebar = <span class="hljs-literal">False</span>    login_shell = <span class="hljs-literal">True</span>    custom_command = tmux    use_system_font = <span class="hljs-literal">False</span>[layouts]  [[default]]    [[[child1]]]     <span class="hljs-built_in"> type </span>= Terminal      parent = window0    [[[window0]]]     <span class="hljs-built_in"> type </span>= Window      parent = <span class="hljs-string">""</span>      size = 1060, 700[plugins]</code></pre></p><h2 id="3-桌面美化"><a href="#3-桌面美化" class="headerlink" title="3. 桌面美化"></a>3. 桌面美化</h2><ol><li>安装 tweek<br><code>sudo apt install gnome-tweak-tool</code></li><li>让gnome 支持插件扩展<br><code>sudo apt install gnome-shell-extensions</code></li><li>chrome 浏览器扩展支持，可以使用浏览器安装插件<br><code>sudo apt install chrome-gnome-shell</code></li></ol><blockquote><p>这里注意下，桌面主题跟插件不一样的东西，主题包括一些应用图标桌面美化，而插件是桌面插件。比如有个<code>Dash to Dock</code>用来自定义 dock，我以为主题，其实是插件。插件直接可以用chrome插件安装，很方便</p></blockquote><p>我用的主题是<a href="https://github.com/vinceliuice/WhiteSur-gtk-theme" target="_blank" rel="noopener">WhiteSur-gtk-theme</a></p><h2 id="4-一些常用软件的安装"><a href="#4-一些常用软件的安装" class="headerlink" title="4. 一些常用软件的安装"></a>4. 一些常用软件的安装</h2><ul><li>搜狗输入法<a href="https://pinyin.sogou.com/linux/help.php" target="_blank" rel="noopener">安装指南</a></li><li>pycharm CE：直接在软件商店安装</li><li>wps：官网下载deb文件，然后安装</li><li>chrome：不展开</li><li>Markdown软件 haroopad：官网下载deb文件，然后安装</li><li>vscode：官网下载deb文件，然后安装</li><li>剪贴板Gpaste <code>sudo apt install gnome-shell-extensions-gpaste gpaste</code>。安装完成后，按下 Alt + F2 并输入 r 重新启动 Gnome Shell，然后按回车键</li><li>MQTTX  <code>snap install mqttx</code></li><li>SQlite Browser <code>sudo apt install sqlitebrowser</code></li><li>docker <code>sudo apt install docker.io</code> <code>sudo systemctl enable --now docker</code> <code>sudo usermod -aG docker $USER</code>。给完用户权限之后，要logout一下才生效</li></ul>]]></content>
-    
-    
-    <categories>
-      
-      <category>Linux</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>Linux</tag>
-      
-      <tag>Bash</tag>
       
     </tags>
     
