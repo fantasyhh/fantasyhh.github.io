@@ -761,9 +761,9 @@
       
       <tag>Django</tag>
       
-      <tag>Wsgi</tag>
-      
       <tag>Gunicorn</tag>
+      
+      <tag>Wsgi</tag>
       
     </tags>
     
