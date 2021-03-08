@@ -198,7 +198,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      674 字
+      1.3k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3
+      6
        分钟
     </span>
   
@@ -251,22 +251,28 @@
 	 colored-man-pages
 	 sudo
 	 history-substring-search
+	 docker
+	 docker-compose
 	)
 
 
-<span class="hljs-keyword">alias</span> <span class="hljs-title">ipy</span>=<span class="hljs-string">"~/quick_ipython.sh"</span>
-<span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">git</span>=<span class="hljs-string">"git -c http.proxy='socks5://127.0.0.1:1080'"</span>
-<span class="hljs-keyword">alias</span> <span class="hljs-title">proxy</span>-<span class="hljs-title">docker</span>=<span class="hljs-string">"echo https://3xpu0n3u.mirror.aliyuncs.com ; echo https://blog.csdn.net/liu865033503/article/details/95936640"</span>
+alias <span class="hljs-attribute">ipy</span>=<span class="hljs-string">"~/quick_ipython.sh"</span>
+alias <span class="hljs-attribute">proxy-git</span>=<span class="hljs-string">"git -c http.proxy='socks5://127.0.0.1:1080'"</span>
+alias <span class="hljs-attribute">proxy-docker</span>=<span class="hljs-string">"echo https://3xpu0n3u.mirror.aliyuncs.com ; echo https://blog.csdn.net/liu865033503/article/details/95936640"</span>
 
-<span class="hljs-keyword">alias</span> <span class="hljs-title">c</span>=<span class="hljs-comment">'clear'</span>
-<span class="hljs-keyword">alias</span> <span class="hljs-title">h</span>=<span class="hljs-comment">'history'</span>
-<span class="hljs-keyword">alias</span> <span class="hljs-title">ping</span>=<span class="hljs-comment">'ping -c 5'</span>
-<span class="hljs-keyword">alias</span> <span class="hljs-title">ports</span>=<span class="hljs-comment">'netstat -tulanp'</span>
-<span class="hljs-keyword">alias</span> <span class="hljs-title">untar</span>=<span class="hljs-comment">'tar -zxvf'</span>
-<span class="hljs-keyword">alias</span> <span class="hljs-title">venv</span>=<span class="hljs-comment">'source venv/bin/activate'</span>
+alias <span class="hljs-attribute">c</span>=<span class="hljs-string">'clear'</span>
+alias <span class="hljs-attribute">h</span>=<span class="hljs-string">'history'</span>
+alias <span class="hljs-attribute">ping</span>=<span class="hljs-string">'ping -c 5'</span>
+alias <span class="hljs-attribute">ports</span>=<span class="hljs-string">'netstat -tulanp'</span>
+alias <span class="hljs-attribute">untar</span>=<span class="hljs-string">'tar -zxvf'</span>
+alias <span class="hljs-attribute">venv</span>=<span class="hljs-string">'source venv/bin/activate'</span>
 
 
-export VIRTUAL_ENV_DISABLE_PROMPT=</code></pre></p>
+<span class="hljs-builtin-name">export</span> VIRTUAL_ENV_DISABLE_PROMPT=
+setopt no_nomatch
+
+<span class="hljs-builtin-name">export</span> <span class="hljs-attribute">NVM_DIR</span>=~/.nvm
+[ -s <span class="hljs-string">"<span class="hljs-variable">$NVM_DIR</span>/nvm.sh"</span> ] &amp;&amp; . <span class="hljs-string">"<span class="hljs-variable">$NVM_DIR</span>/nvm.sh"</span></code></pre></p>
 <p><code>~/.config/terminator/config</code>配置<br><pre><code class="hljs undefined">[global_config]
 [keybindings]
 [profiles]
@@ -304,13 +310,49 @@ export VIRTUAL_ENV_DISABLE_PROMPT=</code></pre></p>
 <li>pycharm CE：直接在软件商店安装</li>
 <li>wps：官网下载deb文件，然后安装</li>
 <li>chrome：不展开</li>
-<li>Markdown软件 haroopad：官网下载deb文件，然后安装</li>
+<li>Markdown软件 <del>haroopad：官网下载deb文件，然后安装</del>，haroopad各种造成死机，已换成<a href="https://typora.io/#linux" target="_blank" rel="noopener">typora</a></li>
 <li>vscode：官网下载deb文件，然后安装</li>
 <li>剪贴板Gpaste <code>sudo apt install gnome-shell-extensions-gpaste gpaste</code>。安装完成后，按下 Alt + F2 并输入 r 重新启动 Gnome Shell，然后按回车键</li>
 <li>MQTTX  <code>snap install mqttx</code></li>
-<li>SQlite Browser <code>sudo apt install sqlitebrowser</code></li>
+<li><del>SQlite Browser <code>sudo apt install sqlitebrowser</code></del> <a href="https://github.com/dbeaver/dbeaver/releases" target="_blank" rel="noopener">dbeaver开源的数据库客户端工具</a> </li>
+<li><a href="https://ugetdm.com/downloads/" target="_blank" rel="noopener">uGet</a>用于下载软件，uGet安装完成后，根据个人需要，可以安装和配置aria2。Aria2是一个命令行下载软件，配合uGet使用，效果更好</li>
+<li>微信  docker安装，后面会有讲到</li>
+<li>QQ音乐  官网直接下载deb文件然后安装</li>
 <li>docker <code>sudo apt install docker.io</code> <code>sudo systemctl enable --now docker</code> <code>sudo usermod -aG docker $USER</code>。给完用户权限之后，要logout一下才生效</li>
 </ul>
+<h2 id="5-一些常用的docker容器"><a href="#5-一些常用的docker容器" class="headerlink" title="5. 一些常用的docker容器"></a>5. 一些常用的docker容器</h2><h3 id="5-1-postgreSQL"><a href="#5-1-postgreSQL" class="headerlink" title="5.1 postgreSQL"></a>5.1 postgreSQL</h3><p><code>docker run --name mypgsql -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user  -p 5432:5432 -d postgres:13</code></p>
+<h3 id="5-2-pgadmin4-web-docker命令"><a href="#5-2-pgadmin4-web-docker命令" class="headerlink" title="5.2 pgadmin4 web docker命令"></a>5.2 pgadmin4 web docker命令</h3><p><code>docker run -d -p 5433:80 --name pgadmin4 -e PGADMIN_DEFAULT_EMAIL=shijiahuan2610@gmail.com -e PGADMIN_DEFAULT_PASSWORD=123456 dpage/pgadmin4</code></p>
+<blockquote>
+<p>注意本地访问80端口后其实访问的是pgadmin4容器web地址的5433端口，如果连接服务器的时候再选择localhost地址，其实还是pgadmin4容器ip地址，需要将localhost改为postgreSQL容器地址的ip</p>
+</blockquote>
+<pre><code class="hljs undefined"><span class="hljs-symbol">\h</span>：查看SQL命令的解释，比如<span class="hljs-symbol">\h</span> select。
+<span class="hljs-symbol">\?</span>：查看psql命令列表。
+<span class="hljs-symbol">\l</span>：列出所有数据库。
+<span class="hljs-symbol">\c</span> [database_name]：连接其他数据库。
+<span class="hljs-symbol">\d</span>：列出当前数据库的所有表格。
+<span class="hljs-symbol">\d</span> [table_name]：列出某一张表格的结构。
+<span class="hljs-symbol">\d</span>u：列出所有用户。
+<span class="hljs-symbol">\e</span>：打开文本编辑器。
+<span class="hljs-symbol">\c</span>onninfo：列出当前数据库和连接的信息。</code></pre>
+<h3 id="5-3-redis"><a href="#5-3-redis" class="headerlink" title="5.3 redis"></a>5.3 redis</h3><p><code>docker run -d -p 6379:6379 --name myredis redis:rc-alpine --appendonly yes</code><br>服务器安装好了，我们继续在本地安装redis管理器<br><code>snap install redis-desktop-manage</code></p>
+<p><a href="https://segmentfault.com/a/1190000022713251" target="_blank" rel="noopener">redis-cli 常用命令</a></p>
+<h3 id="5-4-mosquitto-支持websocket"><a href="#5-4-mosquitto-支持websocket" class="headerlink" title="5.4 mosquitto 支持websocket"></a>5.4 mosquitto 支持websocket</h3><p><code>docker run -it -d -p 1883:1883 -p 9001:9001 -v /home/sjh/mosquitto.conf:/mosquitto/config/mosquitto.conf -v /mosquitto/data -v /mosquitto/log eclipse-mosquitto</code></p>
+<h3 id="5-5-wechat"><a href="#5-5-wechat" class="headerlink" title="5.5 wechat"></a>5.5 wechat</h3><p>关于工作上常用的微信，以前我都是网页版微信，但是发现实在是太垃圾了，后来发现了<a href="https://github.com/bestwu/docker-wechat" target="_blank" rel="noopener">基于深度操作系统的微信</a>，也存在docker镜像一键部署，但是跑之前需要进行一些配置，可在官网查看</p>
+<pre><code class="hljs undefined">docker <span class="hljs-builtin-name">run</span> -d --name wechat --device /dev/snd <span class="hljs-attribute">--ipc</span>=host \                             
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v <span class="hljs-variable">$HOME</span>/WeChatFiles:/WeChatFiles \
+-e <span class="hljs-attribute">DISPLAY</span>=unix$DISPLAY \
+-e <span class="hljs-attribute">XMODIFIERS</span>=@im=fxitx \
+-e <span class="hljs-attribute">QT_IM_MODULE</span>=fcitx \
+-e <span class="hljs-attribute">GTK_IM_MODULE</span>=fcitx \
+-e <span class="hljs-attribute">AUDIO_GID</span>=`getent<span class="hljs-built_in"> group </span>audio | cut -d: -f3` \
+-e <span class="hljs-attribute">GID</span>=`id -g` \
+-e <span class="hljs-attribute">UID</span>=`id -u` \
+bestwu/wechat</code></pre>
+<h3 id="5-6-EMQX"><a href="#5-6-EMQX" class="headerlink" title="5.6 EMQX"></a>5.6 EMQX</h3><p>正式开发的时候，在mqtt broker方面，需要用到emqx代替mosquitto<br><code>docker run -d --name emqx -p 1883:1883 -p 8083:8083  -p 18083:18083 emqx/emqx</code></p>
+<h3 id="5-7-portainer"><a href="#5-7-portainer" class="headerlink" title="5.7 portainer"></a>5.7 portainer</h3><p>docker容器管理工具portainer</p>
+<p><code>docker volume create portainer_data</code></p>
+<p><code>docker run -d  -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce</code></p>
 
             </div>
             <hr>
