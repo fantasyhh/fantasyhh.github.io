@@ -192,6 +192,118 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/03/09/asgi2/" target="_self">
+          <img src="/images/suolue/asgi2.png" srcset="/img/loading.gif" alt="ASGI翻译系列（二）：使用 ASGI 和 HTTP">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2021/03/09/asgi2/">ASGI翻译系列（二）：使用 ASGI 和 HTTP</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/03/09/asgi2/">
+          
+          
+            
+          
+          我们之前的文章介绍了 ASGI 协议，并介绍了为什么拥有一个标准化的低级server/application接口是有用的，以及 Python 社区超越现有 WSGI 服务器并开始采用 ASGI 的一些动机。
+在这篇文章中，我们将开始看看 ASGI 的构建快，并演示我们如何开始使用它们来编写 web 服务。
+作为一个应用程序开发者，你通常不会在低级别的地方使用ASGI，因为框架通常会提供一个更高级别
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-03-09 10:38" pubdate>
+              2021-03-09
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/文章分类/">文章分类</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Web/">Web</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/03/08/asgi1/" target="_self">
+          <img src="/images/suolue/asgi1.jpeg" srcset="/img/loading.gif" alt="ASGI翻译系列（一）： 你好，ASGI">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        <a href="/2021/03/08/asgi1/">ASGI翻译系列（一）： 你好，ASGI</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/03/08/asgi1/">
+          
+          
+            
+          
+          说说为什么要写这个系列。在新项目Python Web框架的选项中，我选择了我之前没有使用过的Fastapi，这是一次新的尝试，当然在这次用之前老早的时候我就看过这个框架，并被其吸引住了，感觉很有意思。至目前为止，框架也用了一两个月了，愈发觉得其typing+asynico的特性吊爆了，正如某些人所说，Fastapi绝对是Python Web框架上历程上的一个里程碑！当然这次的翻译系列中，不说Fas
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-03-08 17:28" pubdate>
+              2021-03-08
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/文章分类/">文章分类</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Web/">Web</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/12/31/Ubuntu2004-Config/" target="_self">
           <img src="/images/suolue/ubuntu2004.jpg" srcset="/img/loading.gif" alt="Ubuntu20.04系统配置总结">
         </a>
@@ -632,121 +744,6 @@
               <a href="/tags/Python/">Python</a>
             
               <a href="/tags/Linux/">Linux</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2020/02/28/invoke-fabric/" target="_self">
-          <img src="/images/suolue/fabric.png" srcset="/img/loading.gif" alt="Invoke与Fabric注意事项详解教程">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        <a href="/2020/02/28/invoke-fabric/">Invoke与Fabric注意事项详解教程</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/02/28/invoke-fabric/">
-          
-          
-            
-          
-          说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-02-28 14:13" pubdate>
-              2020-02-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Fabric/">Fabric</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Python/">Python</a>
-            
-              <a href="/tags/Linux/">Linux</a>
-            
-              <a href="/tags/Fabric/">Fabric</a>
-            
-              <a href="/tags/Invoke/">Invoke</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2020/02/13/python-asyncio/" target="_self">
-          <img src="/images/suolue/asynico.jpg" srcset="/img/loading.gif" alt="Python并发之异步I/O(async,await）">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        <a href="/2020/02/13/python-asyncio/">Python并发之异步I/O(async,await）</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/02/13/python-asyncio/">
-          
-          
-            
-          
-          前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！
-1. 背景Python有很长一段的异步编程历史,特别是twisted，gevent和一些无堆栈的Python项目。异
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-02-13 18:05" pubdate>
-              2020-02-13
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Python/">Python</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Python/">Python</a>
-            
-              <a href="/tags/asyncio/">asyncio</a>
             
           </div>
         
