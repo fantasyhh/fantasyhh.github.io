@@ -193,6 +193,59 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
+        <a href="/2019/07/08/django-gunicorn-nginx-config/">Django+Gunicorn+Nginx配置整理</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2019/07/08/django-gunicorn-nginx-config/">
+          
+          
+            
+          
+          之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅
+1. Gunicorn使用及配置
+我们可以通过执行./manage.py runserver命令来运行我们的django应用程序。但我们知道它被称为开发服务器是有原因的，因为自带的开发服务器不健壮，安全问题，线程问题等等。那么，我们如何真正运行我
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-07-08 09:22" pubdate>
+              2019-07-08
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Django/">Django</a>
+            
+              <a href="/tags/Gunicorn/">Gunicorn</a>
+            
+              <a href="/tags/Nginx/">Nginx</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
         <a href="/2019/06/27/python3-wsgi-concept/">梳理Python WSGI与WSGI服务器等概念</a>
       </h1>
 
@@ -642,58 +695,6 @@
               <a href="/tags/Python/">Python</a>
             
               <a href="/tags/Bytes/">Bytes</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        <a href="/2019/05/23/python-encode-decode1/">通过串口发送16进制数据引发的Python3编码血案</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2019/05/23/python-encode-decode1/">
-          
-          
-            
-          
-          由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..
-1. 按部就班设备手册里写的读
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-05-23 13:46" pubdate>
-              2019-05-23
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Python/">Python</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Python/">Python</a>
-            
-              <a href="/tags/Linux/">Linux</a>
-            
-              <a href="/tags/Serial/">Serial</a>
             
           </div>
         
