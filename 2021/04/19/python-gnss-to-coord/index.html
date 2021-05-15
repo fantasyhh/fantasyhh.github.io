@@ -198,7 +198,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3k 字
+      2.9k 字
     </span>
   
 
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      14
+      13
        分钟
     </span>
   
@@ -352,19 +352,18 @@ bd2gcj  : convert BD-09 to GCJ-02</code></pre>
 <p>网上找的好多都是已经被废弃的函数，这边说下最新的，基于3.0版本的,从GPGGA解析到的经纬度转换为墨卡托平面坐标：</p>
 <pre><code class="hljs python"><span class="hljs-keyword">from</span> pyproj <span class="hljs-keyword">import</span> Transformer
 <span class="hljs-comment">#如果希望轴的顺序总是按 x、y 或 lon、lat 的顺序排列，你可以在创建转换器时使用 always_xy 选项。</span>
-transformer = Transformer.from_crs(<span class="hljs-string">"EPSG:4326"</span>, <span class="hljs-string">"EPSG:3857"</span>, always_xy=<span class="hljs-literal">True</span>)
-transformer.transform(<span class="hljs-number">120.7</span>, <span class="hljs-number">31.3</span>)
-(<span class="hljs-number">13436262.538748119</span>, <span class="hljs-number">3671771.4487971356</span>)</code></pre>
+<span class="hljs-comment"># 转换为伪墨卡托坐标，，也叫web墨卡托坐标，用于谷歌地图等</span>
+transformer1 = Transformer.from_crs(<span class="hljs-string">"EPSG:4326"</span>, <span class="hljs-string">"EPSG:3857"</span>, always_xy=<span class="hljs-literal">True</span>)
+<span class="hljs-comment"># 转换成中国地区的通用横轴墨卡托坐标(UTM投影)，用于计算等</span>
+transformer2 = Transformer.from_crs(<span class="hljs-number">4326</span>, <span class="hljs-number">32650</span>, always_xy=<span class="hljs-literal">True</span>)
+
+transformer1.transform(<span class="hljs-number">120.7</span>, <span class="hljs-number">31.3</span>)
+(<span class="hljs-number">13436262.538748119</span>, <span class="hljs-number">3671771.4487971356</span>)
+transformer1.transform(<span class="hljs-number">120.7</span>, <span class="hljs-number">31.3</span>)
+(<span class="hljs-number">852227.2443889615</span>, <span class="hljs-number">3468763.8018454057</span>)</code></pre>
 <blockquote>
 <p>在国际上，每个坐标系统都会被分配一个 <a href="https://epsg.io/" target="_blank" rel="noopener">EPSG</a> 代码，EPSG:4326 就是 WGS84 的代码。GPS是基于WGS84的</p>
-<p>Web Mercator 最早是由 Google 提出的，当前已经成为 Web Map 的事实标准。但是也许是由于上面”伪“的原因，最初 Web Mercator 被拒绝分配EPSG 代码。于是大家普遍使用 EPSG:900913（Google的数字变形） 的非官方代码来代表它。直到2008年，才被分配了EPSG:3785的代码，但在同一年没多久，又被弃用，重新分配了 EPSG:3857 的正式代码，使用至今。</p>
 </blockquote>
-<p>也可以手动Python实现墨卡托坐标转换：</p>
-<pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">wgs84toWebMercator</span><span class="hljs-params">(lon, lat)</span>:</span>
-    x = lon * <span class="hljs-number">20037508.342789</span> / <span class="hljs-number">180</span>
-    y = math.log(math.tan((<span class="hljs-number">90</span> + lat) * math.pi / <span class="hljs-number">360</span>)) / (math.pi / <span class="hljs-number">180</span>)
-    y = y * <span class="hljs-number">20037508.34789</span> / <span class="hljs-number">180</span>
-    <span class="hljs-keyword">return</span> x, y</code></pre>
 <h3 id="相关资源："><a href="#相关资源：" class="headerlink" title="相关资源："></a>相关资源：</h3><ul>
 <li><a href="https://tool.lu/coordinate/" target="_blank" rel="noopener">在线坐标转换</a></li>
 <li><a href="https://lbs.amap.com/" target="_blank" rel="noopener">高德开放平台</a></li>
