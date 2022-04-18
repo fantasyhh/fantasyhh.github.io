@@ -1,49 +1,72 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="hello">
+<meta property="og:type" content="website">
+<meta property="og:title" content="烛影小札">
+<meta property="og:url" content="https://fantasyhh.github.io/page/2/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="hello">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Jiahuan Shi">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -56,7 +79,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -130,26 +154,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -157,13 +172,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="日拱一卒, 知足常乐">
               
             </span>
 
@@ -178,7 +193,7 @@
 
   <main>
     
-      <div class="container nopadding-md">
+      <div class="container nopadding-x-md">
         <div class="py-5" id="board"
           >
           
@@ -192,21 +207,76 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2020/04/02/python-rsyslog/" target="_self">
-          <img src="/images/suolue/rsyslog.png" srcset="/img/loading.gif" alt="Python rsyslog日志集中化">
+        <a href="/2020/05/13/arduinoFanByTemp/" target="_self">
+          <img src="/images/suolue/fan.png" srcset="/img/loading.gif" lazyload alt="Arduino温控PC风扇以及信息显示思路总结">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/04/02/python-rsyslog/">Python rsyslog日志集中化</a>
+        
+        <a href="/2020/05/13/arduinoFanByTemp/" target="_self">
+          Arduino温控PC风扇以及信息显示思路总结
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/04/02/python-rsyslog/">
+        <a href="/2020/05/13/arduinoFanByTemp/" target="_self">
           
-          
+          温控风扇的一个总所周知的例子就是CPU上的散热风扇，风扇速度会随着CPU负载上升的同时增加，达到及时散热的目的，然而这次要捣鼓的东西也跟这个差不多但是是在放在大机柜里，四路温控风扇，并带有温度风扇速度显示，以及通过触摸显示屏设置上下温度阀值，我毫不犹豫选择了Arduino，这在油管上也有很多类似的项目，不过也杂而不全，翻来覆去，测试了各个部分然后确定了自己想要的方案。 1. 温度传感器选择温度传感
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-05-13 11:08" pubdate>
+              2020-05-13
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
+              <a href="/categories/Arduino/">Arduino</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C/">C</a>
+            
+              <a href="/tags/Arduino/">Arduino</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2020/04/02/python-rsyslog/" target="_self">
+          <img src="/images/suolue/rsyslog.png" srcset="/img/loading.gif" lazyload alt="Python rsyslog日志集中化">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/04/02/python-rsyslog/" target="_self">
+          Python rsyslog日志集中化
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/04/02/python-rsyslog/" target="_self">
           
           下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。
         </a>
@@ -250,22 +320,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/03/31/linux-signal-with-python/" target="_self">
-          <img src="/images/suolue/signal.png" srcset="/img/loading.gif" alt="Linux的信号以及Python处理">
+          <img src="/images/suolue/signal.png" srcset="/img/loading.gif" lazyload alt="Linux的信号以及Python处理">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/03/31/linux-signal-with-python/">Linux的信号以及Python处理</a>
+        
+        <a href="/2020/03/31/linux-signal-with-python/" target="_self">
+          Linux的信号以及Python处理
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/03/31/linux-signal-with-python/">
+        <a href="/2020/03/31/linux-signal-with-python/" target="_self">
           
-          
-            
-          
-          初次接触信号这个概念实在gpiozero库文档中的这么一个专题，How do I keep my script running?,我最最开始是在button.when_pressed = hello用一个while True的无限循环保持脚本运行，后来发现有个个内置库的signal.pause()函数可以保持脚本运行，直到按下Ctrl+C程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来
+          初次接触信号这个概念实在gpiozero库文档中的这么一个专题，How do I keep my script running?,我最最开始是在button.when_pressed &#x3D; hello用一个while True的无限循环保持脚本运行，后来发现有个个内置库的signal.pause()函数可以保持脚本运行，直到按下Ctrl+C程序才会退出，我当时仅仅认识到这个地步，没往下深究，直到后来
         </a>
       </p>
 
@@ -305,20 +375,20 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/02/28/invoke-fabric/" target="_self">
-          <img src="/images/suolue/fabric.png" srcset="/img/loading.gif" alt="Invoke与Fabric注意事项详解教程">
+          <img src="/images/suolue/fabric.png" srcset="/img/loading.gif" lazyload alt="Invoke与Fabric注意事项详解教程">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/02/28/invoke-fabric/">Invoke与Fabric注意事项详解教程</a>
+        
+        <a href="/2020/02/28/invoke-fabric/" target="_self">
+          Invoke与Fabric注意事项详解教程
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/02/28/invoke-fabric/">
-          
-          
-            
+        <a href="/2020/02/28/invoke-fabric/" target="_self">
           
           说到远程部署利器，那就不得不讲讲Fabric，Fabric 是一个 Python 的库，同时它也是一个命令行工具。它提供了丰富的同 SSH 交互的接口，可以用来在本地或远程机器上自动化、流水化地执行 Shell 命令。使用 fabric 提供的命令行工具，可以很方便地执行应用部署和系统管理等操作。因此它非常适合用来做应用的远程部署及系统维护刚实习那会，也遇到这种需求，但是不知道Fabric，自己在
         </a>
@@ -364,23 +434,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/02/13/python-asyncio/" target="_self">
-          <img src="/images/suolue/asynico.jpg" srcset="/img/loading.gif" alt="Python并发之异步I/O(async,await）">
+          <img src="/images/suolue/asynico.jpg" srcset="/img/loading.gif" lazyload alt="Python并发之异步I/O(async,await）">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/02/13/python-asyncio/">Python并发之异步I/O(async,await）</a>
+        
+        <a href="/2020/02/13/python-asyncio/" target="_self">
+          Python并发之异步I/O(async,await）
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/02/13/python-asyncio/">
+        <a href="/2020/02/13/python-asyncio/" target="_self">
           
-          
-            
-          
-          前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！
-1. 背景Python有很长一段的异步编程历史,特别是twisted，gevent和一些无堆栈的Python项目。异
+          前面关于yield，yield from的语法说了好多，其实大多是铺垫，算是python在通往异步大道上的一些探索，但是将异步完整融入python整个过程并非都是顺利的，创建修改替换修改，反反复复，直到最新几版的python，趋于平稳，用其优雅特性来给人们展示异步，我们一起来看看！ 1. 背景Python有很长一段的异步编程历史,特别是twisted，gevent和一些无堆栈的Python项目。异
         </a>
       </p>
 
@@ -420,23 +489,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/02/10/Raspberrypi-PWM/" target="_self">
-          <img src="/images/suolue/pwm.png" srcset="/img/loading.gif" alt="树莓派几种不同的PWM及其应用">
+          <img src="/images/suolue/pwm.png" srcset="/img/loading.gif" lazyload alt="树莓派几种不同的PWM及其应用">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/02/10/Raspberrypi-PWM/">树莓派几种不同的PWM及其应用</a>
+        
+        <a href="/2020/02/10/Raspberrypi-PWM/" target="_self">
+          树莓派几种不同的PWM及其应用
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/02/10/Raspberrypi-PWM/">
+        <a href="/2020/02/10/Raspberrypi-PWM/" target="_self">
           
-          
-            
-          
-          树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。
-1. 树莓
+          树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。 1. 树莓
         </a>
       </p>
 
@@ -478,24 +546,22 @@
     
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2020/01/20/ADC-MCP3008/" target="_self">
-          <img src="/images/suolue/mcp3008.png" srcset="/img/loading.gif" alt="树莓派使用MCP3008模数转换器(ADC)">
+          <img src="/images/suolue/mcp3008.png" srcset="/img/loading.gif" lazyload alt="树莓派使用MCP3008模数转换器(ADC)">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/01/20/ADC-MCP3008/">树莓派使用MCP3008模数转换器(ADC)</a>
+        
+        <a href="/2020/01/20/ADC-MCP3008/" target="_self">
+          树莓派使用MCP3008模数转换器(ADC)
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/01/20/ADC-MCP3008/">
+        <a href="/2020/01/20/ADC-MCP3008/" target="_self">
           
-          
-            
-          
-          树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。
-1. 方法总结
-Analogue Senso
+          树莓派是一款出色的小型台式计算机，可用于控制数字输入和输出。但是，当你想读取模拟信号（例如从热敏电阻，电位器或许多其他类型的传感器获得的信号）时会怎么做？通过将小型的模数转换器（ADC）芯片连接到P树莓派，可以为程序打开模拟信号的世界！我这边的目的是想测电瓶里面还剩多少电，通过数模转换器拿到电瓶此时输出的电压，再根据电瓶电压衰减曲线大概估算所剩百分比。 1. 方法总结 Analogue Senso
         </a>
       </p>
 
@@ -537,17 +603,16 @@ Analogue Senso
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/01/12/python-yield-from/">Python3 yield from 用法详解</a>
+        
+        <a href="/2020/01/12/python-yield-from/" target="_self">
+          Python3 yield from 用法详解
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/01/12/python-yield-from/">
+        <a href="/2020/01/12/python-yield-from/" target="_self">
           
-          
-            
-          
-          yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。
-1. 替代内层for循环如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：&gt;&gt;
+          yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。 1. 替代内层for循环如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环： 1234567
         </a>
       </p>
 
@@ -587,19 +652,16 @@ Analogue Senso
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/01/06/python-yield-2/">Python yield使用详解（二）</a>
+        
+        <a href="/2020/01/06/python-yield-2/" target="_self">
+          Python yield使用详解（二）
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/01/06/python-yield-2/">
+        <a href="/2020/01/06/python-yield-2/" target="_self">
           
-          
-            
-          
-          yield的第二部分主要是with模块的功能，即上下文管理器。我们可以用contextmanager装饰器加上yield语法代替传统的__enter__，__exit__魔法方法，让代码变得更Pythonic！
-1. 上下文管理器和with块1.1 with表达式常见的with用法格式，控制代码块的进入/退出：with open(filename) as f:
-    statement
-    
+          yield的第二部分主要是with模块的功能，即上下文管理器。我们可以用contextmanager装饰器加上yield语法代替传统的__enter__，__exit__魔法方法，让代码变得更Pythonic！ 1. 上下文管理器和with块1.1 with表达式常见的with用法格式，控制代码块的进入&#x2F;退出： 12345678with open(filename) as f:    statem
         </a>
       </p>
 
@@ -639,14 +701,14 @@ Analogue Senso
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2020/01/02/python-yield-1/">Python yield使用详解（一）</a>
+        
+        <a href="/2020/01/02/python-yield-1/" target="_self">
+          Python yield使用详解（一）
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/01/02/python-yield-1/">
-          
-          
-            
+        <a href="/2020/01/02/python-yield-1/" target="_self">
           
           刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就
         </a>
@@ -683,69 +745,13 @@ Analogue Senso
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        <a href="/2019/12/31/thread-and-process/">操作系统中线程与进程概念解惑</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2019/12/31/thread-and-process/">
-          
-          
-            
-          
-          这篇文章总结本来记录于两年前，是在写Python多线程时对一些概念的疑惑的解答，当初查阅了很多资料，对于操作系统层面的线程进程概念很模糊。而今，随着Python版本的更新，本身异步的新特性逐渐完善，在学习异步的时候难免与常用的多进程多线程进行比较来说明异步的优越性，把以前的文章拿出来，并且在现在自己的理解上查阅一些资料进行适当修改，达到温故而知新的效果。
-看了一天的相关概念,很多涉及到操作系统与底
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-12-31 10:07" pubdate>
-              2019-12-31
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Linux/">Linux</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Linux/">Linux</a>
-            
-              <a href="/tags/Thread/">Thread</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
-  
-  <script>
-    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
-      ele.href += '#board';
-    }
-  </script>
 
 
 
@@ -755,16 +761,16 @@ Analogue Senso
         </div>
       </div>
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -776,154 +782,83 @@ Analogue Senso
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
-
-
-
-
-
+  
 
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "日拱一卒, 知足常乐&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -945,7 +880,7 @@ Analogue Senso
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -958,6 +893,10 @@ Analogue Senso
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

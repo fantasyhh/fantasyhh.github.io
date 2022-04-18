@@ -1,49 +1,72 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="hello">
+<meta property="og:type" content="website">
+<meta property="og:title" content="烛影小札">
+<meta property="og:url" content="https://fantasyhh.github.io/page/5/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="hello">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Jiahuan Shi">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -56,7 +79,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -130,26 +154,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -157,13 +172,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="日拱一卒, 知足常乐">
               
             </span>
 
@@ -178,7 +193,7 @@
 
   <main>
     
-      <div class="container nopadding-md">
+      <div class="container nopadding-x-md">
         <div class="py-5" id="board"
           >
           
@@ -193,17 +208,65 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/05/23/python-encode-decode1/">通过串口发送16进制数据引发的Python3编码血案</a>
+        
+        <a href="/2019/05/25/python-encode-decode2/" target="_self">
+          血案后对python3.7最新字节字符编码解码知识整理
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/05/23/python-encode-decode1/">
+        <a href="/2019/05/25/python-encode-decode2/" target="_self">
           
-          
+          之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。 1. 先从概念理解开始 某大佬云：人类使用文本，计算机使用字节序列  我们先可以看一下
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-05-25 09:53" pubdate>
+              2019-05-25
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
+              <a href="/categories/Python/">Python</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Bytes/">Bytes</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/05/23/python-encode-decode1/" target="_self">
+          通过串口发送16进制数据引发的Python3编码血案
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2019/05/23/python-encode-decode1/" target="_self">
           
-          由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑…..
-1. 按部就班设备手册里写的读
+          由于工作需要，通过rs232串口来连接一个超声波测距仪，通过应答的方式，发送数据然后读取数据从而得到值。厂家给了个定制版串口助手，直接输入串口参数然后打开串口，就能获取到超声波周边（左，中，右）的障碍物的距离（单位厘米）。但是呢，我需要用Python给串口传数据，这也好办，发送十六进制数据，网上那边看看这边找找，然后我就顺其自然地走进了个坑，Python的大坑….. 1. 按部就班设备手册里写的读
         </a>
       </p>
 
@@ -245,14 +308,14 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/05/17/nodejs3-jstips/">用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）</a>
+        
+        <a href="/2019/05/17/nodejs3-jstips/" target="_self">
+          用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/05/17/nodejs3-jstips/">
-          
-          
-            
+        <a href="/2019/05/17/nodejs3-jstips/" target="_self">
           
           说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能
         </a>
@@ -292,14 +355,14 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/05/14/pipenv-and-npm/">由npm而温故到的pipenv</a>
+        
+        <a href="/2019/05/14/pipenv-and-npm/" target="_self">
+          由npm而温故到的pipenv
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/05/14/pipenv-and-npm/">
-          
-          
-            
+        <a href="/2019/05/14/pipenv-and-npm/" target="_self">
           
           最近在学习Nodejs的npm工具时，很喜欢这个包管理器，非全局安装库，package.json以及lock文件的内容，突然让我联想到了Pipfile，对于这个文件我一般都只是打开，将里面的source url换成国内pip源，然后就关掉，下一步安装软件，我的目的只是单纯的想要个干净的软件，想着到最后小项目完成的时候还能用pip freeze 生成个requirement文件，多好。后来才发现自己
         </a>
@@ -341,18 +404,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/05/08/nodejs-2/">用 Python 眼光看Nodejs（二），安装及npm配置</a>
+        
+        <a href="/2019/05/08/nodejs-2/" target="_self">
+          用 Python 眼光看Nodejs（二），安装及npm配置
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/05/08/nodejs-2/">
+        <a href="/2019/05/08/nodejs-2/" target="_self">
           
-          
-            
-          
-          上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整与基础，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳
-1. Nodejs安装# Using Ubuntu
-cu
+          上一节说过，以搜集文章为主，然后自己总结一些常用的知识当做笔记，可能不完整与基础，更多的是给自己做记录。学习一门新的语言，从安装到简单用法开始。所以从Nodejs的安装，运行，代码的导入，以及一般项目的代码组织与部署开始，不用太过于深入，了解大概流程就行，不可能记住所有的命令与用法，只要知道有这个功能大概长什么样，然后去官网手册翻看一下最佳 1. Nodejs安装12345678# Using U
         </a>
       </p>
 
@@ -390,17 +451,16 @@ cu
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/05/07/nodejs-1/">用 Python 眼光看Nodejs（一）,杂谈</a>
+        
+        <a href="/2019/05/07/nodejs-1/" target="_self">
+          用 Python 眼光看Nodejs（一）,杂谈
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/05/07/nodejs-1/">
+        <a href="/2019/05/07/nodejs-1/" target="_self">
           
-          
-            
-          
-          说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。
-1. Nodejs为何与Python放在一起看待后端Nodejs基
+          说说自己为何要取这么个标题。最近在python的异步编程中挣扎，同步阻塞并发并行的概念让人头疼。在更加深入Django知识的过程中，也了解到了更多的web知识，比如轮询与长轮询（long polling），websokcet，然后到Django Channel，以及有名的异步的web框架tornado等，然后接触到了Nodejs。 1. Nodejs为何与Python放在一起看待后端Nodejs基
         </a>
       </p>
 
@@ -438,17 +498,16 @@ cu
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/04/25/sed-usage/">关于sed我常用的几个方法以及遇到坑的整理</a>
+        
+        <a href="/2019/04/25/sed-usage/" target="_self">
+          关于sed我常用的几个方法以及遇到坑的整理
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/04/25/sed-usage/">
+        <a href="/2019/04/25/sed-usage/" target="_self">
           
-          
-            
-          
-          shell、grep、sed 和 awk 是 Unix 的基础。如果你不能非常轻松的使用它们，你将会被自己束缚住，因为它们构成了通过命令行和脚本与 Unix 系统交互的基础。自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。
-注：以下用法如果用到 -i 参数 ，直接修改读取的文件内
+          shell、grep、sed 和 awk 是 Unix 的基础。如果你不能非常轻松的使用它们，你将会被自己束缚住，因为它们构成了通过命令行和脚本与 Unix 系统交互的基础。自己平常用到sed的场景一般都在shell中，自动化一些按部就班的东西，比如上一篇博文的自动生成django，在配置settings文件的时候难免修改或者增加一些设置。 注：以下用法如果用到 -i 参数 ，直接修改读取的文件内
         </a>
       </p>
 
@@ -486,17 +545,16 @@ cu
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/04/24/auto-django/">Shell脚本自动生成django项目结构并添加常用插件</a>
+        
+        <a href="/2019/04/24/auto-django/" target="_self">
+          Shell脚本自动生成django项目结构并添加常用插件
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/04/24/auto-django/">
+        <a href="/2019/04/24/auto-django/" target="_self">
           
-          
-            
-          
-          时常需要新建一个django项目来做快速的Demo演示，自己也记不住一些基本配置与库的导入，常常去之前写的项目中拷贝，Pycharm切来切去有点麻烦，萌生出了简单写个shell脚本自动化生成django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，美滋滋！
-生成一个新的django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测
+          时常需要新建一个django项目来做快速的Demo演示，自己也记不住一些基本配置与库的导入，常常去之前写的项目中拷贝，Pycharm切来切去有点麻烦，萌生出了简单写个shell脚本自动化生成django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测试视图，美滋滋！ 生成一个新的django标准项目结构，简单配置了一些我平常用的插件，包括一个Hello Djago的测
         </a>
       </p>
 
@@ -535,15 +593,9 @@ cu
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/4/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+      <a class="extend prev" rel="prev" href="/page/4/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="page-number current">5</span>
     </span>
   </nav>
-  
-  <script>
-    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
-      ele.href += '#board';
-    }
-  </script>
 
 
 
@@ -553,16 +605,16 @@ cu
         </div>
       </div>
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -574,154 +626,83 @@ cu
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
-
-
-
-
-
+  
 
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "日拱一卒, 知足常乐&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -743,7 +724,7 @@ cu
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -756,6 +737,10 @@ cu
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

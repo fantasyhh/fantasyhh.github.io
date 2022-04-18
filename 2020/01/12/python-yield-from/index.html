@@ -1,62 +1,91 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。 1. 替代内层for循环如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环： 1234567">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python3 yield from 用法详解">
+<meta property="og:url" content="https://fantasyhh.github.io/2020/01/12/python-yield-from/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="yield from是Python3.3以后全新的语言结构，它的作用比yield多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用await关键字，这个名称就好多了。当然，后面Python也改成了await，这个我们在结尾说，少废话，先看东西。 1. 替代内层for循环如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环： 1234567">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-12T02:46:39.000Z">
+<meta property="article:modified_time" content="2020-04-01T03:10:28.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="yield from">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>Python3 yield from 用法详解 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +98,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +173,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +191,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Python3 yield from 用法详解">
               
             </span>
 
@@ -195,21 +216,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      3.2k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
-       分钟
+      27 分钟
     </span>
   
 
@@ -230,106 +248,43 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Python3 yield from 用法详解</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p><code>yield from</code>是Python3.3以后全新的语言结构，它的作用比<code>yield</code>多得多，因此人们认为继续使用那个关键字多少会引起误解。在其他语言中，类似的结构使用<code>await</code>关键字，这个名称就好多了。当然，后面Python也改成了<code>await</code>，这个我们在结尾说，少废话，先看东西。</p>
-<h2 id="1-替代内层for循环"><a href="#1-替代内层for循环" class="headerlink" title="1. 替代内层for循环"></a>1. 替代内层for循环</h2><p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：<br><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">chain</span><span class="hljs-params">(*iterables)</span>:</span>
-...		<span class="hljs-keyword">for</span> it <span class="hljs-keyword">in</span> iterables:
-...			<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> it:
-...				<span class="hljs-keyword">yield</span> i
-<span class="hljs-meta">&gt;&gt;&gt; </span>s = <span class="hljs-string">'ABC'</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>t = tuple(range(<span class="hljs-number">3</span>))
-<span class="hljs-meta">&gt;&gt;&gt; </span>list(chain(s, t))
-[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></p>
-<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。<br><pre><code class="hljs python">Python3<span class="hljs-number">.3</span>之后引入了新语法：
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">chain</span><span class="hljs-params">(*iterables)</span>:</span>
-<span class="hljs-meta">... </span>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> iterables:
-<span class="hljs-meta">... </span>		<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> i
-...
-<span class="hljs-meta">&gt;&gt;&gt; </span>list(chain(s, t))
-[<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>, <span class="hljs-string">'C'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]</code></pre></p>
+<h2 id="1-替代内层for循环"><a href="#1-替代内层for循环" class="headerlink" title="1. 替代内层for循环"></a>1. 替代内层for循环</h2><p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的for循环：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">chain</span>(<span class="hljs-params">*iterables</span>):<br>...		<span class="hljs-keyword">for</span> it <span class="hljs-keyword">in</span> iterables:<br>...			<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> it:<br>...				<span class="hljs-keyword">yield</span> i<br><span class="hljs-meta">&gt;&gt;&gt; </span>s = <span class="hljs-string">&#x27;ABC&#x27;</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>t = <span class="hljs-built_in">tuple</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>))<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(chain(s, t))<br>[<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-string">&#x27;C&#x27;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]<br></code></pre></td></tr></table></figure>
+<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">Python3<span class="hljs-number">.3</span>之后引入了新语法：<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">chain</span>(<span class="hljs-params">*iterables</span>):<br><span class="hljs-meta">... </span>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> iterables:<br><span class="hljs-meta">... </span>		<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> i<br>...<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(chain(s, t))<br>[<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-string">&#x27;C&#x27;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]<br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>yield from</code> 完全代替了内层的 for 循环。</li>
 <li><code>yield from x</code> 表达式对 x 对象所做的第一件事是，调用 iter(x)，从中获取迭代器。因此，x 可以是任何可迭代的对象。</li>
-<li>在这个示例中使用 <code>yield from</code>代码读起来更顺畅，不过感觉更像是语法糖。 </li>
+<li>在这个示例中使用 <code>yield from </code>代码读起来更顺畅，不过感觉更像是语法糖。</li>
 </ul>
-<p>上面这个例子看上去比较简单（传统意义上说因为我们只是for循环一次就完事，因为只嵌套了一层），我们再来看几个<code>yield from</code>的例子。<br><strong>例子1：我们有一个嵌套型的序列，想将它扁平化处理为一列单独的值。</strong><br><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> Iterable
-
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">flatten</span><span class="hljs-params">(items, ignore_types=<span class="hljs-params">(str, bytes)</span>)</span>:</span>
-	<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> items:
-		<span class="hljs-keyword">if</span> isinstance(x, Iterable) <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> isinstance(x, ignore_types):
-			<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> flatten(x)
-		<span class="hljs-keyword">else</span>:
-			<span class="hljs-keyword">yield</span> x
-
-items = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>], <span class="hljs-number">7</span>], <span class="hljs-number">8</span>]
-<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> flatten(items):
-	print(x)
-<span class="hljs-comment"># output：</span>
- <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span>
------------------------------------------------
-items = [<span class="hljs-string">'Dave'</span>, <span class="hljs-string">'Paula'</span>, [<span class="hljs-string">'Thomas'</span>, <span class="hljs-string">'Lewis'</span>]]
-<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> flatten(items):
-	print(x)
-
-<span class="hljs-comment"># output：</span>
-Dave
-Paula
-Thomas
-Lewis</code></pre></p>
+<p>上面这个例子看上去比较简单（传统意义上说因为我们只是for循环一次就完事，因为只嵌套了一层），我们再来看几个<code>yield from</code>的例子。<br><strong>例子1：我们有一个嵌套型的序列，想将它扁平化处理为一列单独的值。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> Iterable<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">flatten</span>(<span class="hljs-params">items, ignore_types=(<span class="hljs-params"><span class="hljs-built_in">str</span>, <span class="hljs-built_in">bytes</span></span>)</span>):<br>	<span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> items:<br>		<span class="hljs-keyword">if</span> <span class="hljs-built_in">isinstance</span>(x, Iterable) <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">isinstance</span>(x, ignore_types):<br>			<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> flatten(x)<br>		<span class="hljs-keyword">else</span>:<br>			<span class="hljs-keyword">yield</span> x<br><br>items = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>], <span class="hljs-number">7</span>], <span class="hljs-number">8</span>]<br><span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> flatten(items):<br>	<span class="hljs-built_in">print</span>(x)<br><span class="hljs-comment"># output：</span><br> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span><br>-----------------------------------------------<br>items = [<span class="hljs-string">&#x27;Dave&#x27;</span>, <span class="hljs-string">&#x27;Paula&#x27;</span>, [<span class="hljs-string">&#x27;Thomas&#x27;</span>, <span class="hljs-string">&#x27;Lewis&#x27;</span>]]<br><span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> flatten(items):<br>	<span class="hljs-built_in">print</span>(x)<br><br><span class="hljs-comment"># output：</span><br>Dave<br>Paula<br>Thomas<br>Lewis<br></code></pre></td></tr></table></figure>
 <ul>
 <li><code>collections.Iterable</code>是一个抽象基类，我们用<code>isinstance(x, Iterable)</code>检查某个元素是否是可迭代的.如果是的话,那么就用<code>yield from</code>将这个可迭代对象作为一种子例程进行递归。最终返回结果就是一个没有嵌套的单值序列了。</li>
-<li>代码中额外的参数<code>ignore types</code>和检测语句<code>isinstance(x, ignore types)</code>用来将字符<br>串和字节排除在可迭代对象外，防止将它们再展开成单个的字符。<ul>
+<li>代码中额外的参数<code>ignore types </code>和检测语句<code>isinstance(x, ignore types)</code>用来将字符<br>串和字节排除在可迭代对象外，防止将它们再展开成单个的字符。</li>
 <li>如果这里不用<code>yield from</code>的话，那么就需要另外一个for来嵌套，并不是一种优雅的操作</li>
 </ul>
-</li>
-</ul>
-<p><strong>例子2：利用一个Node类来表示树结构</strong><br><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span>:</span>
-	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, value)</span>:</span>
-		self._value = value
-		self._children = []
+<p><strong>例子2：利用一个Node类来表示树结构</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span>:<br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, value</span>):<br>		self._value = value<br>		self._children = []<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">__repr__</span>(<span class="hljs-params">self</span>):<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;Node(&#123;!r&#125;)&#x27;</span>.<span class="hljs-built_in">format</span>(self._value)<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">add_child</span>(<span class="hljs-params">self, node</span>):<br>		self._children.append(node)<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">__iter__</span>(<span class="hljs-params">self</span>):<br>		<span class="hljs-keyword">return</span> <span class="hljs-built_in">iter</span>(self._children)<br><br>	<span class="hljs-keyword">def</span> <span class="hljs-title function_">depth_first</span>(<span class="hljs-params">self</span>):<br>		<span class="hljs-keyword">yield</span> self<br>		<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self:<br>			<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> c.depth_first()<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>	root = Node(<span class="hljs-number">0</span>)<br>	child1 = Node(<span class="hljs-number">1</span>)<br>	child2 = Node(<span class="hljs-number">2</span>)<br>	root.add_child(child1)<br>	root.add_child(child2)<br>	child1.add_child(Node(<span class="hljs-number">3</span>))<br>	child1.add_child(Node(<span class="hljs-number">4</span>))<br>	child2.add_child(Node(<span class="hljs-number">5</span>))<br>	<span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> root.depth_first():<br>		<span class="hljs-built_in">print</span>(ch)<br></code></pre></td></tr></table></figure>
 
-	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__repr__</span><span class="hljs-params">(self)</span>:</span>
-		<span class="hljs-keyword">return</span> <span class="hljs-string">'Node(&#123;!r&#125;)'</span>.format(self._value)
-
-	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add_child</span><span class="hljs-params">(self, node)</span>:</span>
-		self._children.append(node)
-
-	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__iter__</span><span class="hljs-params">(self)</span>:</span>
-		<span class="hljs-keyword">return</span> iter(self._children)
-
-	<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">depth_first</span><span class="hljs-params">(self)</span>:</span>
-		<span class="hljs-keyword">yield</span> self
-		<span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self:
-			<span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> c.depth_first()
-
-
-<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
-	root = Node(<span class="hljs-number">0</span>)
-	child1 = Node(<span class="hljs-number">1</span>)
-	child2 = Node(<span class="hljs-number">2</span>)
-	root.add_child(child1)
-	root.add_child(child2)
-	child1.add_child(Node(<span class="hljs-number">3</span>))
-	child1.add_child(Node(<span class="hljs-number">4</span>))
-	child2.add_child(Node(<span class="hljs-number">5</span>))
-	<span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> root.depth_first():
-		print(ch)</code></pre></p>
 <ul>
-<li><code>__iter__</code>代表一个Pyton的迭代协议，返回一个迭代器对象,就能迭代了</li>
+<li><code> __iter__</code>代表一个Pyton的迭代协议，返回一个迭代器对象,就能迭代了</li>
 <li><code>depth_frist</code>返回一个生成器，仔细体会其中的<code>yield</code>与 <code>yield from</code>用法</li>
 </ul>
-<p>上面两个例子无论是树还是嵌套序列，都比较复杂，观察这里<code>yield from</code>跟的是什么,跟的是函数,生成器函数,而且都是在函数内递归。虽然我也不是理解的很透彻 =,= 。但现在应该知道，这是<code>yield from</code>一种常用的方法了（认真体会，手动滑稽）。</p>
-<h2 id="2-打开双通道"><a href="#2-打开双通道" class="headerlink" title="2. 打开双通道"></a>2. 打开双通道</h2><p>如果 <code>yield from</code> 结构唯一的作用是替代产出值的嵌套 for 循环，这个结构很有可能不会添加到 Python 语言中。<code>yield from</code> 结构的本质作用无法通过简单的可迭代对象说明，而要发散思维，使用嵌套的生成器。<br><strong>yield from 的主要功能是打开双向通道，把最外层的调用方与最内层的子生成器连接起来，这样二者可以直接发送和产出值，还可以直接传入异常，而不用在位于中间的协程中添加大量处理异常的样板代码。有了这个结构，协程可以通过以前不可能的方式委托职责。</strong><br>这里有张详细图来说明三者关系:<a href="http://flupy.org/resources/yield-from.pdf" title="委派生成器,子生成器与调用方" target="_blank" rel="noopener">http://flupy.org/resources/yield-from.pdf</a><br>例子就不展开了，有兴趣的童鞋可以去 <strong>Fluent Python</strong>这本书上 查看 <strong>示例16-17</strong>。并且结合示例图好好体会（我也有待好好体会）</p>
+<p>上面两个例子无论是树还是嵌套序列，都比较复杂，观察这里<code>yield from</code>跟的是什么,跟的是函数,生成器函数,而且都是在函数内递归。虽然我也不是理解的很透彻 &#x3D;,&#x3D; 。但现在应该知道，这是<code>yield from</code>一种常用的方法了（认真体会，手动滑稽）。</p>
+<h2 id="2-打开双通道"><a href="#2-打开双通道" class="headerlink" title="2. 打开双通道"></a>2. 打开双通道</h2><p>如果 <code>yield from</code> 结构唯一的作用是替代产出值的嵌套 for 循环，这个结构很有可能不会添加到 Python 语言中。<code>yield from</code> 结构的本质作用无法通过简单的可迭代对象说明，而要发散思维，使用嵌套的生成器。<br><strong>yield from 的主要功能是打开双向通道，把最外层的调用方与最内层的子生成器连接起来，这样二者可以直接发送和产出值，还可以直接传入异常，而不用在位于中间的协程中添加大量处理异常的样板代码。有了这个结构，协程可以通过以前不可能的方式委托职责。</strong><br>这里有张详细图来说明三者关系:<a target="_blank" rel="noopener" href="http://flupy.org/resources/yield-from.pdf" title="委派生成器,子生成器与调用方">http://flupy.org/resources/yield-from.pdf</a><br>例子就不展开了，有兴趣的童鞋可以去 <strong>Fluent Python</strong>这本书上 查看 <strong>示例16-17</strong>。并且结合示例图好好体会（我也有待好好体会）</p>
 <h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><ul>
 <li><p><code>yield from</code>伴随着Python3.4新加入的asyncio模块得以发扬光大, <code>asynico + yield from</code>双枪组合，但当时定义协程还是需要<code>@asyncio.coroutine</code>装饰器，之前都是我们手工切换协程，现在当声明函数为协程后，我们通过事件循环来调度协程</p>
 </li>
@@ -363,10 +318,14 @@ Lewis</code></pre></p>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -393,11 +352,13 @@ Lewis</code></pre></p>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -418,9 +379,9 @@ Lewis</code></pre></p>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -433,7 +394,7 @@ Lewis</code></pre></p>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -445,16 +406,16 @@ Lewis</code></pre></p>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -466,208 +427,96 @@ Lewis</code></pre></p>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Python3 yield from 用法详解&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -689,7 +538,7 @@ Lewis</code></pre></p>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -702,6 +551,10 @@ Lewis</code></pre></p>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

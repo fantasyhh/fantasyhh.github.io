@@ -1,62 +1,94 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。 1. 树莓">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派几种不同的PWM及其应用">
+<meta property="og:url" content="https://fantasyhh.github.io/2020/02/10/Raspberrypi-PWM/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。 1. 树莓">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/suolue/pwm.png">
+<meta property="article:published_time" content="2020-02-10T04:34:02.000Z">
+<meta property="article:modified_time" content="2020-04-01T03:27:06.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="PWM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/suolue/pwm.png">
+  
+  
   <title>树莓派几种不同的PWM及其应用 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +101,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +176,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +194,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="树莓派几种不同的PWM及其应用">
               
             </span>
 
@@ -195,21 +219,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      916 字
+      1.7k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      4
-       分钟
+      15 分钟
     </span>
   
 
@@ -230,20 +251,20 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">树莓派几种不同的PWM及其应用</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>树莓派上PWM其实应用的不多，很多例子都是简单地用代码控制小灯地闪亮黯淡过程，这在我之前刚接触硬件时充满懵懂的脑子面前显得十分新奇，后来慢慢懂了PWM，很多时候用在步进马达上，后来，慢慢过了半年后，我才发现一个问题，当树莓派有发热现象，传统地调用树莓派PWM功能时，步进马达总是怪怪的，转的不是很规律，有点性能跟不上的感觉。深入进去，发现PWM有多东西，这次就趁机总结一下，方便以后使用。</p>
 <h2 id="1-树莓派上PWM的分类"><a href="#1-树莓派上PWM的分类" class="headerlink" title="1. 树莓派上PWM的分类"></a>1. 树莓派上PWM的分类</h2><h3 id="1-1-Fully-hardware-PWM-全硬件PWM"><a href="#1-1-Fully-hardware-PWM-全硬件PWM" class="headerlink" title="1.1 Fully hardware PWM (全硬件PWM)"></a>1.1 Fully hardware PWM (全硬件PWM)</h3><blockquote>
-<p>这种类型的PWM由树莓派的PWM外设产生。脉冲的时序由PWM外设控制。它是最准确的，而且可以说是最灵活的。<br>它可以在GPIO 12/13/18/19上生成。但是，只有两个通道，因此一次只能生成两个不同的PWM流。GPIO 12/18在一个通道上，GPIO 13/19在另一个通道上。<br>适用于无抖动的伺服，无干扰的LED亮度控制，电机速度控制。</p>
+<p>这种类型的PWM由树莓派的PWM外设产生。脉冲的时序由PWM外设控制。它是最准确的，而且可以说是最灵活的。<br>它可以在GPIO 12&#x2F;13&#x2F;18&#x2F;19上生成。但是，只有两个通道，因此一次只能生成两个不同的PWM流。GPIO 12&#x2F;18在一个通道上，GPIO 13&#x2F;19在另一个通道上。<br>适用于无抖动的伺服，无干扰的LED亮度控制，电机速度控制。</p>
 </blockquote>
 <h3 id="1-2-DMA-timed-PWM-（DMA定时PWM）"><a href="#1-2-DMA-timed-PWM-（DMA定时PWM）" class="headerlink" title="1.2 DMA timed PWM （DMA定时PWM）"></a>1.2 DMA timed PWM （DMA定时PWM）</h3><blockquote>
 <p>这种类型的PWM由树莓派的DMA外设产生。<br>脉冲的时序由DMA控制。它的定时精度不如完全硬件的PWM精确，但比软件定时的PWM精确得多。取决于实现方式，它不如完全硬件的PWM灵活，例如，频率的数量要受限制得多，开和关之间的步数要受限制得多。<br>此类PWM可以在扩展头上的任何GPIO上生成。所有GPIO可能具有不同的设置。<br>适用于无抖动的伺服，无干扰的LED亮度控制，电机速度控制。</p>
@@ -252,22 +273,15 @@
 <p>这种类型的PWM由软件生成。<br>脉冲的时序由（Linux）调度程序控制。与完全硬件PWM或DMA定时PWM相比，它的定时精度明显降低。它比DMA定时PWM灵活得多，并且与完全硬件PWM一样灵活，例如，频率数量是无限的，开和关之间的步数是无限的。<br>此类PWM可以在扩展头上的任何GPIO上生成。所有GPIO可能具有不同的设置。时序精度将根据用于PWM的GPIO数量而变化。<br>不太适合伺服器，可以控制LED的亮度，但会出现毛刺，适合于电机速度控制。</p>
 </blockquote>
 <p>脉冲稳定性当然是：全硬件PWM &gt;&gt; DMA定时PWM &gt;&gt; 软件定时PWM</p>
-<h2 id="2-树莓派上PWM的实现方式"><a href="#2-树莓派上PWM的实现方式" class="headerlink" title="2. 树莓派上PWM的实现方式"></a>2. 树莓派上PWM的实现方式</h2><h3 id="2-1-传统的实现方式"><a href="#2-1-传统的实现方式" class="headerlink" title="2.1 传统的实现方式"></a>2.1 传统的实现方式</h3><p>手动sleep来实现pwm功能，步进马达连接与传统实现可以看<a href="https://www.raspberrypi.org/forums/viewtopic.php?t=186016" target="_blank" rel="noopener">这里</a><br><pre><code class="hljs python"><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
-	<span class="hljs-keyword">print</span> (<span class="hljs-string">"Move Backward"</span>)
-	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range (<span class="hljs-number">5</span>*<span class="hljs-number">200</span>):
-		GPIO.output(LinearActuatorDir, <span class="hljs-number">0</span>)
-		GPIO.output(LinearActuatorStepPin, <span class="hljs-number">1</span>)
-		time.sleep(LowSpeed)
-		GPIO.output(LinearActuatorStepPin, <span class="hljs-number">0</span>)
-		time.sleep(LowSpeed)
-		<span class="hljs-keyword">print</span> (<span class="hljs-string">"Moving"</span>)
-    ...</code></pre></p>
-<h3 id="2-2-神级武器gpiozero"><a href="#2-2-神级武器gpiozero" class="headerlink" title="2.2 神级武器gpiozero"></a>2.2 神级武器gpiozero</h3><p>这里我们可以用gpiozero中的<a href="https://gpiozero.readthedocs.io/en/stable/api_output.html#pwmoutputdevice" target="_blank" rel="noopener">PWMOutputDevice类</a><br><pre><code class="hljs python"><span class="hljs-comment"># 初始化完即运行，initial_value为占空比，frequency为频率</span>
-p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, initial_value=<span class="hljs-number">0</span>, frequency=<span class="hljs-number">100</span>, pin_factory=<span class="hljs-literal">None</span>)</code></pre></p>
+<h2 id="2-树莓派上PWM的实现方式"><a href="#2-树莓派上PWM的实现方式" class="headerlink" title="2. 树莓派上PWM的实现方式"></a>2. 树莓派上PWM的实现方式</h2><h3 id="2-1-传统的实现方式"><a href="#2-1-传统的实现方式" class="headerlink" title="2.1 传统的实现方式"></a>2.1 传统的实现方式</h3><p>手动sleep来实现pwm功能，步进马达连接与传统实现可以看<a target="_blank" rel="noopener" href="https://www.raspberrypi.org/forums/viewtopic.php?t=186016">这里</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>	<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;Move Backward&quot;</span>)<br>	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span> (<span class="hljs-number">5</span>*<span class="hljs-number">200</span>):<br>		GPIO.output(LinearActuatorDir, <span class="hljs-number">0</span>)<br>		GPIO.output(LinearActuatorStepPin, <span class="hljs-number">1</span>)<br>		time.sleep(LowSpeed)<br>		GPIO.output(LinearActuatorStepPin, <span class="hljs-number">0</span>)<br>		time.sleep(LowSpeed)<br>		<span class="hljs-built_in">print</span> (<span class="hljs-string">&quot;Moving&quot;</span>)<br>    ...<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-神级武器gpiozero"><a href="#2-2-神级武器gpiozero" class="headerlink" title="2.2 神级武器gpiozero"></a>2.2 神级武器gpiozero</h3><p>这里我们可以用gpiozero中的<a target="_blank" rel="noopener" href="https://gpiozero.readthedocs.io/en/stable/api_output.html#pwmoutputdevice">PWMOutputDevice类</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 初始化完即运行，initial_value为占空比，frequency为频率</span><br>p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, initial_value=<span class="hljs-number">0</span>, frequency=<span class="hljs-number">100</span>, pin_factory=<span class="hljs-literal">None</span>)<br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>注意，这里有一个点，<code>pin_factory=None</code>一般情况下默认使用的是<code>RPi.GPIO</code>，而<code>RPi.GPIO</code>默认的PWM是Software Timed PWM，所以可能稳定性不太好，所以我们可以使用<code>factory = PiGPIOFactory(host=&#39;127.0.0.1&#39;)</code>， <code>PiGPIO</code>支持DMA timed PWM，这个比较好</p>
 </blockquote>
-<h3 id="2-3-庞大的pigpio-（不推荐新手）"><a href="#2-3-庞大的pigpio-（不推荐新手）" class="headerlink" title="2.3 庞大的pigpio （不推荐新手）"></a>2.3 庞大的pigpio （不推荐新手）</h3><p>piggio python库中的set_PWM_dutycycle函数和hardware_PWM函数分别对应DMA，以及Fully hardware，这里不做过多阐述，自己也不是很懂 =。= ，有点尴尬，感觉相对于gpiozero稍微有点麻烦，可以看<a href="https://raspberrypi.stackexchange.com/questions/40243/pigpio-set-pwm-dutycycle-vs-hardware-pwm" target="_blank" rel="noopener">两者区别</a>和<a href="http://abyz.me.uk/rpi/pigpio/python.html" target="_blank" rel="noopener">pigpio文档</a></p>
+<h3 id="2-3-庞大的pigpio-（不推荐新手）"><a href="#2-3-庞大的pigpio-（不推荐新手）" class="headerlink" title="2.3 庞大的pigpio （不推荐新手）"></a>2.3 庞大的pigpio （不推荐新手）</h3><p>piggio python库中的set_PWM_dutycycle函数和hardware_PWM函数分别对应DMA，以及Fully hardware，这里不做过多阐述，自己也不是很懂 &#x3D;。&#x3D; ，有点尴尬，感觉相对于gpiozero稍微有点麻烦，可以看<a target="_blank" rel="noopener" href="https://raspberrypi.stackexchange.com/questions/40243/pigpio-set-pwm-dutycycle-vs-hardware-pwm">两者区别</a>和<a target="_blank" rel="noopener" href="http://abyz.me.uk/rpi/pigpio/python.html">pigpio文档</a></p>
 
             </div>
             <hr>
@@ -295,10 +309,14 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -325,11 +343,13 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -350,9 +370,9 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -365,7 +385,7 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -377,16 +397,16 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -398,208 +418,96 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "树莓派几种不同的PWM及其应用&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -621,7 +529,7 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -634,6 +542,10 @@ p = PWMOutputDevice(pin, *, active_high=<span class="hljs-literal">True</span>, 
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

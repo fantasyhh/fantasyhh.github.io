@@ -1,49 +1,72 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="hello">
+<meta property="og:type" content="website">
+<meta property="og:title" content="烛影小札">
+<meta property="og:url" content="https://fantasyhh.github.io/page/3/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="hello">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Jiahuan Shi">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -56,7 +79,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -130,26 +154,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -157,13 +172,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="日拱一卒, 知足常乐">
               
             </span>
 
@@ -178,7 +193,7 @@
 
   <main>
     
-      <div class="container nopadding-md">
+      <div class="container nopadding-x-md">
         <div class="py-5" id="board"
           >
           
@@ -193,14 +208,63 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/12/10/python-mqtt/">MQTT知识指南以及在Python的应用</a>
+        
+        <a href="/2019/12/31/thread-and-process/" target="_self">
+          操作系统中线程与进程概念解惑
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/12/10/python-mqtt/">
+        <a href="/2019/12/31/thread-and-process/" target="_self">
           
-          
+          这篇文章总结本来记录于两年前，是在写Python多线程时对一些概念的疑惑的解答，当初查阅了很多资料，对于操作系统层面的线程进程概念很模糊。而今，随着Python版本的更新，本身异步的新特性逐渐完善，在学习异步的时候难免与常用的多进程多线程进行比较来说明异步的优越性，把以前的文章拿出来，并且在现在自己的理解上查阅一些资料进行适当修改，达到温故而知新的效果。 看了一天的相关概念,很多涉及到操作系统与底
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-12-31 10:07" pubdate>
+              2019-12-31
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
+              <a href="/categories/Linux/">Linux</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/Thread/">Thread</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/12/10/python-mqtt/" target="_self">
+          MQTT知识指南以及在Python的应用
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2019/12/10/python-mqtt/" target="_self">
           
           谈到物联网就会谈到MQTT协议，之前一段时间我虽然在书上看到过，也是粗略一看也没深究，主要自己只是维度不够，项目中也没有用到，就不了了之了。最近老板找了个架构师准备用心好好搞一搞公司那个平台，提出新的架构，用到了MQTT协议，用心研究了一番，发现以前写了好多的功能都是MQTT自带的，花了好多时间重复造轮子。最近看了好多相关的东西，虽然蛮多深层次的东西都没有摸到，但也有些了解，故搜集了一些资料有序的
         </a>
@@ -244,14 +308,14 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/12/09/django-admin-action/">Django admin后台常用设置汇总</a>
+        
+        <a href="/2019/12/09/django-admin-action/" target="_self">
+          Django admin后台常用设置汇总
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/12/09/django-admin-action/">
-          
-          
-            
+        <a href="/2019/12/09/django-admin-action/" target="_self">
           
           一开始学Django的时候基本都有接触django admin管理员后台，但是之后的开发基本很少用，写API测试的时候要修好后台数据基本都是命令行或者数据库直接修改，完全没有接触到admin。但是最近方便公司订饭，写了个订饭系统，前后端分离，本想让前端根据登录员工判断是否是管理员角色，然后在页面上增加管理员操作元素，有点麻烦，。之后，我直接傻了，拍了下自己头，为啥不用django自带的管理员后台呢
         </a>
@@ -293,18 +357,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/10/17/python-m-option/">Python -m 参数以及生僻运行命令汇总</a>
+        
+        <a href="/2019/10/17/python-m-option/" target="_self">
+          Python -m 参数以及生僻运行命令汇总
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/10/17/python-m-option/">
+        <a href="/2019/10/17/python-m-option/" target="_self">
           
-          
-            
-          
-          最近在翻阅剖析Python源码的时候讲到了内部Python变量的实现，以及当运行Python命令时，隐藏在内部的一些过程，于是python3 --help之后对某些运行参数产生了一些疑问，还涉及到了包与模块的内容，略微生僻，特此整理记录下～
-1. 大杂烩
-旨在由用户直接执行的包含Python代码的纯文本文件通常称为脚本(script)，这是一个非正式术语，表示顶级程序文件。 另一方面，包含设计用于
+          最近在翻阅剖析Python源码的时候讲到了内部Python变量的实现，以及当运行Python命令时，隐藏在内部的一些过程，于是python3 --help之后对某些运行参数产生了一些疑问，还涉及到了包与模块的内容，略微生僻，特此整理记录下～ 1. 大杂烩 旨在由用户直接执行的包含Python代码的纯文本文件通常称为**脚本(script)，这是一个非正式术语，表示顶级程序文件。 另一方面，包含设计
         </a>
       </p>
 
@@ -342,14 +404,14 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/10/11/extern-and-linker/">C语言中extern和头文件以及静态动态库概念梳理</a>
+        
+        <a href="/2019/10/11/extern-and-linker/" target="_self">
+          C语言中extern和头文件以及静态动态库概念梳理
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/10/11/extern-and-linker/">
-          
-          
-            
+        <a href="/2019/10/11/extern-and-linker/" target="_self">
           
           最近因为Arduino使用的较多，开始学起来了C语言，看了还多天，无非就是基本的数据类型，运算符，控制语句，简单得很，后来发现这仅仅是语法层面，C语言是除了汇编最为底层的语言了，要了解这门语言，就要从了解支撑起C的底层原理开始了解，编译原理，操作系统，计算机硬件。而这次遇到的C语言的库文件，就好比Python中的标准库与第三方库，怎么共享，中间又是个什么过程，一团黑。因为涉及内容太多太多，我还是偏
         </a>
@@ -391,16 +453,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">浅谈Flask目录结构以及与Vue.js整合注意事项</a>
+        
+        <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/" target="_self">
+          浅谈Flask目录结构以及与Vue.js整合注意事项
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/">
+        <a href="/2019/09/25/Flask-structrue-and-integrate-with-vue/" target="_self">
           
-          
-            
-          
-          没用Flask之前，我对Flask的只有一个概念，那就是Micro，官网对其的解释是这样的：Micro并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的Micro意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定，因此F
+          没用Flask之前，我对Flask的只有一个概念，那就是**Micro，官网对其的解释是这样的：Micro并不意味着你的整个Web应用程序必须只有单个Python文件（尽管可以），也不意味着Flask缺少功能。微框架中的Micro**意味着Flask旨在使核心保持简单但可扩展。Flask不会为你做出很多决定，例如使用什么数据库，而且它所做的决定（例如使用哪种模板引擎）很容易更改。其他一切都由你决定
         </a>
       </p>
 
@@ -442,18 +504,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/09/20/MCP23017-raspberrypi-expander/">用Python在树莓派中使用MCP23017 I/O扩展模块</a>
+        
+        <a href="/2019/09/20/MCP23017-raspberrypi-expander/" target="_self">
+          用Python在树莓派中使用MCP23017 I/O扩展模块
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/09/20/MCP23017-raspberrypi-expander/">
+        <a href="/2019/09/20/MCP23017-raspberrypi-expander/" target="_self">
           
-          
-            
-          
-          摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景:
-For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more?
-The ea
+          摘自老外一段话,本来想翻译,有点拗口,直接搬运过来,作为背景: For all of my projects I have used the standard GPIO header pins as inputs and outputs. This gives you a total of 17 pins to play with but what if you need more? The ea
         </a>
       </p>
 
@@ -495,17 +555,16 @@ The ea
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/08/01/Arduino-Serial/">Arduino Serial使用以及各种读写函数区别</a>
+        
+        <a href="/2019/08/01/Arduino-Serial/" target="_self">
+          Arduino Serial使用以及各种读写函数区别
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/08/01/Arduino-Serial/">
+        <a href="/2019/08/01/Arduino-Serial/" target="_self">
           
-          
-            
-          
-          之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键….
-1. 前言常见的串口调试是将Arduino与PC相连，然
+          之前有一篇文章总结了Python的串口使用，自认为已经深得要领。直到最近开始研究Arduino，用的串口传输数据，心里还是有很多问题，时常在运用相关函数的时候想起之前Python上的串口知识点，两者有着千丝万缕的关系。从头开始理一下思路，原理都是一样的，计算机只懂得二进制，而人类懂得ASCII文本，如何理解两者之间架起的这座桥梁甚是关键…. 1. 前言常见的串口调试是将Arduino与PC相连，然
         </a>
       </p>
 
@@ -543,17 +602,16 @@ The ea
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/07/25/python-about-keyboard/">Python中关于键盘行为的方法总结</a>
+        
+        <a href="/2019/07/25/python-about-keyboard/" target="_self">
+          Python中关于键盘行为的方法总结
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/07/25/python-about-keyboard/">
+        <a href="/2019/07/25/python-about-keyboard/" target="_self">
           
-          
-            
-          
-          最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理
-1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者
+          最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理 1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者
         </a>
       </p>
 
@@ -591,17 +649,16 @@ The ea
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/07/10/docker-common-commands/">Docker常用命令整理</a>
+        
+        <a href="/2019/07/10/docker-common-commands/" target="_self">
+          Docker常用命令整理
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/07/10/docker-common-commands/">
+        <a href="/2019/07/10/docker-common-commands/" target="_self">
           
-          
-            
-          
-          因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。
-由于国内网络环境的缘故，要使用国内源安装，
+          因为工作需要接触到了Docker，发现这个东西是真的好用。容器带来的隔离效果对我这种强迫症患者太友好了。学一个新的框架或者数据库，docker搞起来，无论怎么糟蹋怎么设置，出现小问题啥的直接移除这个容器，再创个干净的新的重头再来，少了很多配置的烦恼，电脑上也不用装很多乱七八糟的东西！所以这篇文章就记录下最近自己整理的常用的docker命令，以便后续翻阅。 由于国内网络环境的缘故，要使用国内源安装，
         </a>
       </p>
 
@@ -636,68 +693,13 @@ The ea
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        <a href="/2019/07/10/postgresql-tutorial/">PostgreSQL 常用命令记录</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2019/07/10/postgresql-tutorial/">
-          
-          
-            
-          
-          从之前看的Two Scoops Press Two Scoops of Django 1.11书籍或者是官网的教程，又或者最近在github查找django-docker人家的代码时看到的，都是用的PostgreSQL作为Django的数据库，平常都是用的Mysql，是不是验证了”国外大多用PostgresSQL，国内大多用Mysql“这句话，我对这个数据库比较陌生，但是既然官网都主推了，相对My
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-07-10 10:05" pubdate>
-              2019-07-10
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/PostgreSQL/">PostgreSQL</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Linux/">Linux</a>
-            
-              <a href="/tags/SQL/">SQL</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
-  
-  <script>
-    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
-      ele.href += '#board';
-    }
-  </script>
 
 
 
@@ -707,16 +709,16 @@ The ea
         </div>
       </div>
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -728,154 +730,83 @@ The ea
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
-
-
-
-
-
+  
 
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "日拱一卒, 知足常乐&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -897,7 +828,7 @@ The ea
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -910,6 +841,10 @@ The ea
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

@@ -1,62 +1,91 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。 1. 先从概念理解开始 某大佬云：人类使用文本，计算机使用字节序列  我们先可以看一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="血案后对python3.7最新字节字符编码解码知识整理">
+<meta property="og:url" content="https://fantasyhh.github.io/2019/05/25/python-encode-decode2/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。 1. 先从概念理解开始 某大佬云：人类使用文本，计算机使用字节序列  我们先可以看一下">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-25T01:53:39.000Z">
+<meta property="article:modified_time" content="2020-09-02T09:26:02.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Bytes">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>血案后对python3.7最新字节字符编码解码知识整理 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +98,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +173,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +191,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="血案后对python3.7最新字节字符编码解码知识整理">
               
             </span>
 
@@ -195,21 +216,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.8k 字
+      5.5k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      13
-       分钟
+      46 分钟
     </span>
   
 
@@ -230,25 +248,25 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">血案后对python3.7最新字节字符编码解码知识整理</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。</p>
 <h2 id="1-先从概念理解开始"><a href="#1-先从概念理解开始" class="headerlink" title="1. 先从概念理解开始"></a>1. 先从概念理解开始</h2><blockquote>
 <p>某大佬云：人类使用文本，计算机使用字节序列</p>
 </blockquote>
-<p>我们先可以看一下<a href="https://zhuanlan.zhihu.com/p/29318105" target="_blank" rel="noopener">从ASCII到Unicode的发展历史</a>，然后理解下面的概念。</p>
+<p>我们先可以看一下<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29318105">从ASCII到Unicode的发展历史</a>，然后理解下面的概念。</p>
 <ul>
 <li><strong>bit</strong>：二进制位， 是计算机内部数据储存的最小单位，11010100是一个8位二进制数</li>
-<li><strong>byte</strong>：字节，是计算机中数据处理的基本单位，计算机中以字节为单位存储和解释信息，规定一个字节由八个二进制位构成，即1个字节等于8个比特（1Byte=8bit）。八位二进制数最小为00000000，最大为11111111；通常1个字节可以存入一个ASCII码，2个字节可以存放一个汉字国标码</li>
+<li><strong>byte</strong>：字节，是计算机中数据处理的基本单位，计算机中以字节为单位存储和解释信息，规定一个字节由八个二进制位构成，即1个字节等于8个比特（1Byte&#x3D;8bit）。八位二进制数最小为00000000，最大为11111111；通常1个字节可以存入一个ASCII码，2个字节可以存放一个汉字国标码</li>
 <li><strong>Unicode</strong>：Unicode（统一码、万国码、单一码）是计算机科学领域里的一项业界标准，包括字符集、编码方案等。Unicode 是为了解决传统的字符编码方案的局限而产生的，它为每种语言中的每个字符设定了统一并且唯一的二进制编码，以满足跨语言、跨平台进行文本转换、处理的要求</li>
 <li><strong>字符</strong>：“字符”的最佳定义是Unicode字符，字符的具体表述取决于所用的编码</li>
 <li><strong>字符串</strong>：一个字符串就是一个字符序列（多个字符组成）</li>
@@ -256,92 +274,54 @@
 <li><strong>编码</strong>：把码位转换成字节序列的过程就是编码</li>
 <li><strong>解码</strong>：把字节序序列转换成码位的过程</li>
 </ul>
-<p>简单看一个书本上例子当下酒菜：<br><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>s = <span class="hljs-string">'café'</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>len(s) <span class="hljs-comment"># ➊</span>
-<span class="hljs-number">4</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>b = s.encode(<span class="hljs-string">'utf8'</span>) <span class="hljs-comment"># ➋</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>b
-<span class="hljs-string">b'caf\xc3\xa9'</span> <span class="hljs-comment"># ➌</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>len(b) <span class="hljs-comment"># ➍</span>
-<span class="hljs-number">5</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>b.decode(<span class="hljs-string">'utf8'</span>) <span class="hljs-comment"># ➎</span>
-<span class="hljs-string">'café'</span></code></pre></p>
+<p>简单看一个书本上例子当下酒菜：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>s = <span class="hljs-string">&#x27;café&#x27;</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">len</span>(s) <span class="hljs-comment"># ➊</span><br><span class="hljs-number">4</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>b = s.encode(<span class="hljs-string">&#x27;utf8&#x27;</span>) <span class="hljs-comment"># ➋</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>b<br><span class="hljs-string">b&#x27;caf\xc3\xa9&#x27;</span> <span class="hljs-comment"># ➌</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">len</span>(b) <span class="hljs-comment"># ➍</span><br><span class="hljs-number">5</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>b.decode(<span class="hljs-string">&#x27;utf8&#x27;</span>) <span class="hljs-comment"># ➎</span><br><span class="hljs-string">&#x27;café&#x27;</span><br></code></pre></td></tr></table></figure>
+
 <p>❶ ‘café’ 字符串有 4 个 Unicode 字符。<br>❷ 使用 UTF-8 把 str 对象编码成 bytes 对象。<br>❸ bytes 字面量以 b 开头。<br>❹ 字节序列 b 有 5 个字节(在 UTF-8 中,“é”的码位编码成两个字节)。<br>❺ 使用 UTF-8 把 bytes 对象解码成 str 对象</p>
 <blockquote>
 <p>如果想帮助自己记住 .decode() 和 .encode() 的区别,可以把字节序列想成晦涩难懂的机器磁芯转储,把 Unicode 字符串想成“人类可读”的文本。那么,把字节序列变成人类可读的文本字符串就是解码,而把字符串变成用于存储或传输的字节序列就是编码。</p>
 </blockquote>
 <h2 id="2-几个常会看到的函数"><a href="#2-几个常会看到的函数" class="headerlink" title="2. 几个常会看到的函数"></a>2. 几个常会看到的函数</h2><h3 id="2-1-数字转换"><a href="#2-1-数字转换" class="headerlink" title="2.1 数字转换"></a>2.1 数字转换</h3><p> <code>bin()</code>,<code>oct()</code>,<code>int()</code>,<code>hex()</code>，这些函数就不说了，数字转换手算算也是非常简单的。但是我们要知道Python中各种进制数据的表示，以十进制的23为例，二进制前缀为0b，<code>0b10111</code>，八进制前缀为0o，<code>0o27</code>，十六进制前缀为0x，<code>0x17</code>.</p>
-<p>一个在转换进制的同时高位补零的小技巧：<br><pre><code class="hljs python">&gt;&gt;&gt; bin(2)
-0b10'
-&gt;&gt;&gt; '&#123;:08b&#125;'.format(2)
-'00000010'
-&gt;&gt;&gt; '&#123;:8b&#125;'.format()
-'      10'
-# 输出的都是字符串
-&gt;&gt;&gt; int('00000010',2)
-2</code></pre></p>
-<h3 id="2-2-不起眼的主角"><a href="#2-2-不起眼的主角" class="headerlink" title="2.2 不起眼的主角"></a>2.2 不起眼的主角</h3><p><code>chr(i)</code>：<strong>返回 Unicode 码位为整数 i （ 0 &lt;= i &lt;= 0x10ffff）的字符的字符串格式。例如，chr(97) 返回字符串 ‘a’，chr(8364) 返回字符串 ‘€’。这是 ord() 的逆函数</strong>。</p>
+<p>一个在转换进制的同时高位补零的小技巧：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">bin</span>(<span class="hljs-number">2</span>)<br><span class="hljs-number">0b10</span><span class="hljs-string">&#x27;</span><br><span class="hljs-string">&gt;&gt;&gt; &#x27;</span>&#123;:08b&#125;<span class="hljs-string">&#x27;.format(2)</span><br><span class="hljs-string">&#x27;</span><span class="hljs-number">000000</span>10<span class="hljs-string">&#x27;</span><br><span class="hljs-string">&gt;&gt;&gt; &#x27;</span>&#123;:8b&#125;<span class="hljs-string">&#x27;.format()</span><br><span class="hljs-string">&#x27;</span>      <span class="hljs-number">10</span><span class="hljs-string">&#x27;</span><br><span class="hljs-string"># 输出的都是字符串</span><br><span class="hljs-string">&gt;&gt;&gt; int(&#x27;</span><span class="hljs-number">000000</span>10<span class="hljs-string">&#x27;,2)</span><br><span class="hljs-string">2</span><br></code></pre></td></tr></table></figure>
+
+
+<h3 id="2-2-不起眼的主角"><a href="#2-2-不起眼的主角" class="headerlink" title="2.2 不起眼的主角"></a>2.2 不起眼的主角</h3><p><code>chr(i)</code>：<strong>返回 Unicode 码位为整数 i （ 0 &lt;&#x3D; i &lt;&#x3D; 0x10ffff）的字符的字符串格式。例如，chr(97) 返回字符串 ‘a’，chr(8364) 返回字符串 ‘€’。这是 ord() 的逆函数</strong>。</p>
 <p><code>ord(c)</code>： <strong>对表示单个 Unicode 字符的字符串，返回代表它 Unicode 码点的整数。例如 ord(‘a’) 返回整数 97， ord(‘€’) （欧元符合）返回 8364 。这是 chr() 的逆函数。</strong></p>
 <p>所以上面chr函数里面i的范围最大为0x10ffff，转换成十进制就是码位概念里字符标识数字的1114111，欧元符号转换也是同理，0x20AC就是8364。</p>
-<h2 id="3-计算机所能理解的字节"><a href="#3-计算机所能理解的字节" class="headerlink" title="3. 计算机所能理解的字节"></a>3. 计算机所能理解的字节</h2><h3 id="3-1-Python中的字节对象"><a href="#3-1-Python中的字节对象" class="headerlink" title="3.1 Python中的字节对象"></a>3.1 Python中的字节对象</h3><p><strong>操作二进制数据的核心内置类型是 bytes 和 bytearray。 它们由 memoryview 提供支持，该对象使用 缓冲区协议 来访问其他二进制对象所在内存，不需要创建对象的副本。</strong>、<br><code>bytearray(）</code>:返回一个新的 bytes 数组。 bytearray 类是一个可变序列，包含范围为 0 &lt;= x &lt; 256 的整数。它有可变序列大部分常见的方法<br><code>bytes()</code>:返回一个新的“bytes”对象， 是一个不可变序列，包含范围为 0 &lt;= x &lt; 256 的整数,bytes 是 bytearray 的不可变版本 - 它有其中不改变序列的方法和相同的索引、切片操作。<br><strong>Python中bytes 字面值中只允许 ASCII 字符（无论源代码声明的编码为何）。 任何超出 127 的二进制值必须使用相应的转义序列形式加入 bytes 字面值。</strong></p>
+<h2 id="3-计算机所能理解的字节"><a href="#3-计算机所能理解的字节" class="headerlink" title="3. 计算机所能理解的字节"></a>3. 计算机所能理解的字节</h2><h3 id="3-1-Python中的字节对象"><a href="#3-1-Python中的字节对象" class="headerlink" title="3.1 Python中的字节对象"></a>3.1 Python中的字节对象</h3><p><strong>操作二进制数据的核心内置类型是 bytes 和 bytearray。 它们由 memoryview 提供支持，该对象使用 缓冲区协议 来访问其他二进制对象所在内存，不需要创建对象的副本。</strong>、<br><code>bytearray(）</code>:返回一个新的 bytes 数组。 bytearray 类是一个可变序列，包含范围为 0 &lt;&#x3D; x &lt; 256 的整数。它有可变序列大部分常见的方法<br><code>bytes()</code>:返回一个新的“bytes”对象， 是一个不可变序列，包含范围为 0 &lt;&#x3D; x &lt; 256 的整数,bytes 是 bytearray 的不可变版本 - 它有其中不改变序列的方法和相同的索引、切片操作。<br><strong>Python中bytes 字面值中只允许 ASCII 字符（无论源代码声明的编码为何）。 任何超出 127 的二进制值必须使用相应的转义序列形式加入 bytes 字面值。</strong></p>
 <blockquote>
 <p>bytearray和bytes不一样的地方在于，bytearray是可变的,它们的关系就相当于list与tuple</p>
 </blockquote>
-<p>还是来看书上例子<br><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>cafe = bytes(<span class="hljs-string">'café'</span>, encoding=<span class="hljs-string">'utf_8'</span>) ➊
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe
-<span class="hljs-string">b'caf\xc3\xa9'</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe[<span class="hljs-number">0</span>] ➋
-<span class="hljs-number">99</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe[:<span class="hljs-number">1</span>] ➌
-<span class="hljs-string">b'c'</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe_arr = bytearray(cafe)
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe_arr ➍
-bytearray(<span class="hljs-string">b'caf\xc3\xa9'</span>)
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe_arr[<span class="hljs-number">-1</span>:] ➎
-bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
+<p>还是来看书上例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>cafe = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">&#x27;café&#x27;</span>, encoding=<span class="hljs-string">&#x27;utf_8&#x27;</span>) ➊<br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe<br><span class="hljs-string">b&#x27;caf\xc3\xa9&#x27;</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe[<span class="hljs-number">0</span>] ➋<br><span class="hljs-number">99</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe[:<span class="hljs-number">1</span>] ➌<br><span class="hljs-string">b&#x27;c&#x27;</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe_arr = <span class="hljs-built_in">bytearray</span>(cafe)<br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe_arr ➍<br><span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;caf\xc3\xa9&#x27;</span>)<br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe_arr[-<span class="hljs-number">1</span>:] ➎<br><span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;\xa9&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
 <p>❶ bytes 对象可以从 str 对象使用给定的编码构建。<br>❷ 各个元素是 range(256) 内的整数。<br>❸ bytes 对象的切片还是 bytes 对象,即使是只有一个字节的切片。<br>❹ bytearray 对象没有字面量句法,而是以 bytearray() 和字节序列字面量参数的形式<br>显示。<br>❺ bytearray 对象的切片还是 bytearray 对象。</p>
 <blockquote>
-<p>my_bytes[0] 获取的是一个整数,而 my_bytes[:1] 返回的是一个长度为 1的 bytes 对象——这一点应该不会让人意外。s[0] == s[:1] 只对 str 这个序列类型成立。不过,str 类型的这个行为十分罕见。对其他各个序列类型来说,s[i] 返回一个元素,而 s[i:i+1] 返回一个相同类型的序列,里面是 s[i] 元素。</p>
+<p>my_bytes[0] 获取的是一个整数,而 my_bytes[:1] 返回的是一个长度为 1的 bytes 对象——这一点应该不会让人意外。s[0] &#x3D;&#x3D; s[:1] 只对 str 这个序列类型成立。不过,str 类型的这个行为十分罕见。对其他各个序列类型来说,s[i] 返回一个元素,而 s[i:i+1] 返回一个相同类型的序列,里面是 s[i] 元素。</p>
 </blockquote>
-<h3 id="3-2-简单分析"><a href="#3-2-简单分析" class="headerlink" title="3.2 简单分析"></a>3.2 简单分析</h3><p>上面的例子中，我们看到Python中字节用的是<code>b&#39;caf\xc3\xa9&#39;</code>来表示，通过一个前缀b来表示字节，也是为了让人更明白，<code>cafe[0]</code>得到的是99，我们打开<a href="https://www.ascii-code.com/" target="_blank" rel="noopener">ascii码表</a>，或者用<code>ord(&#39;c&#39;)</code>知道了，99代表的就是’c’。从内部来看，这个字节在计算机中的真正存在方式是用<code>01100011</code>来表示，后面的af类似，而<code>é</code>在utf8编码中要用两个字节表示，而且这两个字节都大于127，所有只能使用十六进制转义。<br>那为什么要用十六进制呢，而不是二进制来表明字节？</p>
+<h3 id="3-2-简单分析"><a href="#3-2-简单分析" class="headerlink" title="3.2 简单分析"></a>3.2 简单分析</h3><p>上面的例子中，我们看到Python中字节用的是<code>b&#39;caf\xc3\xa9&#39;</code>来表示，通过一个前缀b来表示字节，也是为了让人更明白，<code>cafe[0]</code>得到的是99，我们打开<a target="_blank" rel="noopener" href="https://www.ascii-code.com/">ascii码表</a>，或者用<code>ord(&#39;c&#39;)</code>知道了，99代表的就是’c’。从内部来看，这个字节在计算机中的真正存在方式是用<code>01100011</code>来表示，后面的af类似，而<code>é</code>在utf8编码中要用两个字节表示，而且这两个字节都大于127，所有只能使用十六进制转义。<br>那为什么要用十六进制呢，而不是二进制来表明字节？</p>
 <blockquote>
 <p>由于字节(byte)在计算机内部出现的频率较高，如果可以使用一种简洁的方式将它的内在含义准确表达出来，将会给我们带来很多方便。选择十六进制，是因为8位二进制的数字可以方便的转换为2个十六进制的数字。一个字节能且只能由一对十六进制来表示，比如10110110可以表示为B6。如果使用4进制的话则需要使用4个数字来表示一个字节，不够简洁；使用8进制的话，最靠左的8进制数是由2位二进制数字来表示的，相比于使用16进制有些美中不足。</p>
 </blockquote>
 <p>说到底，Python给我们返回来的字节形式还是<strong>“给人看的”</strong>，让我们以一种看字符的方式来看字节。</p>
-<h3 id="3-3-字节的两个好用方法来应对十六进制"><a href="#3-3-字节的两个好用方法来应对十六进制" class="headerlink" title="3.3 字节的两个好用方法来应对十六进制"></a>3.3 字节的两个好用方法来应对十六进制</h3><p><code>fromhex(string) （与binascii.b2a_hex(string)类似）</code>:此 bytes 类方法返回一个解码给定字符串的 bytes 对象。 字符串必须由表示每个字节的两个十六进制数码构成，其中的 ASCII 空白符会被忽略<br><code>hex(h)（与binascii.a2b_hex(string)类似））</code>：返回一个字符串对象，该对象包含实例中每个字节的两个十六进制数字。<br><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>cafe = bytes(<span class="hljs-string">'café'</span>, encoding=<span class="hljs-string">'utf_8'</span>)
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe
-<span class="hljs-string">b'caf\xc3\xa9'</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>cafe.hex()
-<span class="hljs-string">'636166c3a9'</span>
-&gt;&gt;&gt;bytes.fromhex(<span class="hljs-string">'63 61 66 c3 a9'</span>)
-<span class="hljs-string">b'caf\xc3\xa9'</span>
-<span class="hljs-comment"># 另一种写方法,用的不多，一些手册或者其他语言里的十六进制数据都是没有0x前缀，还要手动补，不靠谱</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>bytes([<span class="hljs-number">0x63</span>,<span class="hljs-number">0x61</span>,<span class="hljs-number">0x66</span>,<span class="hljs-number">0xc3</span>,<span class="hljs-number">0xa9</span>])
-<span class="hljs-string">b'caf\xc3\xa9'</span></code></pre></p>
+<h3 id="3-3-字节的两个好用方法来应对十六进制"><a href="#3-3-字节的两个好用方法来应对十六进制" class="headerlink" title="3.3 字节的两个好用方法来应对十六进制"></a>3.3 字节的两个好用方法来应对十六进制</h3><p><code>fromhex(string) （与binascii.b2a_hex(string)类似）</code>:此 bytes 类方法返回一个解码给定字符串的 bytes 对象。 字符串必须由表示每个字节的两个十六进制数码构成，其中的 ASCII 空白符会被忽略<br><code>hex(h)（与binascii.a2b_hex(string)类似））</code>：返回一个字符串对象，该对象包含实例中每个字节的两个十六进制数字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>cafe = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">&#x27;café&#x27;</span>, encoding=<span class="hljs-string">&#x27;utf_8&#x27;</span>)<br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe<br><span class="hljs-string">b&#x27;caf\xc3\xa9&#x27;</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>cafe.<span class="hljs-built_in">hex</span>()<br><span class="hljs-string">&#x27;636166c3a9&#x27;</span><br>&gt;&gt;&gt;<span class="hljs-built_in">bytes</span>.fromhex(<span class="hljs-string">&#x27;63 61 66 c3 a9&#x27;</span>)<br><span class="hljs-string">b&#x27;caf\xc3\xa9&#x27;</span><br><span class="hljs-comment"># 另一种写方法,用的不多，一些手册或者其他语言里的十六进制数据都是没有0x前缀，还要手动补，不靠谱</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">bytes</span>([<span class="hljs-number">0x63</span>,<span class="hljs-number">0x61</span>,<span class="hljs-number">0x66</span>,<span class="hljs-number">0xc3</span>,<span class="hljs-number">0xa9</span>])<br><span class="hljs-string">b&#x27;caf\xc3\xa9&#x27;</span><br></code></pre></td></tr></table></figure>
 <p>查看下bytes用法</p>
 <blockquote>
-<p>Init signature: bytes(self, /, *args, **kwargs)<br>Docstring:<br>bytes(iterable_of_ints) -&gt; bytes<br>bytes(string, encoding[, errors]) -&gt; bytes<br>bytes(bytes_or_buffer) -&gt; immutable copy of bytes_or_buffer<br>bytes(int) -&gt; bytes object of size given by the parameter initialized with null bytes<br>bytes() -&gt; empty bytes object</p>
+<p>Init signature: bytes(self, &#x2F;, *args, **kwargs)<br>Docstring:<br>bytes(iterable_of_ints) -&gt; bytes<br>bytes(string, encoding[, errors]) -&gt; bytes<br>bytes(bytes_or_buffer) -&gt; immutable copy of bytes_or_buffer<br>bytes(int) -&gt; bytes object of size given by the parameter initialized with null bytes<br>bytes() -&gt; empty bytes object</p>
 </blockquote>
 <p>好了，这下心里的结都理清楚了，特别是要给下位机发送一段十六进制的数字的组合，就可以这么转换了</p>
 <h2 id="4-结构体与内存视图"><a href="#4-结构体与内存视图" class="headerlink" title="4. 结构体与内存视图"></a>4. 结构体与内存视图</h2><p><strong>struct 模块提供了一些函数,把打包的字节序列转换成不同类型字段组成的元组,还有一些函数用于执行反向转换,把元组转换成打包的bytes、bytearray 和 memoryview 对象。</strong></p>
-<p>虽然网上找的时候好多遇到了<code>struct</code>模块，但这里不多说，留下两个链接<a href="https://docs.python.org/zh-cn/3/library/stdtypes.html#memoryview" target="_blank" rel="noopener">内存试图</a>，<a href="https://docs.python.org/zh-cn/3/library/struct.html?highlight=struct#module-struct" target="_blank" rel="noopener">struct模块官方手册</a>。</p>
+<p>虽然网上找的时候好多遇到了<code>struct</code>模块，但这里不多说，留下两个链接<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/stdtypes.html#memoryview">内存试图</a>，<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/struct.html?highlight=struct#module-struct">struct模块官方手册</a>。</p>
 <h2 id="5-编码与解码"><a href="#5-编码与解码" class="headerlink" title="5. 编码与解码"></a>5. 编码与解码</h2><blockquote>
-<p>Python 自带了超过 100 种编解码器(codec, encoder/decoder),用于在文本和字节之间相互转换。每个编解码器都有一个名称,如 ‘utf_8’,而且经常有几个别名,如’utf8’、’utf-8’ 和 ‘U8’。这些名称可以传给open()、str.encode()、bytes.decode() 等函数的 encoding 参数。</p>
+<p>Python 自带了超过 100 种编解码器(codec, encoder&#x2F;decoder),用于在文本和字节之间相互转换。每个编解码器都有一个名称,如 ‘utf_8’,而且经常有几个别名,如’utf8’、’utf-8’ 和 ‘U8’。这些名称可以传给open()、str.encode()、bytes.decode() 等函数的 encoding 参数。</p>
 </blockquote>
-<p>终于到了编码与解码，其实万剑归一，那些科技大佬们在混沌的一片编码方式中劈开了一斧，创建了utf8，我们只要用它就行了。看下面一个例子。<br><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span> k = <span class="hljs-string">'欢'</span>.encode(<span class="hljs-string">'utf8'</span>)
-<span class="hljs-meta">&gt;&gt;&gt; </span> k
-<span class="hljs-string">b'\xe6\xac\xa2'</span> <span class="hljs-comment"># ➊</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>print(bin(k[<span class="hljs-number">0</span>])+<span class="hljs-string">'    '</span>+bin(k[<span class="hljs-number">1</span>])+<span class="hljs-string">'    '</span>+bin(k[<span class="hljs-number">2</span>]))
-<span class="hljs-number">0b11100110</span>    <span class="hljs-number">0b10101100</span>    <span class="hljs-number">0b10100010</span>  <span class="hljs-comment"># ➋</span></code></pre></p>
+<p>终于到了编码与解码，其实万剑归一，那些科技大佬们在混沌的一片编码方式中劈开了一斧，创建了utf8，我们只要用它就行了。看下面一个例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span> k = <span class="hljs-string">&#x27;欢&#x27;</span>.encode(<span class="hljs-string">&#x27;utf8&#x27;</span>)<br><span class="hljs-meta">&gt;&gt;&gt; </span> k<br><span class="hljs-string">b&#x27;\xe6\xac\xa2&#x27;</span> <span class="hljs-comment"># ➊</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(k[<span class="hljs-number">0</span>])+<span class="hljs-string">&#x27;    &#x27;</span>+<span class="hljs-built_in">bin</span>(k[<span class="hljs-number">1</span>])+<span class="hljs-string">&#x27;    &#x27;</span>+<span class="hljs-built_in">bin</span>(k[<span class="hljs-number">2</span>]))<br><span class="hljs-number">0b11100110</span>    <span class="hljs-number">0b10101100</span>    <span class="hljs-number">0b10100010</span>  <span class="hljs-comment"># ➋</span><br></code></pre></td></tr></table></figure>
 <p>❶ 汉字‘欢’通过utf8编码程三个字节<br>❷ 打印这三个字节的二进制</p>
-<p> 然后再来看Unicode字符代码与UTF-8编码的对应关系，发现与下面的第三条是对应的，所以编码也不是乱编的，你随便写一个字节再解码都是容易报错的，百分之九十九，除非你运气好。<br><pre><code class="hljs undefined"> 
-<span class="hljs-number">0000</span> <span class="hljs-number">0000</span><span class="hljs-number">-0000</span> <span class="hljs-number">007</span>F | <span class="hljs-number">0</span>xxxxxxx
-
-<span class="hljs-number">0000</span> <span class="hljs-number">0080</span><span class="hljs-number">-0000</span> <span class="hljs-number">07</span>FF | <span class="hljs-number">110</span>xxxxx <span class="hljs-number">10</span>xxxxxx
-
-<span class="hljs-number">0000</span> <span class="hljs-number">0800</span><span class="hljs-number">-0000</span> FFFF | <span class="hljs-number">1110</span>xxxx <span class="hljs-number">10</span>xxxxxx <span class="hljs-number">10</span>xxxxxx
-
-<span class="hljs-number">0001</span> <span class="hljs-number">0000</span><span class="hljs-number">-0010</span> FFFF | <span class="hljs-number">11110</span>xxx <span class="hljs-number">10</span>xxxxxx <span class="hljs-number">10</span>xxxxxx <span class="hljs-number">10</span>xxxxxx</code></pre></p>
+<p> 然后再来看Unicode字符代码与UTF-8编码的对应关系，发现与下面的第三条是对应的，所以编码也不是乱编的，你随便写一个字节再解码都是容易报错的，百分之九十九，除非你运气好。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"> <br><span class="hljs-attribute">0000</span> <span class="hljs-number">0000</span>-<span class="hljs-number">0000</span> <span class="hljs-number">007</span>F | <span class="hljs-number">0</span>xxxxxxx<br><br><span class="hljs-attribute">0000</span> <span class="hljs-number">0080</span>-<span class="hljs-number">0000</span> <span class="hljs-number">07</span>FF | <span class="hljs-number">110</span>xxxxx <span class="hljs-number">10</span>xxxxxx<br><br><span class="hljs-attribute">0000</span> <span class="hljs-number">0800</span>-<span class="hljs-number">0000</span> FFFF | <span class="hljs-number">1110</span>xxxx <span class="hljs-number">10</span>xxxxxx <span class="hljs-number">10</span>xxxxxx<br><br><span class="hljs-attribute">0001</span> <span class="hljs-number">0000</span>-<span class="hljs-number">0010</span> FFFF | <span class="hljs-number">11110</span>xxx <span class="hljs-number">10</span>xxxxxx <span class="hljs-number">10</span>xxxxxx <span class="hljs-number">10</span>xxxxxx<br></code></pre></td></tr></table></figure>
 <h2 id="6-尾声"><a href="#6-尾声" class="headerlink" title="6.尾声"></a>6.尾声</h2><p>在整理以上内容的过程中，又收获了新的知识，头脑里对这一块又清晰多了。字节字符编码解码无论在哪门语言中都是快让人头疼难啃的骨头，其实不在于Python中语法是怎样的，而是对概念的理解，人类对编码的越加完善，架设了这么一条人与计算机交流的的桥梁。科技的美妙在于此～</p>
 
             </div>
@@ -368,10 +348,14 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -398,11 +382,13 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -423,9 +409,9 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -438,7 +424,7 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -450,16 +436,16 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -471,208 +457,96 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "血案后对python3.7最新字节字符编码解码知识整理&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -694,7 +568,7 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -707,6 +581,10 @@ bytearray(<span class="hljs-string">b'\xa9'</span>)</code></pre></p>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

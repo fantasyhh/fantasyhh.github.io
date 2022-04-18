@@ -1,62 +1,93 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="说说为什么要写这个系列。在新项目Python Web框架的选项中，我选择了我之前没有使用过的Fastapi，这是一次新的尝试，当然在这次用之前老早的时候我就看过这个框架，并被其吸引住了，感觉很有意思。至目前为止，框架也用了一两个月了，愈发觉得其typing+asynico的特性吊爆了，正如某些人所说，Fastapi绝对是Python Web框架上历程上的一个里程碑！当然这次的翻译系列中，不说Fas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ASGI翻译系列（一）： 你好，ASGI">
+<meta property="og:url" content="https://fantasyhh.github.io/2021/03/08/asgi1/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="说说为什么要写这个系列。在新项目Python Web框架的选项中，我选择了我之前没有使用过的Fastapi，这是一次新的尝试，当然在这次用之前老早的时候我就看过这个框架，并被其吸引住了，感觉很有意思。至目前为止，框架也用了一两个月了，愈发觉得其typing+asynico的特性吊爆了，正如某些人所说，Fastapi绝对是Python Web框架上历程上的一个里程碑！当然这次的翻译系列中，不说Fas">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/suolue/asgi1.jpeg">
+<meta property="article:published_time" content="2021-03-08T09:28:11.000Z">
+<meta property="article:modified_time" content="2021-03-13T06:54:19.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/suolue/asgi1.jpeg">
+  
+  
   <title>ASGI翻译系列（一）： 你好，ASGI - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +100,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +175,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +193,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="ASGI翻译系列（一）： 你好，ASGI">
               
             </span>
 
@@ -195,21 +218,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.2k 字
+      4.2k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
-       分钟
+      35 分钟
     </span>
   
 
@@ -230,25 +250,25 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">ASGI翻译系列（一）： 你好，ASGI</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>说说为什么要写这个系列。在新项目Python Web框架的选项中，我选择了我之前没有使用过的<strong>Fastapi</strong>，这是一次新的尝试，当然在这次用之前老早的时候我就看过这个框架，并被其吸引住了，感觉很有意思。至目前为止，框架也用了一两个月了，愈发觉得其typing+asynico的特性吊爆了，正如某些人所说，<strong>Fastapi</strong>绝对是Python Web框架上历程上的一个里程碑！当然这次的翻译系列中，不说<strong>Fastapi</strong>，先来说说与其息息相关的<strong>ASGI</strong></p>
-<p><a href="https://www.encode.io/articles/hello-asgi" target="_blank" rel="noopener">原文地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.encode.io/articles/hello-asgi">原文地址</a></p>
 <blockquote>
 <p>译者注：原文代码的使用的ASGI2协议，当时接口采用的是双重调用，在2019年3月20日，ASGI3.0发布，改进了调用风格，虽然向下兼容，但是原文的例子有些还是没法用了，所以我这边做了更新统一采用ASGI3写法并适当进行增删改。</p>
-<p>具体可以看<a href="https://www.aeracode.org/2019/03/20/asgi-30/" target="_blank" rel="noopener">ASGI3.0</a></p>
+<p>具体可以看<a target="_blank" rel="noopener" href="https://www.aeracode.org/2019/03/20/asgi-30/">ASGI3.0</a></p>
 </blockquote>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>本文介绍了新兴的 ASGI 标准，以及它为 Python Web 框架带来的好处。</p>
-<p>当前 Python 环境的最新变化之一是关注异步编程模型，并在语言中引入了 async/await 语法。</p>
+<p>当前 Python 环境的最新变化之一是关注异步编程模型，并在语言中引入了 async&#x2F;await 语法。</p>
 <p>异步模型使用轻量级的基于任务的切换，在runtime时管理显式的切换点和流控制。这与基于线程的并发相反，后者资源更加密集，依赖于隐式切换，由操作系统管理。</p>
 <p>更多的现代runtime(如 Go 和 Node)是基于异步模型的。作为一种相对古老的语言，Python 不得不逐步适应它，这既带来了机遇，也带来了挑战。</p>
 <p>其中一个挑战是 Python Web 框架如何适应异步模型的潜在好处。我们已经在最近涌入的高性能 Python Web 框架中看到了这一点。</p>
@@ -258,40 +278,22 @@
 <h2 id="2-WSGI-综述"><a href="#2-WSGI-综述" class="headerlink" title="2. WSGI 综述"></a>2. WSGI 综述</h2><p>长期以来，Python领域的Web框架，包括Django、Flask、Falcon、Pyramid和Bottle都是基于WSGI的框架。</p>
 <p>WSGI是一个标准，它在Server实现和Application实现之间提供了一个形式化的接口，处理原始socket处理的琐碎细节。</p>
 <p>在这里有一个形式化的接口是非常重要的，因为它在这两个方面之间提供了一个适当的分离，并允许服务器实现独立于框架或应用程序实现而发展。</p>
-<p>Python有很多WSGI服务器，包括Gunicorn、uWSGI、Apache/mod_wsgi和Waitress。</p>
+<p>Python有很多WSGI服务器，包括Gunicorn、uWSGI、Apache&#x2F;mod_wsgi和Waitress。</p>
 <p>我不会在本文中深入研究WSGI接口的具体细节，但我们可以快速看看如何运行一个基本“<strong>Hello, World</strong>” 的Web服务。</p>
 <p><strong>example. py</strong>:</p>
-<pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hello_world</span><span class="hljs-params">(environ, start_response)</span>:</span>
-    data = <span class="hljs-string">b"Hello, World!\n"</span>
-    start_response(<span class="hljs-string">"200 OK"</span>, [
-        (<span class="hljs-string">"Content-Type"</span>, <span class="hljs-string">"text/plain"</span>),
-    ])
-    <span class="hljs-keyword">return</span> [data]</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">hello_world</span>(<span class="hljs-params">environ, start_response</span>):<br>    data = <span class="hljs-string">b&quot;Hello, World!\n&quot;</span><br>    start_response(<span class="hljs-string">&quot;200 OK&quot;</span>, [<br>        (<span class="hljs-string">&quot;Content-Type&quot;</span>, <span class="hljs-string">&quot;text/plain&quot;</span>),<br>    ])<br>    <span class="hljs-keyword">return</span> [data]<br></code></pre></td></tr></table></figure>
+
 <p>现在我们可以在任何WSGI服务器上运行我们的hello world应用程序。</p>
-<p><code>$ gunicorn example:hello_world</code><br>WSGI已经取得了巨大的成功，它几乎被普遍采用，这证明了Server/application接口的重要性，但它有几个限制，如果不进行重大改革，这些限制是不容易克服的。</p>
-<p>首先，WSGI必须是一个基于线程或greenlet的接口，无法支持async/await模式。WSGI本质上无法利用异步编程的潜在优势。</p>
+<p><code>$ gunicorn example:hello_world</code><br>WSGI已经取得了巨大的成功，它几乎被普遍采用，这证明了Server&#x2F;application接口的重要性，但它有几个限制，如果不进行重大改革，这些限制是不容易克服的。</p>
+<p>首先，WSGI必须是一个基于线程或greenlet的接口，无法支持async&#x2F;await模式。WSGI本质上无法利用异步编程的潜在优势。</p>
 <p>还有一点，WSGI严格来说是一个HTTP接口，不能轻易地调整为提供对WebSockets或其他网络协议的支持。</p>
 <h2 id="2-谈谈ASGI"><a href="#2-谈谈ASGI" class="headerlink" title="2. 谈谈ASGI"></a>2. 谈谈ASGI</h2><p>这就是 ASGI 的用武之地。</p>
-<p>ASGI规范是一个从WSGI迭代下来的但又基本算是一个重新设计，它提供了一个异步 server/application接口，支持HTTP、HTTP/2和WebSockets。</p>
+<p>ASGI规范是一个从WSGI迭代下来的但又基本算是一个重新设计，它提供了一个异步 server&#x2F;application接口，支持HTTP、HTTP&#x2F;2和WebSockets。</p>
 <p>作为对比，这里有一个ASGI的“<strong>Hello, World</strong>”的 Web服务例子。</p>
 <p><strong>example.py</strong>:</p>
 <p><del>原文采用的ASGI2双重调用的例子:</del></p>
-<pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloWorld</span>:</span>
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, scope)</span>:</span>
-        <span class="hljs-keyword">pass</span>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloWorld</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, scope</span>):<br>        <span class="hljs-keyword">pass</span><br><br>    <span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">__call__</span>(<span class="hljs-params">self, receive, send</span>):<br>        <span class="hljs-keyword">await</span> send(&#123;<br>            <span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-string">&#x27;http.response.start&#x27;</span>,<br>            <span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-number">200</span>,<br>            <span class="hljs-string">&#x27;headers&#x27;</span>: [<br>                [<span class="hljs-string">b&#x27;content-type&#x27;</span>, <span class="hljs-string">b&#x27;text/plain&#x27;</span>],<br>            ]<br>        &#125;)<br>        <span class="hljs-keyword">await</span> send(&#123;<br>            <span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-string">&#x27;http.response.body&#x27;</span>,<br>            <span class="hljs-string">&#x27;body&#x27;</span>: <span class="hljs-string">b&#x27;Hello, world!&#x27;</span>,<br>        &#125;)<br></code></pre></td></tr></table></figure>
 
-    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__call__</span><span class="hljs-params">(self, receive, send)</span>:</span>
-        <span class="hljs-keyword">await</span> send(&#123;
-            <span class="hljs-string">'type'</span>: <span class="hljs-string">'http.response.start'</span>,
-            <span class="hljs-string">'status'</span>: <span class="hljs-number">200</span>,
-            <span class="hljs-string">'headers'</span>: [
-                [<span class="hljs-string">b'content-type'</span>, <span class="hljs-string">b'text/plain'</span>],
-            ]
-        &#125;)
-        <span class="hljs-keyword">await</span> send(&#123;
-            <span class="hljs-string">'type'</span>: <span class="hljs-string">'http.response.body'</span>,
-            <span class="hljs-string">'body'</span>: <span class="hljs-string">b'Hello, world!'</span>,
-        &#125;)</code></pre>
 <p><code>$ uvicorn example:HelloWorld</code></p>
 <p>同样，在本文中我不会去讨论规范的具体内容，但在接口中需要注意的两个关键点：</p>
 <ul>
@@ -299,25 +301,14 @@
 <li><code>receive</code>和<code>send</code>参数，server和application之间的消息传递是通过这些参数进行的</li>
 </ul>
 <p><strong>而最新的ASGI3例子，更简单明了：</strong></p>
-<pre><code class="hljs python"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">app</span><span class="hljs-params">(scope, receive, send)</span>:</span>
-    <span class="hljs-keyword">await</span> send(&#123;
-        <span class="hljs-string">'type'</span>: <span class="hljs-string">'http.response.start'</span>,
-        <span class="hljs-string">'status'</span>: <span class="hljs-number">200</span>,
-        <span class="hljs-string">'headers'</span>: [
-            [<span class="hljs-string">b'content-type'</span>, <span class="hljs-string">b'text/plain'</span>],
-        ]
-    &#125;)
-    <span class="hljs-keyword">await</span> send(&#123;
-        <span class="hljs-string">'type'</span>: <span class="hljs-string">'http.response.body'</span>,
-        <span class="hljs-string">'body'</span>: <span class="hljs-string">b'Hello, world!'</span>,
-    &#125;)</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">async</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">app</span>(<span class="hljs-params">scope, receive, send</span>):<br>    <span class="hljs-keyword">await</span> send(&#123;<br>        <span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-string">&#x27;http.response.start&#x27;</span>,<br>        <span class="hljs-string">&#x27;status&#x27;</span>: <span class="hljs-number">200</span>,<br>        <span class="hljs-string">&#x27;headers&#x27;</span>: [<br>            [<span class="hljs-string">b&#x27;content-type&#x27;</span>, <span class="hljs-string">b&#x27;text/plain&#x27;</span>],<br>        ]<br>    &#125;)<br>    <span class="hljs-keyword">await</span> send(&#123;<br>        <span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-string">&#x27;http.response.body&#x27;</span>,<br>        <span class="hljs-string">&#x27;body&#x27;</span>: <span class="hljs-string">b&#x27;Hello, world!&#x27;</span>,<br>    &#125;)<br></code></pre></td></tr></table></figure>
 <p><code>$ uvicorn example:app</code></p>
-<p>这种基于async/await的接口与WSGI相比有很多优势。</p>
+<p>这种基于async&#x2F;await的接口与WSGI相比有很多优势。</p>
 <h2 id="3-性能"><a href="#3-性能" class="headerlink" title="3. 性能"></a>3. 性能</h2><p>在代码主要是网络绑定而非计算绑定的情况下，异步代码能够获得比基于线程的并发更高的吞吐量。基于任务的并发的资源高效切换意味着成千上万的轻量级任务可以同时执行，而不需要基于线程切换的高开销。这意味着每个单一的服务器或实例能够支持更多的流量。</p>
 <p>Python框架对于异步方面某些类别的用例来说是一个糟糕的候选者，而Node或Go等的异步能力则表现出色。</p>
-<p>ASGI规范为Python提供了一个机会，使其能够在广泛的用例中达到生产力/性能的最佳状态，从编写大容量的代理服务器到将大规模的Web应用程序快速推向市场。</p>
+<p>ASGI规范为Python提供了一个机会，使其能够在广泛的用例中达到生产力&#x2F;性能的最佳状态，从编写大容量的代理服务器到将大规模的Web应用程序快速推向市场。</p>
 <p>例如，这里是TechEmpower基准测试的最新结果，过滤到一些动态语言(Python、JavaScript、Ruby、PHP、Perl)，全部使用Postgres后端。</p>
-<p><img src="/home/sjh/Documents/hexo/blog/source/images/asgi/asgi-performance.png" srcset="/img/loading.gif" alt></p>
+<p><img src="/home/sjh/Documents/hexo/blog/source/images/asgi/asgi-performance.png" srcset="/img/loading.gif" lazyload></p>
 <p>随着 Starlette 和 Uvicorn 位居榜首，Python 在这些基准测试中的性能与 Node 相当。</p>
 <h2 id="4-支持WebSockets和长效HTTP连接"><a href="#4-支持WebSockets和长效HTTP连接" class="headerlink" title="4. 支持WebSockets和长效HTTP连接"></a>4. 支持WebSockets和长效HTTP连接</h2><p>ASGI直接支持WebSockets，允许开发人员构建响应速度更快的Web应用程序，以及其他不适合HTTP的高度交互式服务。</p>
 <p>它还可以用于支持 HTTP 长轮询或 HTTP 服务器发送事件(HTTP Server Sent Events) ，允许服务器到客户端的单向更新。</p>
@@ -325,12 +316,12 @@
 <h2 id="6-可扩展性"><a href="#6-可扩展性" class="headerlink" title="6. 可扩展性"></a>6. 可扩展性</h2><p>WSGI提出的接口是 “<strong>用HTTP请求调用这个函数，并等待HTTP响应返回</strong>”，而ASGI规范则提出了一个更广泛的可扩展接口，即 “<strong>这里有一对通道，服务器和应用程序可以在这两个通道之间进行通信</strong>”。</p>
 <p>这种更广泛的模式有可能被扩展到HTTP或WebSockets之外的其他协议中</p>
 <h2 id="7-我们现在在哪里？"><a href="#7-我们现在在哪里？" class="headerlink" title="7. 我们现在在哪里？"></a>7. 我们现在在哪里？</h2><p>有许多可用于生产的 ASGI 服务器:</p>
-<p><strong>daphne</strong> - 最初的ASGI服务器。最初是为Django channels 开发的。<br><strong>uvicorn</strong> - 一个高性能的ASGI服务器，基于uvloop和httptools实现。<br><strong>hypercorn</strong> - 一个功能齐全的ASGI服务器，包括支持HTTP/2服务器推送等功能。</p>
+<p><strong>daphne</strong> - 最初的ASGI服务器。最初是为Django channels 开发的。<br><strong>uvicorn</strong> - 一个高性能的ASGI服务器，基于uvloop和httptools实现。<br><strong>hypercorn</strong> - 一个功能齐全的ASGI服务器，包括支持HTTP&#x2F;2服务器推送等功能。</p>
 <p>其中每一个都有一个已建立的生产使用的度量标准，所有这三个都有助于改进 ASGI 规范。</p>
 <p>还有一些不同的ASGI框架。</p>
 <p><strong>channels</strong> - Django为了支持WebSocket而生。在基于异步服务器的实现上提供了一个基于线程的应用上下文。<br><strong>starlette</strong> - Starlette被设计成一个功能齐全的Web框架，或者用作与和 ASGI 一起工作的工具包。一个高性能的框架，其功能集的范围类似于 Sanic 或 Werkzeug。<br><strong>quart</strong> - 一个Python ASGI网络微框架，具有与Flask相同的API。</p>
 <p>ASGI还为现有的Web框架提供了一个可管理的升级路径，以提供异步支持，因为它很好地映射到WSGI上，同时增加了额外的功能。</p>
-<p>Werkzeug/Flask的维护者以及Falcon团队都发出了积极的声音。Django团队也有考虑将ASGI支持引入核心框架。</p>
+<p>Werkzeug&#x2F;Flask的维护者以及Falcon团队都发出了积极的声音。Django团队也有考虑将ASGI支持引入核心框架。</p>
 <p>还有一些基于异步的框架的维护者提供了初步的支持，包括 Sanic。</p>
 <h2 id="8-继续这个系列"><a href="#8-继续这个系列" class="headerlink" title="8. 继续这个系列"></a>8. 继续这个系列</h2><p>我在这里的开发工作主要集中在 ASGI 服务器、 Uvicorn 和 ASGI 框架 Starlette 上。</p>
 <p>在接下来的几周里，我将更详细地介绍如何使用 ASGI，包括如何使用它构建基于 websocket 的应用程序、 HTTP 代理服务器、 ASGI 中间件等等。</p>
@@ -360,10 +351,14 @@
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -390,11 +385,13 @@
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -415,9 +412,9 @@
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -430,7 +427,7 @@
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -442,16 +439,16 @@
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -463,208 +460,96 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "ASGI翻译系列（一）： 你好，ASGI&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -686,7 +571,7 @@
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -699,6 +584,10 @@
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

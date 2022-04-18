@@ -1,49 +1,72 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="hello">
+<meta property="og:type" content="website">
+<meta property="og:title" content="烛影小札">
+<meta property="og:url" content="https://fantasyhh.github.io/page/4/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="hello">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Jiahuan Shi">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 60vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -56,7 +79,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -130,26 +154,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -157,13 +172,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/home2.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="日拱一卒, 知足常乐">
               
             </span>
 
@@ -178,7 +193,7 @@
 
   <main>
     
-      <div class="container nopadding-md">
+      <div class="container nopadding-x-md">
         <div class="py-5" id="board"
           >
           
@@ -193,18 +208,65 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/07/08/django-gunicorn-nginx-config/">Django+Gunicorn+Nginx配置整理</a>
+        
+        <a href="/2019/07/10/postgresql-tutorial/" target="_self">
+          PostgreSQL 常用命令记录
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/07/08/django-gunicorn-nginx-config/">
+        <a href="/2019/07/10/postgresql-tutorial/" target="_self">
           
-          
+          从之前看的Two Scoops Press Two Scoops of Django 1.11书籍或者是官网的教程，又或者最近在github查找django-docker人家的代码时看到的，都是用的PostgreSQL作为Django的数据库，平常都是用的Mysql，是不是验证了”国外大多用PostgresSQL，国内大多用Mysql“这句话，我对这个数据库比较陌生，但是既然官网都主推了，相对My
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2019-07-10 10:05" pubdate>
+              2019-07-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
+              <a href="/categories/PostgreSQL/">PostgreSQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Linux/">Linux</a>
+            
+              <a href="/tags/SQL/">SQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2019/07/08/django-gunicorn-nginx-config/" target="_self">
+          Django+Gunicorn+Nginx配置整理
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2019/07/08/django-gunicorn-nginx-config/" target="_self">
           
-          之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅
-1. Gunicorn使用及配置
-我们可以通过执行./manage.py runserver命令来运行我们的django应用程序。但我们知道它被称为开发服务器是有原因的，因为自带的开发服务器不健壮，安全问题，线程问题等等。那么，我们如何真正运行我
+          之前一篇文章我们梳理了WSGI与WSGI服务器的一些概念，这里主要整理下web应用部署时候的配置，包括Gunicorn以及Nginx的配置，方便以后翻阅 1. Gunicorn使用及配置 我们可以通过执行**.&#x2F;manage.py runserver**命令来运行我们的django应用程序。但我们知道它被称为开发服务器是有原因的，因为自带的开发服务器不健壮，安全问题，线程问题等等。那么，我们如何真
         </a>
       </p>
 
@@ -246,17 +308,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/06/27/python3-wsgi-concept/">梳理Python WSGI与WSGI服务器等概念</a>
+        
+        <a href="/2019/06/27/python3-wsgi-concept/" target="_self">
+          梳理Python WSGI与WSGI服务器等概念
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/06/27/python3-wsgi-concept/">
+        <a href="/2019/06/27/python3-wsgi-concept/" target="_self">
           
-          
-            
-          
-          经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。
-1. 首先弄清下面几个概念W
+          经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。 1. 首先弄清下面几个概念W
         </a>
       </p>
 
@@ -298,14 +359,14 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/06/24/revpi-install-img/">Revpi 重装系统以及本地化配置的注意项</a>
+        
+        <a href="/2019/06/24/revpi-install-img/" target="_self">
+          Revpi 重装系统以及本地化配置的注意项
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/06/24/revpi-install-img/">
-          
-          
-            
+        <a href="/2019/06/24/revpi-install-img/" target="_self">
           
           Revolution Pi是一个迷你工业PC，我一般叫它工业树莓派，产自德国。它的基础模块叫作 RevPi core，装有 Raspberry Pi 计算模块。该计算模块包含两个 IC：一个 Broadcom BCM2835 SoC 带 500 Mbyte RAM 和一个 4 Gbyte eMMC 闪存。该模块通过主板插座提供 1.8 V、3.3 V 和 5 V。采用单排200针宽插座，所有 IO
         </a>
@@ -347,19 +408,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/06/13/python3-queue/">Python3 队列用法整理</a>
+        
+        <a href="/2019/06/13/python3-queue/" target="_self">
+          Python3 队列用法整理
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/06/13/python3-queue/">
+        <a href="/2019/06/13/python3-queue/" target="_self">
           
-          
-            
-          
-          先进先出队列(或简称队列)是一种基于先进先出(FIFO)策略的集合类型.
-队列的最简单的例子是我们平时不时会参与的列。排队等待电影，在杂货店的收营台等待，在自助餐厅排队等待（这样我们可以弹出托盘栈）。行为良好的线或队列是有限制的，因为它只有一条路，只有一条出路。不能插队，也不能离开。你只有等待了一定的时间才能到前面。下图展示了一个简单的 Python 对象队列。    
-1. 队列
-队列是有序数据
+          先进先出队列(或简称队列)是一种基于先进先出(FIFO)策略的集合类型. 队列的最简单的例子是我们平时不时会参与的列。排队等待电影，在杂货店的收营台等待，在自助餐厅排队等待（这样我们可以弹出托盘栈）。行为良好的线或队列是有限制的，因为它只有一条路，只有一条出路。不能插队，也不能离开。你只有等待了一定的时间才能到前面。下图展示了一个简单的 Python 对象队列。     1. 队列 队列是有序数据
         </a>
       </p>
 
@@ -399,16 +457,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/06/11/python3-subprocess/">Python3.5+ subprocess用法概括以及使用场景分析</a>
+        
+        <a href="/2019/06/11/python3-subprocess/" target="_self">
+          Python3.5+ subprocess用法概括以及使用场景分析
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/06/11/python3-subprocess/">
+        <a href="/2019/06/11/python3-subprocess/" target="_self">
           
-          
-            
-          
-          Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用os.syste
+          Python是一门很给力的语言，可以完成想要的所有操作，但在极少数情况下，你可能需要调用外部程序。比如Linux命令或者运行Shell脚本。以前写Python脚本的时候，我最排斥的就是调用外部命令，可能因为出了错误不好处理，要么纯用Shell脚本，要么纯用Python脚本，“杂交算什么东西”！ 那我现在的想法呢，也很纠结，看下去吧。以前代码最常见的是使用Python的原始方法是使用** os.sy
         </a>
       </p>
 
@@ -448,19 +506,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/06/10/MCP2515-CAN-BUS/">利用MCP2515芯片在树莓派上使用CAN BUS协议</a>
+        
+        <a href="/2019/06/10/MCP2515-CAN-BUS/" target="_self">
+          利用MCP2515芯片在树莓派上使用CAN BUS协议
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/06/10/MCP2515-CAN-BUS/">
+        <a href="/2019/06/10/MCP2515-CAN-BUS/" target="_self">
           
-          
-            
-          
-          在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～
-我之前的完成过程基本依靠Google，贴上我参考的国外教程：
-
-[quick-guide] CAN bus on raspberry pi with MCP251
+          在树莓派上使用CAN_BUS（即CAN总线技术）来控制小物件对我来说很外行，概念也不深，只能按照小物件的说明来使用，但是使用之前需要进行与树莓派的连接，折腾了好多，这里简单做个梳理，但不过多介绍….因为自己对CAN协议也是一窍不通，囧～ 我之前的完成过程基本依靠Google，贴上我参考的国外教程：  [quick-guide] CAN bus on raspberry pi with MCP251
         </a>
       </p>
 
@@ -502,18 +557,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/06/05/drf-post-image/">由DRF上传图片温习到的HTTP知识</a>
+        
+        <a href="/2019/06/05/drf-post-image/" target="_self">
+          由DRF上传图片温习到的HTTP知识
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/06/05/drf-post-image/">
+        <a href="/2019/06/05/drf-post-image/" target="_self">
           
-          
-            
-          
-          在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。
-1. 熟悉而又陌生的HTTP
-某大佬
+          在前后端开发的时候，Djangorestframework（简称DRF）是个及其强大的附属于Django的第三方库，依赖于Model的CURD操作大大减少了代码量。之前使用DRF的时候基本都是跟前端json交互，非常容易，但是最近要上传以及跟新图片，遇到了一些小问题，期间不知不觉又拓展到了Http的知识，发现自己有在这方面有些薄弱，温习了一波，特在此记录一波。 1. 熟悉而又陌生的HTTP 某大佬
         </a>
       </p>
 
@@ -553,14 +606,14 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/06/04/django-CBV-VS-FBV/">Django Class-Based Views vs. Function-Based Views</a>
+        
+        <a href="/2019/06/04/django-CBV-VS-FBV/" target="_self">
+          Django Class-Based Views vs. Function-Based Views
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/06/04/django-CBV-VS-FBV/">
-          
-          
-            
+        <a href="/2019/06/04/django-CBV-VS-FBV/" target="_self">
           
           从一开始学习Django时候的Hello world的函数视图，到自带的View视图，再到restframework的APIView以及viewset。回过头来看看，好像有种从稚嫩到成熟再到老奸巨猾的感觉，代码量越来越少了，第三方库封装的越来越多，但是真正包含在其中的实现和理解我们却愈发忽视。作为一个web框架，我们在使用时应该更多在于一个完整的流程的实现过程，所以，无论是CBV还是FBV本质都是
         </a>
@@ -602,17 +655,16 @@
     
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
-        <a href="/2019/05/30/celery-supvisor-config/">supvisor和celery以及django+vue的配置整理</a>
+        
+        <a href="/2019/05/30/celery-supvisor-config/" target="_self">
+          supvisor和celery以及django+vue的配置整理
+        </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2019/05/30/celery-supvisor-config/">
+        <a href="/2019/05/30/celery-supvisor-config/" target="_self">
           
-          
-            
-          
-          supvisor经常用来打包服务（领导喜欢service这个词，无语），celery用来做异步任务以及定时任务。web项目常常使用前后端分离，django+vue的组合，但是也要做一些配置,这里对一些以往的配置做一些整理,省的每次都要翻以前的项目，权当记录手册。
-1. Supvisor+Celery配置假设有个叫smartmp的项目，那么有如下配置。supvisor对celery beat的配置文
+          supvisor经常用来打包服务（领导喜欢service这个词，无语），celery用来做异步任务以及定时任务。web项目常常使用前后端分离，django+vue的组合，但是也要做一些配置,这里对一些以往的配置做一些整理,省的每次都要翻以前的项目，权当记录手册。 1. Supvisor+Celery配置假设有个叫smartmp的项目，那么有如下配置。supvisor对celery beat的配置文
         </a>
       </p>
 
@@ -649,72 +701,13 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        <a href="/2019/05/25/python-encode-decode2/">血案后对python3.7最新字节字符编码解码知识整理</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2019/05/25/python-encode-decode2/">
-          
-          
-            
-          
-          之前因为工作上面的需要，查了好多字符串字节编码解码方面的资料，结果发现鱼龙混杂。本身由于Python3与Python2在这方面的改动很大，再加上从Python3开始，伴随着版本的迭代，一些方法也有了变化，很多以前的转换方法都不能用了，整个过程被折磨的脑壳疼，在此从自己本身的理解上面做个总结，以后方便自己来查阅。
-1. 先从概念理解开始
-某大佬云：人类使用文本，计算机使用字节序列
-
-我们先可以看一下
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-05-25 09:53" pubdate>
-              2019-05-25
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Python/">Python</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Python/">Python</a>
-            
-              <a href="/tags/Bytes/">Bytes</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/3/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/3/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#board">5</a><a class="extend next" rel="next" href="/page/5/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
-  
-  <script>
-    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
-      ele.href += '#board';
-    }
-  </script>
 
 
 
@@ -724,16 +717,16 @@
         </div>
       </div>
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -745,154 +738,83 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
-
-
-
-
-
+  
 
 
 
 
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "日拱一卒, 知足常乐&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -914,7 +836,7 @@
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -927,6 +849,10 @@
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

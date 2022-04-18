@@ -1,62 +1,94 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对于I&#x2F;O每个程序员并不陌生，但从菜鸟入门阶再到进阶，每个阶段对I&#x2F;O都会有新的认识见解，从最开始的printf函数到Linux中的管道再到多线程使用中读写I&#x2F;O，网络I&#x2F;O的概念，每个地方都感觉有I&#x2F;O的身影，但模模糊糊，含义好像都不太一样，困惑也渐渐增多… 1. Unix I&#x2F;O1.1 输入&#x2F;输出输入&#x2F;输出（I&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谈谈系统级I&#x2F;O">
+<meta property="og:url" content="https://fantasyhh.github.io/2020/12/08/unixIO/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="对于I&#x2F;O每个程序员并不陌生，但从菜鸟入门阶再到进阶，每个阶段对I&#x2F;O都会有新的认识见解，从最开始的printf函数到Linux中的管道再到多线程使用中读写I&#x2F;O，网络I&#x2F;O的概念，每个地方都感觉有I&#x2F;O的身影，但模模糊糊，含义好像都不太一样，困惑也渐渐增多… 1. Unix I&#x2F;O1.1 输入&#x2F;输出输入&#x2F;输出（I&amp;#">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/suolue/unixio.png">
+<meta property="article:published_time" content="2020-12-08T01:45:09.000Z">
+<meta property="article:modified_time" content="2020-12-09T07:52:12.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="I&#x2F;O">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/suolue/unixio.png">
+  
+  
   <title>谈谈系统级I/O - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +101,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +176,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +194,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="谈谈系统级I/O">
               
             </span>
 
@@ -195,21 +219,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3k 字
+      5.7k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      14
-       分钟
+      48 分钟
     </span>
   
 
@@ -230,117 +251,66 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">谈谈系统级I/O</h1>
             
-            <div class="markdown-body" id="post-body">
-              <p>对于I/O每个程序员并不陌生，但从菜鸟入门阶再到进阶，每个阶段对I/O都会有新的认识见解，从最开始的<code>printf</code>函数到Linux中的管道再到多线程使用中读写I/O，网络I/O的概念，每个地方都感觉有I/O的身影，但模模糊糊，含义好像都不太一样，困惑也渐渐增多…</p>
-<h2 id="1-Unix-I-O"><a href="#1-Unix-I-O" class="headerlink" title="1. Unix I/O"></a>1. Unix I/O</h2><h3 id="1-1-输入-输出"><a href="#1-1-输入-输出" class="headerlink" title="1.1 输入/输出"></a>1.1 输入/输出</h3><p>输入/输出（I/O）是在主存（DRAM）和外部设备（例如磁盘驱动器、终端、网络）之间复制数据的过程。输入操作是I/O设备复制数据到主存，而输出操作是从主存复制数据到I/O设备。<br><img src="/images/unixIO/io.jpeg" srcset="/img/loading.gif" alt><br>图稍微配的有点糙，但是能很清晰的说明输入上段文字中所描述的关系，复制数据的过程在I/O总线中进行。</p>
-<p><strong>在UNIX操作系统中，所有的外围设备（上图中显示的）都被看作是文件系统中的文件</strong>，一个Linux文件就是m个字节的序列：<code>BO,B1,B2...</code>。因此，<strong>所有的输入/输出都要通过对应的读文件或写文件完成</strong>。这种将设备优雅地映射为文件的方法，允许Linux内核引出一个简单、低级的应用接口口，称为为<code>Unix I/O</code>。也就是说，通过一个单一的接口就可以处理外围设备和程序之间的所有通信。</p>
+            <div class="markdown-body">
+              <p>对于I&#x2F;O每个程序员并不陌生，但从菜鸟入门阶再到进阶，每个阶段对I&#x2F;O都会有新的认识见解，从最开始的<code>printf</code>函数到Linux中的管道再到多线程使用中读写I&#x2F;O，网络I&#x2F;O的概念，每个地方都感觉有I&#x2F;O的身影，但模模糊糊，含义好像都不太一样，困惑也渐渐增多…</p>
+<h2 id="1-Unix-I-x2F-O"><a href="#1-Unix-I-x2F-O" class="headerlink" title="1. Unix I&#x2F;O"></a>1. Unix I&#x2F;O</h2><h3 id="1-1-输入-x2F-输出"><a href="#1-1-输入-x2F-输出" class="headerlink" title="1.1 输入&#x2F;输出"></a>1.1 输入&#x2F;输出</h3><p>输入&#x2F;输出（I&#x2F;O）是在主存（DRAM）和外部设备（例如磁盘驱动器、终端、网络）之间复制数据的过程。输入操作是I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。<br><img src="/images/unixIO/io.jpeg" srcset="/img/loading.gif" lazyload><br>图稍微配的有点糙，但是能很清晰的说明输入上段文字中所描述的关系，复制数据的过程在I&#x2F;O总线中进行。</p>
+<p><strong>在UNIX操作系统中，所有的外围设备（上图中显示的）都被看作是文件系统中的文件</strong>，一个Linux文件就是m个字节的序列：<code>BO,B1,B2...</code>。因此，<strong>所有的输入&#x2F;输出都要通过对应的读文件或写文件完成</strong>。这种将设备优雅地映射为文件的方法，允许Linux内核引出一个简单、低级的应用接口口，称为为<code>Unix I/O</code>。也就是说，通过一个单一的接口就可以处理外围设备和程序之间的所有通信。</p>
 <blockquote>
 <p>文本文件（比如txt文件）与文件（上述的文件含义）要区分开</p>
 </blockquote>
 <blockquote>
-<p>主存（L3高速缓存）的速度远远大于本地磁盘（本地二级存储）和web服务器（远程二级存储），由于这种巨大的速度差，我们在多线程中总是提到I/O瓶颈，I/O时间观，例如从SSD读1M连续数据真实延迟是1毫秒，但对CPU的感觉来说是一个月的漫长时间！而这个等待时间我们不能让CPU白白浪费，要搞点别的事，然后就是I/O模型的各种进化版，最后到异步的操作了。</p>
+<p>主存（L3高速缓存）的速度远远大于本地磁盘（本地二级存储）和web服务器（远程二级存储），由于这种巨大的速度差，我们在多线程中总是提到I&#x2F;O瓶颈，I&#x2F;O时间观，例如从SSD读1M连续数据真实延迟是1毫秒，但对CPU的感觉来说是一个月的漫长时间！而这个等待时间我们不能让CPU白白浪费，要搞点别的事，然后就是I&#x2F;O模型的各种进化版，最后到异步的操作了。</p>
 </blockquote>
-<h3 id="1-2-操作文件的方式"><a href="#1-2-操作文件的方式" class="headerlink" title="1.2 操作文件的方式"></a>1.2 操作文件的方式</h3><p><strong>打开文件</strong>：因为大多数的输入/输出是通过键盘和显示器实现的，为了方便，UNIX做了特别的安排。一个应用程序通过要求内核打开相应的文件，内核将返回一个非负整数，称为<strong>描述符</strong>，记录打开文件的所有信息：标准输入（描述符0）、标准输出（描述符1）、标准错误（描述符2）。</p>
+<h3 id="1-2-操作文件的方式"><a href="#1-2-操作文件的方式" class="headerlink" title="1.2 操作文件的方式"></a>1.2 操作文件的方式</h3><p><strong>打开文件</strong>：因为大多数的输入&#x2F;输出是通过键盘和显示器实现的，为了方便，UNIX做了特别的安排。一个应用程序通过要求内核打开相应的文件，内核将返回一个非负整数，称为<strong>描述符</strong>，记录打开文件的所有信息：标准输入（描述符0）、标准输出（描述符1）、标准错误（描述符2）。</p>
 <p><strong>改变当前文件位置</strong>：内核保持一个文件的位置k，初始为0，表示从文件开始处偏移的字节数。通过seek操作。</p>
 <p><strong>读写文件</strong>：读操作就是从文件拷贝n个字节到存储器，如果是从k处开始，就是拷贝k+n为止。文件的大小为m，如果k≥m就会触发（EOF），所有就不需要明确的EOF字符了。写操作就是从存储器拷贝n个字节到文件当前位置k处。</p>
 <p><strong>关闭文件</strong>：通知内核关闭文件。内核释放文件打开时创建的数据结构，将描述符恢复到可以的描述符池中。无论一个进程因为哪种原因终止，内核都会关闭所有打开的文件并释放他们的内存资源。</p>
-<h2 id="2-标准I-O函数"><a href="#2-标准I-O函数" class="headerlink" title="2. 标准I/O函数"></a>2. 标准I/O函数</h2><p>有了上面的一些概念，我们可以看看C语言中一些常见的容易混淆的函数。各种I/O函数都存放在<code>stdio.h</code>头文件中</p>
-<h3 id="2-1-格式化输出"><a href="#2-1-格式化输出" class="headerlink" title="2.1 格式化输出"></a>2.1 格式化输出</h3><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-comment">// 这里在显示器打印`hello，world`</span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"hello,world\n"</span>);
-    <span class="hljs-comment">// 等同于 fprintf(stdout,"hello,world\n");</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;</code></pre>
+<h2 id="2-标准I-x2F-O函数"><a href="#2-标准I-x2F-O函数" class="headerlink" title="2. 标准I&#x2F;O函数"></a>2. 标准I&#x2F;O函数</h2><p>有了上面的一些概念，我们可以看看C语言中一些常见的容易混淆的函数。各种I&#x2F;O函数都存放在<code>stdio.h</code>头文件中</p>
+<h3 id="2-1-格式化输出"><a href="#2-1-格式化输出" class="headerlink" title="2.1 格式化输出"></a>2.1 格式化输出</h3><figure class="highlight c"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-comment">// 这里在显示器打印`hello，world`</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hello,world\n&quot;</span>);<br>    <span class="hljs-comment">// 等同于 fprintf(stdout,&quot;hello,world\n&quot;);</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p><code>printf(...)</code>函数其实是<code>fprint</code>的带默认参数版，等价于<code>fprint(stdout,...)</code><br><code>int printf(const char *format,...)</code> 对比<code>int fprintf(FILE *stream, const char *foramt,...)</code><br>因为所有外围设备（这里指显示器）都是文件，我们只要把后者函数的stream参数默认为标准输出stdout即可。所以我们也可以把这个stream参数用一个<code>FILE *</code>参数来代替，那就直接格式化输出到文件里，这个我们后面会继续讲到。</p>
 <blockquote>
-<p>流（stream）是与磁盘或者其他外围设备关联的数据的源或者目的地，UNIX中文本流和二进制流是相同的。打开一个流将把该流与一个文件或设备连接起来，关闭流将断开这种连接。打开一个文件将返回一个指向FILE类型对象的指针，该指针记录了控制该流的所有必要信息。我们可以将<code>文件指针</code>和<code>流</code>等同<br>A very important concept in C is the stream. In C, the stream is a common, logical interface to the various devices that comprise the computer.In its most common form, a stream is a logical interface to a file. As C defines the term “file”, it can refer to a disk file, the screen, the keyboard, a port, a file on tape, and so on.Although files differ in form and capabilities, all streams are the same. The stream provides a consistent interface and to the programmer one hardware device will look much like another.<br><a href="https://www.cquestions.com/2009/01/what-is-stream-in-c-programming.html" target="_blank" rel="noopener">https://www.cquestions.com/2009/01/what-is-stream-in-c-programming.html</a></p>
+<p>流（stream）是与磁盘或者其他外围设备关联的数据的源或者目的地，UNIX中文本流和二进制流是相同的。打开一个流将把该流与一个文件或设备连接起来，关闭流将断开这种连接。打开一个文件将返回一个指向FILE类型对象的指针，该指针记录了控制该流的所有必要信息。我们可以将<code>文件指针</code>和<code>流</code>等同<br>A very important concept in C is the stream. In C, the stream is a common, logical interface to the various devices that comprise the computer.In its most common form, a stream is a logical interface to a file. As C defines the term “file”, it can refer to a disk file, the screen, the keyboard, a port, a file on tape, and so on.Although files differ in form and capabilities, all streams are the same. The stream provides a consistent interface and to the programmer one hardware device will look much like another.<br><a target="_blank" rel="noopener" href="https://www.cquestions.com/2009/01/what-is-stream-in-c-programming.html">https://www.cquestions.com/2009/01/what-is-stream-in-c-programming.html</a></p>
 </blockquote>
-<p>此外，还有个<code>int sprintf(char *s, const char *foramt,...)</code>函数，与<code>printf</code>函数基本相同，但其输出将被写入到字符串s中，具体可以看<a href="http://c.biancheng.net/cpp/html/295.html" target="_blank" rel="noopener">C语言sprintf()函数：将格式化的数据写入字符串</a>。为什么会有这个函数，反正把内存中的数据写到文本，显示器等文件中，当然我也可以直接不变位置还是写到内存中的另一个地方，所有才有了这个<code>char *s</code>。</p>
-<h3 id="2-2-格式化输入"><a href="#2-2-格式化输入" class="headerlink" title="2.2 格式化输入"></a>2.2 格式化输入</h3><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-    <span class="hljs-keyword">float</span> num;
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Enter a number: "</span>);
-    <span class="hljs-comment">// %f 匹配浮点型数据</span>
-    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%f"</span>,&amp;num);
-	<span class="hljs-comment">// 等同于 fscanf(stdin,"%f",&amp;num)</span>
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Value = %.2f"</span>, num);
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-&#125;</code></pre>
+<p>此外，还有个<code>int sprintf(char *s, const char *foramt,...)</code>函数，与<code>printf</code>函数基本相同，但其输出将被写入到字符串s中，具体可以看<a target="_blank" rel="noopener" href="http://c.biancheng.net/cpp/html/295.html">C语言sprintf()函数：将格式化的数据写入字符串</a>。为什么会有这个函数，反正把内存中的数据写到文本，显示器等文件中，当然我也可以直接不变位置还是写到内存中的另一个地方，所有才有了这个<code>char *s</code>。</p>
+<h3 id="2-2-格式化输入"><a href="#2-2-格式化输入" class="headerlink" title="2.2 格式化输入"></a>2.2 格式化输入</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">float</span> num;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Enter a number: &quot;</span>);<br>    <span class="hljs-comment">// %f 匹配浮点型数据</span><br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%f&quot;</span>,&amp;num);<br>	<span class="hljs-comment">// 等同于 fscanf(stdin,&quot;%f&quot;,&amp;num)</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Value = %.2f&quot;</span>, num);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>格式化输入这边的原理跟输出，不展开</p>
-<h3 id="2-3-字符输入输出"><a href="#2-3-字符输入输出" class="headerlink" title="2.3 字符输入输出"></a>2.3 字符输入输出</h3><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">( )</span></span>&#123;
-    <span class="hljs-keyword">int</span> c;
-    <span class="hljs-keyword">while</span>( (c=getchar()) != <span class="hljs-string">'\n'</span> )  <span class="hljs-comment">//从控制台流中读取字符，直到按回车键结束</span>
-        <span class="hljs-built_in">printf</span> (<span class="hljs-string">"%c"</span>, c);  <span class="hljs-comment">//输出读取内容</span>
-&#125;</code></pre>
+<h3 id="2-3-字符输入输出"><a href="#2-3-字符输入输出" class="headerlink" title="2.3 字符输入输出"></a>2.3 字符输入输出</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">( )</span>&#123;<br>    <span class="hljs-type">int</span> c;<br>    <span class="hljs-keyword">while</span>( (c=getchar()) != <span class="hljs-string">&#x27;\n&#x27;</span> )  <span class="hljs-comment">//从控制台流中读取字符，直到按回车键结束</span><br>        <span class="hljs-built_in">printf</span> (<span class="hljs-string">&quot;%c&quot;</span>, c);  <span class="hljs-comment">//输出读取内容</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <p>这个的<code>getchar</code>函数等同于<code>getc(stdin)</code>,而相对的输出这边<code>putchar</code>函数等同于<code>putc(c,stdout)</code>。</p>
-<h3 id="2-4-文件操作"><a href="#2-4-文件操作" class="headerlink" title="2.4 文件操作"></a>2.4 文件操作</h3><p>上面都是常见的标准输出到显示器，从键盘标准输入，这些其实都是文件操作函数，只是带有默认输入输出的函数。<br>那么，究其根源，处理与文件有关的通用函数来了！<br><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
-</span>&#123;
-   FILE *fp ;
-   <span class="hljs-keyword">char</span> *s = <span class="hljs-string">"hello\n"</span>;
-   fp = fopen(<span class="hljs-string">"foo.txt"</span>, <span class="hljs-string">"w"</span>);
-   fwrite(s, <span class="hljs-keyword">sizeof</span>(s) , <span class="hljs-number">1</span>, fp );
-   <span class="hljs-built_in">fprintf</span>(fp, <span class="hljs-string">"call one number:%d\n"</span>, <span class="hljs-number">520</span>);
-   <span class="hljs-built_in">fputs</span>(<span class="hljs-string">"This is testing for fputs...\n"</span>, fp);
-   fclose(fp);
-&#125;</code></pre></p>
-<p><code>FILE *fopen(const char *filename, const char *mode)</code><br><code>fopen</code>函数打开filename指定的文本文件，并返回一个与之相关联的流。如果打开操作失败，则返回NULL。访问模式mode就是常见的：<code>r</code>，<code>w</code>，<code>a</code>等，含义就不一一说了，<a href="http://c.biancheng.net/view/2054.html" target="_blank" rel="noopener">网上很多</a></p>
+<h3 id="2-4-文件操作"><a href="#2-4-文件操作" class="headerlink" title="2.4 文件操作"></a>2.4 文件操作</h3><p>上面都是常见的标准输出到显示器，从键盘标准输入，这些其实都是文件操作函数，只是带有默认输入输出的函数。<br>那么，究其根源，处理与文件有关的通用函数来了！</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>   FILE *fp ;<br>   <span class="hljs-type">char</span> *s = <span class="hljs-string">&quot;hello\n&quot;</span>;<br>   fp = fopen(<span class="hljs-string">&quot;foo.txt&quot;</span>, <span class="hljs-string">&quot;w&quot;</span>);<br>   fwrite(s, <span class="hljs-keyword">sizeof</span>(s) , <span class="hljs-number">1</span>, fp );<br>   <span class="hljs-built_in">fprintf</span>(fp, <span class="hljs-string">&quot;call one number:%d\n&quot;</span>, <span class="hljs-number">520</span>);<br>   <span class="hljs-built_in">fputs</span>(<span class="hljs-string">&quot;This is testing for fputs...\n&quot;</span>, fp);<br>   fclose(fp);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>FILE *fopen(const char *filename, const char *mode)</code><br><code>fopen</code>函数打开filename指定的文本文件，并返回一个与之相关联的流。如果打开操作失败，则返回NULL。访问模式mode就是常见的：<code>r</code>，<code>w</code>，<code>a</code>等，含义就不一一说了，<a target="_blank" rel="noopener" href="http://c.biancheng.net/view/2054.html">网上很多</a></p>
 <p>相对应的，<code>int fclose(FILE *stream)</code>函数讲所有未写入的数据写入流stream中，丢弃缓冲区中的所有未读输入数据，并释放自动分配的全部缓冲区，最后关闭流，若出错则返回EOF，否则返回0。</p>
 <p>我们可以用<code>fwrite</code>直接把数据输出到流stream中，相应的是<code>fread</code></p>
 <p>而<code>fprintf</code>是对输出进行格式化再写到stream流中，对应的是<code>fscanf</code></p>
 <p><code>fputs</code>就是讲字符使出到流stream中，对应的是<code>fgetc</code></p>
 <p>顺便提一下<code>int fflush(FILE *stream)</code>，对输出流来说，该函数将已写到缓冲区但尚未写入文件的所有数据写入到文件中。对输入流来说，其结果是未定义的。如果在写的过程中发生错误，则返回EOF，否则返回0。<code>fflush(NULL)</code>将清洗所有的输出流。</p>
 <blockquote>
-<p>刚开始学python也遇到缓冲区，print函数中flush参数的问题，以及缓冲策略。参考<a href="https://anyisalin.github.io/2017/10/13/python-file-buffer/" target="_blank" rel="noopener">Python File Buffer</a>和<a href="https://blog.csdn.net/Granthoo/article/details/82880562" target="_blank" rel="noopener">python的print（flush=True）实现动态loading……效果</a></p>
+<p>刚开始学python也遇到缓冲区，print函数中flush参数的问题，以及缓冲策略。参考<a target="_blank" rel="noopener" href="https://anyisalin.github.io/2017/10/13/python-file-buffer/">Python File Buffer</a>和<a target="_blank" rel="noopener" href="https://blog.csdn.net/Granthoo/article/details/82880562">python的print（flush&#x3D;True）实现动态loading……效果</a></p>
 </blockquote>
-<h2 id="3-UNIX-I-O函数"><a href="#3-UNIX-I-O函数" class="headerlink" title="3. UNIX I/O函数"></a>3. UNIX I/O函数</h2><p><img src="/images/unixIO/unixio.png" srcset="/img/loading.gif" alt><br>上面说的标准I/O函数其实算是叫高级别的I/O函数，在Linux系统中，这些高级I/O函数都是通过使用由内核提供的系统级Unix I/O函数（较低级）来实现的。大多数时候，高级别I/O函数工作良好，没必要直接使用Unix I/O。那什么还要讲呢，两点，一是能帮助理解其他的系统概念，二是又是你除了Unix I/O函数以外别无选择。</p>
-<pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/types.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/stat.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;fcntl.h&gt;</span></span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">open</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *filename, <span class="hljs-keyword">int</span> flags, <span class="hljs-keyword">mode_t</span> mode)</span></span>;</code></pre>
+<h2 id="3-UNIX-I-x2F-O函数"><a href="#3-UNIX-I-x2F-O函数" class="headerlink" title="3. UNIX I&#x2F;O函数"></a>3. UNIX I&#x2F;O函数</h2><p><img src="/images/unixIO/unixio.png" srcset="/img/loading.gif" lazyload><br>上面说的标准I&#x2F;O函数其实算是叫高级别的I&#x2F;O函数，在Linux系统中，这些高级I&#x2F;O函数都是通过使用由内核提供的系统级Unix I&#x2F;O函数（较低级）来实现的。大多数时候，高级别I&#x2F;O函数工作良好，没必要直接使用Unix I&#x2F;O。那什么还要讲呢，两点，一是能帮助理解其他的系统概念，二是又是你除了Unix I&#x2F;O函数以外别无选择。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">char</span> *filename, <span class="hljs-type">int</span> flags, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
 <p>进程是通过<code>open</code>函数来打开一个已存在的文件或者创建一个新文件，返回一个描述符数字。返回的描述符总是进程中当前没有打开的最小描述符</p>
-<pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span>
-<span class="hljs-keyword">ssize_t</span> read(<span class="hljs-keyword">int</span> fd, <span class="hljs-keyword">void</span> *buf, <span class="hljs-keyword">size_t</span> n);
-<span class="hljs-keyword">ssize_t</span> write(<span class="hljs-keyword">int</span> fd, <span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *buf, <span class="hljs-keyword">size_t</span> n);</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">read</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> n)</span>;<br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">write</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> n)</span>;<br></code></pre></td></tr></table></figure>
 <p>应用程序是通过分别调用<code>read</code>和<code>write</code>函数来执行输入和输出的。</p>
-<pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/types.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/stat.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;fcntl.h&gt;</span></span>
-
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
-</span>&#123;
-<span class="hljs-keyword">char</span> c;
-<span class="hljs-keyword">int</span> fd;
-fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-number">1</span>);
-<span class="hljs-keyword">while</span>(read(STDOUT_FILENO, &amp;c, <span class="hljs-number">1</span>) != <span class="hljs-number">0</span>)&#123;
-   write(fd, &amp;c, <span class="hljs-number">1</span>);
-&#125;
-<span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);
-
-&#125;</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br><span class="hljs-type">char</span> c;<br><span class="hljs-type">int</span> fd;<br>fd = open(<span class="hljs-string">&quot;foo.txt&quot;</span>,O_WRONLY,<span class="hljs-number">1</span>);<br><span class="hljs-keyword">while</span>(read(STDOUT_FILENO, &amp;c, <span class="hljs-number">1</span>) != <span class="hljs-number">0</span>)&#123;<br>   write(fd, &amp;c, <span class="hljs-number">1</span>);<br>&#125;<br><span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br><br>&#125;<br></code></pre></td></tr></table></figure>
 <p>这里写了个例子，打开<code>foo.txt</code>，从标准输入（即键盘输入）中获取字符只要<code>read</code>函数读到的字节数不为0就把字符写进<code>foo.txt</code>中。</p>
 <h2 id="4-更健壮的RIO包"><a href="#4-更健壮的RIO包" class="headerlink" title="4. 更健壮的RIO包"></a>4. 更健壮的RIO包</h2><p>RIO包更强壮一点，带有无缓冲的输入输出函数以及带缓冲的输入函数，但这不是我这篇文章的重点，有兴趣可以去网上找找。</p>
-<h2 id="5-我该使用哪些I-O函数"><a href="#5-我该使用哪些I-O函数" class="headerlink" title="5. 我该使用哪些I/O函数"></a>5. 我该使用哪些I/O函数</h2><p>Unix I/O模型实在操作系统内核中实现的。应用程序可以通过诸如<code>open</code>、<code>close</code>、<code>lseek</code>、<code>read</code>、<code>write</code>、<code>stat</code>这样的函数来访问Unix I/O。较高级别的RIO和标准I/O函数都是基于Unix I/O函数来实现的。具体可以看第三节的那个图，一目了然</p>
-<p>那么，选哪一个？ 对我自己来说：只要有可能就使用标准I/O。对磁盘和终端设备来说，标准I/O函数是首选方法。大多数C程序员在其整个职业生涯只使用标准I/O！</p>
-<h2 id="6-I-O重定向"><a href="#6-I-O重定向" class="headerlink" title="6. I/O重定向"></a>6. I/O重定向</h2><p>Linux shell提供了I/O重定向操作符，允许用户将磁盘文件和标准输入输出联系在一起。例如<code>ls &gt; foo.fxt</code>,使用shell加载和执行ls程序，将标准输出重定向到磁盘文件<code>foo.txt</code>。一些更加复杂的重定向操作可以看<a href="https://blog.csdn.net/ithomer/article/details/9288353" target="_blank" rel="noopener">Linux Shell 1&gt;/dev/null 2&gt;&amp;1 含义</a></p>
+<h2 id="5-我该使用哪些I-x2F-O函数"><a href="#5-我该使用哪些I-x2F-O函数" class="headerlink" title="5. 我该使用哪些I&#x2F;O函数"></a>5. 我该使用哪些I&#x2F;O函数</h2><p>Unix I&#x2F;O模型实在操作系统内核中实现的。应用程序可以通过诸如<code>open</code>、<code>close</code>、<code>lseek</code>、<code>read</code>、<code>write</code>、<code>stat</code>这样的函数来访问Unix I&#x2F;O。较高级别的RIO和标准I&#x2F;O函数都是基于Unix I&#x2F;O函数来实现的。具体可以看第三节的那个图，一目了然</p>
+<p>那么，选哪一个？ 对我自己来说：只要有可能就使用标准I&#x2F;O。对磁盘和终端设备来说，标准I&#x2F;O函数是首选方法。大多数C程序员在其整个职业生涯只使用标准I&#x2F;O！</p>
+<h2 id="6-I-x2F-O重定向"><a href="#6-I-x2F-O重定向" class="headerlink" title="6. I&#x2F;O重定向"></a>6. I&#x2F;O重定向</h2><p>Linux shell提供了I&#x2F;O重定向操作符，允许用户将磁盘文件和标准输入输出联系在一起。例如<code>ls &gt; foo.fxt</code>,使用shell加载和执行ls程序，将标准输出重定向到磁盘文件<code>foo.txt</code>。一些更加复杂的重定向操作可以看<a target="_blank" rel="noopener" href="https://blog.csdn.net/ithomer/article/details/9288353">Linux Shell 1&gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 含义</a></p>
 <h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><p>断断续续花了两天时间做了这篇总结，回头想想起因是啥，回头<code>C程序设计语言</code>这本圣经时，以前只是看到结构体那一章就盖上书了，结果这次不仅翻到了后一章，还把附录翻了一遍，刚好手头有本<code>CSAPP</code>，越翻又糊涂又明白，遂总结了一下。</p>
-<p>其实写到后面，发现，有些低级函数作为一般程序员压根用不到，还是得用高级函数，但是在这学习的过程中，很多相关概念才是最让人解惑，让自己理解整个过程以及其他系统概念。其实平常常用的文本文件读写，Python相关的函数封装地更简单，直接两行代码搞定。然而，所有编程语言都基于操作系统，当总结了相关概念之后，无论啥语言， 关于I/O根本的东西都是一样的。而自己偏爱使用Python所谓高级语言后，简单便捷，但所有的东西经过封装之后隐藏了幕后的细节，只是把语法当成工具，或许，工具就够了，又或许，还不够。</p>
-<p>当了解了系统I/O之后，接下去，回到过去，跟着历史和大佬们一起，开发Linux I/O模型！！</p>
+<p>其实写到后面，发现，有些低级函数作为一般程序员压根用不到，还是得用高级函数，但是在这学习的过程中，很多相关概念才是最让人解惑，让自己理解整个过程以及其他系统概念。其实平常常用的文本文件读写，Python相关的函数封装地更简单，直接两行代码搞定。然而，所有编程语言都基于操作系统，当总结了相关概念之后，无论啥语言， 关于I&#x2F;O根本的东西都是一样的。而自己偏爱使用Python所谓高级语言后，简单便捷，但所有的东西经过封装之后隐藏了幕后的细节，只是把语法当成工具，或许，工具就够了，又或许，还不够。</p>
+<p>当了解了系统I&#x2F;O之后，接下去，回到过去，跟着历史和大佬们一起，开发Linux I&#x2F;O模型！！</p>
 
             </div>
             <hr>
@@ -368,10 +338,14 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -398,11 +372,13 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -423,9 +399,9 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -438,7 +414,7 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -450,16 +426,16 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -471,208 +447,96 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "谈谈系统级I/O&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -694,7 +558,7 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -707,6 +571,10 @@ fd = open(<span class="hljs-string">"foo.txt"</span>,O_WRONLY,<span class="hljs-
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

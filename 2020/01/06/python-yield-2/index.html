@@ -1,62 +1,95 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="yield的第二部分主要是with模块的功能，即上下文管理器。我们可以用contextmanager装饰器加上yield语法代替传统的__enter__，__exit__魔法方法，让代码变得更Pythonic！ 1. 上下文管理器和with块1.1 with表达式常见的with用法格式，控制代码块的进入&#x2F;退出： 12345678with open(filename) as f:    statem">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python yield使用详解（二）">
+<meta property="og:url" content="https://fantasyhh.github.io/2020/01/06/python-yield-2/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="yield的第二部分主要是with模块的功能，即上下文管理器。我们可以用contextmanager装饰器加上yield语法代替传统的__enter__，__exit__魔法方法，让代码变得更Pythonic！ 1. 上下文管理器和with块1.1 with表达式常见的with用法格式，控制代码块的进入&#x2F;退出： 12345678with open(filename) as f:    statem">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/yield/yield2_1.png">
+<meta property="og:image" content="https://fantasyhh.github.io/images/yield/yield2_2.png">
+<meta property="og:image" content="https://fantasyhh.github.io/images/yield/yield2_3.png">
+<meta property="article:published_time" content="2020-01-06T02:25:49.000Z">
+<meta property="article:modified_time" content="2020-04-01T03:09:48.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="yield">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/yield/yield2_1.png">
+  
+  
   <title>Python yield使用详解（二） - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +102,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +177,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +195,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Python yield使用详解（二）">
               
             </span>
 
@@ -195,21 +220,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      819 字
+      2.2k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      4
-       分钟
+      19 分钟
     </span>
   
 
@@ -230,59 +252,24 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Python yield使用详解（二）</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>yield的第二部分主要是with模块的功能，即上下文管理器。我们可以用<code>contextmanager</code>装饰器加上<code>yield</code>语法代替传统的<code>__enter__</code>，<code>__exit__</code>魔法方法，让代码变得更Pythonic！</p>
-<h2 id="1-上下文管理器和with块"><a href="#1-上下文管理器和with块" class="headerlink" title="1. 上下文管理器和with块"></a>1. 上下文管理器和with块</h2><h3 id="1-1-with表达式"><a href="#1-1-with表达式" class="headerlink" title="1.1 with表达式"></a>1.1 with表达式</h3><p>常见的with用法格式，控制代码块的<code>进入/退出</code>：<br><pre><code class="hljs python"><span class="hljs-keyword">with</span> open(filename) <span class="hljs-keyword">as</span> f:
-    statement
-    statement
- ...
-<span class="hljs-keyword">with</span> lock:
-    statement
-    statement
- ...</code></pre></p>
-<h3 id="1-2-定制你自己的上下文管理器"><a href="#1-2-定制你自己的上下文管理器" class="headerlink" title="1.2 定制你自己的上下文管理器"></a>1.2 定制你自己的上下文管理器</h3><p>一个计时器的例子：<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> time
-<span class="hljs-keyword">from</span> contextlib <span class="hljs-keyword">import</span> contextmanager
-
-<span class="hljs-meta">@contextmanager</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">timethis</span><span class="hljs-params">(label)</span>:</span>
-    start = time.time()
-    <span class="hljs-keyword">try</span>:
-        <span class="hljs-keyword">yield</span> 
-    <span class="hljs-keyword">finally</span>:
-        end = time.time()
-        print(<span class="hljs-string">'%s: %0.3f'</span> % (label, end-start))
-
-<span class="hljs-comment">#Usage</span>
-<span class="hljs-keyword">with</span> timethis(<span class="hljs-string">'counting'</span>):
-     n = <span class="hljs-number">1000000</span>
-     <span class="hljs-keyword">while</span> n &gt; <span class="hljs-number">0</span>:
-         n -= <span class="hljs-number">1</span>
-<span class="hljs-comment">#Output</span>
-counting: <span class="hljs-number">0.156</span></code></pre></p>
-<p>另外一个例子：临时文件夹<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> tempfile, shutil
-<span class="hljs-keyword">from</span> contextlib <span class="hljs-keyword">import</span> contextmanager
-
-<span class="hljs-meta">@contextmanager</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">tempdir</span><span class="hljs-params">()</span>:</span>
-    outdir = tempfile.mkdtemp()
-    <span class="hljs-keyword">try</span>:
-        <span class="hljs-keyword">yield</span> outdir
-    <span class="hljs-keyword">finally</span>:
-        shutil.rmtree(outdir)
-
-<span class="hljs-comment">#Example</span>
-<span class="hljs-keyword">with</span> tempdir() <span class="hljs-keyword">as</span> dirname:
-    ...</code></pre></p>
+<h2 id="1-上下文管理器和with块"><a href="#1-上下文管理器和with块" class="headerlink" title="1. 上下文管理器和with块"></a>1. 上下文管理器和with块</h2><h3 id="1-1-with表达式"><a href="#1-1-with表达式" class="headerlink" title="1.1 with表达式"></a>1.1 with表达式</h3><p>常见的with用法格式，控制代码块的<code>进入/退出</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(filename) <span class="hljs-keyword">as</span> f:<br>    statement<br>    statement<br> ...<br><span class="hljs-keyword">with</span> lock:<br>    statement<br>    statement<br> ...<br></code></pre></td></tr></table></figure>
+<h3 id="1-2-定制你自己的上下文管理器"><a href="#1-2-定制你自己的上下文管理器" class="headerlink" title="1.2 定制你自己的上下文管理器"></a>1.2 定制你自己的上下文管理器</h3><p>一个计时器的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">from</span> contextlib <span class="hljs-keyword">import</span> contextmanager<br><br><span class="hljs-meta">@contextmanager</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">timethis</span>(<span class="hljs-params">label</span>):<br>    start = time.time()<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-keyword">yield</span> <br>    <span class="hljs-keyword">finally</span>:<br>        end = time.time()<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;%s: %0.3f&#x27;</span> % (label, end-start))<br><br><span class="hljs-comment">#Usage</span><br><span class="hljs-keyword">with</span> timethis(<span class="hljs-string">&#x27;counting&#x27;</span>):<br>     n = <span class="hljs-number">1000000</span><br>     <span class="hljs-keyword">while</span> n &gt; <span class="hljs-number">0</span>:<br>         n -= <span class="hljs-number">1</span><br><span class="hljs-comment">#Output</span><br>counting: <span class="hljs-number">0.156</span><br></code></pre></td></tr></table></figure>
+<p>另外一个例子：临时文件夹</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tempfile, shutil<br><span class="hljs-keyword">from</span> contextlib <span class="hljs-keyword">import</span> contextmanager<br><br><span class="hljs-meta">@contextmanager</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">tempdir</span>():<br>    outdir = tempfile.mkdtemp()<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-keyword">yield</span> outdir<br>    <span class="hljs-keyword">finally</span>:<br>        shutil.rmtree(outdir)<br><br><span class="hljs-comment">#Example</span><br><span class="hljs-keyword">with</span> tempdir() <span class="hljs-keyword">as</span> dirname:<br>    ...<br></code></pre></td></tr></table></figure>
 <p><strong>等等！！！</strong>，<strong>这里的<code>yield outdir</code>是什么？</strong></p>
 <ul>
 <li>不是迭代</li>
@@ -295,55 +282,21 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
 <li>上下文对象存在的目的是管理<code>with</code>语句，就像迭代器的存在是为了管理<code>for</code>语句</li>
 <li>with语句的目的是简化t<code>try/finally</code>模式，这种模式用于保证一段代码运行完毕后执行某项操作。即使那段代码由于异常，<code>return</code>语句或<code>sys.exit()</code>调用而终止，也会执行指定操作</li>
 </ul>
-<p><strong>上下文管理器的内部实现：</strong><br><img src="/images/yield/yield2_1.png" srcset="/img/loading.gif" alt></p>
+<p><strong>上下文管理器的内部实现：</strong><br><img src="/images/yield/yield2_1.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li>上下文管理器协议包含<strong>enter</strong>和<strong>exit</strong>两个方法，<code>with</code>语句还是运行时，会在上下文管理器对象上调用<strong>enter</strong>方法。with语句结束后，会在上下文管理器对象上调用<strong>exit</strong>方法，以此扮演finally子句的角色</li>
+<li>上下文管理器协议包含__enter__和__exit__两个方法，<code>with</code>语句还是运行时，会在上下文管理器对象上调用__enter__方法。with语句结束后，会在上下文管理器对象上调用__exit__方法，以此扮演finally子句的角色</li>
 </ul>
-<p><strong>实现模板</strong><br><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Manager</span><span class="hljs-params">(object)</span>:</span>
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__enter__</span><span class="hljs-params">(self)</span>:</span>
-        <span class="hljs-keyword">return</span> value
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__exit__</span><span class="hljs-params">(self, exc_type, val, tb)</span>:</span>
-        <span class="hljs-keyword">if</span> exc_type <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
-            <span class="hljs-keyword">return</span>
-        <span class="hljs-keyword">else</span>:
-            <span class="hljs-comment"># Handle an exception (if you want)</span>
-           <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span> <span class="hljs-keyword">if</span> handled <span class="hljs-keyword">else</span> <span class="hljs-literal">False</span>
-
- <span class="hljs-comment"># Usage         </span>
-<span class="hljs-keyword">with</span> Manager() <span class="hljs-keyword">as</span> value:
-    statements
-    statements</code></pre></p>
-<p><strong>实例</strong><br><pre><code class="hljs python"><span class="hljs-keyword">import</span> tempfile
-<span class="hljs-keyword">import</span> shutil
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">tempdir</span><span class="hljs-params">(object)</span>:</span>
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__enter__</span><span class="hljs-params">(self)</span>:</span>
-        self.dirname = tempfile.mkdtemp()  <span class="hljs-comment">#生成临时文件夹</span>
-        <span class="hljs-keyword">return</span> self.dirname
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__exit__</span><span class="hljs-params">(self, exc, val, tb)</span>:</span>
-        shutil.rmtree(self.dirname)   <span class="hljs-comment">#删除文件夹</span>
-
-<span class="hljs-comment"># Usage  </span>
-<span class="hljs-keyword">with</span> tempdir() <span class="hljs-keyword">as</span> dirname:
-...
-<span class="hljs-comment"># with语句运行完毕后，会自动删除那个临时文件夹</span></code></pre></p>
-<h2 id="3-更简洁的一种选择：利用-contextmanager装饰器"><a href="#3-更简洁的一种选择：利用-contextmanager装饰器" class="headerlink" title="3. 更简洁的一种选择：利用@contextmanager装饰器"></a>3. 更简洁的一种选择：利用@contextmanager装饰器</h2><pre><code class="hljs python"><span class="hljs-keyword">import</span> tempfile, shutil
-<span class="hljs-keyword">from</span> contextlib <span class="hljs-keyword">import</span> contextmanager
-
-<span class="hljs-meta">@contextmanager</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">tempdir</span><span class="hljs-params">()</span>:</span>
-    dirname = tempfile.mkdtemp()
-    <span class="hljs-keyword">try</span>:
-        <span class="hljs-keyword">yield</span> dirname
-    <span class="hljs-keyword">finally</span>:
-        shutil.rmtree(dirname)
- <span class="hljs-comment"># 跟上个例子相同的代码。</span></code></pre>
-<h3 id="3-1-contextmanager装饰器运行原理"><a href="#3-1-contextmanager装饰器运行原理" class="headerlink" title="3.1 contextmanager装饰器运行原理"></a>3.1 contextmanager装饰器运行原理</h3><p>下图：<br><img src="/images/yield/yield2_2.png" srcset="/img/loading.gif" alt></p>
+<p><strong>实现模板</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Manager</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__enter__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> value<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__exit__</span>(<span class="hljs-params">self, exc_type, val, tb</span>):<br>        <span class="hljs-keyword">if</span> exc_type <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">return</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-comment"># Handle an exception (if you want)</span><br>           <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span> <span class="hljs-keyword">if</span> handled <span class="hljs-keyword">else</span> <span class="hljs-literal">False</span><br><br> <span class="hljs-comment"># Usage         </span><br><span class="hljs-keyword">with</span> Manager() <span class="hljs-keyword">as</span> value:<br>    statements<br>    statements<br></code></pre></td></tr></table></figure>
+<p><strong>实例</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tempfile<br><span class="hljs-keyword">import</span> shutil<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">tempdir</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__enter__</span>(<span class="hljs-params">self</span>):<br>        self.dirname = tempfile.mkdtemp()  <span class="hljs-comment">#生成临时文件夹</span><br>        <span class="hljs-keyword">return</span> self.dirname<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__exit__</span>(<span class="hljs-params">self, exc, val, tb</span>):<br>        shutil.rmtree(self.dirname)   <span class="hljs-comment">#删除文件夹</span><br><br><span class="hljs-comment"># Usage  </span><br><span class="hljs-keyword">with</span> tempdir() <span class="hljs-keyword">as</span> dirname:<br>...<br><span class="hljs-comment"># with语句运行完毕后，会自动删除那个临时文件夹</span><br></code></pre></td></tr></table></figure>
+<h2 id="3-更简洁的一种选择：利用-contextmanager装饰器"><a href="#3-更简洁的一种选择：利用-contextmanager装饰器" class="headerlink" title="3. 更简洁的一种选择：利用@contextmanager装饰器"></a>3. 更简洁的一种选择：利用@contextmanager装饰器</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tempfile, shutil<br><span class="hljs-keyword">from</span> contextlib <span class="hljs-keyword">import</span> contextmanager<br><br><span class="hljs-meta">@contextmanager</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">tempdir</span>():<br>    dirname = tempfile.mkdtemp()<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-keyword">yield</span> dirname<br>    <span class="hljs-keyword">finally</span>:<br>        shutil.rmtree(dirname)<br> <span class="hljs-comment"># 跟上个例子相同的代码。</span><br></code></pre></td></tr></table></figure>
+<h3 id="3-1-contextmanager装饰器运行原理"><a href="#3-1-contextmanager装饰器运行原理" class="headerlink" title="3.1 contextmanager装饰器运行原理"></a>3.1 contextmanager装饰器运行原理</h3><p>下图：<br><img src="/images/yield/yield2_2.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>思考剪刀处<code>yield</code>代码</li>
 <li>将代码一分两半</li>
 </ul>
-<p><img src="/images/yield/yield2_3.png" srcset="/img/loading.gif" alt></p>
+<p><img src="/images/yield/yield2_3.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>每一半对应着上下文管理器协议</li>
 <li><code>yield</code>是促成图中这一实现的魔法</li>
@@ -352,7 +305,7 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><ol>
 <li><code>yield</code>表达式的另一个不同作用:上下文管理器</li>
 <li>常用来重新定制控制流</li>
-<li>也可以用<code>@contextmanager</code>装饰器来代替<strong>enter</strong>和<strong>exit</strong>两个方法。优雅且实用，把三个不同的Python特性结合到一起： 函数装饰器，生成器和<code>with</code>语句</li>
+<li>也可以用<code>@contextmanager</code>装饰器来代替__enter__和__exit__两个方法。优雅且实用，把三个不同的Python特性结合到一起： 函数装饰器，生成器和<code>with</code>语句</li>
 </ol>
 
             </div>
@@ -379,10 +332,14 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -409,11 +366,13 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -434,9 +393,9 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -449,7 +408,7 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -461,16 +420,16 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -482,208 +441,96 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Python yield使用详解（二）&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -705,7 +552,7 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -718,6 +565,10 @@ counting: <span class="hljs-number">0.156</span></code></pre></p>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

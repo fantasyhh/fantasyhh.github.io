@@ -1,62 +1,90 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）">
+<meta property="og:url" content="https://fantasyhh.github.io/2019/05/17/nodejs3-jstips/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-17T07:38:52.000Z">
+<meta property="article:modified_time" content="2020-04-01T02:11:54.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Nodejs">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新） - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +97,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +172,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +190,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）">
               
             </span>
 
@@ -195,21 +215,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.1k 字
+      4k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
-       分钟
+      34 分钟
     </span>
   
 
@@ -230,102 +247,43 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>说到语法，翻一翻熟悉的js菜鸟教程，变量，if语句，函数定义啥的，都是老生长谈的东西，一看就能明白。但还是和Python有点偏差，比如分号啊括号啊，变量定义啊什么的，而且唰唰唰往下看了都懂，等真正自己写起来的时候，都忘得差不多了，还是要回头翻。但是仅仅能看懂语法也是有好处的，比如新学一个模块或者框架的时候，你能看得懂代码然后依葫芦画瓢照着写，遇到不懂得语法（比如箭头函数）就去找，学习量也比较少，能更容易接受，达到慢慢积累的效果。这对于自己写代码也有一定帮助，看的语法少，那就稳稳当当码代码，不搞花里胡哨的写法。</p>
-<p><a href="https://juejin.im/post/5b9cb3336fb9a05d290ee47e" target="_blank" rel="noopener">ES6、ES7、ES8特性一锅炖</a>，这里是Js近几年来的新特性，其实新特性对于初学者还是很有好的，相关用法只用看新的就行，老的完全摒弃不闻不问，多清净。</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5b9cb3336fb9a05d290ee47e">ES6、ES7、ES8特性一锅炖</a>，这里是Js近几年来的新特性，其实新特性对于初学者还是很有好的，相关用法只用看新的就行，老的完全摒弃不闻不问，多清净。</p>
 <h2 id="1-箭头函数"><a href="#1-箭头函数" class="headerlink" title="1. 箭头函数"></a>1. 箭头函数</h2><p>类似于Python的匿名函数，lambda表达式，但又有一些不一样。lambda只能是一条单独的表达式，而箭头函数却可以有多个表达式，中间用分好隔开，我认为两者差异的原因很大程度上在于，<strong>匿名函数本身就是为回调函数量身定做的，而Js中回调用法真的是家常便饭，要是像Python那样仅仅是单行表达式，那真的是太不方便了。</strong></p>
-<h3 id="1-1-基础用法"><a href="#1-1-基础用法" class="headerlink" title="1.1 基础用法"></a>1.1 基础用法</h3><pre><code class="hljs js">(参数<span class="hljs-number">1</span>, 参数<span class="hljs-number">2</span>, …, 参数N) =&gt; &#123; 函数声明 &#125;
+<h3 id="1-1-基础用法"><a href="#1-1-基础用法" class="headerlink" title="1.1 基础用法"></a>1.1 基础用法</h3><figure class="highlight js"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></div></td><td class="code"><pre><code class="hljs js">(参数<span class="hljs-number">1</span>, 参数<span class="hljs-number">2</span>, …, 参数N) =&gt; &#123; 函数声明 &#125;<br><br><span class="hljs-comment">//相当于：(参数1, 参数2, …, 参数N) =&gt;&#123; return 表达式; &#125;</span><br>(参数<span class="hljs-number">1</span>, 参数<span class="hljs-number">2</span>, …, 参数N) =&gt; 表达式（单一）<br><br><span class="hljs-comment">// 当只有一个参数时，圆括号是可选的：</span><br>(单一参数) =&gt; &#123;函数声明&#125;<br>单一参数 =&gt; &#123;函数声明&#125;<br><br><span class="hljs-comment">// 没有参数的函数应该写成一对圆括号。</span><br>() =&gt; &#123;函数声明&#125;<span class="hljs-string">``</span><span class="hljs-string">`</span><br><span class="hljs-string"></span><br><span class="hljs-string">### 1.2 高级用法</span><br><span class="hljs-string">`</span><span class="hljs-string">``</span>js<br><span class="hljs-comment">//加括号的函数体返回对象字面表达式：</span><br>参数=&gt; (&#123;<span class="hljs-attr">foo</span>: bar&#125;)<br><br><span class="hljs-comment">//支持剩余参数和默认参数</span><br>(参数<span class="hljs-number">1</span>, 参数<span class="hljs-number">2</span>, ...rest) =&gt; &#123;函数声明&#125;<br>(参数<span class="hljs-number">1</span> = 默认值<span class="hljs-number">1</span>,参数<span class="hljs-number">2</span>, …, 参数N = 默认值N) =&gt; &#123;函数声明&#125;<br><br><span class="hljs-comment">//同样支持参数列表解构</span><br><span class="hljs-keyword">let</span> <span class="hljs-title function_">f</span> = (<span class="hljs-params">[a, b] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], &#123;x: c&#125; = &#123;x: a + b&#125;</span>) =&gt; a + b + c;<br><span class="hljs-title function_">f</span>();  <span class="hljs-comment">// 6 ```</span><br><br>当然官方不太可能单单因为这一个简单的功能：**更短的函数** 而把它搬到新特性里来，看这边[箭头函数与普通函数区别](<span class="hljs-attr">https</span>:<span class="hljs-comment">//developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions)</span><br><br><br>## <span class="hljs-number">2.</span> 数组的迭代到数组的常用用法<br>例子正好用到上面的箭头函数：<br><span class="hljs-string">``</span><span class="hljs-string">`js</span><br><span class="hljs-string">var array1 = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];</span><br><span class="hljs-string">array1.forEach((value,index,array) =&gt;&#123;console.log(value,index,array)&#125;)</span><br><span class="hljs-string">//除了value，其他的参数是可选的</span><br><span class="hljs-string"></span><br><span class="hljs-string">//可用for of代替，类似于Python中for... in</span><br><span class="hljs-string">for (value of array1) &#123;console.log(value)&#125;</span><br></code></pre></td></tr></table></figure>
 
-<span class="hljs-comment">//相当于：(参数1, 参数2, …, 参数N) =&gt;&#123; return 表达式; &#125;</span>
-(参数<span class="hljs-number">1</span>, 参数<span class="hljs-number">2</span>, …, 参数N) =&gt; 表达式（单一）
+<p>大概浏览下<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array">array数组的语法一览</a>，array的方法很多，基本上结合了Python中的list的内置函数以及itertools模块中的函数（<strong>包含过滤，映射，合并，元素拓展，重新排列等功能</strong>。当然，<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators">js语法中也有迭代器跟生成器的概念</a>，这里不拓展。</p>
+<h2 id="3-解构"><a href="#3-解构" class="headerlink" title="3. 解构"></a>3. 解构</h2><p>刚看到结构的语法，有些懵逼，实在想不到跟Python的哪种语法相关。后来一看是<a target="_blank" rel="noopener" href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p01_unpack_sequence_into_separate_variables.html">将序列分解为单独变量</a>，以及<a target="_blank" rel="noopener" href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p02_unpack_elements_from_iterables.html">从任意长度的可迭代对象中分解元素</a>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">//解构数组</span><br><span class="hljs-keyword">var</span> a, b, rest;<br>[a, b] = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>];<br><span class="hljs-comment">// 用三个点，python中是*</span><br>[a, b, ...rest] = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>];<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(rest);<br><span class="hljs-comment">// expected output: [30,40,50]</span><br><span class="hljs-comment">//使用扩展运算符（...）拷贝数组</span><br><span class="hljs-keyword">const</span> itemsCopy = [...items];<br><br><span class="hljs-comment">///解构对象，这个是python没有的，通过dict.values()然后再分解</span><br><span class="hljs-keyword">var</span> a, b;<br>(&#123;a, b&#125; = &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>&#125;);<br><span class="hljs-comment">//给新的变量赋值</span><br><span class="hljs-keyword">var</span> o = &#123;<span class="hljs-attr">p</span>: <span class="hljs-number">42</span>, <span class="hljs-attr">q</span>: <span class="hljs-literal">true</span>&#125;;<br><span class="hljs-keyword">var</span> &#123;<span class="hljs-attr">p</span>: foo, <span class="hljs-attr">q</span>: bar&#125; = o;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(foo); <span class="hljs-comment">// 42</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(bar); <span class="hljs-comment">// true</span><br><span class="hljs-comment">// 提供默认值</span><br><span class="hljs-keyword">var</span> &#123;a = <span class="hljs-number">10</span>, b = <span class="hljs-number">5</span>&#125; = &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">3</span>&#125;;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a); <span class="hljs-comment">// 3</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(b); <span class="hljs-comment">// 5</span><br><span class="hljs-comment">// 给新的变量命名并提供默认值</span><br><span class="hljs-keyword">var</span> &#123;<span class="hljs-attr">a</span>:aa = <span class="hljs-number">10</span>, <span class="hljs-attr">b</span>:bb = <span class="hljs-number">5</span>&#125; = &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">3</span>&#125;;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(aa); <span class="hljs-comment">// 3</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(bb); <span class="hljs-comment">// 5</span><br></code></pre></td></tr></table></figure>
 
-<span class="hljs-comment">// 当只有一个参数时，圆括号是可选的：</span>
-(单一参数) =&gt; &#123;函数声明&#125;
-单一参数 =&gt; &#123;函数声明&#125;
-
-<span class="hljs-comment">// 没有参数的函数应该写成一对圆括号。</span>
-() =&gt; &#123;函数声明&#125;</code></pre>
-<h3 id="1-2-高级用法"><a href="#1-2-高级用法" class="headerlink" title="1.2 高级用法"></a>1.2 高级用法</h3><pre><code class="hljs js"><span class="hljs-comment">//加括号的函数体返回对象字面表达式：</span>
-参数=&gt; (&#123;<span class="hljs-attr">foo</span>: bar&#125;)
-
-<span class="hljs-comment">//支持剩余参数和默认参数</span>
-(参数<span class="hljs-number">1</span>, 参数<span class="hljs-number">2</span>, ...rest) =&gt; &#123;函数声明&#125;
-(参数<span class="hljs-number">1</span> = 默认值<span class="hljs-number">1</span>,参数<span class="hljs-number">2</span>, …, 参数N = 默认值N) =&gt; &#123;函数声明&#125;
-
-<span class="hljs-comment">//同样支持参数列表解构</span>
-<span class="hljs-keyword">let</span> f = <span class="hljs-function">(<span class="hljs-params">[a, b] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], &#123;x: c&#125; = &#123;x: a + b&#125;</span>) =&gt;</span> a + b + c;
-f();  <span class="hljs-comment">// 6</span></code></pre>
-<p>当然官方不太可能单单因为这一个简单的功能：<strong>更短的函数</strong> 而把它搬到新特性里来，看这边<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener">箭头函数与普通函数区别</a></p>
-<h2 id="2-数组的迭代到数组的常用用法"><a href="#2-数组的迭代到数组的常用用法" class="headerlink" title="2. 数组的迭代到数组的常用用法"></a>2. 数组的迭代到数组的常用用法</h2><p>例子正好用到上面的箭头函数：<br><pre><code class="hljs js"><span class="hljs-keyword">var</span> array1 = [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>];
-array1.forEach(<span class="hljs-function">(<span class="hljs-params">value,index,array</span>) =&gt;</span>&#123;<span class="hljs-built_in">console</span>.log(value,index,array)&#125;)
-<span class="hljs-comment">//除了value，其他的参数是可选的</span>
-
-<span class="hljs-comment">//可用for of代替，类似于Python中for... in</span>
-<span class="hljs-keyword">for</span> (value <span class="hljs-keyword">of</span> array1) &#123;<span class="hljs-built_in">console</span>.log(value)&#125;</code></pre></p>
-<p>大概浏览下<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener">array数组的语法一览</a>，array的方法很多，基本上结合了Python中的list的内置函数以及itertools模块中的函数（<strong>包含过滤，映射，合并，元素拓展，重新排列等功能</strong>。当然，<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators" target="_blank" rel="noopener">js语法中也有迭代器跟生成器的概念</a>，这里不拓展。</p>
-<h2 id="3-解构"><a href="#3-解构" class="headerlink" title="3. 解构"></a>3. 解构</h2><p>刚看到结构的语法，有些懵逼，实在想不到跟Python的哪种语法相关。后来一看是<a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p01_unpack_sequence_into_separate_variables.html" target="_blank" rel="noopener">将序列分解为单独变量</a>，以及<a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c01/p02_unpack_elements_from_iterables.html" target="_blank" rel="noopener">从任意长度的可迭代对象中分解元素</a>。<br><pre><code class="hljs js"><span class="hljs-comment">//解构数组</span>
-<span class="hljs-keyword">var</span> a, b, rest;
-[a, b] = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>];
-<span class="hljs-comment">// 用三个点，python中是*</span>
-[a, b, ...rest] = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>];
-<span class="hljs-built_in">console</span>.log(rest);
-<span class="hljs-comment">// expected output: [30,40,50]</span>
-<span class="hljs-comment">//使用扩展运算符（...）拷贝数组</span>
-<span class="hljs-keyword">const</span> itemsCopy = [...items];
-
-<span class="hljs-comment">///解构对象，这个是python没有的，通过dict.values()然后再分解</span>
-<span class="hljs-keyword">var</span> a, b;
-(&#123;a, b&#125; = &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>&#125;);
-<span class="hljs-comment">//给新的变量赋值</span>
-<span class="hljs-keyword">var</span> o = &#123;<span class="hljs-attr">p</span>: <span class="hljs-number">42</span>, <span class="hljs-attr">q</span>: <span class="hljs-literal">true</span>&#125;;
-<span class="hljs-keyword">var</span> &#123;<span class="hljs-attr">p</span>: foo, <span class="hljs-attr">q</span>: bar&#125; = o;
-<span class="hljs-built_in">console</span>.log(foo); <span class="hljs-comment">// 42</span>
-<span class="hljs-built_in">console</span>.log(bar); <span class="hljs-comment">// true</span>
-<span class="hljs-comment">// 提供默认值</span>
-<span class="hljs-keyword">var</span> &#123;a = <span class="hljs-number">10</span>, b = <span class="hljs-number">5</span>&#125; = &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">3</span>&#125;;
-<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// 3</span>
-<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// 5</span>
-<span class="hljs-comment">// 给新的变量命名并提供默认值</span>
-<span class="hljs-keyword">var</span> &#123;<span class="hljs-attr">a</span>:aa = <span class="hljs-number">10</span>, <span class="hljs-attr">b</span>:bb = <span class="hljs-number">5</span>&#125; = &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">3</span>&#125;;
-<span class="hljs-built_in">console</span>.log(aa); <span class="hljs-comment">// 3</span>
-<span class="hljs-built_in">console</span>.log(bb); <span class="hljs-comment">// 5</span></code></pre></p>
 <h2 id="4-模板字符串"><a href="#4-模板字符串" class="headerlink" title="4. 模板字符串"></a>4. 模板字符串</h2><blockquote>
-<p>静态字符串一律使用单引号或反引号，不使用双引号。动态字符串使用反引号。<br><code>const a = &#39;foobar&#39;;
-const b = `foo${a}bar`;</code></p>
+<p>静态字符串一律使用单引号或反引号，不使用双引号。动态字符串使用反引号。<br><code>const a = &#39;foobar&#39;; const b = `foo$&#123;a&#125;bar`;</code></p>
 </blockquote>
-<p>打印字符串这种常用到语法,一定需要个优雅的写法,才有动力让程序员代码继续搞下去。跟<a href="http://ju.outofmemory.cn/entry/198922" target="_blank" rel="noopener">神一样的python的<code>format</code>语法</a>差不多，不过好像不能在格式化字符串的同时对传入变量进行一些转换操作，比如进制，小数点转换等。<br>还有种更高级的用法：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/template_strings#%E5%B8%A6%E6%A0%87%E7%AD%BE%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2" target="_blank" rel="noopener">带标签的模板字符串</a>，不展开。</p>
+<p>打印字符串这种常用到语法,一定需要个优雅的写法,才有动力让程序员代码继续搞下去。跟<a target="_blank" rel="noopener" href="http://ju.outofmemory.cn/entry/198922">神一样的python的<code>format</code>语法</a>差不多，不过好像不能在格式化字符串的同时对传入变量进行一些转换操作，比如进制，小数点转换等。<br>还有种更高级的用法：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/template_strings#%E5%B8%A6%E6%A0%87%E7%AD%BE%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2">带标签的模板字符串</a>，不展开。</p>
 <h3 id="4-1-拓展：条件运算符"><a href="#4-1-拓展：条件运算符" class="headerlink" title="4.1 拓展：条件运算符"></a>4.1 拓展：条件运算符</h3><blockquote>
 <p>条件（三元）运算符是 JavaScript 仅有的使用三个操作数的运算符。本运算符经常作为if语句的简短形式来使用。<br>condition ? expr1 : expr2</p>
 </blockquote>
-<pre><code class="hljs js"><span class="hljs-keyword">var</span> age = <span class="hljs-number">26</span>;
-<span class="hljs-keyword">var</span> canDrinkAlcohol = (age &gt; <span class="hljs-number">21</span>) ? <span class="hljs-string">"True, over 21"</span> : <span class="hljs-string">"False, under 21"</span>;
-<span class="hljs-built_in">console</span>.log(canDrinkAlcohol); <span class="hljs-comment">// "True, over 21"</span>
-
-<span class="hljs-comment">// 三元运算符能够很好地用在函数返回值的表达式中，此时不需要 if/else 语句</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">canDrinkAlcohol</span>(<span class="hljs-params">age</span>) </span>&#123;
-  <span class="hljs-keyword">return</span> (age &gt; <span class="hljs-number">21</span>) ? <span class="hljs-string">"True, over 21"</span> : <span class="hljs-string">"False, under 21"</span>;
-&#125;
-<span class="hljs-keyword">var</span> output = canDrinkAlcohol(<span class="hljs-number">26</span>);
-<span class="hljs-built_in">console</span>.log(output); <span class="hljs-comment">// "True, over 21"</span></code></pre>
-<p>在Python中不存在三元表达式，可以用<strong>简洁版的if/else语句</strong>：<code>canDrinkAlcohol =   &quot;True, over 21&quot; if age&gt;21 else  &quot;False, under 21&quot;</code>，可以达到同样效果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> age = <span class="hljs-number">26</span>;<br><span class="hljs-keyword">var</span> canDrinkAlcohol = (age &gt; <span class="hljs-number">21</span>) ? <span class="hljs-string">&quot;True, over 21&quot;</span> : <span class="hljs-string">&quot;False, under 21&quot;</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(canDrinkAlcohol); <span class="hljs-comment">// &quot;True, over 21&quot;</span><br><br><span class="hljs-comment">// 三元运算符能够很好地用在函数返回值的表达式中，此时不需要 if/else 语句</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">canDrinkAlcohol</span>(<span class="hljs-params">age</span>) &#123;<br>  <span class="hljs-keyword">return</span> (age &gt; <span class="hljs-number">21</span>) ? <span class="hljs-string">&quot;True, over 21&quot;</span> : <span class="hljs-string">&quot;False, under 21&quot;</span>;<br>&#125;<br><span class="hljs-keyword">var</span> output = <span class="hljs-title function_">canDrinkAlcohol</span>(<span class="hljs-number">26</span>);<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(output); <span class="hljs-comment">// &quot;True, over 21&quot;</span><br></code></pre></td></tr></table></figure>
+<p>在Python中不存在三元表达式，可以用<strong>简洁版的if&#x2F;else语句</strong>：<code>canDrinkAlcohol =   &quot;True, over 21&quot; if age&gt;21 else  &quot;False, under 21&quot;</code>，可以达到同样效果。</p>
 <h2 id="5-let与const"><a href="#5-let与const" class="headerlink" title="5. let与const"></a>5. let与const</h2><blockquote>
-<p>Python是强类型 + 动态类型 , JS是弱类型 + 动态类型<br>动态/静态类型，指的是声明一个变量之后，它是否可以存储（指向）不同类型的变量。隐式类型转换，只可能发生在弱类型语言中<br>关于更多这方面的了解可以看这个链接：<a href="https://github.com/muwenzi/Program-Blog/issues/34" target="_blank" rel="noopener">JS是动态弱类型语言的理解</a></p>
+<p>Python是强类型 + 动态类型 , JS是弱类型 + 动态类型<br>动态&#x2F;静态类型，指的是声明一个变量之后，它是否可以存储（指向）不同类型的变量。隐式类型转换，只可能发生在弱类型语言中<br>关于更多这方面的了解可以看这个链接：<a target="_blank" rel="noopener" href="https://github.com/muwenzi/Program-Blog/issues/34">JS是动态弱类型语言的理解</a></p>
 </blockquote>
-<p>虽同为动态类型语言，但js还是有点小不同，要用var，let，const之类的。<a href="https://juejin.im/post/5bdedd42e51d450d810a897c" target="_blank" rel="noopener">浅谈var、let和const区别</a>这里已经说得很清楚了,编程对此的建议是：</p>
+<p>虽同为动态类型语言，但js还是有点小不同，要用var，let，const之类的。<a target="_blank" rel="noopener" href="https://juejin.im/post/5bdedd42e51d450d810a897c">浅谈var、let和const区别</a>这里已经说得很清楚了,编程对此的建议是：</p>
 <blockquote>
 <p>let完全可以取代var，因为两者语义相同，而且let没有副作用,在let和const之间，建议优先使用const，尤其是在全局环境，不应该设置变量，只应设置常量。</p>
 </blockquote>
-<h2 id="6-this用法"><a href="#6-this用法" class="headerlink" title="6. this用法"></a>6. this用法</h2><p>关于this，见到的比较少，但对这个语法也是模糊不清，等真正接触到了在写心得。具体用法参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">官网手册</a></p>
+<h2 id="6-this用法"><a href="#6-this用法" class="headerlink" title="6. this用法"></a>6. this用法</h2><p>关于this，见到的比较少，但对这个语法也是模糊不清，等真正接触到了在写心得。具体用法参考<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this">官网手册</a></p>
 <h2 id="7-async与await"><a href="#7-async与await" class="headerlink" title="7. async与await"></a>7. async与await</h2><p>有必要简单讲一下javascript的异步发展历程，异步主要经历了这么几个过程：<br>Es6之前：</p>
 <ul>
 <li>回调函数（callback）</li>
@@ -333,11 +291,11 @@ const b = `foo${a}bar`;</code></p>
 <p>Es6</p>
 <ul>
 <li>Promise对象</li>
-<li>Generator函数  </li>
+<li>Generator函数</li>
 </ul>
 <p>Es7</p>
 <ul>
-<li>async/await语法</li>
+<li>async&#x2F;await语法</li>
 </ul>
 <blockquote>
 <p>async用于声明一个function是异步的,await只能出现在用async修饰的function中</p>
@@ -370,10 +328,14 @@ const b = `foo${a}bar`;</code></p>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -400,11 +362,13 @@ const b = `foo${a}bar`;</code></p>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -425,9 +389,9 @@ const b = `foo${a}bar`;</code></p>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -440,7 +404,7 @@ const b = `foo${a}bar`;</code></p>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -452,16 +416,16 @@ const b = `foo${a}bar`;</code></p>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -473,208 +437,96 @@ const b = `foo${a}bar`;</code></p>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "用 Python 眼光看Nodejs（三），Nodejs灵性语法整理（保持更新）&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -696,7 +548,7 @@ const b = `foo${a}bar`;</code></p>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -709,6 +561,10 @@ const b = `foo${a}bar`;</code></p>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

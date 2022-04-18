@@ -1,62 +1,93 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在上一篇文章中，我们研究了 ASGI 接口的基本结构。现在我们将进一步了解 HTTP 请求的消息结构，并看看我们如何使用 Starlette 包提供的一些数据结构来处理 ASGI 中的 HTTP 请求。 在任何 ASGI 应用程序中发生的第一件事情是，它用“scope”字典来实例化，该字典提供有关传入请求的一些初始信息。 下面是范围字典如何查找简单 HTTP 请求的示例。 123456789101">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ASGI翻译系列（三）：使用 ASGI 和 HTTP">
+<meta property="og:url" content="https://fantasyhh.github.io/2021/03/13/asgi3/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="在上一篇文章中，我们研究了 ASGI 接口的基本结构。现在我们将进一步了解 HTTP 请求的消息结构，并看看我们如何使用 Starlette 包提供的一些数据结构来处理 ASGI 中的 HTTP 请求。 在任何 ASGI 应用程序中发生的第一件事情是，它用“scope”字典来实例化，该字典提供有关传入请求的一些初始信息。 下面是范围字典如何查找简单 HTTP 请求的示例。 123456789101">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/suolue/asgi3.png">
+<meta property="article:published_time" content="2021-03-13T06:53:53.000Z">
+<meta property="article:modified_time" content="2021-03-13T08:56:30.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/suolue/asgi3.png">
+  
+  
   <title>ASGI翻译系列（三）：使用 ASGI 和 HTTP - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +100,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +175,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +193,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="ASGI翻译系列（三）：使用 ASGI 和 HTTP">
               
             </span>
 
@@ -195,21 +218,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.5k 字
+      4.6k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
-       分钟
+      39 分钟
     </span>
   
 
@@ -230,128 +250,84 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">ASGI翻译系列（三）：使用 ASGI 和 HTTP</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>在上一篇文章中，我们研究了 ASGI 接口的基本结构。现在我们将进一步了解 HTTP 请求的消息结构，并看看我们如何使用 Starlette 包提供的一些数据结构来处理 ASGI 中的 HTTP 请求。</p>
 <p>在任何 ASGI 应用程序中发生的第一件事情是，它用“scope”字典来实例化，该字典提供有关传入请求的一些初始信息。</p>
 <p>下面是范围字典如何查找简单 HTTP 请求的示例。</p>
-<pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>scope = &#123;
-    <span class="hljs-string">"type"</span>: <span class="hljs-string">"http"</span>,
-    <span class="hljs-string">"http_version"</span>: <span class="hljs-string">"1.1"</span>,
-    <span class="hljs-string">"method"</span>: <span class="hljs-string">"GET"</span>,
-    <span class="hljs-string">"scheme"</span>: <span class="hljs-string">"https"</span>,
-    <span class="hljs-string">"path"</span>: <span class="hljs-string">"/"</span>,
-    <span class="hljs-string">"query_string"</span>: <span class="hljs-string">b"search=red+blue&amp;maximum_price=20"</span>,
-    <span class="hljs-string">"headers"</span>: [
-        (<span class="hljs-string">b"host"</span>, <span class="hljs-string">b"www.example.org"</span>),
-        (<span class="hljs-string">b"accept"</span>, <span class="hljs-string">b"application/json"</span>)
-    ],
-    <span class="hljs-string">"client"</span>: (<span class="hljs-string">"134.56.78.4"</span>, <span class="hljs-number">1453</span>),
-    <span class="hljs-string">"server"</span>: (<span class="hljs-string">"www.example.org"</span>, <span class="hljs-number">443</span>)
-&#125;</code></pre>
-<p>scope字典与 WSGI 的“environ”字典非常相似。事实上，ASGI 规范描述了<a href="https://asgi.readthedocs.io/en/latest/specs/www.html#wsgi-compatibility" target="_blank" rel="noopener">如何在两者之间进行映射</a>.。</p>
-<pre><code class="hljs python">environ = &#123;
-    <span class="hljs-string">"REQUEST_METHOD"</span>: <span class="hljs-string">"GET"</span>,
-    <span class="hljs-string">"SCRIPT_NAME"</span>: <span class="hljs-string">""</span>,
-    <span class="hljs-string">"PATH_INFO"</span>: <span class="hljs-string">"/"</span>,
-    <span class="hljs-string">"QUERY_STRING"</span>: <span class="hljs-string">"search=red+blue&amp;maximum_price=20"</span>,
-    <span class="hljs-string">"SERVER_NAME"</span>: <span class="hljs-string">"www.example.org"</span>,
-    <span class="hljs-string">"SERVER_PORT"</span>: <span class="hljs-number">443</span>,
-    <span class="hljs-string">"REMOTE_HOST"</span>: <span class="hljs-string">"134.56.78.4"</span>,
-    <span class="hljs-string">"REMOTE_PORT"</span>: <span class="hljs-number">1453</span>,
-    <span class="hljs-string">"SERVER_PROTOCOL"</span>: <span class="hljs-string">"HTTP/1.1"</span>,
-    <span class="hljs-string">"HTTP_HOST"</span>: <span class="hljs-string">"www.example.org"</span>,
-    <span class="hljs-string">"HTTP_ACCEPT"</span>: <span class="hljs-string">"application/json"</span>,
-&#125;</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>scope = &#123;<br>    <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;http&quot;</span>,<br>    <span class="hljs-string">&quot;http_version&quot;</span>: <span class="hljs-string">&quot;1.1&quot;</span>,<br>    <span class="hljs-string">&quot;method&quot;</span>: <span class="hljs-string">&quot;GET&quot;</span>,<br>    <span class="hljs-string">&quot;scheme&quot;</span>: <span class="hljs-string">&quot;https&quot;</span>,<br>    <span class="hljs-string">&quot;path&quot;</span>: <span class="hljs-string">&quot;/&quot;</span>,<br>    <span class="hljs-string">&quot;query_string&quot;</span>: <span class="hljs-string">b&quot;search=red+blue&amp;maximum_price=20&quot;</span>,<br>    <span class="hljs-string">&quot;headers&quot;</span>: [<br>        (<span class="hljs-string">b&quot;host&quot;</span>, <span class="hljs-string">b&quot;www.example.org&quot;</span>),<br>        (<span class="hljs-string">b&quot;accept&quot;</span>, <span class="hljs-string">b&quot;application/json&quot;</span>)<br>    ],<br>    <span class="hljs-string">&quot;client&quot;</span>: (<span class="hljs-string">&quot;134.56.78.4&quot;</span>, <span class="hljs-number">1453</span>),<br>    <span class="hljs-string">&quot;server&quot;</span>: (<span class="hljs-string">&quot;www.example.org&quot;</span>, <span class="hljs-number">443</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>scope字典与 WSGI 的“environ”字典非常相似。事实上，ASGI 规范描述了<a target="_blank" rel="noopener" href="https://asgi.readthedocs.io/en/latest/specs/www.html#wsgi-compatibility">如何在两者之间进行映射</a>.。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">environ = &#123;<br>    <span class="hljs-string">&quot;REQUEST_METHOD&quot;</span>: <span class="hljs-string">&quot;GET&quot;</span>,<br>    <span class="hljs-string">&quot;SCRIPT_NAME&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,<br>    <span class="hljs-string">&quot;PATH_INFO&quot;</span>: <span class="hljs-string">&quot;/&quot;</span>,<br>    <span class="hljs-string">&quot;QUERY_STRING&quot;</span>: <span class="hljs-string">&quot;search=red+blue&amp;maximum_price=20&quot;</span>,<br>    <span class="hljs-string">&quot;SERVER_NAME&quot;</span>: <span class="hljs-string">&quot;www.example.org&quot;</span>,<br>    <span class="hljs-string">&quot;SERVER_PORT&quot;</span>: <span class="hljs-number">443</span>,<br>    <span class="hljs-string">&quot;REMOTE_HOST&quot;</span>: <span class="hljs-string">&quot;134.56.78.4&quot;</span>,<br>    <span class="hljs-string">&quot;REMOTE_PORT&quot;</span>: <span class="hljs-number">1453</span>,<br>    <span class="hljs-string">&quot;SERVER_PROTOCOL&quot;</span>: <span class="hljs-string">&quot;HTTP/1.1&quot;</span>,<br>    <span class="hljs-string">&quot;HTTP_HOST&quot;</span>: <span class="hljs-string">&quot;www.example.org&quot;</span>,<br>    <span class="hljs-string">&quot;HTTP_ACCEPT&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span>,<br>&#125;<br></code></pre></td></tr></table></figure>
+
 <blockquote>
 <p>译者注：原文代码的使用的ASGI2协议，当时接口采用的是双重调用，在2019年3月20日，ASGI3.0发布，改进了调用风格，虽然向下兼容，但是原文的例子有些还是没法用了，所以我这边做了更新统一采用ASGI3写法并适当进行增删改。</p>
-<p>具体可以看<a href="https://www.aeracode.org/2019/03/20/asgi-30/" target="_blank" rel="noopener">ASGI3.0</a></p>
+<p>具体可以看<a target="_blank" rel="noopener" href="https://www.aeracode.org/2019/03/20/asgi-30/">ASGI3.0</a></p>
 </blockquote>
-<h2 id="1-scope的类型"><a href="#1-scope的类型" class="headerlink" title="1. scope的类型"></a>1. scope的类型</h2><p>ASGI 和 WSGI 之间的一个根本区别是 ASGI 是一个更通用的消息传递接口，而 WSGI 是严格的请求/响应接口。</p>
+<h2 id="1-scope的类型"><a href="#1-scope的类型" class="headerlink" title="1. scope的类型"></a>1. scope的类型</h2><p>ASGI 和 WSGI 之间的一个根本区别是 ASGI 是一个更通用的消息传递接口，而 WSGI 是严格的请求&#x2F;响应接口。</p>
 <p>在任何 ASGI 的scope中必须始终存在的一个元素是“ type”键，它用于指示协议类型。</p>
-<pre><code class="hljs python">scope = &#123;
-    <span class="hljs-string">"type"</span>: <span class="hljs-string">"http"</span>,  <span class="hljs-comment"># Deal with an incoming HTTP request.</span>
-    ...</code></pre>
-<h2 id="2-Request-URL"><a href="#2-Request-URL" class="headerlink" title="2. Request URL"></a>2. Request URL</h2><p>可以根据<code>scheme</code>、<code>server</code>、<code>path</code> 和 <code>query _ string</code> 中包含的信息构造传入请求的完整 URL。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">scope = &#123;<br>    <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;http&quot;</span>,  <span class="hljs-comment"># Deal with an incoming HTTP request.</span><br>    ...<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-Request-URL"><a href="#2-Request-URL" class="headerlink" title="2. Request URL"></a>2. Request URL</h2><p>可以根据<code> scheme</code>、<code> server</code>、<code> path</code> 和 <code>query _ string</code> 中包含的信息构造传入请求的完整 URL。</p>
 <p>由于我们通常不需要使用原始的ASGI信息进行工作，因此拥有一些可重用的工具对我们很有用，我们可以使用这些工具为我们提取一些细节。</p>
-<p><a href="https://www.starlette.io/" target="_blank" rel="noopener">Starlette框架</a>被特意设计为零依赖库，因此可以将其用作各种 ASGI 应用程序或其他更高级别框架的基础。</p>
+<p><a target="_blank" rel="noopener" href="https://www.starlette.io/">Starlette框架</a>被特意设计为零依赖库，因此可以将其用作各种 ASGI 应用程序或其他更高级别框架的基础。</p>
 <p>它提供了一组用于 ASGI 的基本数据结构。例如:</p>
-<pre><code class="hljs bash">&gt;&gt;&gt; from starlette.datastructures import URL
-&gt;&gt;&gt; url = URL(scope=scope)
-&gt;&gt;&gt; url
-URL(<span class="hljs-string">'https://www.example.org/?search=red+blue&amp;maximum_price=20'</span>)
-&gt;&gt;&gt; str(url)
-<span class="hljs-string">'https://www.example.org/?search=red+blue&amp;maximum_price=20'</span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">&gt;&gt;&gt; from starlette.datastructures import URL<br>&gt;&gt;&gt; url = URL(scope=scope)<br>&gt;&gt;&gt; url<br>URL(<span class="hljs-string">&#x27;https://www.example.org/?search=red+blue&amp;maximum_price=20&#x27;</span>)<br>&gt;&gt;&gt; str(url)<br><span class="hljs-string">&#x27;https://www.example.org/?search=red+blue&amp;maximum_price=20&#x27;</span><br></code></pre></td></tr></table></figure>
+
 <p>通过使用URL实例，你可以像使用标准库的<code>urlparse</code>一样检查URL上的各个组成部分：</p>
-<pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>url.scheme
-<span class="hljs-string">'https'</span></code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>url.scheme<br><span class="hljs-string">&#x27;https&#x27;</span><br></code></pre></td></tr></table></figure>
+
 <p>你也可以修改 URL 的组件，并返回一个新的实例：</p>
-<pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>url.replace(hostname=<span class="hljs-string">'www.example.com'</span>)
-URL(<span class="hljs-string">'https://www.example.com/?search=red&amp;maximum_price=20'</span>)</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>url.replace(hostname=<span class="hljs-string">&#x27;www.example.com&#x27;</span>)<br>URL(<span class="hljs-string">&#x27;https://www.example.com/?search=red&amp;maximum_price=20&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
 <h2 id="3-Request-headers"><a href="#3-Request-headers" class="headerlink" title="3. Request headers"></a>3. Request headers</h2><p>ASGI 中的 HTTP 头被授权为一个字节对列表，表示头的名称和值。由于 HTTP 标头是不区分大小写的，因此 ASGI 强制要求按字节分类的标头表示必须严格采用小写格式。</p>
 <p>HTTP 标头还可以包含具有相同标头名称的多个实例，例如与 <code>Set-Cookie</code>一起使用。</p>
 <p>Starlette 提供了一个不变的、不区分大小写的、多 dict 来处理来自 ASGI 的 HTTP 请求头。</p>
-<pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> starlette.datastructures <span class="hljs-keyword">import</span> Headers
-<span class="hljs-meta">&gt;&gt;&gt; </span>headers = Headers(scope=scope)
-<span class="hljs-meta">&gt;&gt;&gt; </span>headers
-Headers(&#123;<span class="hljs-string">'host'</span>: <span class="hljs-string">'www.example.org'</span>, <span class="hljs-string">'accept'</span>: <span class="hljs-string">'application/json'</span>&#125;)</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> starlette.datastructures <span class="hljs-keyword">import</span> Headers<br><span class="hljs-meta">&gt;&gt;&gt; </span>headers = Headers(scope=scope)<br><span class="hljs-meta">&gt;&gt;&gt; </span>headers<br>Headers(&#123;<span class="hljs-string">&#x27;host&#x27;</span>: <span class="hljs-string">&#x27;www.example.org&#x27;</span>, <span class="hljs-string">&#x27;accept&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span>&#125;)<br></code></pre></td></tr></table></figure>
+
 <p>实例化 <code>header</code> 数据结构是一种廉价的操作，与直接迭代逐字节对相比，它为检查请求 header 提供了一个更方便的接口。</p>
-<pre><code class="hljs bash">&gt;&gt;&gt; headers[<span class="hljs-string">'Accept'</span>]
-<span class="hljs-string">'application/json'</span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">&gt;&gt;&gt; headers[<span class="hljs-string">&#x27;Accept&#x27;</span>]<br><span class="hljs-string">&#x27;application/json&#x27;</span><br></code></pre></td></tr></table></figure>
+
 <p>对于响应头，Starlette 提供了一个 <code>MutableHeaders</code> 数据结构，这个数据结构是等效的，但可以设置或删除头值。</p>
 <h2 id="4-Request-query-params"><a href="#4-Request-query-params" class="headerlink" title="4. Request query params"></a>4. Request query params</h2><p>我们需要处理的 URL 的一个特殊部分是请求查询参数，例如<code>? search = red + blue &amp; maximum _ price = 20</code>。</p>
 <p>为了处理这些问题，可以使用 <code>QueryParams</code> 类，它在参数上提供了一个不变的多字典实现。</p>
-<pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> starlette.datastructures <span class="hljs-keyword">import</span> QueryParams
-<span class="hljs-meta">&gt;&gt;&gt; </span>params = QueryParams(scope=scope)
-<span class="hljs-meta">&gt;&gt;&gt; </span>params
-QueryParams(query_string=<span class="hljs-string">'search=red+blue&amp;maximum_price=20'</span>)
-<span class="hljs-meta">&gt;&gt;&gt; </span>params[<span class="hljs-string">'search'</span>]
-<span class="hljs-string">'red blue'</span></code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> starlette.datastructures <span class="hljs-keyword">import</span> QueryParams<br><span class="hljs-meta">&gt;&gt;&gt; </span>params = QueryParams(scope=scope)<br><span class="hljs-meta">&gt;&gt;&gt; </span>params<br>QueryParams(query_string=<span class="hljs-string">&#x27;search=red+blue&amp;maximum_price=20&#x27;</span>)<br><span class="hljs-meta">&gt;&gt;&gt; </span>params[<span class="hljs-string">&#x27;search&#x27;</span>]<br><span class="hljs-string">&#x27;red blue&#x27;</span><br></code></pre></td></tr></table></figure>
+
 <h2 id="5-Request-body"><a href="#5-Request-body" class="headerlink" title="5. Request body"></a>5. Request body</h2><p>有关传入请求的大部分信息都存储在“scope”中，并在 ASGI 应用程序实例化时显示。但是，对于<strong>请求主体</strong>，这是不可能的。</p>
 <p>为了访问请求体，我们必须从“ receive”通道获取消息流。以下是我们如何在流中获取单个消息的方法：</p>
-<pre><code class="hljs python">message = <span class="hljs-keyword">await</span> receive()</code></pre>
-<p>以下是 HTTP 请求正文消息结构的一个示例:</p>
-<pre><code class="hljs python">&#123;
-    <span class="hljs-string">'type'</span>: <span class="hljs-string">'http.request.body'</span>,
-    <span class="hljs-string">'body'</span>: <span class="hljs-string">b'&#123;"example": "Some JSON data"&#125;'</span>,
-    <span class="hljs-string">'more_body'</span>: <span class="hljs-literal">False</span>
-&#125;</code></pre>
-<p>如果你直接使用 ASGI，请按照以下模式使用HTTP请求正文的整个流：</p>
-<pre><code class="hljs python">body = <span class="hljs-string">b''</span>
-more_body = <span class="hljs-literal">True</span>
-<span class="hljs-keyword">while</span> more_body:
-    message = <span class="hljs-keyword">await</span> receive()
-    body += message.get(<span class="hljs-string">'body'</span>, <span class="hljs-string">b''</span>)
-    more_body = message.get(<span class="hljs-string">'more_body'</span>, <span class="hljs-literal">False</span>)</code></pre>
-<p>Starlette提供了一种轻量级的方式来在请求界面中同时封装“scope”和“receive”通道，从而提供了更简单的方法来访问请求主体：</p>
-<pre><code class="hljs python">request = Request(scope, receive=receive)
-body = <span class="hljs-keyword">await</span> request.body()</code></pre>
-<p>或者，要获取JSON解析的表示形式，请执行以下操作：</p>
-<pre><code class="hljs python">request = Request(scope, receive=receive)
-body = <span class="hljs-keyword">await</span> request.json()</code></pre>
-<p>对于大型请求，你可能不希望一次就把整个请求体消耗到内存中。</p>
-<p>从 Python 3.6开始，<a href="https://www.python.org/dev/peps/pep-0525/" target="_blank" rel="noopener">异步生成器语法</a>得到了支持，它允许我们提供一个很好的简单的API来流式处理请求体…</p>
-<pre><code class="hljs python">request = Request(scope, receive=receive)
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">message = <span class="hljs-keyword">await</span> receive()<br></code></pre></td></tr></table></figure>
 
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> chunk <span class="hljs-keyword">in</span> request.stream():
-    ... <span class="hljs-comment"># Do something with "chunk"</span></code></pre>
+<p>以下是 HTTP 请求正文消息结构的一个示例:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">&#123;<br>    <span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-string">&#x27;http.request.body&#x27;</span>,<br>    <span class="hljs-string">&#x27;body&#x27;</span>: <span class="hljs-string">b&#x27;&#123;&quot;example&quot;: &quot;Some JSON data&quot;&#125;&#x27;</span>,<br>    <span class="hljs-string">&#x27;more_body&#x27;</span>: <span class="hljs-literal">False</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果你直接使用 ASGI，请按照以下模式使用HTTP请求正文的整个流：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">body = <span class="hljs-string">b&#x27;&#x27;</span><br>more_body = <span class="hljs-literal">True</span><br><span class="hljs-keyword">while</span> more_body:<br>    message = <span class="hljs-keyword">await</span> receive()<br>    body += message.get(<span class="hljs-string">&#x27;body&#x27;</span>, <span class="hljs-string">b&#x27;&#x27;</span>)<br>    more_body = message.get(<span class="hljs-string">&#x27;more_body&#x27;</span>, <span class="hljs-literal">False</span>)<br></code></pre></td></tr></table></figure>
+
+<p>Starlette提供了一种轻量级的方式来在请求界面中同时封装“scope”和“receive”通道，从而提供了更简单的方法来访问请求主体：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">request = Request(scope, receive=receive)<br>body = <span class="hljs-keyword">await</span> request.body()<br></code></pre></td></tr></table></figure>
+
+<p>或者，要获取JSON解析的表示形式，请执行以下操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">request = Request(scope, receive=receive)<br>body = <span class="hljs-keyword">await</span> request.json()<br></code></pre></td></tr></table></figure>
+
+<p>对于大型请求，你可能不希望一次就把整个请求体消耗到内存中。</p>
+<p>从 Python 3.6开始，<a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0525/">异步生成器语法</a>得到了支持，它允许我们提供一个很好的简单的API来流式处理请求体…</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">request = Request(scope, receive=receive)<br><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> chunk <span class="hljs-keyword">in</span> request.stream():<br>    ... <span class="hljs-comment"># Do something with &quot;chunk&quot;</span><br></code></pre></td></tr></table></figure>
+
 <p>我们可以将其与请求解析结合起来，以便优雅地处理表单数据。</p>
 <p>在处理 HTTP 多部分请求时，您通常希望确保请求解析能够将任何文件上传内容流到磁盘上的临时文件中，而不必首先将所有数据加载到内存中。</p>
-<pre><code class="hljs python">request = Request(scope, receive=receive)
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">request = Request(scope, receive=receive)<br><br><span class="hljs-comment"># Any upload files in the request body will be streamed into temporary files.</span><br>form = <span class="hljs-keyword">await</span> request.form()<br></code></pre></td></tr></table></figure>
 
-<span class="hljs-comment"># Any upload files in the request body will be streamed into temporary files.</span>
-form = <span class="hljs-keyword">await</span> request.form()</code></pre>
 <h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>我们已经了解了如何为HTTP请求构造ASGI的“scope”消息，以及消息主体是如何通过 “receive “通道进行流式传输的。</p>
-<p>我们还使用了<a href="https://www.starlette.io/" target="_blank" rel="noopener">Starlette</a>提供的一些基本数据结构，以便在更高层次上使用ASGI。</p>
+<p>我们还使用了<a target="_blank" rel="noopener" href="https://www.starlette.io/">Starlette</a>提供的一些基本数据结构，以便在更高层次上使用ASGI。</p>
 
             </div>
             <hr>
@@ -377,10 +353,14 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -407,11 +387,13 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -432,9 +414,9 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -447,7 +429,7 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -459,16 +441,16 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -480,208 +462,96 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "ASGI翻译系列（三）：使用 ASGI 和 HTTP&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -703,7 +573,7 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -716,6 +586,10 @@ form = <span class="hljs-keyword">await</span> request.form()</code></pre>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

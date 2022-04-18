@@ -1,62 +1,97 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。 1. 首先弄清下面几个概念W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="梳理Python WSGI与WSGI服务器等概念">
+<meta property="og:url" content="https://fantasyhh.github.io/2019/06/27/python3-wsgi-concept/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。 1. 首先弄清下面几个概念W">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/wsgi.png">
+<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/middleware.png">
+<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/which_wsgi_server.png">
+<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/nginx+gunicorn.png">
+<meta property="article:published_time" content="2019-06-27T00:53:06.000Z">
+<meta property="article:modified_time" content="2020-04-01T02:33:26.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Django">
+<meta property="article:tag" content="Wsgi">
+<meta property="article:tag" content="Gunicorn">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/wsgi/wsgi.png">
+  
+  
   <title>梳理Python WSGI与WSGI服务器等概念 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +104,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +179,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +197,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="梳理Python WSGI与WSGI服务器等概念">
               
             </span>
 
@@ -195,21 +222,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.2k 字
+      3.8k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
-       分钟
+      32 分钟
     </span>
   
 
@@ -230,27 +254,27 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">梳理Python WSGI与WSGI服务器等概念</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。</p>
 <h2 id="1-首先弄清下面几个概念"><a href="#1-首先弄清下面几个概念" class="headerlink" title="1. 首先弄清下面几个概念"></a>1. 首先弄清下面几个概念</h2><p><strong>WSGI</strong>：全称是Web Server Gateway Interface，WSGI不是服务器，python模块，框架，API或者任何软件，只是一种规范，描述web server如何与web application通信的规范。server和application的规范在PEP 3333中有具体描述。要实现WSGI协议，必须同时实现web server和web application，当前运行在WSGI协议之上的web框架有Bottle, Flask, Django。</p>
-<p><img src="/images/wsgi/wsgi.png" srcset="/img/loading.gif" alt=" " title="wsgi"></p>
+<p><img src="/images/wsgi/wsgi.png" srcset="/img/loading.gif" lazyload alt=" " title="wsgi"></p>
 <blockquote>
 <p>WSGI存在的目的有两个：</p>
+</blockquote>
 <ol>
 <li>让Web服务器知道如何调用Python应用程序，并且把用户的请求告诉应用程序。</li>
 <li>让Python应用程序知道用户的具体请求是什么，以及如何返回结果给Web服务器。</li>
 </ol>
-</blockquote>
 <p><strong>uwsgi</strong>：与WSGI一样是一种通信协议，<strong>是uWSGI服务器的独占协议</strong>，用于定义传输信息的类型(type of information)，每一个uwsgi packet前4byte为传输信息类型的描述，与WSGI协议是两种东西，据说该协议是fcgi协议的10倍快。</p>
 <p><strong>uWSGI</strong>：是一个web服务器，实现了WSGI协议、uwsgi协议、http协议等。</p>
 <p><strong>WSGI协议主要包括server(或者gateway)和application(或者framework)两部分：</strong></p>
@@ -263,10 +287,10 @@
 <blockquote>
 <p>​ WSGI Middleware（中间件）也是WSGI规范的一部分。上一章我们已经说明了WSGI的两个角色：server和application。那么middleware是一种运行在server和application中间的应用（一般都是Python应用）。middleware同时具备server和application角色，对于server来说，它是一个application；对于application来说，它是一个server。middleware并不修改server端和application端的规范，只是同时实现了这两个角色的功能而已。</p>
 </blockquote>
-<p><img src="/images/wsgi/middleware.png" srcset="/img/loading.gif" alt="middleware"> </p>
+<p><img src="/images/wsgi/middleware.png" srcset="/img/loading.gif" lazyload alt="middleware"> </p>
 <p>WSGI协议其实是定义了一种server与application解耦的规范，即可以有多个实现WSGI server的服务器，也可以有多个实现WSGI application的框架，那么就可以选择任意的server和application组合实现自己的web应用。例如<strong>uWSGI和Gunicorn</strong>都是实现了WSGI server协议的服务器，<strong>Django，Flask</strong>是实现了WSGI application协议的web框架，可以根据项目实际情况搭配使用，详细的我们后面说。</p>
-<h2 id="2-WSGI实现原理以及”兄弟”CGI-FastCGI"><a href="#2-WSGI实现原理以及”兄弟”CGI-FastCGI" class="headerlink" title="2. WSGI实现原理以及”兄弟”CGI FastCGI?"></a>2. WSGI实现原理以及”兄弟”CGI FastCGI?</h2><p>WSGI原理的内部实现，说简单不简单说复杂却不复杂，这里不细说，我们可以<strong><a href="http://luckylau.tech/2017/02/28/python%E7%9A%84wsgi%E7%90%86%E8%A7%A3/" target="_blank" rel="noopener">用简单实例来理解Python WSGI</a> </strong></p>
-<p>那么<code>CGI</code> <code>FastCGI</code>又是什么？是不是跟WSGI有什么关系？我们可以翻阅下<a href="https://blog.callmewhy.com/2015/12/07/what-is-wsgi-and-cgi/" target="_blank" rel="noopener">CGI FastCGI WSGI 学习笔记 </a> 就会豁然开朗了</p>
+<h2 id="2-WSGI实现原理以及”兄弟”CGI-FastCGI"><a href="#2-WSGI实现原理以及”兄弟”CGI-FastCGI" class="headerlink" title="2. WSGI实现原理以及”兄弟”CGI FastCGI?"></a>2. WSGI实现原理以及”兄弟”CGI FastCGI?</h2><p>WSGI原理的内部实现，说简单不简单说复杂却不复杂，这里不细说，我们可以**<a target="_blank" rel="noopener" href="http://luckylau.tech/2017/02/28/python%E7%9A%84wsgi%E7%90%86%E8%A7%A3/">用简单实例来理解Python WSGI</a> **</p>
+<p>那么<code>CGI</code> <code>FastCGI</code>又是什么？是不是跟WSGI有什么关系？我们可以翻阅下<a target="_blank" rel="noopener" href="https://blog.callmewhy.com/2015/12/07/what-is-wsgi-and-cgi/">CGI FastCGI WSGI 学习笔记 </a> 就会豁然开朗了</p>
 <h2 id="3-WSGI服务器的选择？"><a href="#3-WSGI服务器的选择？" class="headerlink" title="3. WSGI服务器的选择？"></a>3. WSGI服务器的选择？</h2><p>上面提到<strong>uWSGI和Gunicorn</strong>都是实现了WSGI server协议的服务器，还有我之前用过的部署在Apache上mod_wsgi, 那么对于这些东西，为什么需要一个？我应该选择哪一个？</p>
 <blockquote>
 <p><strong>django自带的web server目的是方便开发，不是能直接放到生产环境的,直接引用django的文档。It’s intended only for use while developing. (We’re in the business of making Web frameworks, not Web servers.)</strong></p>
@@ -274,19 +298,19 @@
 <blockquote>
 <p> <strong>使用Gunicorn，除非你在Windows上部署，在这种情况下使用mod_wsgi。</strong></p>
 </blockquote>
-<p><img src="/images/wsgi/which_wsgi_server.png" srcset="/img/loading.gif" alt="which_server"> </p>
-<p>具体的解释我这里用这篇英文原文<a href="https://djangodeployment.com/2017/01/02/which-wsgi-server-should-i-use/" target="_blank" rel="noopener">Which WSGI server should I use?</a> 翻译一下来回答。</p>
-<p>如图所示（我们可以暂时忽略掉图中的Web Server，这是下一小节要说的），Web浏览器与Web服务器通信，Web服务器又与WSGI服务器通信。该WSGI服务器不会直接与你的Django项目通信，而是导入 Django项目。它是这么做的：<br><pre><code class="hljs python"><span class="hljs-keyword">from</span> django_project.wsgi <span class="hljs-keyword">import</span> application
-application(args)</code></pre></p>
-<p>因此，从操作系统的角度来看，你的Django项目将成为WSGI服务器的一部分; 这是同一个过程。调用<strong><code>application()</code></strong>的方式由WSGI规范标准化。这个函数的接口是标准化的，这使得你可以在许多不同的WSGI服务器（如Gunicorn，uWSGI或mod_wsgi）之间进行选择，以及为什么每个服务器都可以与许多Python应用程序框架（如Django或Flask）进行交互。</p>
+<p><img src="/images/wsgi/which_wsgi_server.png" srcset="/img/loading.gif" lazyload alt="which_server"> </p>
+<p>具体的解释我这里用这篇英文原文<a target="_blank" rel="noopener" href="https://djangodeployment.com/2017/01/02/which-wsgi-server-should-i-use/">Which WSGI server should I use?</a> 翻译一下来回答。</p>
+<p>如图所示（我们可以暂时忽略掉图中的Web Server，这是下一小节要说的），Web浏览器与Web服务器通信，Web服务器又与WSGI服务器通信。该WSGI服务器不会直接与你的Django项目通信，而是导入 Django项目。它是这么做的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django_project.wsgi <span class="hljs-keyword">import</span> application<br>application(args)<br></code></pre></td></tr></table></figure>
+<p>因此，从操作系统的角度来看，你的Django项目将成为WSGI服务器的一部分; 这是同一个过程。调用**<code>application()</code>**的方式由WSGI规范标准化。这个函数的接口是标准化的，这使得你可以在许多不同的WSGI服务器（如Gunicorn，uWSGI或mod_wsgi）之间进行选择，以及为什么每个服务器都可以与许多Python应用程序框架（如Django或Flask）进行交互。</p>
 <p>mod_wsgi仅适用于Apache，我更偏向于可与Apache或nginx一起使用的方法。这样的话，使更改Web服务器变得更容易。我也发现Gunicorn更容易设置和维护。</p>
 <p>我使用了uWSGI几年，并且被它的功能所震撼。其中许多都复制了Apache或nginx或堆栈其他部分中已存在的功能，因此很少需要它们。它的文档有点混乱。开发人员自己承认：“我们尽力提供良好的文档，但这是一项艰苦的工作。对不起。“我记得每周都会遇到问题并且每次花费数小时来解决问题。</p>
 <p>另一方面，Gunicorn正是你想要的恰到好处的功能。它很简单，工作正常。所以我推荐它，除非在你的特殊情况下有一个令人信服的理由使用其中一个。</p>
 <p>uWSGI和Gunicorn没法在Windows中运行，因此如果你在Windows上部署那就使用Apache + mod_wsgi。</p>
 <h2 id="4-既然有了WSGI-Server，为什么我们还需要Nginx（Web-Server）"><a href="#4-既然有了WSGI-Server，为什么我们还需要Nginx（Web-Server）" class="headerlink" title="4. 既然有了WSGI Server，为什么我们还需要Nginx（Web Server）?"></a>4. 既然有了WSGI Server，为什么我们还需要Nginx（Web Server）?</h2><blockquote>
-<p>如果只有一个应用，不需要负载均衡；只提供api服务，没有静态文件；不需要额外的访问控制等功能这样是不是就不需要nginx等反向代理？答案是需要。nginx可以缓冲请求和响应。如果让Gunicorn直接提供服务，浏览器发起一个请求，鉴于浏览器和网络情况都是未知的，http请求的发起过程可能比较慢，而Gunicorn只能等待请求发起完成后，才去真正处理请求，处理完成后，等客户端完全接收请求后，才继续下一个。nginx缓存客户端发起的请求，直到收完整个请求，转发给Gunicorn，等Gunicorn处理完成后，拿到响应，再发给客户端，这个流程是nginx擅长处理，而Gunicorn不擅长处理的。因此将Gunicorn置于nginx后面，可以有效提高Gunicorn的处理能力。  ——摘自知乎<a href="https://www.zhihu.com/question/38528616" target="_blank" rel="noopener">Nginx、Gunicorn在服务器中分别起什么作用？</a> 某回答</p>
+<p>如果只有一个应用，不需要负载均衡；只提供api服务，没有静态文件；不需要额外的访问控制等功能这样是不是就不需要nginx等反向代理？答案是需要。nginx可以缓冲请求和响应。如果让Gunicorn直接提供服务，浏览器发起一个请求，鉴于浏览器和网络情况都是未知的，http请求的发起过程可能比较慢，而Gunicorn只能等待请求发起完成后，才去真正处理请求，处理完成后，等客户端完全接收请求后，才继续下一个。nginx缓存客户端发起的请求，直到收完整个请求，转发给Gunicorn，等Gunicorn处理完成后，拿到响应，再发给客户端，这个流程是nginx擅长处理，而Gunicorn不擅长处理的。因此将Gunicorn置于nginx后面，可以有效提高Gunicorn的处理能力。  ——摘自知乎<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/38528616">Nginx、Gunicorn在服务器中分别起什么作用？</a> 某回答</p>
 </blockquote>
-<p><img src="/images/wsgi/nginx+gunicorn.png" srcset="/img/loading.gif" alt="nginx+gunicorn"></p>
+<p><img src="/images/wsgi/nginx+gunicorn.png" srcset="/img/loading.gif" lazyload alt="nginx+gunicorn"></p>
 <p>当我们为Gunicorn运行我们的django应用程序而开心时，然而，最后，我们看到管理面板的样式已经消失了。原因是Gunicorn是一个应用程序服务器，只运行应用程序（在我们的例子中是django app）和django，正如我们所知，<strong>除了开发之外，它不提供静态文件</strong>。Nginx来救援！它将是Gunicorn的反向代理。到底是什么反向代理？好问题！我们都知道VPN是什么，对吧？我们使用它们访问某些因某种原因被阻止的网站。在这种情况下，我们通过VPN访问该网站：我们 - &gt; VPN - &gt;某些网站。这种代理称为正向代理。至于反向代理，可以将它们视为强制代理。例如，用户正在尝试访问我们在gunicorn中运行的django应用程序。它认为它正在直接访问该应用程序。然而，真正的过程是它首先访问Nginx服务器，该服务器决定下一步该做什么，如果用户正在访问静态文件，Nginx服务器将自行提供服务。否则，它会将其重定向到Gunicorn。简单来说，<strong>http请求将由Gunicorn处理，而静态处理则由Nginx处理。这就是我们需要Nginx的原因</strong>。<br>除此之外，<strong>Nginx还提高了性能，可靠性，安全性和规模</strong>。</p>
 <h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>这几天晚上睡觉前花了一点时间来对这些概念进行了一些整理，收获颇多。要想真正的成为一名Web开发，并不是简单的套用框架写写逻辑层，而是框架背后的原理与流程，这才是重中之重，了解了这些，所有的类似框架以后上手都能快半分。接下去，会对Gunicorn，Nginx的配置文件做个记录（这中间也踩了点坑），再往后就是Nginx与docker的理解与实践了，加油～</p>
 
@@ -316,10 +340,14 @@ application(args)</code></pre></p>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -346,11 +374,13 @@ application(args)</code></pre></p>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -371,9 +401,9 @@ application(args)</code></pre></p>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -386,7 +416,7 @@ application(args)</code></pre></p>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -398,16 +428,16 @@ application(args)</code></pre></p>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -419,208 +449,96 @@ application(args)</code></pre></p>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "梳理Python WSGI与WSGI服务器等概念&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -642,7 +560,7 @@ application(args)</code></pre></p>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -655,6 +573,10 @@ application(args)</code></pre></p>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

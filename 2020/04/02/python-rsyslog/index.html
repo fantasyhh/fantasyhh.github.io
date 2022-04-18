@@ -1,62 +1,94 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python rsyslog日志集中化">
+<meta property="og:url" content="https://fantasyhh.github.io/2020/04/02/python-rsyslog/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 rsyslog即可，Python 日志库也自带了 SysLogHandler. 简单配置一下即可使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/suolue/rsyslog.png">
+<meta property="article:published_time" content="2020-04-02T08:00:04.000Z">
+<meta property="article:modified_time" content="2020-11-25T03:06:04.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="rsyslog">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/suolue/rsyslog.png">
+  
+  
   <title>Python rsyslog日志集中化 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +101,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +176,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +194,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Python rsyslog日志集中化">
               
             </span>
 
@@ -195,21 +219,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.6k 字
+      6.5k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12
-       分钟
+      54 分钟
     </span>
   
 
@@ -230,17 +251,17 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Python rsyslog日志集中化</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>下位机十多台树莓派，就开始考虑将日志集中在一起方便调试查看，其实一开始我对这个不太熟悉，对集中化这个词不太敏感，只是想要把日志发送到同一个主机上，后来网上查了查，这叫日志集中化，名气最大的是ELK，日志一把梭<br>上面说的 ELK 都比较复杂，其实用一台服务器作为日志收集服务,使用 Linux 自带的 <code>rsyslog</code>即可，<code>Python</code> 日志库也自带了 <code>SysLogHandler</code>. 简单配置一下即可使用。</p>
 <h2 id="1-什么是rsyslog"><a href="#1-什么是rsyslog" class="headerlink" title="1. 什么是rsyslog"></a>1. 什么是rsyslog</h2><h3 id="1-1-基本介绍"><a href="#1-1-基本介绍" class="headerlink" title="1.1 基本介绍"></a>1.1 基本介绍</h3><p>开始之前想说说什么是 <code>syslog</code>，在 <code>Linux</code>中，有很多后台程序都是以后台进程的形式存在运行，例如 <code>crontab／sshd／nginx</code> 等，有些是系统的，有些是我们自己添加的，但是，他们都有一些相同的特点：</p>
 <ul>
@@ -268,105 +289,65 @@
 <blockquote>
 <p>In general, we suggest to use TCP syslog. It is way more reliable than UDP syslog and still pretty fast. The main reason is, that UDP might suffer of message loss. This happens when the syslog server must receive large bursts of messages. If the system buffer for UDP is full, all other messages will be dropped. With TCP, this will not happen. But sometimes it might be good to have a UDP server configured as well. That is, because some devices (like routers) are not able to send TCP syslog by design. In that case, you would need both syslog server types to have everything covered. If you need both syslog server types configured, please make sure they run on proper ports. By default UDP syslog is received on port 514. TCP syslog needs a different port because often the RPC service is using this port as well.</p>
 </blockquote>
-<h2 id="2-rsyslogc基础配置"><a href="#2-rsyslogc基础配置" class="headerlink" title="2. rsyslogc基础配置"></a>2. rsyslogc基础配置</h2><p>rsyslog主要配置文件在<code>/etc/rsyslog.conf</code>。这里你可以配置 <code>global directives</code>, <code>modules</code>， <code>rules</code> that consist of <code>filter</code> and <code>action</code> parts，也可以写一些注释。<br>这里我们主要来讲讲<code>rules</code>板块的配置，<code>rules</code>简单点说就是让系统日志进来的规则，就好比数据库先筛选一部分记录然后给这部分记录做一些动作，等于<code>table.filter().update()</code><br>以下内容整理来自<a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s1-configuring_rsyslog_on_a_logging_server" target="_blank" rel="noopener">redhat rsyslog配置</a></p>
-<h3 id="2-1-Filters（过滤器）"><a href="#2-1-Filters（过滤器）" class="headerlink" title="2.1 Filters（过滤器）"></a>2.1 Filters（过滤器）</h3><p><strong>Facility/Priority-based filters </strong></p>
+<h2 id="2-rsyslogc基础配置"><a href="#2-rsyslogc基础配置" class="headerlink" title="2. rsyslogc基础配置"></a>2. rsyslogc基础配置</h2><p>rsyslog主要配置文件在<code>/etc/rsyslog.conf</code>。这里你可以配置 <code>global directives</code>, <code>modules</code>， <code>rules</code> that consist of <code>filter</code> and <code>action</code> parts，也可以写一些注释。<br>这里我们主要来讲讲<code>rules</code>板块的配置，<code>rules</code>简单点说就是让系统日志进来的规则，就好比数据库先筛选一部分记录然后给这部分记录做一些动作，等于<code>table.filter().update()</code><br>以下内容整理来自<a target="_blank" rel="noopener" href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s1-configuring_rsyslog_on_a_logging_server">redhat rsyslog配置</a></p>
+<h3 id="2-1-Filters（过滤器）"><a href="#2-1-Filters（过滤器）" class="headerlink" title="2.1 Filters（过滤器）"></a>2.1 Filters（过滤器）</h3><p>**Facility&#x2F;Priority-based filters **</p>
 <p>FACILITY指定产生特定系统日志消息的子系统。例如，邮件子系统处理所有与邮件相关的系统日志消息。 FACILITY可以用以下关键字之一（或数字代码）表示：<code>kern (0), user (1), mail (2), daemon (3), auth (4), syslog (5), lpr (6), news (7), cron (8), authpriv (9), ftp (10), and local0 through local7 (16 - 23)</code></p>
 <p>PRIORITY指定系统日志消息的优先级。可以通过以下关键字之一（或数字）来表示优先级：<code>debug (7), info (6), notice (5), warning (4), err (3), crit (2), alert (1), and emerg (0)</code></p>
 <p> To select all kernel syslog messages with any priority, add the following text into the configuration file:</p>
-<p>选择任何优先级的所有内核syslog消息：<br><pre><code class="hljs undefined">kern.*`</code></pre></p>
+<p>选择任何优先级的所有内核syslog消息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs">kern.*`<br></code></pre></td></tr></table></figure>
+
 <p>要选择优先级crit更高的所有邮件系统日志消息，请使用以下形式：</p>
-<pre><code class="hljs undefined"><span class="hljs-selector-tag">mail</span><span class="hljs-selector-class">.crit</span></code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">mail.crit<br></code></pre></td></tr></table></figure>
+
 <p>要选择除具有info或debug优先级的消息外的所有cron syslog消息，请以以下形式设置配置：</p>
-<pre><code class="hljs undefined">cron.!info,!debug</code></pre>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs erlang-repl">cron.!info,!debug<br></code></pre></td></tr></table></figure>
+
 <p>此外，还支持比较符过滤，比如：</p>
-<pre><code class="hljs undefined"><span class="hljs-symbol">:msg</span>, contains, <span class="hljs-string">"error"</span>
-<span class="hljs-symbol">:hostname</span>, isequal, <span class="hljs-string">"host1"</span>
-<span class="hljs-symbol">:msg</span>, !regex, <span class="hljs-string">"fatal .* error"</span></code></pre>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs elixir"><span class="hljs-symbol">:msg</span>, contains, <span class="hljs-string">&quot;error&quot;</span><br><span class="hljs-symbol">:hostname</span>, isequal, <span class="hljs-string">&quot;host1&quot;</span><br><span class="hljs-symbol">:msg</span>, !regex, <span class="hljs-string">&quot;fatal .* error&quot;</span><br></code></pre></td></tr></table></figure>
+
 <p>以及表达式过滤器：</p>
-<pre><code class="hljs undefined"><span class="hljs-keyword">if</span> EXPRESSION <span class="hljs-keyword">then</span> <span class="hljs-keyword">ACTION</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">ACTION</span></code></pre>
-<h3 id="2-2-Actions（动作）"><a href="#2-2-Actions（动作）" class="headerlink" title="2.2  Actions（动作）"></a>2.2  Actions（动作）</h3><h4 id="2-2-1-将syslog消息存入文件"><a href="#2-2-1-将syslog消息存入文件" class="headerlink" title="2.2.1 将syslog消息存入文件"></a>2.2.1 将syslog消息存入文件</h4><p>大多数操作指定将系统日志消息保存到哪个日志文件。这是通过在已定义的选择器之后指定文件(    FILTER PATH)路径来完成的：</p>
-<pre><code class="hljs undefined">cron.* /<span class="hljs-built_in">var</span>/<span class="hljs-keyword">log</span>/cron.<span class="hljs-keyword">log</span></code></pre>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs fortran"><span class="hljs-keyword">if</span> EXPRESSION <span class="hljs-keyword">then</span> <span class="hljs-keyword">ACTION</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">ACTION</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-Actions（动作）"><a href="#2-2-Actions（动作）" class="headerlink" title="2.2  Actions（动作）"></a>2.2  Actions（动作）</h3><h4 id="2-2-1-将syslog消息存入文件"><a href="#2-2-1-将syslog消息存入文件" class="headerlink" title="2.2.1 将syslog消息存入文件"></a>2.2.1 将syslog消息存入文件</h4><p>大多数操作指定将系统日志消息保存到哪个日志文件。这是通过在已定义的选择器之后指定文件(	FILTER PATH)路径来完成的：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">cron.* <span class="hljs-regexp">/var/</span><span class="hljs-built_in">log</span>/cron.<span class="hljs-built_in">log</span><br></code></pre></td></tr></table></figure>
+
 <p>默认情况下，每次生成系统日志消息时都会同步日志文件。使用破折号（-）作为指定的文件路径的前缀以省略同步：</p>
-<pre><code class="hljs undefined">FILTER -<span class="hljs-built_in">PATH</span></code></pre>
-<p>指定的文件路径可以是静态或动态的。如上例所示，静态文件由固定文件路径表示。动态文件路径可能会根据收到的消息而有所不同。动态文件路径由模板和问号（?）前缀表示，<code>FILTER ?DynamicFile</code></p>
-<pre><code class="hljs undefined">template(<span class="hljs-attribute">name</span>=<span class="hljs-string">"DynFile"</span> <span class="hljs-attribute">type</span>=<span class="hljs-string">"string"</span> <span class="hljs-attribute">string</span>=<span class="hljs-string">"/var/log/line/%fromhost%.log"</span>)
-local7.* ?DynFile</code></pre>
-<p>动态模板是很大的一块内容，具体的不展开我用到的不多，就上面这个例子。详情可以看<a href="https://dulishu.top/linux-rsyslog-template/" target="_blank" rel="noopener">rsyslog template</a>以及<a href="https://www.rsyslog.com/doc/master/configuration/properties.html" target="_blank" rel="noopener">需要用到的属性</a></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">FILTER</span> -<span class="hljs-type">PATH</span><br></code></pre></td></tr></table></figure>
+
+<p>指定的文件路径可以是静态或动态的。如上例所示，静态文件由固定文件路径表示。动态文件路径可能会根据收到的消息而有所不同。动态文件路径由模板和问号（?）前缀表示，<code>FILTER ?DynamicFile </code></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">template(<span class="hljs-attribute">name</span>=<span class="hljs-string">&quot;DynFile&quot;</span> <span class="hljs-attribute">type</span>=<span class="hljs-string">&quot;string&quot;</span> <span class="hljs-attribute">string</span>=<span class="hljs-string">&quot;/var/log/line/%fromhost%.log&quot;</span>)<br>local7.* ?DynFile<br></code></pre></td></tr></table></figure>
+
+<p>动态模板是很大的一块内容，具体的不展开我用到的不多，就上面这个例子。详情可以看<a target="_blank" rel="noopener" href="https://dulishu.top/linux-rsyslog-template/">rsyslog template</a>以及<a target="_blank" rel="noopener" href="https://www.rsyslog.com/doc/master/configuration/properties.html">需要用到的属性</a></p>
 <h4 id="2-2-2-通过网络发送syslog消息"><a href="#2-2-2-通过网络发送syslog消息" class="headerlink" title="2.2.2 通过网络发送syslog消息"></a>2.2.2 通过网络发送syslog消息</h4><p>rsyslog允许您通过网络发送和接收syslog消息。此功能使您可以在一台计算机上管理多个主机的系统日志消息。要将系统日志消息转发到远程计算机，请使用以下语法，<code>@[(zNUMBER)]HOST:[PORT]</code>，<code>@</code>代表udp，<code>@@</code>代表TCP</p>
-<pre><code class="hljs undefined">*.* <span class="hljs-variable">@192</span>.<span class="hljs-number">168.0</span>.<span class="hljs-number">1</span>
-*.* <span class="hljs-variable">@@example</span>.<span class="hljs-symbol">com:</span><span class="hljs-number">6514</span>
-*.* @(z9)[<span class="hljs-number">2001</span><span class="hljs-symbol">:db8</span>::<span class="hljs-number">1</span>]
-Storing syslog messages <span class="hljs-keyword">in</span> a database</code></pre>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs elixir">*.* <span class="hljs-variable">@192</span>.<span class="hljs-number">168.0</span>.<span class="hljs-number">1</span><br>*.* <span class="hljs-variable">@@example</span>.<span class="hljs-symbol">com:</span><span class="hljs-number">6514</span><br>*.* @(z9)[<span class="hljs-number">2001</span><span class="hljs-symbol">:db8</span>::<span class="hljs-number">1</span>]<br><span class="hljs-title class_">Storing</span> syslog messages <span class="hljs-keyword">in</span> a database<br></code></pre></td></tr></table></figure>
+
 <h4 id="2-2-3-其他传输方式"><a href="#2-2-3-其他传输方式" class="headerlink" title="2.2.3 其他传输方式"></a>2.2.3 其他传输方式</h4><ul>
 <li>Output channels</li>
 <li>Sending syslog messages to specific users</li>
 <li>Executing a program</li>
-<li>Storing syslog messages in a database<br>（<code>:PLUGIN:DB_HOST,DB_NAME,DB_USER,DB_PASSWORD;[TEMPLATE]</code>）</li>
+<li>Storing syslog messages in a database<br> （<code>:PLUGIN:DB_HOST,DB_NAME,DB_USER,DB_PASSWORD;[TEMPLATE]</code>）</li>
 <li>Discarding syslog messages  （丢弃日志<code>local5.* stop</code>）</li>
 </ul>
 <h4 id="2-2-4-指定多个动作"><a href="#2-2-4-指定多个动作" class="headerlink" title="2.2.4 指定多个动作"></a>2.2.4 指定多个动作</h4><p>可以为每个选择器指定多个操作。要为一个选择器指定多个动作，请将每个动作写在单独的行上，并在其前面加上一个＆字符</p>
-<pre><code class="hljs undefined">FILTER <span class="hljs-keyword">ACTION</span>
-&amp; <span class="hljs-keyword">ACTION</span>
-&amp; <span class="hljs-keyword">ACTION</span>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">FILTER</span> ACTION<br>&amp; ACTION<br>&amp; ACTION<br><br>kern.=<span class="hljs-literal">crit</span> user1<br>&amp;<span class="hljs-regexp"> ^test-program</span>;<span class="hljs-attribute">temp</span><br>&amp; @<span class="hljs-number">192.168.0.1</span><br></code></pre></td></tr></table></figure>
 
-kern.=crit user1
-&amp; ^test-<span class="hljs-function"><span class="hljs-keyword">program</span></span>;temp
-&amp; @<span class="hljs-number">192.168.</span><span class="hljs-number">0.1</span></code></pre>
 <h3 id="2-3-Log-Rotation-（日志轮替）"><a href="#2-3-Log-Rotation-（日志轮替）" class="headerlink" title="2.3 Log Rotation （日志轮替）"></a>2.3 Log Rotation （日志轮替）</h3><p>我们可以在<code>/etc/logrotate.conf</code>配置文件中进行<strong>日志轮替</strong>的配置</p>
-<pre><code class="hljs undefined"># <span class="hljs-keyword">rotate</span> <span class="hljs-keyword">log</span> files <span class="hljs-built_in">weekly</span>
-<span class="hljs-built_in">weekly</span>
-# <span class="hljs-keyword">keep</span> 4 weeks worth of backlogs
-<span class="hljs-keyword">rotate</span> 4
-# uncomment this <span class="hljs-keyword">if</span> you want your <span class="hljs-keyword">log</span> files compressed
-<span class="hljs-keyword">compress</span></code></pre>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># rotate log files weekly</span><br><span class="hljs-attribute">weekly</span><br><span class="hljs-comment"># keep 4 weeks worth of backlogs</span><br><span class="hljs-attribute">rotate</span> <span class="hljs-number">4</span><br><span class="hljs-comment"># uncomment this if you want your log files compressed</span><br><span class="hljs-attribute">compress</span><br></code></pre></td></tr></table></figure>
 <h2 id="3-使用Python发送日志到rsyslog"><a href="#3-使用Python发送日志到rsyslog" class="headerlink" title="3. 使用Python发送日志到rsyslog"></a>3. 使用Python发送日志到rsyslog</h2><p>我们查阅一下 Python 文档中的 logging 模块的文档，可以发现又一个 handler 叫做：SysLogHandler，看一下参数，并不比 syslog 的原始函数简单，但是，我们可以忽略所有这些参数，而简单得控制日志输出：</p>
-<pre><code class="hljs undefined"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">logging</span>.<span class="hljs-title">handlers</span>.<span class="hljs-title">SysLogHandler</span><span class="hljs-params">(address=<span class="hljs-params">(<span class="hljs-string">'localhost'</span>, SYSLOG_UDP_PORT)</span>, facility=LOG_USER, socktype=socket.SOCK_DGRAM)</span></span></code></pre>
-<p><code>address</code>: 前面说了 rsyslog 是一个套接字，这里可以制定套接字的地址，注意：这个可以是不在同一台机器,默认为(‘localhost’, 514)<br><code>facility</code>：这个参数的作用是告诉 rsyslog 日志的类型，从而可以让他根据不同的类型执行不同的操作，默认为LOG_USER,下面的例子我们使用<strong>自定义的日志设备local7</strong><br><code>socktype</code>：默认UDP，想换TCP用<code>socket.SOCK_STREAM</code><br>使用的话就和其他的 Handler 一致，简单得记一下：<br><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging
-<span class="hljs-keyword">from</span> logging.handlers <span class="hljs-keyword">import</span> SysLogHandler
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">class logging.handlers.SysLogHandler(address=(<span class="hljs-string">&#x27;localhost&#x27;</span>, SYSLOG_UDP_PORT), <span class="hljs-attribute">facility</span>=LOG_USER, <span class="hljs-attribute">socktype</span>=socket.SOCK_DGRAM)<br></code></pre></td></tr></table></figure>
 
-_LOG_SERVER = (<span class="hljs-string">'192.168.123.222'</span>, <span class="hljs-number">514</span>)
+<p><code>address</code>: 前面说了 rsyslog 是一个套接字，这里可以制定套接字的地址，注意：这个可以是不在同一台机器,默认为(‘localhost’, 514)<br><code>facility</code>：这个参数的作用是告诉 rsyslog 日志的类型，从而可以让他根据不同的类型执行不同的操作，默认为LOG_USER,下面的例子我们使用<strong>自定义的日志设备local7</strong><br><code>socktype</code>：默认UDP，想换TCP用<code>socket.SOCK_STREAM</code><br>使用的话就和其他的 Handler 一致，简单得记一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging<br><span class="hljs-keyword">from</span> logging.handlers <span class="hljs-keyword">import</span> SysLogHandler<br><br>_LOG_SERVER = (<span class="hljs-string">&#x27;192.168.123.222&#x27;</span>, <span class="hljs-number">514</span>)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">remote_logger</span>(<span class="hljs-params">name</span>):<br>    logger = logging.getLogger(name)<br>    logger.setLevel(logging.INFO)<br>    handler1 = SysLogHandler(<br>        address=_LOG_SERVER, facility=SysLogHandler.LOG_LOCAL7)<br>    <span class="hljs-comment"># python logging 默认所有的日志都是输出到 stderr 中的,可以在supervisor的stderr_logfile指定文件中查看相关日志</span><br>    <span class="hljs-comment"># 或者 stdout_handler = logging.StreamHandler(sys.stdout)</span><br>    handler2 = StreamHandler()<br>    formatter1 = logging.Formatter(<span class="hljs-string">&#x27;%(name)s - %(levelname)s -  %(message)s&#x27;</span>)<br>    formatter2 = logging.Formatter(<br>        <span class="hljs-string">&#x27;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#x27;</span>)<br>    handler1.setFormatter(formatter1)<br>    handler2.setFormatter(formatter2)<br>    logger.addHandler(handler1)<br>    logger.addHandler(handler2)<br>    <span class="hljs-keyword">return</span> logger<br><br>logger = remote_logger(<span class="hljs-string">&#x27;test&#x27;</span>)<br>logger.info(<span class="hljs-string">&#x27;xxx&#x27;</span>)<br></code></pre></td></tr></table></figure>
 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">remote_logger</span><span class="hljs-params">(name)</span>:</span>
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
-    handler1 = SysLogHandler(
-        address=_LOG_SERVER, facility=SysLogHandler.LOG_LOCAL7)
-    <span class="hljs-comment"># python logging 默认所有的日志都是输出到 stderr 中的,可以在supervisor的stderr_logfile指定文件中查看相关日志</span>
-    <span class="hljs-comment"># 或者 stdout_handler = logging.StreamHandler(sys.stdout)</span>
-    handler2 = StreamHandler()
-    formatter1 = logging.Formatter(<span class="hljs-string">'%(name)s - %(levelname)s -  %(message)s'</span>)
-    formatter2 = logging.Formatter(
-        <span class="hljs-string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)
-    handler1.setFormatter(formatter1)
-    handler2.setFormatter(formatter2)
-    logger.addHandler(handler1)
-    logger.addHandler(handler2)
-    <span class="hljs-keyword">return</span> logger
+<h2 id="4-记录Python使用TCP的一些坑"><a href="#4-记录Python使用TCP的一些坑" class="headerlink" title="4. 记录Python使用TCP的一些坑"></a>4. 记录Python使用TCP的一些坑</h2><p>鉴于上面所说的，官方推荐使用TCP，而在上面的例子中我们只要改下<code>socktype</code>的参数就行，但随后发现日志总是没法显示，要么就是好多行在一起，找了好多资料才发现其中原因，具体看<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/40041697/pythons-sysloghandler-and-tcp">Python’s SyslogHandler and TCP</a>和<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/52950147/sysloghandler-messages-grouped-on-one-line-on-remote-server">SysLogHandler messages grouped on one line on remote server</a>，概括来说就是<strong>TCP格式标准不支持</strong>，要自己动手额外打些补丁，比较简便的方法是<a target="_blank" rel="noopener" href="https://community.graylog.org/t/graylog-2-not-displaying-tcp-syslog-messages/961/2">使用syslog_rfc5424_formatter库</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging<br><span class="hljs-keyword">import</span> logging.handlers<br><span class="hljs-keyword">import</span> socket<br><span class="hljs-keyword">from</span> syslog_rfc5424_formatter <span class="hljs-keyword">import</span> RFC5424Formatter<br><br>my_logger = logging.getLogger(<span class="hljs-string">&#x27;MyLogger&#x27;</span>)<br>my_logger.setLevel(logging.DEBUG)<br><br>handler = logging.handlers.SysLogHandler(address = (<span class="hljs-string">&#x27;0.0.0.0&#x27;</span>,<span class="hljs-number">8514</span>),socktype=socket.SOCK_STREAM)<br><span class="hljs-comment"># some old syslog daemons expect a NUL terminator, but graylog will not work if a NUL terminator is appended.</span><br>handler.append_nul = <span class="hljs-literal">False</span><br>handler.setFormatter(RFC5424Formatter())<br>my_logger.addHandler(handler)<br><br>my_logger.debug(<span class="hljs-string">&#x27;wolfgang was here\n&#x27;</span>)<br></code></pre></td></tr></table></figure>
 
-logger = remote_logger(<span class="hljs-string">'test'</span>)
-logger.info(<span class="hljs-string">'xxx'</span>)</code></pre></p>
-<h2 id="4-记录Python使用TCP的一些坑"><a href="#4-记录Python使用TCP的一些坑" class="headerlink" title="4. 记录Python使用TCP的一些坑"></a>4. 记录Python使用TCP的一些坑</h2><p>鉴于上面所说的，官方推荐使用TCP，而在上面的例子中我们只要改下<code>socktype</code>的参数就行，但随后发现日志总是没法显示，要么就是好多行在一起，找了好多资料才发现其中原因，具体看<a href="https://stackoverflow.com/questions/40041697/pythons-sysloghandler-and-tcp" target="_blank" rel="noopener">Python’s SyslogHandler and TCP</a>和<a href="https://stackoverflow.com/questions/52950147/sysloghandler-messages-grouped-on-one-line-on-remote-server" target="_blank" rel="noopener">SysLogHandler messages grouped on one line on remote server</a>，概括来说就是<strong>TCP格式标准不支持</strong>，要自己动手额外打些补丁，比较简便的方法是<a href="https://community.graylog.org/t/graylog-2-not-displaying-tcp-syslog-messages/961/2" target="_blank" rel="noopener">使用syslog_rfc5424_formatter库</a></p>
-<pre><code class="hljs python"><span class="hljs-keyword">import</span> logging
-<span class="hljs-keyword">import</span> logging.handlers
-<span class="hljs-keyword">import</span> socket
-<span class="hljs-keyword">from</span> syslog_rfc5424_formatter <span class="hljs-keyword">import</span> RFC5424Formatter
-
-my_logger = logging.getLogger(<span class="hljs-string">'MyLogger'</span>)
-my_logger.setLevel(logging.DEBUG)
-
-handler = logging.handlers.SysLogHandler(address = (<span class="hljs-string">'0.0.0.0'</span>,<span class="hljs-number">8514</span>),socktype=socket.SOCK_STREAM)
-<span class="hljs-comment"># some old syslog daemons expect a NUL terminator, but graylog will not work if a NUL terminator is appended.</span>
-handler.append_nul = <span class="hljs-literal">False</span>
-handler.setFormatter(RFC5424Formatter())
-my_logger.addHandler(handler)
-
-my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></pre>
 <blockquote>
 <p>当然我们可以用一些方法曲线救国，我们用UDP写入到本地然后在用rsylog自带的TCP传输写入到远程，这个方法还可以，尽量保证数据准确性</p>
 </blockquote>
-<h2 id="5-在Docker中使用rsyslog"><a href="#5-在Docker中使用rsyslog" class="headerlink" title="5. 在Docker中使用rsyslog"></a>5. 在Docker中使用rsyslog</h2><p>当需要一个干干静静的日志服务器时，我们需要用一个docker来解决此事，仅14M的镜像大小，没有类似于<strong>mail</strong>，<strong>auth</strong>等其他杂的信息，<code>docker logs -f container_id</code>直接跟踪，多协议支持，安逸！<br>我参考的是dockerhub上的<code>rsyslog/syslog_appliance_alpine</code>，正常的话使用<code>docker run   --name testsyslog   -d -p 666:514/udp  rsyslog/syslog_appliance_alpine rsyslog</code>打开容器监听666端口上的system日志，然而我们自定义的话使用LOCAL7类型日志，简单改动下，自己做了个<code>shijiahuan
-/rsyslog</code>，详细说明都有，不展开。</p>
-<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>在学习日志集中化过程中，也发现了<a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/index.html" target="_blank" rel="noopener">ELK</a>，相信以后如果接触大型项目也会要学习到的，而几个小机器，用rsyslog绰绰有余～</p>
+<h2 id="5-在Docker中使用rsyslog"><a href="#5-在Docker中使用rsyslog" class="headerlink" title="5. 在Docker中使用rsyslog"></a>5. 在Docker中使用rsyslog</h2><p>当需要一个干干静静的日志服务器时，我们需要用一个docker来解决此事，仅14M的镜像大小，没有类似于<strong>mail</strong>，<strong>auth</strong>等其他杂的信息，<code>docker logs -f container_id</code>直接跟踪，多协议支持，安逸！<br>我参考的是dockerhub上的<code>rsyslog/syslog_appliance_alpine</code>，正常的话使用<code>docker run   --name testsyslog   -d -p 666:514/udp  rsyslog/syslog_appliance_alpine rsyslog </code>打开容器监听666端口上的system日志，然而我们自定义的话使用LOCAL7类型日志，简单改动下，自己做了个<code>shijiahuan /rsyslog</code>，详细说明都有，不展开。</p>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>在学习日志集中化过程中，也发现了<a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/index.html">ELK</a>，相信以后如果接触大型项目也会要学习到的，而几个小机器，用rsyslog绰绰有余～</p>
 
             </div>
             <hr>
@@ -394,10 +375,14 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -424,11 +409,13 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -449,9 +436,9 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -464,7 +451,7 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -476,16 +463,16 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -497,208 +484,96 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Python rsyslog日志集中化&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -720,7 +595,7 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -733,6 +608,10 @@ my_logger.debug(<span class="hljs-string">'wolfgang was here\n'</span>)</code></
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

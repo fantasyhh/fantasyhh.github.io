@@ -1,62 +1,90 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理 1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python中关于键盘行为的方法总结">
+<meta property="og:url" content="https://fantasyhh.github.io/2019/07/25/python-about-keyboard/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理 1. 前言我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-07-25T06:30:54.000Z">
+<meta property="article:modified_time" content="2020-04-01T02:38:14.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
   <title>Python中关于键盘行为的方法总结 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +97,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +172,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +190,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Python中关于键盘行为的方法总结">
               
             </span>
 
@@ -195,21 +215,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      972 字
+      3k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5
-       分钟
+      26 分钟
     </span>
   
 
@@ -230,117 +247,32 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Python中关于键盘行为的方法总结</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>最近在倒腾AGV的时候，手动挪小车实在是太重太重了，之前写过控制小车转弯直行的命令，但没有优化，最近小车加了层铠甲实在太重了，于是想写一个类似于小时候玩赛车游戏一样的用手柄或者键盘控制的程序来控制它，中间查阅了相关Python控制键盘的一些第三方库，以及中间遇到的问题做一些整理</p>
 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>我能想到的操控键盘的行为无非有两种，一种是监听键盘的按键，还有一种就是模拟键盘的输入，但我的情景里需要的是前者。</p>
 <h2 id="2-pynput库"><a href="#2-pynput库" class="headerlink" title="2. pynput库"></a>2. pynput库</h2><p>这个库允许你控制和监视输入设备。 目前，支持鼠标和键盘输入和监视</p>
-<h3 id="2-1-控制键盘示例"><a href="#2-1-控制键盘示例" class="headerlink" title="2.1 控制键盘示例"></a>2.1 控制键盘示例</h3><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput.keyboard <span class="hljs-keyword">import</span> Key, Controller
+<h3 id="2-1-控制键盘示例"><a href="#2-1-控制键盘示例" class="headerlink" title="2.1 控制键盘示例"></a>2.1 控制键盘示例</h3><figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput.keyboard <span class="hljs-keyword">import</span> Key, Controller<br><br>keyboard = Controller()<br><br><span class="hljs-comment"># Press and release space</span><br>keyboard.press(Key.space)<br>keyboard.release(Key.space)<br><br><span class="hljs-comment"># Type a lower case A; this will work even if no key on the</span><br><span class="hljs-comment"># physical keyboard is labelled &#x27;A&#x27;</span><br>keyboard.press(<span class="hljs-string">&#x27;a&#x27;</span>)<br>keyboard.release(<span class="hljs-string">&#x27;a&#x27;</span>)<br><br><span class="hljs-comment"># Type two upper case As</span><br>keyboard.press(<span class="hljs-string">&#x27;A&#x27;</span>)<br>keyboard.release(<span class="hljs-string">&#x27;A&#x27;</span>)<br><span class="hljs-keyword">with</span> keyboard.pressed(Key.shift):<br>    keyboard.press(<span class="hljs-string">&#x27;a&#x27;</span>)<br>    keyboard.release(<span class="hljs-string">&#x27;a&#x27;</span>)<br><br><span class="hljs-comment"># Type &#x27;Hello World&#x27; using the shortcut type method</span><br>keyboard.<span class="hljs-built_in">type</span>(<span class="hljs-string">&#x27;Hello World&#x27;</span>)<br></code></pre></td></tr></table></figure>
 
-keyboard = Controller()
+<h3 id="2-2-监听鼠标示例"><a href="#2-2-监听鼠标示例" class="headerlink" title="2.2 监听鼠标示例"></a>2.2 监听鼠标示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput <span class="hljs-keyword">import</span> keyboard<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">on_press</span>(<span class="hljs-params">key</span>):<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;alphanumeric key &#123;0&#125; pressed&#x27;</span>.<span class="hljs-built_in">format</span>(key.char))<br>    <span class="hljs-keyword">except</span> AttributeError:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;special key &#123;0&#125; pressed&#x27;</span>.<span class="hljs-built_in">format</span>(key))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">on_release</span>(<span class="hljs-params">key</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#123;0&#125; released&#x27;</span>.<span class="hljs-built_in">format</span>(key))<br>    <span class="hljs-keyword">if</span> key == keyboard.Key.esc:<br>        <span class="hljs-comment"># Stop listener</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span><br><br><span class="hljs-comment"># Collect events until released</span><br><span class="hljs-keyword">with</span> keyboard.Listener(<br>        on_press=on_press,<br>        on_release=on_release) <span class="hljs-keyword">as</span> listener:<br>    listener.join()<br><br><span class="hljs-comment"># ...or, in a non-blocking fashion:</span><br>listener = mouse.Listener(<br>    on_press=on_press,<br>    on_release=on_release)<br>listener.start()<br></code></pre></td></tr></table></figure>
 
-<span class="hljs-comment"># Press and release space</span>
-keyboard.press(Key.space)
-keyboard.release(Key.space)
+<p><strong>我对这个库的第一印象是简洁好用，监听部分的callback函数很优雅，很是喜欢，也简单测试成功了，于是我噗呲噗呲地开始写，然后把代码扔到树莓派上准备run一下，结果悲剧了，报错<code>Xlib.error.DisplayNameError: Bad display name &quot;&quot;</code>，网上说通过ssh使用这个库的时候会报错，没法正常监听，具体可以看<a target="_blank" rel="noopener" href="https://github.com/moses-palmer/pynput/issues/6">这个issue</a>，虽然上面有着解决方法，但是我没有得到解决，只能忍痛弃之 （或者可以曲线救国，采用蓝牙键盘？没试过）</strong></p>
+<h2 id="3-keyboard库"><a href="#3-keyboard库" class="headerlink" title="3. keyboard库"></a>3. keyboard库</h2><p><a target="_blank" rel="noopener" href="https://github.com/boppreh/keyboard">keyboard库</a>在github上是有较多star的，内容非常多，功能十分强大，你能想到的基本都有….不过我看着头疼，当然，没有选择的另外一个原因是发现了另外一个小脚本来实现我所需要的键盘监听功能，这也是我待会要说的，如果要用其他关于键盘的行为操作，建议好好琢磨下这个库。</p>
+<h2 id="4-神奇小脚本"><a href="#4-神奇小脚本" class="headerlink" title="4. 神奇小脚本"></a>4. 神奇小脚本</h2><p>网上看着看着，突然发现了国外大佬的这篇文章<a target="_blank" rel="noopener" href="https://www.jonwitts.co.uk/archives/896">Detecting keyboard input in Python
+</a>，完美测试，感觉好极了！先贴代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span><br> <br><span class="hljs-comment"># adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py</span><br> <br><span class="hljs-keyword">import</span> sys, termios, tty, os, time<br> <br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getch</span>():<br>    fd = sys.stdin.fileno()<br>    old_settings = termios.tcgetattr(fd)<br>    <span class="hljs-keyword">try</span>:<br>        tty.setraw(sys.stdin.fileno())<br>        ch = sys.stdin.read(<span class="hljs-number">1</span>)<br> <br>    <span class="hljs-keyword">finally</span>:<br>        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)<br>    <span class="hljs-keyword">return</span> ch<br> <br>button_delay = <span class="hljs-number">0.2</span><br> <br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    char = getch()<br> <br>    <span class="hljs-keyword">if</span> (char == <span class="hljs-string">&quot;p&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Stop!&quot;</span>)<br>        exit(<span class="hljs-number">0</span>)<br> <br>    <span class="hljs-keyword">if</span> (char == <span class="hljs-string">&quot;a&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Left pressed&quot;</span>)<br>        time.sleep(button_delay)<br> <br>    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">&quot;d&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Right pressed&quot;</span>)<br>        time.sleep(button_delay)<br> <br>    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">&quot;w&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Up pressed&quot;</span>)<br>        time.sleep(button_delay)<br> <br>    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">&quot;s&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Down pressed&quot;</span>)<br>        time.sleep(button_delay)<br> <br>    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">&quot;1&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Number 1 pressed&quot;</span>)<br>        time.sleep(button_delay)<br></code></pre></td></tr></table></figure>
 
-<span class="hljs-comment"># Type a lower case A; this will work even if no key on the</span>
-<span class="hljs-comment"># physical keyboard is labelled 'A'</span>
-keyboard.press(<span class="hljs-string">'a'</span>)
-keyboard.release(<span class="hljs-string">'a'</span>)
-
-<span class="hljs-comment"># Type two upper case As</span>
-keyboard.press(<span class="hljs-string">'A'</span>)
-keyboard.release(<span class="hljs-string">'A'</span>)
-<span class="hljs-keyword">with</span> keyboard.pressed(Key.shift):
-    keyboard.press(<span class="hljs-string">'a'</span>)
-    keyboard.release(<span class="hljs-string">'a'</span>)
-
-<span class="hljs-comment"># Type 'Hello World' using the shortcut type method</span>
-keyboard.type(<span class="hljs-string">'Hello World'</span>)</code></pre>
-<h3 id="2-2-监听鼠标示例"><a href="#2-2-监听鼠标示例" class="headerlink" title="2.2 监听鼠标示例"></a>2.2 监听鼠标示例</h3><pre><code class="hljs python"><span class="hljs-keyword">from</span> pynput <span class="hljs-keyword">import</span> keyboard
-
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">on_press</span><span class="hljs-params">(key)</span>:</span>
-    <span class="hljs-keyword">try</span>:
-        print(<span class="hljs-string">'alphanumeric key &#123;0&#125; pressed'</span>.format(key.char))
-    <span class="hljs-keyword">except</span> AttributeError:
-        print(<span class="hljs-string">'special key &#123;0&#125; pressed'</span>.format(key))
-
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">on_release</span><span class="hljs-params">(key)</span>:</span>
-    print(<span class="hljs-string">'&#123;0&#125; released'</span>.format(key))
-    <span class="hljs-keyword">if</span> key == keyboard.Key.esc:
-        <span class="hljs-comment"># Stop listener</span>
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
-
-<span class="hljs-comment"># Collect events until released</span>
-<span class="hljs-keyword">with</span> keyboard.Listener(
-        on_press=on_press,
-        on_release=on_release) <span class="hljs-keyword">as</span> listener:
-    listener.join()
-
-<span class="hljs-comment"># ...or, in a non-blocking fashion:</span>
-listener = mouse.Listener(
-    on_press=on_press,
-    on_release=on_release)
-listener.start()</code></pre>
-<p><strong>我对这个库的第一印象是简洁好用，监听部分的callback函数很优雅，很是喜欢，也简单测试成功了，于是我噗呲噗呲地开始写，然后把代码扔到树莓派上准备run一下，结果悲剧了，报错<code>Xlib.error.DisplayNameError: Bad display name &quot;&quot;</code>，网上说通过ssh使用这个库的时候会报错，没法正常监听，具体可以看<a href="https://github.com/moses-palmer/pynput/issues/6" target="_blank" rel="noopener">这个issue</a>，虽然上面有着解决方法，但是我没有得到解决，只能忍痛弃之 （或者可以曲线救国，采用蓝牙键盘？没试过）</strong></p>
-<h2 id="3-keyboard库"><a href="#3-keyboard库" class="headerlink" title="3. keyboard库"></a>3. keyboard库</h2><p><a href="https://github.com/boppreh/keyboard" target="_blank" rel="noopener">keyboard库</a>在github上是有较多star的，内容非常多，功能十分强大，你能想到的基本都有….不过我看着头疼，当然，没有选择的另外一个原因是发现了另外一个小脚本来实现我所需要的键盘监听功能，这也是我待会要说的，如果要用其他关于键盘的行为操作，建议好好琢磨下这个库。</p>
-<h2 id="4-神奇小脚本"><a href="#4-神奇小脚本" class="headerlink" title="4. 神奇小脚本"></a>4. 神奇小脚本</h2><p>网上看着看着，突然发现了国外大佬的这篇文章<a href="https://www.jonwitts.co.uk/archives/896" target="_blank" rel="noopener">Detecting keyboard input in Python
-</a>，完美测试，感觉好极了！先贴代码：<br><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
- 
-<span class="hljs-comment"># adapted from https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py</span>
- 
-<span class="hljs-keyword">import</span> sys, termios, tty, os, time
- 
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getch</span><span class="hljs-params">()</span>:</span>
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    <span class="hljs-keyword">try</span>:
-        tty.setraw(sys.stdin.fileno())
-        ch = sys.stdin.read(<span class="hljs-number">1</span>)
- 
-    <span class="hljs-keyword">finally</span>:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    <span class="hljs-keyword">return</span> ch
- 
-button_delay = <span class="hljs-number">0.2</span>
- 
-<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
-    char = getch()
- 
-    <span class="hljs-keyword">if</span> (char == <span class="hljs-string">"p"</span>):
-        print(<span class="hljs-string">"Stop!"</span>)
-        exit(<span class="hljs-number">0</span>)
- 
-    <span class="hljs-keyword">if</span> (char == <span class="hljs-string">"a"</span>):
-        print(<span class="hljs-string">"Left pressed"</span>)
-        time.sleep(button_delay)
- 
-    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"d"</span>):
-        print(<span class="hljs-string">"Right pressed"</span>)
-        time.sleep(button_delay)
- 
-    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"w"</span>):
-        print(<span class="hljs-string">"Up pressed"</span>)
-        time.sleep(button_delay)
- 
-    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"s"</span>):
-        print(<span class="hljs-string">"Down pressed"</span>)
-        time.sleep(button_delay)
- 
-    <span class="hljs-keyword">elif</span> (char == <span class="hljs-string">"1"</span>):
-        print(<span class="hljs-string">"Number 1 pressed"</span>)
-        time.sleep(button_delay)</code></pre></p>
-<p><strong>说实话其实<code>getch</code>这个函数我没太看懂，我也不想花时间研究它了，轮子已经造好了，正如这篇文章的作者一样，他也进行了一些搜索并找到了一些示例代码，但是没有一个完全符合要求，直到github上发现了<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章，也是感叹极客的给力！</strong></p>
-<h2 id="5-碎碎念"><a href="#5-碎碎念" class="headerlink" title="5. 碎碎念"></a>5. 碎碎念</h2><p>回过头来整理时发现了更巧的事情，<a href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py" target="_blank" rel="noopener">control a robot with a bluetooth keyboard </a>这篇文章也是用键盘来控制两个马达，控制前进后退（虽然马达类型不一样），真是太巧了，哈哈哈哈哈～</p>
+<p><strong>说实话其实<code>getch</code>这个函数我没太看懂，我也不想花时间研究它了，轮子已经造好了，正如这篇文章的作者一样，他也进行了一些搜索并找到了一些示例代码，但是没有一个完全符合要求，直到github上发现了<a target="_blank" rel="noopener" href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py">control a robot with a bluetooth keyboard </a>这篇文章，也是感叹极客的给力！</strong></p>
+<h2 id="5-碎碎念"><a href="#5-碎碎念" class="headerlink" title="5. 碎碎念"></a>5. 碎碎念</h2><p>回过头来整理时发现了更巧的事情，<a target="_blank" rel="noopener" href="https://github.com/recantha/EduKit3-RC-Keyboard/blob/master/rc_keyboard.py">control a robot with a bluetooth keyboard </a>这篇文章也是用键盘来控制两个马达，控制前进后退（虽然马达类型不一样），真是太巧了，哈哈哈哈哈～</p>
 
             </div>
             <hr>
@@ -364,10 +296,14 @@ button_delay = <span class="hljs-number">0.2</span>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -394,11 +330,13 @@ button_delay = <span class="hljs-number">0.2</span>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -419,9 +357,9 @@ button_delay = <span class="hljs-number">0.2</span>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -434,7 +372,7 @@ button_delay = <span class="hljs-number">0.2</span>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -446,16 +384,16 @@ button_delay = <span class="hljs-number">0.2</span>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -467,208 +405,96 @@ button_delay = <span class="hljs-number">0.2</span>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Python中关于键盘行为的方法总结&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -690,7 +516,7 @@ button_delay = <span class="hljs-number">0.2</span>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -703,6 +529,10 @@ button_delay = <span class="hljs-number">0.2</span>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

@@ -1,62 +1,95 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python yield使用详解（一）">
+<meta property="og:url" content="https://fantasyhh.github.io/2020/01/02/python-yield-1/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/yield/yield1_1.png">
+<meta property="og:image" content="https://fantasyhh.github.io/images/yield/yield1_2.png">
+<meta property="og:image" content="https://fantasyhh.github.io/images/yield/yield1_3.png">
+<meta property="article:published_time" content="2020-01-02T06:09:36.000Z">
+<meta property="article:modified_time" content="2020-04-01T03:08:02.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="yield">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/yield/yield1_1.png">
+  
+  
   <title>Python yield使用详解（一） - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +102,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +177,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +195,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Python yield使用详解（一）">
               
             </span>
 
@@ -195,21 +220,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      3.4k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
-       分钟
+      29 分钟
     </span>
   
 
@@ -230,68 +252,28 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Python yield使用详解（一）</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>刚学到yield这个较为陌生的语法时，一头埋了进去，自认为较为全面的学习到了精髓。结果码了这么多代码好像也没用到过多少次这个关键字，直接扑街。记得工作经验只有一年的时候我出去面了个试，人家问我yield作用是什么，我很自信，一个劲地回答道协程协程，结果好像不太满意，人家一说生成器，奥，恍然大悟，竟然把最基本的语法忘了。所以现在看来，yield是否在协程异步方面有着不可代替的作用，必须出现它呢，那就从篇文章往下看。</p>
-<h2 id="1-生成器"><a href="#1-生成器" class="headerlink" title="1. 生成器"></a>1. 生成器</h2><p><strong>yield语句可以作为生成器</strong><br><pre><code class="hljs python">def countdown(n):
-    while n &gt; 0:
-        yield n
-        n -= 1
+<h2 id="1-生成器"><a href="#1-生成器" class="headerlink" title="1. 生成器"></a>1. 生成器</h2><p><strong>yield语句可以作为生成器</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">countdown</span>(<span class="hljs-params">n</span>):<br>    <span class="hljs-keyword">while</span> n &gt; <span class="hljs-number">0</span>:<br>        <span class="hljs-keyword">yield</span> n<br>        n -= <span class="hljs-number">1</span><br><br><span class="hljs-comment"># 可以当迭代器来使用它</span><br><span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> countdown(<span class="hljs-number">10</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;T-minus&#x27;</span>, x)<br><br><span class="hljs-comment"># 可以使用next()来产出值，当生成器函数return(结束)时，报错。</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>c = countdown(<span class="hljs-number">3</span>)<br><span class="hljs-meta">&gt;&gt;&gt; </span>c<br>&lt;generator <span class="hljs-built_in">object</span> countdown at <span class="hljs-number">0x10064f900</span>&gt;<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">next</span>(c)<br><span class="hljs-number">3</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">next</span>(c)<br><span class="hljs-number">2</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">next</span>(c)<br><span class="hljs-number">1</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">next</span>(c)<br>Traceback (most recent call last):<br> File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> ?<br>StopIteration<br></code></pre></td></tr></table></figure>
 
-# 可以当迭代器来使用它
-for x in countdown(10):
-    print('T-minus', x)
-
-# 可以使用next()来产出值，当生成器函数return(结束)时，报错。
-&gt;&gt;&gt; c = countdown(3)
-&gt;&gt;&gt; c
-&lt;generator object countdown at 0x10064f900&gt;
-&gt;&gt;&gt; next(c)
-3
-&gt;&gt;&gt; next(c)
-2
-&gt;&gt;&gt; next(c)
-1
-&gt;&gt;&gt; next(c)
-Traceback (most recent call last):
- File "&lt;stdin&gt;", line 1, in ?
-StopIteration</code></pre></p>
-<p>这篇文章我着重讲yield作为<code>协程</code>的使用方法，作为生成器的话我一笔带过，想要仔细了解<code>迭代器</code>与<code>生成器</code>使用，我这里推荐个教程。<a href="https://foofish.net/iterators-vs-generators.html" target="_blank" rel="noopener">完全理解Python迭代对象、迭代器、生成器</a> ，很棒，还有的话就是与生成器密切相关的itertools模块，可以了解下。但是我在讲<code>yield协程</code>之前我再给出一张图来说yield一个有趣的用法。 </p>
+<p>这篇文章我着重讲yield作为<code>协程</code>的使用方法，作为生成器的话我一笔带过，想要仔细了解<code>迭代器</code>与<code>生成器</code>使用，我这里推荐个教程。<a target="_blank" rel="noopener" href="https://foofish.net/iterators-vs-generators.html">完全理解Python迭代对象、迭代器、生成器</a> ，很棒，还有的话就是与生成器密切相关的itertools模块，可以了解下。但是我在讲<code>yield协程</code>之前我再给出一张图来说yield一个有趣的用法。 </p>
 <p><strong>生成器类似于UNIX管道的作用</strong></p>
-<p><img src="/images/yield/yield1_1.png" srcset="/img/loading.gif" alt></p>
+<p><img src="/images/yield/yield1_1.png" srcset="/img/loading.gif" lazyload></p>
 <p>这个process会有难以置信的作用，比如实现UNIX中grep的作用。不展开，以后肯定会用到它。</p>
-<h2 id="2-生成器进化为协程"><a href="#2-生成器进化为协程" class="headerlink" title="2. 生成器进化为协程"></a>2. 生成器进化为协程</h2><h3 id="2-1-一个协程例子"><a href="#2-1-一个协程例子" class="headerlink" title="2.1 一个协程例子"></a>2.1 一个协程例子</h3><p>重头戏来了。<br>如果你想更多的使用yield，那么就是协程了。<strong>协程就不仅仅是产出值了，而是能消费发送给它的值。</strong><br>那么这里的例子就用协程实现上面的UNIX的grep作用<br><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">grep</span><span class="hljs-params">(pattern)</span>:</span>
-    print(<span class="hljs-string">"Looking for &#123;&#125;"</span>.format(pattern))
-    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
-        line = <span class="hljs-keyword">yield</span>
-        <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> line:
-            print(<span class="hljs-string">'&#123;&#125; : grep success '</span>.format(line))
+<h2 id="2-生成器进化为协程"><a href="#2-生成器进化为协程" class="headerlink" title="2. 生成器进化为协程"></a>2. 生成器进化为协程</h2><h3 id="2-1-一个协程例子"><a href="#2-1-一个协程例子" class="headerlink" title="2.1 一个协程例子"></a>2.1 一个协程例子</h3><p>重头戏来了。<br>如果你想更多的使用yield，那么就是协程了。<strong>协程就不仅仅是产出值了，而是能消费发送给它的值。</strong><br>那么这里的例子就用协程实现上面的UNIX的grep作用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">grep</span>(<span class="hljs-params">pattern</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Looking for &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(pattern))<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        line = <span class="hljs-keyword">yield</span><br>        <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> line:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#123;&#125; : grep success &#x27;</span>.<span class="hljs-built_in">format</span>(line))<br><br><span class="hljs-meta">&gt;&gt;&gt; </span>g=grep(<span class="hljs-string">&#x27;python&#x27;</span>)<br><span class="hljs-comment"># 还是个生成器</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>g<br>&lt;generator <span class="hljs-built_in">object</span> grep at <span class="hljs-number">0x7f17e86f3780</span>&gt;  <br><span class="hljs-comment"># 激活协程！只能用一次，也可以用g.send(None)来代替next(g)</span><br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">next</span>(g)<br>Looking <span class="hljs-keyword">for</span> python<br><span class="hljs-comment"># 使用.send(...)发送数据，发送的数据会成为生成器函数中yield表达式值，即变量line的值</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">&quot;Yeah, but no, but yeah, but no&quot;</span>)<br><br><span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">&quot;A series of tubes&quot;</span>)<br><span class="hljs-comment"># 协程，协程，就是互相协作的程序，我发数据过去然后你协助我一下看看grep成功没</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">&quot;python generators rock!&quot;</span>)<br>python generators rock! : grep success <br><span class="hljs-comment"># 关闭</span><br><span class="hljs-meta">&gt;&gt;&gt; </span>g.close()<br></code></pre></td></tr></table></figure>
 
-<span class="hljs-meta">&gt;&gt;&gt; </span>g=grep(<span class="hljs-string">'python'</span>)
-<span class="hljs-comment"># 还是个生成器</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>g
-&lt;generator object grep at <span class="hljs-number">0x7f17e86f3780</span>&gt;  
-<span class="hljs-comment"># 激活协程！只能用一次，也可以用g.send(None)来代替next(g)</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>next(g)
-Looking <span class="hljs-keyword">for</span> python
-<span class="hljs-comment"># 使用.send(...)发送数据，发送的数据会成为生成器函数中yield表达式值，即变量line的值</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">"Yeah, but no, but yeah, but no"</span>)
-
-<span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">"A series of tubes"</span>)
-<span class="hljs-comment"># 协程，协程，就是互相协作的程序，我发数据过去然后你协助我一下看看grep成功没</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">"python generators rock!"</span>)
-python generators rock! : grep success 
-<span class="hljs-comment"># 关闭</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>g.close()</code></pre></p>
 <p>例子讲完了。有几个注意点：</p>
 <ul>
 <li>生成器用于生成供迭代的数据</li>
@@ -300,77 +282,28 @@ python generators rock! : grep success
 <li>协程与迭代无关</li>
 <li>注意，虽然在协程值会使用yield产出值，但这与迭代无关</li>
 </ul>
-<h3 id="2-2-发送数据给协程"><a href="#2-2-发送数据给协程" class="headerlink" title="2.2 发送数据给协程"></a>2.2 发送数据给协程</h3><p><img src="/images/yield/yield1_2.png" srcset="/img/loading.gif" alt></p>
+<h3 id="2-2-发送数据给协程"><a href="#2-2-发送数据给协程" class="headerlink" title="2.2 发送数据给协程"></a>2.2 发送数据给协程</h3><p><img src="/images/yield/yield1_2.png" srcset="/img/loading.gif" lazyload></p>
 <p>预激活，到yield处暂停。然后发送item值，协程继续了，协程中item接收到发送的那个值，然后到下一个yield再暂停。</p>
-<h3 id="2-3-使用一个装饰器"><a href="#2-3-使用一个装饰器" class="headerlink" title="2.3 使用一个装饰器"></a>2.3 使用一个装饰器</h3><p>如果不预激(<code>primer</code>),那么协程没什么用，调用g.send(x)之前。记住一定要调用next(g)。为了简化协程用法，有时会使用一个预激装饰器，如下。<br><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">coroutine</span><span class="hljs-params">(func)</span>:</span>
-    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">primer</span><span class="hljs-params">(*args,**kwargs)</span>:</span>
-        cr = func(*args,**kwargs)
-        next(cr)
-        <span class="hljs-keyword">return</span> cr
-    <span class="hljs-keyword">return</span> primer
+<h3 id="2-3-使用一个装饰器"><a href="#2-3-使用一个装饰器" class="headerlink" title="2.3 使用一个装饰器"></a>2.3 使用一个装饰器</h3><p>如果不预激(<code>primer</code>),那么协程没什么用，调用g.send(x)之前。记住一定要调用next(g)。为了简化协程用法，有时会使用一个预激装饰器，如下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">coroutine</span>(<span class="hljs-params">func</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">primer</span>(<span class="hljs-params">*args,**kwargs</span>):<br>        cr = func(*args,**kwargs)<br>        <span class="hljs-built_in">next</span>(cr)<br>        <span class="hljs-keyword">return</span> cr<br>    <span class="hljs-keyword">return</span> primer<br><br><span class="hljs-meta">@coroutine</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">grep</span>(<span class="hljs-params">pattern</span>):<br> ...  <br></code></pre></td></tr></table></figure>
 
-<span class="hljs-meta">@coroutine</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">grep</span><span class="hljs-params">(pattern)</span>:</span>
- ...</code></pre></p>
 <h3 id="2-4-关闭一个协程"><a href="#2-4-关闭一个协程" class="headerlink" title="2.4 关闭一个协程"></a>2.4 关闭一个协程</h3><ul>
 <li>一个协程有可能永远运行下去</li>
 <li>可以 .close()让它停下来<br>例子中已经体现，不展开。</li>
 </ul>
-<h3 id="2-5-捕捉close"><a href="#2-5-捕捉close" class="headerlink" title="2.5 捕捉close()"></a>2.5 捕捉close()</h3><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">grep</span><span class="hljs-params">(pattern)</span>:</span>
-    print(<span class="hljs-string">"Looking for &#123;&#125;"</span>.format(pattern))
-    <span class="hljs-keyword">try</span>:
-        <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
-            line = <span class="hljs-keyword">yield</span>
-            <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> line:
-                print(line)
-    <span class="hljs-keyword">except</span> GeneratorExit:
-        print(<span class="hljs-string">"Going away. Goodbye"</span>)</code></pre>
+<h3 id="2-5-捕捉close"><a href="#2-5-捕捉close" class="headerlink" title="2.5 捕捉close()"></a>2.5 捕捉close()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">grep</span>(<span class="hljs-params">pattern</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Looking for &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(pattern))<br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>            line = <span class="hljs-keyword">yield</span><br>            <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> line:<br>                <span class="hljs-built_in">print</span>(line)<br>    <span class="hljs-keyword">except</span> GeneratorExit:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Going away. Goodbye&quot;</span>)<br></code></pre></td></tr></table></figure>
 <p>捕捉到.close()方法，然后会打印<code>&quot;Going away. Goodbye&quot;</code>。</p>
-<h3 id="2-6-抛出异常"><a href="#2-6-抛出异常" class="headerlink" title="2.6 抛出异常"></a>2.6 抛出异常</h3><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>g = grep(<span class="hljs-string">"python"</span>)
-<span class="hljs-meta">&gt;&gt;&gt; </span>next(g) <span class="hljs-comment"># Prime it</span>
-Looking <span class="hljs-keyword">for</span> python
-<span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">"python generators rock!"</span>)
-python generators rock! : grep success 
-<span class="hljs-meta">&gt;&gt;&gt; </span>g.throw(RuntimeError,<span class="hljs-string">"You're hosed"</span>)
-Traceback (most recent call last):
-.....
-.....
-RuntimeError: Yo<span class="hljs-string">u're hosed
-&gt;&gt;&gt;</span></code></pre>
+<h3 id="2-6-抛出异常"><a href="#2-6-抛出异常" class="headerlink" title="2.6 抛出异常"></a>2.6 抛出异常</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>g = grep(<span class="hljs-string">&quot;python&quot;</span>)<br><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">next</span>(g) <span class="hljs-comment"># Prime it</span><br>Looking <span class="hljs-keyword">for</span> python<br><span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-string">&quot;python generators rock!&quot;</span>)<br>python generators rock! : grep success <br><span class="hljs-meta">&gt;&gt;&gt; </span>g.throw(RuntimeError,<span class="hljs-string">&quot;You&#x27;re hosed&quot;</span>)<br>Traceback (most recent call last):<br>.....<br>.....<br>RuntimeError: Yo<span class="hljs-string">u&#x27;re hosed</span><br><span class="hljs-string">&gt;&gt;&gt;</span><br></code></pre></td></tr></table></figure>
+
 <p>说明：</p>
 <ul>
 <li>在协程内部能抛出一个异常</li>
 <li>异常发生于yield表达式</li>
 <li>不慌，我们可以平常的方法处理它</li>
 </ul>
-<h3 id="2-7-生成器返回数值"><a href="#2-7-生成器返回数值" class="headerlink" title="2.7 生成器返回数值"></a>2.7 生成器返回数值</h3><p>鉴于上面的例子是一直run下去的，所以稍加修改：<br><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">grep</span><span class="hljs-params">(pattern)</span>:</span>
-    print(<span class="hljs-string">"Looking for &#123;&#125;"</span>.format(pattern))
-    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
-        line = <span class="hljs-keyword">yield</span>
-        <span class="hljs-comment"># 当发送的数据为None时，跳出while循环</span>
-        <span class="hljs-keyword">if</span> line <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
-            <span class="hljs-keyword">break</span>
-        <span class="hljs-keyword">else</span>:
-            <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> line:
-                print(<span class="hljs-string">'&#123;&#125; : grep success '</span>.format(line))
-    <span class="hljs-keyword">return</span> <span class="hljs-string">'End'</span>
-
-<span class="hljs-meta">&gt;&gt;&gt; </span>..... 省略
-<span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-literal">None</span>)
-Traceback (most recent call last):
- ...
- ...
-StopIteration: End
-
-<span class="hljs-comment"># 这里可以用try捕捉异常，异常对象的value属性保存着返回的值</span>
-    <span class="hljs-keyword">try</span>:
-        g.send(<span class="hljs-literal">None</span>)
-    <span class="hljs-keyword">except</span> StopIteration <span class="hljs-keyword">as</span> exc:
-        result = exc.value
-
-<span class="hljs-meta">&gt;&gt;&gt; </span>result
-<span class="hljs-comment">#End</span></code></pre></p>
-<p>   图解如下<br><img src="/images/yield/yield1_3.png" srcset="/img/loading.gif" alt></p>
+<h3 id="2-7-生成器返回数值"><a href="#2-7-生成器返回数值" class="headerlink" title="2.7 生成器返回数值"></a>2.7 生成器返回数值</h3><p>鉴于上面的例子是一直run下去的，所以稍加修改：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">grep</span>(<span class="hljs-params">pattern</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Looking for &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(pattern))<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        line = <span class="hljs-keyword">yield</span><br>        <span class="hljs-comment"># 当发送的数据为None时，跳出while循环</span><br>        <span class="hljs-keyword">if</span> line <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">break</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-keyword">if</span> pattern <span class="hljs-keyword">in</span> line:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#123;&#125; : grep success &#x27;</span>.<span class="hljs-built_in">format</span>(line))<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;End&#x27;</span><br><br><span class="hljs-meta">&gt;&gt;&gt; </span>..... 省略<br><span class="hljs-meta">&gt;&gt;&gt; </span>g.send(<span class="hljs-literal">None</span>)<br>Traceback (most recent call last):<br> ...<br> ...<br>StopIteration: End<br><br><span class="hljs-comment"># 这里可以用try捕捉异常，异常对象的value属性保存着返回的值</span><br>    <span class="hljs-keyword">try</span>:<br>        g.send(<span class="hljs-literal">None</span>)<br>    <span class="hljs-keyword">except</span> StopIteration <span class="hljs-keyword">as</span> exc:<br>        result = exc.value<br><br><span class="hljs-meta">&gt;&gt;&gt; </span>result<br><span class="hljs-comment">#End</span><br></code></pre></td></tr></table></figure>
+<p>   图解如下<br><img src="/images/yield/yield1_3.png" srcset="/img/loading.gif" lazyload></p>
 <p>   说明：</p>
 <ul>
 <li>通过捕捉异常获取返回值</li>
@@ -406,10 +339,14 @@ StopIteration: End
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -436,11 +373,13 @@ StopIteration: End
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -461,9 +400,9 @@ StopIteration: End
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -476,7 +415,7 @@ StopIteration: End
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -488,16 +427,16 @@ StopIteration: End
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -509,208 +448,96 @@ StopIteration: End
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Python yield使用详解（一）&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -732,7 +559,7 @@ StopIteration: End
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -745,6 +572,10 @@ StopIteration: End
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>

@@ -1,62 +1,93 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="/theme_image/candle.png">
-  <link rel="icon" type="image/png" href="/img/candle.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <link rel="icon" href="/img/candle.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="hello">
   <meta name="author" content="Jiahuan Shi">
-  <meta name="keywords" content>
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="用Ubuntu系统也已经好多年了，从14.04到16.04再到18.04，Ubuntu也从侧面见证了我从实习到第一份工作到十二月中旬离职的这五年经历。搬到新公司，直接上了Ubuntu20.04作为新的开始。N卡和Ubuntu驱动不兼容，直接把我搞毛了，搞了半天稀里糊涂把驱动问题解决之后，又装了搜来搜去装了大半天的软件，费时费劲，赶在新的一年开始之前进行一些配置记录，以后有新的软件安装也会更新下来。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu20.04系统配置总结">
+<meta property="og:url" content="https://fantasyhh.github.io/2020/12/31/Ubuntu2004-Config/index.html">
+<meta property="og:site_name" content="烛影小札">
+<meta property="og:description" content="用Ubuntu系统也已经好多年了，从14.04到16.04再到18.04，Ubuntu也从侧面见证了我从实习到第一份工作到十二月中旬离职的这五年经历。搬到新公司，直接上了Ubuntu20.04作为新的开始。N卡和Ubuntu驱动不兼容，直接把我搞毛了，搞了半天稀里糊涂把驱动问题解决之后，又装了搜来搜去装了大半天的软件，费时费劲，赶在新的一年开始之前进行一些配置记录，以后有新的软件安装也会更新下来。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fantasyhh.github.io/images/suolue/ubuntu2004.jpg">
+<meta property="article:published_time" content="2020-12-31T14:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-08T01:56:55.000Z">
+<meta property="article:author" content="Jiahuan Shi">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Bash">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/suolue/ubuntu2004.jpg">
+  
+  
   <title>Ubuntu20.04系统配置总结 - 烛影小札</title>
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
-  <link rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css">
-  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
   
     
     
       
-      <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css">
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
     
   
 
   
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_pf9vaxs7x7b.css">
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
-<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
 
 <!-- 自定义样式保持在最底部 -->
 
 
-  <script src="/js/utils.js"></script>
-  <script src="/js/color-schema.js"></script>
-</head>
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"fantasyhh.github.io","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":"UA-143610066-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"tajs":null},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"></head>
 
 
 <body>
   <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>秉烛夜读</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>秉烛夜读</strong>
+    </a>
 
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
@@ -69,7 +100,8 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 Go笔记
               </a>
@@ -143,26 +175,17 @@
             </li>
           
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -170,13 +193,13 @@
   </div>
 </nav>
 
-    <div class="banner intro-2" id="background" parallax=true
+    <div class="banner" id="banner" parallax=true
          style="background: url('/img/default.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="container page-header text-center fade-in-up">
-            <span class="h2" id="subtitle">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Ubuntu20.04系统配置总结">
               
             </span>
 
@@ -195,21 +218,18 @@
 
 <div class="mt-1">
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.3k 字
+      4k 字
     </span>
   
 
   
-    
     <span class="post-meta mr-2">
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
-       分钟
+      34 分钟
     </span>
   
 
@@ -230,72 +250,24 @@
     
       
 
-<div class="container-fluid">
-  <div class="row">
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
     <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
         <div class="py-5" id="board">
-          <article class="post-content mx-auto" id="post">
+          <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Ubuntu20.04系统配置总结</h1>
             
-            <div class="markdown-body" id="post-body">
+            <div class="markdown-body">
               <p>用Ubuntu系统也已经好多年了，从14.04到16.04再到18.04，Ubuntu也从侧面见证了我从实习到第一份工作到十二月中旬离职的这五年经历。搬到新公司，直接上了Ubuntu20.04作为新的开始。N卡和Ubuntu驱动不兼容，直接把我搞毛了，搞了半天稀里糊涂把驱动问题解决之后，又装了搜来搜去装了大半天的软件，费时费劲，赶在新的一年开始之前进行一些配置记录，以后有新的软件安装也会更新下来。</p>
-<p>其实主要参考的还是<a href="https://zhuanlan.zhihu.com/p/139305626" target="_blank" rel="noopener">这篇文章</a>，其他不同的，着重记录下来。</p>
-<h2 id="1-electron-ssr"><a href="#1-electron-ssr" class="headerlink" title="1. electron-ssr"></a>1. electron-ssr</h2><p><a href="https://github.com/geeeeeeeeek/electronic-wechat" target="_blank" rel="noopener">electron-ssr</a>作为我常用的一个梯子，势必得在安装chrome之前搞完，但是这货基于python2，而Ubuntu20.04只有自带的Python3，所以需要<code>apt install python</code>来安装Python2来保证顺利运行。</p>
-<h2 id="2-zsh，alise以及terminnator配置"><a href="#2-zsh，alise以及terminnator配置" class="headerlink" title="2. zsh，alise以及terminnator配置"></a>2. zsh，alise以及terminnator配置</h2><p>安装什么的就不说了，就是记录下自己的配置。<br><code>~/.zshrc</code>部分配置<br><pre><code class="hljs undefined">plugins=(git
-	 z
-	 safe-paste
-	 zsh-autosuggestions
-	 colored-man-pages
-	 sudo
-	 history-substring-search
-	 docker
-	 docker-compose
-	)
-
-
-alias <span class="hljs-attribute">ipy</span>=<span class="hljs-string">"~/quick_ipython.sh"</span>
-alias <span class="hljs-attribute">proxy-git</span>=<span class="hljs-string">"git -c http.proxy='socks5://127.0.0.1:1080'"</span>
-alias <span class="hljs-attribute">proxy-docker</span>=<span class="hljs-string">"echo https://3xpu0n3u.mirror.aliyuncs.com ; echo https://blog.csdn.net/liu865033503/article/details/95936640"</span>
-
-alias <span class="hljs-attribute">c</span>=<span class="hljs-string">'clear'</span>
-alias <span class="hljs-attribute">h</span>=<span class="hljs-string">'history'</span>
-alias <span class="hljs-attribute">ping</span>=<span class="hljs-string">'ping -c 5'</span>
-alias <span class="hljs-attribute">ports</span>=<span class="hljs-string">'netstat -tulanp'</span>
-alias <span class="hljs-attribute">untar</span>=<span class="hljs-string">'tar -zxvf'</span>
-alias <span class="hljs-attribute">venv</span>=<span class="hljs-string">'source venv/bin/activate'</span>
-
-
-<span class="hljs-builtin-name">export</span> VIRTUAL_ENV_DISABLE_PROMPT=
-setopt no_nomatch
-
-<span class="hljs-builtin-name">export</span> <span class="hljs-attribute">NVM_DIR</span>=~/.nvm
-[ -s <span class="hljs-string">"<span class="hljs-variable">$NVM_DIR</span>/nvm.sh"</span> ] &amp;&amp; . <span class="hljs-string">"<span class="hljs-variable">$NVM_DIR</span>/nvm.sh"</span></code></pre></p>
-<p><code>~/.config/terminator/config</code>配置<br><pre><code class="hljs undefined">[global_config]
-[keybindings]
-[profiles]
-  [[default]]
-    background_darkness = 0.92
-    background_type = transparent
-    cursor_color = <span class="hljs-string">"#3036ec"</span>
-    font = Ubuntu Mono 15
-    foreground_color = <span class="hljs-string">"#00ff00"</span>
-    show_titlebar = <span class="hljs-literal">False</span>
-    login_shell = <span class="hljs-literal">True</span>
-    custom_command = tmux
-    use_system_font = <span class="hljs-literal">False</span>
-[layouts]
-  [[default]]
-    [[[child1]]]
-     <span class="hljs-built_in"> type </span>= Terminal
-      parent = window0
-    [[[window0]]]
-     <span class="hljs-built_in"> type </span>= Window
-      parent = <span class="hljs-string">""</span>
-      size = 1060, 700
-[plugins]</code></pre></p>
+<p>其实主要参考的还是<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139305626">这篇文章</a>，其他不同的，着重记录下来。</p>
+<h2 id="1-electron-ssr"><a href="#1-electron-ssr" class="headerlink" title="1. electron-ssr"></a>1. electron-ssr</h2><p><a target="_blank" rel="noopener" href="https://github.com/geeeeeeeeek/electronic-wechat">electron-ssr</a>作为我常用的一个梯子，势必得在安装chrome之前搞完，但是这货基于python2，而Ubuntu20.04只有自带的Python3，所以需要<code>apt install python</code>来安装Python2来保证顺利运行。</p>
+<h2 id="2-zsh，alise以及terminnator配置"><a href="#2-zsh，alise以及terminnator配置" class="headerlink" title="2. zsh，alise以及terminnator配置"></a>2. zsh，alise以及terminnator配置</h2><p>安装什么的就不说了，就是记录下自己的配置。<br><code>~/.zshrc</code>部分配置</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></div></td><td class="code"><pre><code class="hljs routeros">plugins=(git<br>	 z<br>	 safe-paste<br>	 zsh-autosuggestions<br>	 colored-man-pages<br>	 sudo<br>	 history-substring-search<br>	 docker<br>	 docker-compose<br>	)<br><br><br>alias <span class="hljs-attribute">ipy</span>=<span class="hljs-string">&quot;~/quick_ipython.sh&quot;</span><br>alias <span class="hljs-attribute">proxy-git</span>=<span class="hljs-string">&quot;git -c http.proxy=&#x27;socks5://127.0.0.1:1080&#x27;&quot;</span><br>alias <span class="hljs-attribute">proxy-docker</span>=<span class="hljs-string">&quot;echo https://3xpu0n3u.mirror.aliyuncs.com ; echo https://blog.csdn.net/liu865033503/article/details/95936640&quot;</span><br><br>alias <span class="hljs-attribute">c</span>=<span class="hljs-string">&#x27;clear&#x27;</span><br>alias <span class="hljs-attribute">h</span>=<span class="hljs-string">&#x27;history&#x27;</span><br>alias <span class="hljs-attribute">ping</span>=<span class="hljs-string">&#x27;ping -c 5&#x27;</span><br>alias <span class="hljs-attribute">ports</span>=<span class="hljs-string">&#x27;netstat -tulanp&#x27;</span><br>alias <span class="hljs-attribute">untar</span>=<span class="hljs-string">&#x27;tar -zxvf&#x27;</span><br>alias <span class="hljs-attribute">venv</span>=<span class="hljs-string">&#x27;source venv/bin/activate&#x27;</span><br><br><br><span class="hljs-built_in">export</span> VIRTUAL_ENV_DISABLE_PROMPT=<br>setopt no_nomatch<br><br><span class="hljs-built_in">export</span> <span class="hljs-attribute">NVM_DIR</span>=~/.nvm<br>[ -s <span class="hljs-string">&quot;<span class="hljs-variable">$NVM_DIR</span>/nvm.sh&quot;</span> ] &amp;&amp; . <span class="hljs-string">&quot;<span class="hljs-variable">$NVM_DIR</span>/nvm.sh&quot;</span><br></code></pre></td></tr></table></figure>
+<p><code>~/.config/terminator/config</code>配置</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[global_config]</span><br><span class="hljs-section">[keybindings]</span><br><span class="hljs-section">[profiles]</span><br>  <span class="hljs-section">[[default]]</span><br>    <span class="hljs-attr">background_darkness</span> = <span class="hljs-number">0.92</span><br>    <span class="hljs-attr">background_type</span> = transparent<br>    <span class="hljs-attr">cursor_color</span> = <span class="hljs-string">&quot;#3036ec&quot;</span><br>    <span class="hljs-attr">font</span> = Ubuntu Mo<span class="hljs-literal">no</span> <span class="hljs-number">15</span><br>    <span class="hljs-attr">foreground_color</span> = <span class="hljs-string">&quot;#00ff00&quot;</span><br>    <span class="hljs-attr">show_titlebar</span> = <span class="hljs-literal">False</span><br>    <span class="hljs-attr">login_shell</span> = <span class="hljs-literal">True</span><br>    <span class="hljs-attr">custom_command</span> = tmux<br>    <span class="hljs-attr">use_system_font</span> = <span class="hljs-literal">False</span><br><span class="hljs-section">[layouts]</span><br>  <span class="hljs-section">[[default]]</span><br>    <span class="hljs-section">[[[child1]]]</span><br>      <span class="hljs-attr">type</span> = Terminal<br>      <span class="hljs-attr">parent</span> = window0<br>    <span class="hljs-section">[[[window0]]]</span><br>      <span class="hljs-attr">type</span> = Window<br>      <span class="hljs-attr">parent</span> = <span class="hljs-string">&quot;&quot;</span><br>      <span class="hljs-attr">size</span> = <span class="hljs-number">1060</span>, <span class="hljs-number">700</span><br><span class="hljs-section">[plugins]</span><br></code></pre></td></tr></table></figure>
 <h2 id="3-桌面美化"><a href="#3-桌面美化" class="headerlink" title="3. 桌面美化"></a>3. 桌面美化</h2><ol>
 <li>安装 tweek<br><code>sudo apt install gnome-tweak-tool</code></li>
 <li>让gnome 支持插件扩展<br><code>sudo apt install gnome-shell-extensions</code></li>
@@ -304,18 +276,18 @@ setopt no_nomatch
 <blockquote>
 <p>这里注意下，桌面主题跟插件不一样的东西，主题包括一些应用图标桌面美化，而插件是桌面插件。比如有个<code>Dash to Dock</code>用来自定义 dock，我以为主题，其实是插件。插件直接可以用chrome插件安装，很方便</p>
 </blockquote>
-<p>我用的主题是<a href="https://github.com/vinceliuice/WhiteSur-gtk-theme" target="_blank" rel="noopener">WhiteSur-gtk-theme</a></p>
+<p>我用的主题是<a target="_blank" rel="noopener" href="https://github.com/vinceliuice/WhiteSur-gtk-theme">WhiteSur-gtk-theme</a></p>
 <h2 id="4-一些常用软件的安装"><a href="#4-一些常用软件的安装" class="headerlink" title="4. 一些常用软件的安装"></a>4. 一些常用软件的安装</h2><ul>
-<li>搜狗输入法<a href="https://pinyin.sogou.com/linux/help.php" target="_blank" rel="noopener">安装指南</a></li>
+<li>搜狗输入法<a target="_blank" rel="noopener" href="https://pinyin.sogou.com/linux/help.php">安装指南</a></li>
 <li>pycharm CE：直接在软件商店安装</li>
 <li>wps：官网下载deb文件，然后安装</li>
 <li>chrome：不展开</li>
-<li>Markdown软件 <del>haroopad：官网下载deb文件，然后安装</del>，haroopad各种造成死机，已换成<a href="https://typora.io/#linux" target="_blank" rel="noopener">typora</a></li>
+<li>Markdown软件 <del>haroopad：官网下载deb文件，然后安装</del>，haroopad各种造成死机，已换成<a target="_blank" rel="noopener" href="https://typora.io/#linux">typora</a></li>
 <li>vscode：官网下载deb文件，然后安装</li>
 <li>剪贴板Gpaste <code>sudo apt install gnome-shell-extensions-gpaste gpaste</code>。安装完成后，按下 Alt + F2 并输入 r 重新启动 Gnome Shell，然后按回车键</li>
 <li>MQTTX  <code>snap install mqttx</code></li>
-<li><del>SQlite Browser <code>sudo apt install sqlitebrowser</code></del> <a href="https://github.com/dbeaver/dbeaver/releases" target="_blank" rel="noopener">dbeaver开源的数据库客户端工具</a> </li>
-<li><a href="https://ugetdm.com/downloads/" target="_blank" rel="noopener">uGet</a>用于下载软件，uGet安装完成后，根据个人需要，可以安装和配置aria2。Aria2是一个命令行下载软件，配合uGet使用，效果更好</li>
+<li><del>SQlite Browser <code>sudo apt install sqlitebrowser</code></del> <a target="_blank" rel="noopener" href="https://github.com/dbeaver/dbeaver/releases">dbeaver开源的数据库客户端工具</a> </li>
+<li><a target="_blank" rel="noopener" href="https://ugetdm.com/downloads/">uGet</a>用于下载软件，uGet安装完成后，根据个人需要，可以安装和配置aria2。Aria2是一个命令行下载软件，配合uGet使用，效果更好</li>
 <li>微信  docker安装，后面会有讲到</li>
 <li>QQ音乐  官网直接下载deb文件然后安装</li>
 <li>docker <code>sudo apt install docker.io</code> <code>sudo systemctl enable --now docker</code> <code>sudo usermod -aG docker $USER</code>。给完用户权限之后，要logout一下才生效</li>
@@ -325,30 +297,14 @@ setopt no_nomatch
 <blockquote>
 <p>注意本地访问80端口后其实访问的是pgadmin4容器web地址的5433端口，如果连接服务器的时候再选择localhost地址，其实还是pgadmin4容器ip地址，需要将localhost改为postgreSQL容器地址的ip</p>
 </blockquote>
-<pre><code class="hljs undefined"><span class="hljs-symbol">\h</span>：查看SQL命令的解释，比如<span class="hljs-symbol">\h</span> select。
-<span class="hljs-symbol">\?</span>：查看psql命令列表。
-<span class="hljs-symbol">\l</span>：列出所有数据库。
-<span class="hljs-symbol">\c</span> [database_name]：连接其他数据库。
-<span class="hljs-symbol">\d</span>：列出当前数据库的所有表格。
-<span class="hljs-symbol">\d</span> [table_name]：列出某一张表格的结构。
-<span class="hljs-symbol">\d</span>u：列出所有用户。
-<span class="hljs-symbol">\e</span>：打开文本编辑器。
-<span class="hljs-symbol">\c</span>onninfo：列出当前数据库和连接的信息。</code></pre>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-string">\h：查看SQL命令的解释，比如\h</span> select。<br><span class="hljs-string">\?：查看psql命令列表。</span><br><span class="hljs-string">\l：列出所有数据库。</span><br><span class="hljs-string">\c</span> [database_name]：连接其他数据库。<br><span class="hljs-string">\d：列出当前数据库的所有表格。</span><br><span class="hljs-string">\d</span> [table_name]：列出某一张表格的结构。<br><span class="hljs-string">\du：列出所有用户。</span><br><span class="hljs-string">\e：打开文本编辑器。</span><br><span class="hljs-string">\conninfo：列出当前数据库和连接的信息。</span><br></code></pre></td></tr></table></figure>
+
 <h3 id="5-3-redis"><a href="#5-3-redis" class="headerlink" title="5.3 redis"></a>5.3 redis</h3><p><code>docker run -d -p 6379:6379 --name myredis redis:rc-alpine --appendonly yes</code><br>服务器安装好了，我们继续在本地安装redis管理器<br><code>snap install redis-desktop-manage</code></p>
-<p><a href="https://segmentfault.com/a/1190000022713251" target="_blank" rel="noopener">redis-cli 常用命令</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000022713251">redis-cli 常用命令</a></p>
 <h3 id="5-4-mosquitto-支持websocket"><a href="#5-4-mosquitto-支持websocket" class="headerlink" title="5.4 mosquitto 支持websocket"></a>5.4 mosquitto 支持websocket</h3><p><code>docker run -it -d -p 1883:1883 -p 9001:9001 -v /home/sjh/mosquitto.conf:/mosquitto/config/mosquitto.conf -v /mosquitto/data -v /mosquitto/log eclipse-mosquitto</code></p>
-<h3 id="5-5-wechat"><a href="#5-5-wechat" class="headerlink" title="5.5 wechat"></a>5.5 wechat</h3><p>关于工作上常用的微信，以前我都是网页版微信，但是发现实在是太垃圾了，后来发现了<a href="https://github.com/bestwu/docker-wechat" target="_blank" rel="noopener">基于深度操作系统的微信</a>，也存在docker镜像一键部署，但是跑之前需要进行一些配置，可在官网查看</p>
-<pre><code class="hljs undefined">docker <span class="hljs-builtin-name">run</span> -d --name wechat --device /dev/snd <span class="hljs-attribute">--ipc</span>=host \                             
--v /tmp/.X11-unix:/tmp/.X11-unix \
--v <span class="hljs-variable">$HOME</span>/WeChatFiles:/WeChatFiles \
--e <span class="hljs-attribute">DISPLAY</span>=unix$DISPLAY \
--e <span class="hljs-attribute">XMODIFIERS</span>=@im=fxitx \
--e <span class="hljs-attribute">QT_IM_MODULE</span>=fcitx \
--e <span class="hljs-attribute">GTK_IM_MODULE</span>=fcitx \
--e <span class="hljs-attribute">AUDIO_GID</span>=`getent<span class="hljs-built_in"> group </span>audio | cut -d: -f3` \
--e <span class="hljs-attribute">GID</span>=`id -g` \
--e <span class="hljs-attribute">UID</span>=`id -u` \
-bestwu/wechat</code></pre>
+<h3 id="5-5-wechat"><a href="#5-5-wechat" class="headerlink" title="5.5 wechat"></a>5.5 wechat</h3><p>关于工作上常用的微信，以前我都是网页版微信，但是发现实在是太垃圾了，后来发现了<a target="_blank" rel="noopener" href="https://github.com/bestwu/docker-wechat">基于深度操作系统的微信</a>，也存在docker镜像一键部署，但是跑之前需要进行一些配置，可在官网查看</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs routeros">docker <span class="hljs-built_in">run</span> -d --name wechat --device /dev/snd <span class="hljs-attribute">--ipc</span>=host \                             <br>-v /tmp/.X11-unix:/tmp/.X11-unix \<br>-v <span class="hljs-variable">$HOME</span>/WeChatFiles:/WeChatFiles \<br>-e <span class="hljs-attribute">DISPLAY</span>=unix$DISPLAY \<br>-e <span class="hljs-attribute">XMODIFIERS</span>=@im=fxitx \<br>-e <span class="hljs-attribute">QT_IM_MODULE</span>=fcitx \<br>-e <span class="hljs-attribute">GTK_IM_MODULE</span>=fcitx \<br>-e <span class="hljs-attribute">AUDIO_GID</span>=`getent<span class="hljs-built_in"> group </span>audio | cut -d: -f3` \<br>-e <span class="hljs-attribute">GID</span>=`id -g` \<br>-e <span class="hljs-attribute">UID</span>=`id -u` \<br>bestwu/wechat<br></code></pre></td></tr></table></figure>
+
 <h3 id="5-6-EMQX"><a href="#5-6-EMQX" class="headerlink" title="5.6 EMQX"></a>5.6 EMQX</h3><p>正式开发的时候，在mqtt broker方面，需要用到emqx代替mosquitto<br><code>docker run -d --name emqx -p 1883:1883 -p 8083:8083  -p 18083:18083 emqx/emqx</code></p>
 <h3 id="5-7-portainer"><a href="#5-7-portainer" class="headerlink" title="5.7 portainer"></a>5.7 portainer</h3><p>docker容器管理工具portainer</p>
 <p><code>docker volume create portainer_data</code></p>
@@ -378,10 +334,14 @@ bestwu/wechat</code></pre>
                 
               </div>
               
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！
+                  
+                </p>
               
               
-                <div class="post-prevnext row">
+                <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
                     
@@ -408,11 +368,13 @@ bestwu/wechat</code></pre>
 
             
               <!-- Comments -->
-              <article class="comments" id="comments">
+              <article class="comments" id="comments" lazyload>
+                
+                  
                 
                 
   <script type="text/javascript">
-    function loadUtterances() {
+    Fluid.utils.loadComments('#comments', function() {
       var light = 'github-light';
       var dark = 'github-dark';
       var schema = document.documentElement.getAttribute('data-user-color-scheme');
@@ -433,9 +395,9 @@ bestwu/wechat</code></pre>
       s.setAttribute('theme', schema);
       s.setAttribute('crossorigin', 'anonymous');
       document.getElementById('comments').appendChild(s);
-    }
-    waitElementVisible('comments', loadUtterances)
+    })
   </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
               </article>
@@ -448,7 +410,7 @@ bestwu/wechat</code></pre>
       <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
         <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
       </div>
@@ -460,16 +422,16 @@ bestwu/wechat</code></pre>
 
 
     
-  </main>
 
-  
-    <a id="scroll-top-button" href="#" role="button">
-      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-    </a>
-  
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
-  
-    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
@@ -481,208 +443,96 @@ bestwu/wechat</code></pre>
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
-  
-
-  
-
-  
-
-  <footer class="mt-5">
-  <div class="text-center py-3">
-    <div>
-      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
-      <i class="iconfont icon-love"></i>
-      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
-        <span>Fluid</span></a>
-    </div>
     
 
     
+  </main>
 
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
+  
+
+  
+
+  
 </footer>
 
-<!-- SCRIPTS -->
-<script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="/js/debouncer.js"></script>
-<script src="/js/main.js"></script>
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 <!-- Plugins -->
 
 
-  
-    <script src="/js/lazyload.js"></script>
-  
+  <script  src="/js/local-search.js" ></script>
 
 
 
   
+    <script  src="/js/img-lazyload.js" ></script>
+  
 
 
 
-  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="/js/clipboard-use.js"></script>
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
 
 
 
 
 
 
-
-  <script src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js"></script>
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
   <script>
-    $(document).ready(function () {
-      var boardCtn = $('#board-ctn');
-      var boardTop = boardCtn.offset().top;
-
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '#post-body',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        headingsOffset: -boardTop
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc').css('visibility', 'visible');
-      }
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js"></script>
-  <script>
-    var typed = new Typed('#subtitle', {
-      strings: [
-        '  ',
-        "Ubuntu20.04系统配置总结&nbsp;",
-      ],
-      cursorChar: "_",
-      typeSpeed: 70,
-      loop: false,
-    });
-    typed.stop();
-    $(document).ready(function () {
-      $(".typed-cursor").addClass("h2");
-      typed.start();
-    });
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js"></script>
-  <script>
-    anchors.options = {
-      placement: "right",
-      visible: "hover",
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
       
-    };
-    var el = "h1,h2,h3,h4,h5,h6".split(",");
-    var res = [];
-    for (item of el) {
-      res.push(".markdown-body > " + item)
-    }
-    anchors.add(res.join(", "))
+        typing(title);
+      
+    })(window, document);
   </script>
 
-
-
-  <script src="/js/local-search.js"></script>
-  <script>
-    var path = "/local-search.xml";
-    var inputArea = document.querySelector("#local-search-input");
-    inputArea.onclick = function () {
-      searchFunc(path, 'local-search-input', 'local-search-result');
-      this.onclick = null
-    }
-  </script>
-
-
-
-  <script src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css">
-
-  <script>
-    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
-      function () {
-        var element = document.createElement('a');
-        $(element).attr('data-fancybox', 'images');
-        $(element).attr('href', $(this).attr('src'));
-        $(this).wrap(element);
-      }
-    );
-  </script>
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript">
-      //定义获取词语下标
-      var a_idx = 0;
-      jQuery(document).ready(function ($) {
-        //点击body时触发事件
-        $("body").click(function (e) {
-          //需要显示的词语
-          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
-          //设置词语给span标签
-          var $i = $("<span/>").text(a[a_idx]);
-          //下标等于原来下标+1  余 词语总数
-          a_idx = (a_idx + 1) % a.length;
-          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
-          //获取x和y的指针坐标
-          var x = e.pageX, y = e.pageY;
-          //在鼠标的指针的位置给$i定义的span标签添加css样式
-          $i.css({
-            "z-index": 999,
-            "top": y - 20,
-            "left": x,
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": rand_color()
-          });
-          // 随机颜色
-          function rand_color() {
-            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
-          }
-          //在body添加这个标签
-          $("body").append($i);
-          //animate() 方法执行 CSS 属性集的自定义动画。
-          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
-          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
-          $i.animate({
-            //将原来的位置向上移动180
-            "top": y - 180,
-            "opacity": 0
-            //1500动画的速度
-          }, 1500, function () {
-            //时间到了自动删除
-            $i.remove();
-          });
-        });
-      })
-      ;
-    </script>
-  
 
 
 
@@ -704,7 +554,7 @@ bestwu/wechat</code></pre>
       ga('create', 'UA-143610066-1', 'auto');
       ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
   
 
   
@@ -717,6 +567,10 @@ bestwu/wechat</code></pre>
 
 
 
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
 
 </body>
