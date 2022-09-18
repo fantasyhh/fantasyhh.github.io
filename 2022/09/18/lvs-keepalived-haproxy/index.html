@@ -16,28 +16,23 @@
   <meta name="author" content="Jiahuan Shi">
   <meta name="keywords" content="">
   
-    <meta name="description" content="经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。 1. 首先弄清下面几个概念W">
+    <meta name="description" content="因为对整体概念的不熟悉，导致对线网组件的架构不清晰，这边主要对于一些概念作区分总结，主要摘抄于骏马金龙 - 博客园 (cnblogs.com)的博客，还有就是其他的一些文章，都同意写在文章最后面。 1. LVS 网站架构中，负载均衡技术是实现网站架构伸缩性的主要手段之一。所谓”伸缩性”，是指可以不断向集群中添加新的服务器来提升性能、缓解不断增加的并发用户访问压力。通俗地讲，就是一头牛拉不动时，就用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="梳理Python WSGI与WSGI服务器等概念">
-<meta property="og:url" content="https://fantasyhh.github.io/2019/06/27/python3-wsgi-concept/index.html">
+<meta property="og:title" content="LVS、Keepalived、Haproxy概念以及架构总结">
+<meta property="og:url" content="https://fantasyhh.github.io/2022/09/18/lvs-keepalived-haproxy/index.html">
 <meta property="og:site_name" content="烛影小札">
-<meta property="og:description" content="经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。 1. 首先弄清下面几个概念W">
+<meta property="og:description" content="因为对整体概念的不熟悉，导致对线网组件的架构不清晰，这边主要对于一些概念作区分总结，主要摘抄于骏马金龙 - 博客园 (cnblogs.com)的博客，还有就是其他的一些文章，都同意写在文章最后面。 1. LVS 网站架构中，负载均衡技术是实现网站架构伸缩性的主要手段之一。所谓”伸缩性”，是指可以不断向集群中添加新的服务器来提升性能、缓解不断增加的并发用户访问压力。通俗地讲，就是一头牛拉不动时，就用">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/wsgi.png">
-<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/middleware.png">
-<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/which_wsgi_server.png">
-<meta property="og:image" content="https://fantasyhh.github.io/images/wsgi/nginx+gunicorn.png">
-<meta property="article:published_time" content="2019-06-27T00:53:06.000Z">
-<meta property="article:modified_time" content="2020-04-01T02:33:26.000Z">
+<meta property="og:image" content="https://fantasyhh.github.io/images/suolue/lvs_keepalived_haproxy.png">
+<meta property="article:published_time" content="2022-09-18T01:50:21.000Z">
+<meta property="article:modified_time" content="2022-09-18T06:43:10.224Z">
 <meta property="article:author" content="Jiahuan Shi">
-<meta property="article:tag" content="Django">
-<meta property="article:tag" content="Gunicorn">
-<meta property="article:tag" content="Wsgi">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://fantasyhh.github.io/images/wsgi/wsgi.png">
+<meta name="twitter:image" content="https://fantasyhh.github.io/images/suolue/lvs_keepalived_haproxy.png">
   
   
-  <title>梳理Python WSGI与WSGI服务器等概念 - 烛影小札</title>
+  <title>LVS、Keepalived、Haproxy概念以及架构总结 - 烛影小札</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -219,7 +214,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="梳理Python WSGI与WSGI服务器等概念">
+            <span class="h2" id="subtitle" title="LVS、Keepalived、Haproxy概念以及架构总结">
               
             </span>
 
@@ -229,8 +224,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2019-06-27 08:53" pubdate>
-        2019年6月27日 早上
+      <time datetime="2022-09-18 09:50" pubdate>
+        2022年9月18日 上午
       </time>
     </span>
   
@@ -240,7 +235,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.8k 字
+      2.8k 字
     </span>
   
 
@@ -249,7 +244,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      32 分钟
+      24 分钟
     </span>
   
 
@@ -278,57 +273,63 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">梳理Python WSGI与WSGI服务器等概念</h1>
+            <h1 style="display: none">LVS、Keepalived、Haproxy概念以及架构总结</h1>
             
             <div class="markdown-body">
-              <p>经常接触Django，问自己一个问题：Django项目中与setttings文件同目录的wsgi.py是干什么用的？这个问题熟悉而又陌生，wsgi.py这个文件可以说无时无刻不在我们眼皮底下出现，但又对它真正的功能作用知之甚少。更早的时候，将Django部署在Apache上会用到mod-wsgi，这是两者之间通信的媒介。忙碌中整理一些概念与教程来梳理这些概念，解惑也。</p>
-<h2 id="1-首先弄清下面几个概念"><a href="#1-首先弄清下面几个概念" class="headerlink" title="1. 首先弄清下面几个概念"></a>1. 首先弄清下面几个概念</h2><p><strong>WSGI</strong>：全称是Web Server Gateway Interface，WSGI不是服务器，python模块，框架，API或者任何软件，只是一种规范，描述web server如何与web application通信的规范。server和application的规范在PEP 3333中有具体描述。要实现WSGI协议，必须同时实现web server和web application，当前运行在WSGI协议之上的web框架有Bottle, Flask, Django。</p>
-<p><img src="/images/wsgi/wsgi.png" srcset="/img/loading.gif" lazyload alt=" " title="wsgi"></p>
-<blockquote>
-<p>WSGI存在的目的有两个：</p>
-</blockquote>
+              <p>因为对整体概念的不熟悉，导致对线网组件的架构不清晰，这边主要对于一些概念作区分总结，主要摘抄于<a target="_blank" rel="noopener" href="https://www.cnblogs.com/f-ck-need-u/p/7576137.html#lvs">骏马金龙 - 博客园 (cnblogs.com)</a>的博客，还有就是其他的一些文章，都同意写在文章最后面。</p>
+<h2 id="1-LVS"><a href="#1-LVS" class="headerlink" title="1. LVS"></a>1. LVS</h2><p><img src="/images/lvs/lvs%E6%8B%93%E6%89%91%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="LVS拓扑图"></p>
+<p>网站架构中，负载均衡技术是实现网站架构<strong>伸缩性</strong>的主要手段之一。所谓”伸缩性”，是指可以不断向集群中添加新的服务器来提升性能、缓解不断增加的并发用户访问压力。通俗地讲，就是一头牛拉不动时，就用两头、三头、更多头牛来拉。</p>
+<p>负载均衡有好几种方式：http URL重定向、DNS的A记录负载均衡、反向代理负载均衡、IP负载均衡和链路层负载。本文所述为LVS，它的VS&#x2F;NAT和VS&#x2F;TUN模式是IP负载均衡的优秀代表，而它的VS&#x2F;DR模式则是链路层负载均衡的优秀代表。</p>
+<p>LVS是章文嵩开发的一个国产开源负载均衡软件。LVS最初是他在大学期间的玩具，随着后来使用的用户越来越多，LVS也越来越完善，最终集成到了Linux的内核中。有不少开源牛人都为LVS开发过辅助工具和辅助组件，最出名的就是Alexandre为LVS编写的Keepalived，<strong>它最初专门用于监控LVS，后来加入了通过VRRP实现高可用的功能。</strong></p>
+<p>LVS的全称是Linux virtual server，即Linux虚拟服务器。之所以是虚拟服务器，是因为LVS自身是个负载均衡器(director)，不直接处理请求，而是将请求转发至位于它后端真正的服务器realserver上。</p>
+<p>LVS是四层(传输层tcp&#x2F;udp)、七层(应用层)的负载均衡工具，只不过大众一般都使用它的四层负载均衡功能ipvs，而七层的内容分发负载工具ktcpvs(kernel tcp virtual server)不怎么完善，使用的人并不多。</p>
+<p>ipvs是集成在内核中的框架，可以通过用户空间的程序<code>ipvsadm</code>工具来管理，该工具可以定义一些规则来管理内核中的ipvs。就像iptables和netfilter的关系一样。</p>
+<h2 id="2-LVS-Keepalived"><a href="#2-LVS-Keepalived" class="headerlink" title="2. LVS+Keepalived"></a>2. LVS+Keepalived</h2><p>KeepAlived主要有两个功能：</p>
 <ol>
-<li>让Web服务器知道如何调用Python应用程序，并且把用户的请求告诉应用程序。</li>
-<li>让Python应用程序知道用户的具体请求是什么，以及如何返回结果给Web服务器。</li>
+<li>能够对RealServer进行健康状况检查，支持4层、5层和7层协议进行健康检查</li>
 </ol>
-<p><strong>uwsgi</strong>：与WSGI一样是一种通信协议，<strong>是uWSGI服务器的独占协议</strong>，用于定义传输信息的类型(type of information)，每一个uwsgi packet前4byte为传输信息类型的描述，与WSGI协议是两种东西，据说该协议是fcgi协议的10倍快。</p>
-<p><strong>uWSGI</strong>：是一个web服务器，实现了WSGI协议、uwsgi协议、http协议等。</p>
-<p><strong>WSGI协议主要包括server(或者gateway)和application(或者framework)两部分：</strong></p>
+<p><img src="/images/lvs/keepalived+lvs.png" srcset="/img/loading.gif" lazyload alt="健康检查"></p>
+<ol start="2">
+<li>对负载均衡调度器实现高可用，防止Director单点故障</li>
+</ol>
+<p><img src="/images/lvs/keepalived+lvs2.png" srcset="/img/loading.gif" lazyload alt="健康检查+高可用"></p>
+<p>在keepalived设计之初，它只是LVS周边的一个辅助工具，<strong>用于LVS的监控状况检查，因此它和LVS的兼容性非常好。如果某一个realserver节点宕了，keepalived会将此节点从管理列表中踢出去</strong>，当此节点恢复后又将此节点加回管理列表，这样能够就让realserver负载均衡变的智能化。但是，此时的调度器存在单点故障的可能性，因此有必要对其实现高可用。</p>
+<p>实现LVS高可用可以使用多种软件来实现，如heartbeat，但是heartbeat本身不能实现ipvs的健康状况检查，需要搭配Ldirectord(安装完heartbeat就有了)来进行健康检查。<strong>所幸的是keepalived后来也加入了高可用的功能</strong>，而且配置起来也相当简单。相比于heartbeat+Ldirectord，keepalived的检查速度极快，故障转移也极快，布置也简单的多。所以一般来说，要管理ipvs，都会选择使用keepalived。</p>
+<p>keepalived实现故障转移的功能是通过VRRP(virtual router redundancy protocol虚拟路由器冗余协议)协议来实现的。 在keepalived正常工作的时候，主节点(master)会不断的发送心跳信息给备节点(backup)，当备节点不能在一定时间内收到主节点的心跳信息时，备节点会认为主节点宕了，然后会接管主节点上的资源，并继续向外提供服务保证其可用性。当主节点恢复的时候，备节点会自动让出资源并再次自动成为备节点。</p>
+<p>注意，使用keepalived监控、高可用LVS集群时(即常说的keepalived+lvs)，并不需要在Director上使用ipvsadm等管理工具额外配置ipvs规则。<strong>因为keepalived中集合了管理ipvs规则的组件</strong>(即ipvs wrapper)，<strong>可以直接在keepalived的配置文件中配置ipvs相关规则，在解析配置文件时会通过特定的组件将规则发送到内核中的ipvs模块</strong>。</p>
+<h2 id="3-Keepalived-amp-Haproxy"><a href="#3-Keepalived-amp-Haproxy" class="headerlink" title="3. Keepalived&amp;Haproxy"></a>3. Keepalived&amp;Haproxy</h2><p><img src="/images/lvs/ha_diagram.gif" srcset="/img/loading.gif" lazyload alt="keepavlied+haproxy"></p>
+<p>上面说过，Keepalived软件起初是专为LVS负载均衡软件设计的，用来管理并监控LVS集群系统中各个服务节点的状态，后来又加入了可以实现高可用的VRRP功能。因此，Keepalived除了能够管理LVS软件外，还可以作为其他服务（例如：Nginx、Haproxy、MySQL等）的高可用解决方案软件。</p>
+<p>keepalived分为<strong>vrrp实例的心跳检查</strong>和<strong>后端服务的健康检查</strong>。如果要配置后端服务，则后端服务只能是LVS（也就是上面说的下线了护会剔除，这就是健康检查）。<strong>但vrrp能独立于lvs存在，例如keepalive结合haproxy、mysql等服务实现它们的高可用。</strong>			</p>
+<ol>
+<li><p>vrrp实例的心跳检查(lvs,haproxy,mysql…)</p>
 <ul>
-<li><p>WSGI server负责从客户端接收请求，将request转发给application，将application返回的response返回给客户端；</p>
+<li><p>除了LVS，vrrp只能通过脚本来实现vrrp的健康检查，并通过vrrp实例脚本结束keepalived进程来中断该实例的心跳通告。<strong>此时virtual server部分的配置需省略。</strong></p>
 </li>
-<li><p>WSGI application接收由server转发的request，处理请求，并将处理结果返回给server。application中可以包括多个栈式的中间件(middlewares)，这些中间件需要同时实现server与application，因此可以在WSGI服务器与WSGI应用之间起调节作用：<strong>对服务器来说，中间件扮演应用程序，对应用程序来说，中间件扮演服务器</strong>。</p>
+<li><p>对于LVS，无需使用任何脚本，因为所有keepalived节点会同时对<strong>后端服务（即LVS）</strong>进行健康检查，并同时从LVS规则中剔除下线的服务。如果所有后端服务都不健康，那就没有必要切换keepalived。</p>
 </li>
 </ul>
-<blockquote>
-<p>​ WSGI Middleware（中间件）也是WSGI规范的一部分。上一章我们已经说明了WSGI的两个角色：server和application。那么middleware是一种运行在server和application中间的应用（一般都是Python应用）。middleware同时具备server和application角色，对于server来说，它是一个application；对于application来说，它是一个server。middleware并不修改server端和application端的规范，只是同时实现了这两个角色的功能而已。</p>
-</blockquote>
-<p><img src="/images/wsgi/middleware.png" srcset="/img/loading.gif" lazyload alt="middleware"> </p>
-<p>WSGI协议其实是定义了一种server与application解耦的规范，即可以有多个实现WSGI server的服务器，也可以有多个实现WSGI application的框架，那么就可以选择任意的server和application组合实现自己的web应用。例如<strong>uWSGI和Gunicorn</strong>都是实现了WSGI server协议的服务器，<strong>Django，Flask</strong>是实现了WSGI application协议的web框架，可以根据项目实际情况搭配使用，详细的我们后面说。</p>
-<h2 id="2-WSGI实现原理以及”兄弟”CGI-FastCGI"><a href="#2-WSGI实现原理以及”兄弟”CGI-FastCGI" class="headerlink" title="2. WSGI实现原理以及”兄弟”CGI FastCGI?"></a>2. WSGI实现原理以及”兄弟”CGI FastCGI?</h2><p>WSGI原理的内部实现，说简单不简单说复杂却不复杂，这里不细说，我们可以**<a target="_blank" rel="noopener" href="http://luckylau.tech/2017/02/28/python%E7%9A%84wsgi%E7%90%86%E8%A7%A3/">用简单实例来理解Python WSGI</a> **</p>
-<p>那么<code>CGI</code> <code>FastCGI</code>又是什么？是不是跟WSGI有什么关系？我们可以翻阅下<a target="_blank" rel="noopener" href="https://blog.callmewhy.com/2015/12/07/what-is-wsgi-and-cgi/">CGI FastCGI WSGI 学习笔记 </a> 就会豁然开朗了</p>
-<h2 id="3-WSGI服务器的选择？"><a href="#3-WSGI服务器的选择？" class="headerlink" title="3. WSGI服务器的选择？"></a>3. WSGI服务器的选择？</h2><p>上面提到<strong>uWSGI和Gunicorn</strong>都是实现了WSGI server协议的服务器，还有我之前用过的部署在Apache上mod_wsgi, 那么对于这些东西，为什么需要一个？我应该选择哪一个？</p>
-<blockquote>
-<p><strong>django自带的web server目的是方便开发，不是能直接放到生产环境的,直接引用django的文档。It’s intended only for use while developing. (We’re in the business of making Web frameworks, not Web servers.)</strong></p>
-</blockquote>
-<blockquote>
-<p> <strong>使用Gunicorn，除非你在Windows上部署，在这种情况下使用mod_wsgi。</strong></p>
-</blockquote>
-<p><img src="/images/wsgi/which_wsgi_server.png" srcset="/img/loading.gif" lazyload alt="which_server"> </p>
-<p>具体的解释我这里用这篇英文原文<a target="_blank" rel="noopener" href="https://djangodeployment.com/2017/01/02/which-wsgi-server-should-i-use/">Which WSGI server should I use?</a> 翻译一下来回答。</p>
-<p>如图所示（我们可以暂时忽略掉图中的Web Server，这是下一小节要说的），Web浏览器与Web服务器通信，Web服务器又与WSGI服务器通信。该WSGI服务器不会直接与你的Django项目通信，而是导入 Django项目。它是这么做的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> django_project.wsgi <span class="hljs-keyword">import</span> application<br>application(args)<br></code></pre></td></tr></table></figure>
-<p>因此，从操作系统的角度来看，你的Django项目将成为WSGI服务器的一部分; 这是同一个过程。调用**<code>application()</code>**的方式由WSGI规范标准化。这个函数的接口是标准化的，这使得你可以在许多不同的WSGI服务器（如Gunicorn，uWSGI或mod_wsgi）之间进行选择，以及为什么每个服务器都可以与许多Python应用程序框架（如Django或Flask）进行交互。</p>
-<p>mod_wsgi仅适用于Apache，我更偏向于可与Apache或nginx一起使用的方法。这样的话，使更改Web服务器变得更容易。我也发现Gunicorn更容易设置和维护。</p>
-<p>我使用了uWSGI几年，并且被它的功能所震撼。其中许多都复制了Apache或nginx或堆栈其他部分中已存在的功能，因此很少需要它们。它的文档有点混乱。开发人员自己承认：“我们尽力提供良好的文档，但这是一项艰苦的工作。对不起。“我记得每周都会遇到问题并且每次花费数小时来解决问题。</p>
-<p>另一方面，Gunicorn正是你想要的恰到好处的功能。它很简单，工作正常。所以我推荐它，除非在你的特殊情况下有一个令人信服的理由使用其中一个。</p>
-<p>uWSGI和Gunicorn没法在Windows中运行，因此如果你在Windows上部署那就使用Apache + mod_wsgi。</p>
-<h2 id="4-既然有了WSGI-Server，为什么我们还需要Nginx（Web-Server）"><a href="#4-既然有了WSGI-Server，为什么我们还需要Nginx（Web-Server）" class="headerlink" title="4. 既然有了WSGI Server，为什么我们还需要Nginx（Web Server）?"></a>4. 既然有了WSGI Server，为什么我们还需要Nginx（Web Server）?</h2><blockquote>
-<p>如果只有一个应用，不需要负载均衡；只提供api服务，没有静态文件；不需要额外的访问控制等功能这样是不是就不需要nginx等反向代理？答案是需要。nginx可以缓冲请求和响应。如果让Gunicorn直接提供服务，浏览器发起一个请求，鉴于浏览器和网络情况都是未知的，http请求的发起过程可能比较慢，而Gunicorn只能等待请求发起完成后，才去真正处理请求，处理完成后，等客户端完全接收请求后，才继续下一个。nginx缓存客户端发起的请求，直到收完整个请求，转发给Gunicorn，等Gunicorn处理完成后，拿到响应，再发给客户端，这个流程是nginx擅长处理，而Gunicorn不擅长处理的。因此将Gunicorn置于nginx后面，可以有效提高Gunicorn的处理能力。  ——摘自知乎<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/38528616">Nginx、Gunicorn在服务器中分别起什么作用？</a> 某回答</p>
-</blockquote>
-<p><img src="/images/wsgi/nginx+gunicorn.png" srcset="/img/loading.gif" lazyload alt="nginx+gunicorn"></p>
-<p>当我们为Gunicorn运行我们的django应用程序而开心时，然而，最后，我们看到管理面板的样式已经消失了。原因是Gunicorn是一个应用程序服务器，只运行应用程序（在我们的例子中是django app）和django，正如我们所知，<strong>除了开发之外，它不提供静态文件</strong>。Nginx来救援！它将是Gunicorn的反向代理。到底是什么反向代理？好问题！我们都知道VPN是什么，对吧？我们使用它们访问某些因某种原因被阻止的网站。在这种情况下，我们通过VPN访问该网站：我们 - &gt; VPN - &gt;某些网站。这种代理称为正向代理。至于反向代理，可以将它们视为强制代理。例如，用户正在尝试访问我们在gunicorn中运行的django应用程序。它认为它正在直接访问该应用程序。然而，真正的过程是它首先访问Nginx服务器，该服务器决定下一步该做什么，如果用户正在访问静态文件，Nginx服务器将自行提供服务。否则，它会将其重定向到Gunicorn。简单来说，<strong>http请求将由Gunicorn处理，而静态处理则由Nginx处理。这就是我们需要Nginx的原因</strong>。<br>除此之外，<strong>Nginx还提高了性能，可靠性，安全性和规模</strong>。</p>
-<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>这几天晚上睡觉前花了一点时间来对这些概念进行了一些整理，收获颇多。要想真正的成为一名Web开发，并不是简单的套用框架写写逻辑层，而是框架背后的原理与流程，这才是重中之重，了解了这些，所有的类似框架以后上手都能快半分。接下去，会对Gunicorn，Nginx的配置文件做个记录（这中间也踩了点坑），再往后就是Nginx与docker的理解与实践了，加油～</p>
+</li>
+<li><p>后端Real Server的健康检查(只能是LVS)</p>
+<ul>
+<li>一般采用TCP_CHECK、HTTP_GET、SSL_GET进行健康检查。</li>
+<li>但也能自写脚本进行后端服务的健康检查，这种模式称为MISC_CHECK。</li>
+</ul>
+</li>
+</ol>
+<h2 id="4-相关资料"><a href="#4-相关资料" class="headerlink" title="4. 相关资料"></a>4. 相关资料</h2><ul>
+<li><p>LVS中文官方手册：<a target="_blank" rel="noopener" href="http://www.linuxvirtualserver.org/zh/index.html%E3%80%82%E8%BF%99%E4%B8%AA%E6%89%8B%E5%86%8C%E5%AF%B9%E4%BA%8E%E4%BA%86%E8%A7%A3lvs%E7%9A%84%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86%E5%BE%88%E6%9C%89%E5%B8%AE%E5%8A%A9%E3%80%82">http://www.linuxvirtualserver.org/zh/index.html。这个手册对于了解lvs的背景知识很有帮助。</a></p>
+</li>
+<li><p>LVS英文官方手册：<a target="_blank" rel="noopener" href="http://www.linuxvirtualserver.org/Documents.html%E3%80%82%E8%BF%99%E4%B8%AA%E6%89%8B%E5%86%8C%E6%AF%94%E8%BE%83%E5%85%A8%E9%9D%A2%EF%BC%8C%E5%AF%B9%E4%BA%8E%E4%BA%86%E8%A7%A3%E5%92%8C%E5%AD%A6%E4%B9%A0lvs%E7%9A%84%E5%8E%9F%E7%90%86%E3%80%81%E9%85%8D%E7%BD%AE%E5%BE%88%E6%9C%89%E5%B8%AE%E5%8A%A9%E3%80%82">http://www.linuxvirtualserver.org/Documents.html。这个手册比较全面，对于了解和学习lvs的原理、配置很有帮助。</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://wsgzao.github.io/post/lvs-keepalived/">LVS 和 Keepalived 的原理介绍和配置实践 | HelloDog (wsgzao.github.io)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/rexcheny/p/10778567.html">Keepalived部署与配置详解 - 昀溪 - 博客园 (cnblogs.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1644893">高可用篇之Keepalived （HAProxy+keepalived 搭建高可用负载均衡集群） - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jmcui/p/13055283.html">虚拟IP原理及使用 - JMCui - 博客园 (cnblogs.com)</a></p>
+</li>
+</ul>
 
             </div>
             <hr>
@@ -338,7 +339,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                      <a class="hover-with-bg" href="/categories/%E6%96%87%E7%AB%A0%E5%88%86%E7%B1%BB/">文章分类</a>
                     
                   </div>
                 
@@ -346,11 +347,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Django/">Django</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Gunicorn/">Gunicorn</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Wsgi/">Wsgi</a>
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
                     
                   </div>
                 
@@ -367,18 +364,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2019/07/08/django-gunicorn-nginx-config/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Django+Gunicorn+Nginx配置整理</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2019/06/24/revpi-install-img/">
-                        <span class="hidden-mobile">Revpi 重装系统以及本地化配置的注意项</span>
+                      <a href="/2022/04/16/encode-encrypt-hash/">
+                        <span class="hidden-mobile">编码、加密和散列之间的区别</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
