@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://fantasyhh.github.io/images/suolue/asgi2.png">
 <meta property="article:published_time" content="2021-03-09T02:38:01.000Z">
-<meta property="article:modified_time" content="2021-03-13T06:54:23.000Z">
+<meta property="article:modified_time" content="2022-12-29T12:36:10.081Z">
 <meta property="article:author" content="Jiahuan Shi">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="Web">
@@ -314,7 +314,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ pip3 install uvicorn<br>[...]<br>$ uvicorn example:app<br>INFO: Started server process [30074]<br>INFO: Waiting <span class="hljs-keyword">for</span> application startup.<br>INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)<br></code></pre></td></tr></table></figure>
 
 <p>现在在你的网页浏览器中打开“ <a target="_blank" rel="noopener" href="http://127.0.0.1:8000/">http://127.0.0.1:8000</a></p>
-<p><img src="/home/sjh/Documents/hexo/blog/source/images/asgi/hello-world.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/images/asgi/hello-world.png" srcset="/img/loading.gif" lazyload></p>
 <p>也许现在还不是特别令人兴奋？尽管如此，它仍然是一整套功能的基础，而这些功能在 Python 现有的 WSGI 接口中是不可能实现的。</p>
 <h2 id="3-构造-ASGI-应用程序的不同方法（适用于ASGI2）"><a href="#3-构造-ASGI-应用程序的不同方法（适用于ASGI2）" class="headerlink" title="3.  构造 ASGI 应用程序的不同方法（适用于ASGI2）"></a><del>3.  构造 ASGI 应用程序的不同方法</del>（适用于ASGI2）</h2><p>有多种方法可以构建一个 ASGI 应用程序。</p>
 <h3 id="3-1-使用闭包将scope绑定到-ASGI-实例"><a href="#3-1-使用闭包将scope绑定到-ASGI-实例" class="headerlink" title="3.1 使用闭包将scope绑定到 ASGI 实例"></a>3.1 使用闭包将scope绑定到 ASGI 实例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs pyton">def app(scope):<br>    assert scope[&quot;type&quot;] == &quot;http&quot;<br><br>    async def asgi(receive, send):<br>        ...<br><br>    return asgi<br></code></pre></td></tr></table></figure>
